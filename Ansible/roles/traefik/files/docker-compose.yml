@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+
+  traefik:
+      image: "traefik:v2.6"
+      container_name: "traefik"
+      command:
+        - "--log.level=DEBUG"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--providers.docker.network=${TRAEFIK_DOCKER_NETWORK}"
+        
+        - "--entryPoints.web.address=:80"
+        - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
+        - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+        
+        - "--entryPoints.websecure.address=:443"
+        - "--entryPoints.websecure.http.tls=true"
+        - "--entryPoints.websecure.http.tls.certResolver=artisashopresolver"
+        - "--entryPoints.websecure.http.tls.domains[0].main=${ARTISASHOP_HOST}"
+        - "--entryPoints.websecure.http.tls.domains[0].sans=*.${ARTISASHOP_HOST}"
+        
+        - "--certificatesresolvers.artisashopresolver.acme.dnschallenge=true"
+        - "--certificatesresolvers.artisashopresolver.acme.dnschallenge.provider=ovh"
+        # Uncomment for test purpose
+        # - "--certificatesresolvers.artisashopresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+        # Uncomment for production purpose
+        - "--certificatesresolvers.artisashopresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+        #TODO Get an email aqqqddress from the group
+        - "--certificatesresolvers.artisashopresolver.acme.email=matthis.cusin@gmail.com"
+        - "--certificatesresolvers.artisashopresolver.acme.storage=/letsencrypt/acme.json"
+      ports:
+        - "80:80"
+        - "443:443"
+      environment:
+      # Get keys
+      # https://www.grottedubarbu.fr/traefik-dns-challenge-ovh/
+        - "OVH_ENDPOINT=${OVH_ENDPOINT}"
+        - "OVH_APPLICATION_KEY=${OVH_APPLICATION_KEY}"
+        - "OVH_APPLICATION_SECRET=${OVH_APPLICATION_SECRET}"
+        - "OVH_CONSUMER_KEY=${OVH_CONSUMER_KEY}"
+      volumes:
+        - "./letsencrypt:/letsencrypt"
+        - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      networks:
+        - traefik-tier
+
+networks:
+  traefik-tier:
+    external:
+      name: ${TRAEFIK_DOCKER_NETWORK}

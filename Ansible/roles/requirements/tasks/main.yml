@@ -1,0 +1,12 @@
+---
+- name: Ensure apt requirements are installed and up to date
+  ansible.builtin.apt:
+    name: "{{apt_requirements}}"
+- name: Ensure pip requirements are installed and up to date
+  ansible.builtin.pip:
+    name: "{{pip_requirements}}"
+    state: latest
+- name: Ensure that docker deamon is started
+  ansible.builtin.service:
+    name: docker
+    state: started

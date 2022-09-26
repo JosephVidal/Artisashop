@@ -1,0 +1,25 @@
+---
+- name: Copy docker-compose file to specified host location
+  copy:
+    src: "{{ compose_file }}"
+    dest: "{{ deploy_location }}/{{ compose_file }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode:  0655
+- name: Tear down existing services
+  community.docker.docker_compose:
+    project_src: "{{ deploy_location }}"
+    files: "{{ compose_file }}"
+    state: absent
+    env_file: "/home/{{ ansible_user }}/.secret/.env"
+    # Uncomment to delete local images (="-rmi local")
+    # remove_images: local
+- name: Create and start services
+  community.docker.docker_compose:
+    project_src: "{{ deploy_location }}"
+    build: yes
+    files: "{{ compose_file }}"
+    env_file: "/home/{{ ansible_user }}/.secret/.env"
+    # Uncomment to build without cache
+    # nocache: yes
+  register: output

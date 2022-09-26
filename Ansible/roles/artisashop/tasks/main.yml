@@ -1,0 +1,26 @@
+---
+
+- name: Include secret role
+  include_role:
+    name: secret
+  vars:
+    env_file : "{{ artisashop_env_file }}"
+    deploy_location : "{{ artisashop_deploy_location }}"
+    deploy_key : "{{ artisashop_deploy_key }}"
+
+- name: Clone artisashop repo on root
+  ansible.builtin.git:
+    repo: git@gitlab.com:artisashop/Artisashop.git
+    dest: "{{ artisashop_deploy_location }}"
+    key_file: "/home/{{ ansible_user }}/.secret/deploy_key"
+    version: "{{ artisashop_version }}"
+    force: yes
+    accept_hostkey: yes
+
+- name: Include deploy role
+  include_role:
+    name: deploy
+  vars:
+    deploy_location : "{{ artisashop_deploy_location }}"
+    compose_file : "{{ artisashop_compose_file }}"
+    

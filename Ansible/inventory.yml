@@ -1,0 +1,12 @@
+all:
+  hosts:
+    dev.artisashop.eu
+  children:
+    instances:
+      hosts:
+        main:
+          ansible_host: 45.155.171.254
+          ansible_port: 22
+    azure:
+      hosts:
+        127.0.0.1

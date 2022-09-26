@@ -1,0 +1,68 @@
+---
+- name: Ensure requirements
+  hosts: instances
+  remote_user: admin
+  become: yes
+  roles:
+    - requirements
+  vars:
+    apt_requirements :
+      - git
+      - htop
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - python3-pip
+    pip_requirements :
+      - pip
+      - docker-compose
+  tags:
+    - requirements
+
+- name: Create traefik and artisashop user, with current ssh key added
+  hosts: instances
+  remote_user: admin
+  become: yes
+  roles:
+    - new_user
+  vars:
+    users:
+      - { 
+        username: traefik, 
+        groups : docker
+        }
+      - { 
+        username: artisashop, 
+        groups : docker
+        }
+  tags:
+    - requirements
+
+- name: Launch traefik container separately
+  hosts: instances
+  remote_user: traefik
+  roles:
+    - traefik
+  vars:
+    traefik_env_file: .env-traefik
+    traefik_compose_file: docker-compose.yml
+    traefik_deploy_location: "/home/{{ ansible_user }}"
+    # Make sure that the value defined behind MUST be the same as the ones define in
+    # .env files within artisashop and traefik files
+    traefik_network: traefik-public
+  tags:
+    - traefik
+
+- name: Launch artisashop project
+  hosts: instances
+  remote_user: artisashop
+  roles:
+    - artisashop
+  vars:
+    artisashop_deploy_key: deployment_key
+    artisashop_env_file: .env-artisashop
+    artisashop_compose_file : docker-compose-deploy.yml
+    artisashop_deploy_location : "/home/{{ ansible_user }}/artisashop"
+    artisashop_version: Dev
+  tags:
+    - artisashop

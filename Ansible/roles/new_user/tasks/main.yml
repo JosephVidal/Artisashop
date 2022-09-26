@@ -1,0 +1,15 @@
+---
+- name: Add a user {{username}}, appending the  {{groupes}} to the user's groups
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups }}"
+    shell: /bin/bash
+    append: yes
+  loop: "{{users}}"
+
+- name: Deploy SSH public key
+  ansible.posix.authorized_key:
+    user: "{{ item.username }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  loop: "{{users}}"

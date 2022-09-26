@@ -1,0 +1,67 @@
+---
+- name: Ensure requirements
+  hosts: instances
+  remote_user: admin
+  become: yes
+  roles:
+    - requirements
+  vars:
+    apt_requirements :
+      - git
+      - htop
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    pip_requirements :
+      - pip
+      - docker-compose
+  tags:
+    - requirements
+
+- name: Create develop user, with current ssh key added
+  hosts: instances
+  remote_user: admin
+  become: yes
+  roles:
+    - new_user
+  vars:
+    users:
+      - { 
+        username: develop, 
+        groups : docker
+        }
+  tags:
+    - requirements
+
+# We assume that traefik is already deployed since it is used in production.If it is no longer the 
+# case uncomment this section. Don't forget to create traefik user using the role used just above.
+# 
+# - name: Launch traefik container separately
+#   hosts: instances
+#   remote_user: traefik
+#   roles:
+#     - traefik
+#   vars:
+#     traefik_env_file: .env-traefik
+#     traefik_compose_file: docker-compose.yml
+#     traefik_deploy_location: "/home/{{ ansible_user }}"
+#     # Make sure that the value defined behind MUST be the same as the ones define in
+#     # .env files within artisashop and traefik files
+#     traefik_network: traefik-public
+#   tags:
+#     - traefik
+
+- name: Launch artisashop project
+  hosts: instances
+  remote_user: develop
+  roles:
+    - artisashop
+  vars:
+    artisashop_deploy_key: deployment_key
+    artisashop_env_file: .env-artisashop-dev
+    artisashop_compose_file : docker-compose-deploy.yml
+    artisashop_deploy_location : "/home/{{ ansible_user }}/artisashop"
+    # Specify git ref just below
+    artisashop_version: Dev
+  tags:
+    - artisashop-dev
