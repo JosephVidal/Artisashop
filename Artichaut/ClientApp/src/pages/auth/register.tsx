@@ -28,8 +28,8 @@ export default function SignupCard() {
 
     const formik = useFormik({
         initialValues: {
-                firstName: '',
-                lastName: '',
+                firstname: '',
+                lastname: '',
                 email: '',
                 password: '',
                 role: UserType.NUMBER_0
@@ -66,20 +66,20 @@ export default function SignupCard() {
                         boxShadow={'lg'}
                         p={8}>
                         <Stack spacing={4}>
-                            <FormControl id="firstName" isRequired>
+                            <FormControl id="firstname" isRequired>
                                 <FormLabel>Firstname</FormLabel>
                                 <Input
-                                    name="firstName"
+                                    name="firstname"
                                     type="text"
-                                    value={formik.values.firstName}
+                                    value={formik.values.firstname}
                                     onChange={formik.handleChange} />
                             </FormControl>
-                            <FormControl id="lastName" isRequired>
+                            <FormControl id="lastname" isRequired>
                                 <FormLabel>Lastname</FormLabel>
                                 <Input
-                                    name="lastName"
+                                    name="lastname"
                                     type="text"
-                                    value={formik.values.lastName}
+                                    value={formik.values.lastname}
                                     onChange={formik.handleChange} />
                             </FormControl>
                             <FormControl id="email" isRequired>
