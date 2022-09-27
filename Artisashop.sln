@@ -1,16 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31912.275
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Artisashop", "Artisashop\Artisashop.csproj", "{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Artisashop", "Artisashop\Artisashop.csproj", "{DB920C39-B987-4138-95A5-ED2D5A136699}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CF1C46E0-73B5-49FF-B7D3-FD1584F1DD59}"
-	ProjectSection(ProjectDependencies) = postProject
-		{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB} = {46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Artisashop.Tests", "Artisashop.Tests\Artisashop.Tests.csproj", "{6531F81C-91EA-409E-8A0B-4395072690AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{D8757509-15C4-4AC1-9FC7-3BAE250279A3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CmaApi", "CmaApi", "{77D25672-5409-47F0-8BC0-19E8536F13EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RechercheEntreprisesApi", "RechercheEntreprisesApi", "{97FD0E1A-7F9F-4C8C-9DD6-762AA017BC6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CmaApi", "CmaApi\src\CmaApi\CmaApi.csproj", "{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CmaApi.Test", "CmaApi\src\CmaApi.Test\CmaApi.Test.csproj", "{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RechercheEntreprisesApi", "RechercheEntreprisesApi\src\RechercheEntreprisesApi\RechercheEntreprisesApi.csproj", "{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RechercheEntreprisesApi.Test", "RechercheEntreprisesApi\src\RechercheEntreprisesApi.Test\RechercheEntreprisesApi.Test.csproj", "{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D26782B6-4058-4D61-AD24-936A4443C2C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Artisashop", "Artisashop", "{0B442FE5-538B-4B06-B28E-00EA67518B9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,24 +29,47 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46AEA6B5-4E4C-416C-A947-2FECD35B4AEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF1C46E0-73B5-49FF-B7D3-FD1584F1DD59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF1C46E0-73B5-49FF-B7D3-FD1584F1DD59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF1C46E0-73B5-49FF-B7D3-FD1584F1DD59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF1C46E0-73B5-49FF-B7D3-FD1584F1DD59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8757509-15C4-4AC1-9FC7-3BAE250279A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8757509-15C4-4AC1-9FC7-3BAE250279A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8757509-15C4-4AC1-9FC7-3BAE250279A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8757509-15C4-4AC1-9FC7-3BAE250279A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB920C39-B987-4138-95A5-ED2D5A136699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB920C39-B987-4138-95A5-ED2D5A136699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB920C39-B987-4138-95A5-ED2D5A136699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB920C39-B987-4138-95A5-ED2D5A136699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6531F81C-91EA-409E-8A0B-4395072690AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6531F81C-91EA-409E-8A0B-4395072690AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6531F81C-91EA-409E-8A0B-4395072690AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6531F81C-91EA-409E-8A0B-4395072690AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB920C39-B987-4138-95A5-ED2D5A136699} = {0B442FE5-538B-4B06-B28E-00EA67518B9C}
+		{6531F81C-91EA-409E-8A0B-4395072690AB} = {0B442FE5-538B-4B06-B28E-00EA67518B9C}
+		{24138FCB-A072-4CE1-8944-3BFAFA0E5F0D} = {77D25672-5409-47F0-8BC0-19E8536F13EE}
+		{8D6B2A45-63E4-46B3-8CFB-0F684E868F2B} = {77D25672-5409-47F0-8BC0-19E8536F13EE}
+		{1F2B2D56-C1F7-4CFA-9B60-8748D767B54C} = {97FD0E1A-7F9F-4C8C-9DD6-762AA017BC6F}
+		{4FF1F1AE-F8F8-4319-BBA6-D05435CC73CF} = {97FD0E1A-7F9F-4C8C-9DD6-762AA017BC6F}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		LessCompiler = 46aea6b5-4e4c-416c-a947-2fecd35b4aeb
-		SolutionGuid = {68E1A234-14DE-45E5-81AC-03B2E96BE21C}
+		SolutionGuid = {74113F54-A433-4677-BA68-7DDD51A0E5B2}
 	EndGlobalSection
 EndGlobal
