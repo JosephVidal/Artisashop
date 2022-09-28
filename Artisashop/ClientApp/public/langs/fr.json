@@ -1,0 +1,230 @@
+{
+  "global": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "players": "Joueurs",
+    "player": "Joueur",
+    "yes": "Oui",
+    "no": "Non",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "menu": {
+    "home": "Accueil",
+    "games": "Liste des parties",
+    "game": "Partie",
+    "parameters": {
+      "title": "Paramètres",
+      "configuration": "Configuration",
+      "equipments": "Équipements",
+      "opening-hours": "Horaires",
+      "days-off": "Fermetures exceptionnelles"
+    }
+  },
+  "game": {
+    "duration": "Durée de la partie :",
+    "duration-unit": "minute(s)",
+    "list": {
+      "title": "Liste des parties",
+      "closed": "Le centre est fermé ce jour-ci",
+      "table": {
+        "startTime": "Heure de début",
+        "status": {
+          "title": "Statut",
+          "created": "Crée",
+          "loaded": "Chargée",
+          "started": "En cours",
+          "paused": "En pause",
+          "over": "Terminée"
+        },
+        "duration": "Durée",
+        "endTime": "Heure de fin",
+        "delete": {
+          "title": "Supprimer",
+          "text": "Voulez vous vraiment supprimer cette partie ?"
+        }
+      }
+    },
+    "create": {
+      "title": "Créer une nouvelle partie",
+      "duration": "Durée",
+      "duration-unit": "Minute(s)",
+      "duration-unit-short": "min(s)",
+      "select-skin": "Sélectionnez une apparence",
+      "select-mode": "Sélectionnez un mode",
+      "submit-label": "Créer la partie"
+    },
+    "start": {
+      "title": "Démarrer la partie",
+      "connected-players": "Joueurs connectés",
+      "not-connected": "non connecté",
+      "submit-label": "Démarrer la partie",
+      "load": {
+        "submit-label": "Charger la partie"
+      },
+      "save": {
+        "submit-label": "Enregistrer la partie"
+      }
+    },
+    "current": {
+      "title": "Partie active",
+      "paused": "en pause",
+      "stop-confirm-message": "Êtes-vous sûr de vouloir arrêter cette partie ?",
+      "score": "Score :",
+      "deaths": "Morts :",
+      "accuracy": "Précision :",
+      "distance": "Distance parcourue :",
+      "logs": {
+        "error": {},
+        "frag": "{{killer}} a tué {{victim}}"
+      }
+    },
+    "finished": {
+      "title": "Partie finie",
+      "begin-date": "Date de début :",
+      "end-date": "Date de fin :",
+      "victory": "L'équipe {{team}} a gagné",
+      "tie": "Egalité",
+      "table": {
+        "position": "Position",
+        "name": "Nom",
+        "scores": "Score",
+        "deaths": "Morts",
+        "accuracy": "Précision"
+      }
+    }
+  },
+  "teams": {
+    "red": "rouge",
+    "blue": "bleue",
+    "green": "verte",
+    "orange": "orange",
+    "white": "blanche",
+    "pink": "rose",
+    "purple": "violette",
+    "yellow": "jaune",
+    "grey": "grise"
+  },
+  "parameters": {
+    "configuration": {
+      "title": "Configuration",
+      "center-name-label": "Nom du centre :",
+      "default-duration-label": "Durée par défaut d'une partie :",
+      "game-interval-label": "Intervalle entre deux parties :",
+      "equipment-number-label": "Équipements :",
+      "confirm-button-label": "Sauvegarder",
+      "success": "Configuration sauvegardée.",
+      "interval-warning": "Intervalle trop court !",
+      "initial-setup": "Configuration initiale",
+      "step1": "Réglages",
+      "step2": "Horaires d'ouverture",
+      "step3": "Horaires vacances",
+      "step4": "Horaires jours fériés",
+      "step5": "Confirmation",
+      "equipment-warning": "Pas assez d'équipements !",
+      "vacation-zone-label": "Zone de vacances :",
+      "holiday-zone-label": "Alsace-Moselle",
+      "confirmation-title": "Vérifiez les données avant de confirmer la configuration initiale",
+      "confirmation-opening-hours": "Horaires d'ouverture",
+      "confirmation-vacations": "Horaires d'ouverture - Vacances",
+      "confirmation-holidays": "Horaires d'ouverture - Jours fériés",
+      "and": "et"
+    },
+    "equipments": {
+      "title": "Équipements",
+      "activated": "Activé",
+      "deactivated": "Désactivé"
+    },
+    "opening-hours": {
+      "title": "Horaires",
+      "schooling-days": "Période scolaire",
+      "school-vacations": "Vacances scolaires",
+      "holidays": "Jours fériés",
+      "closed": "Fermé",
+      "opening": "Ouvre",
+      "closing": "Ferme",
+      "start": "de",
+      "end": "à",
+      "submit-label": "Sauvegarder",
+      "delete-label": "Supprimer",
+      "week-day": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche",
+        "holiday": "Jours fériés"
+      }
+    },
+    "days-off": {
+      "title": "Fermetures exceptionnelles",
+      "closed": "Fermé",
+      "overlay": {
+        "title": "Fermeture exceptionnelle",
+        "all-day": "Journée entière"
+      }
+    }
+  },
+  "error": {
+    "title": "Erreur",
+    "default": "Une erreur s'est produite.",
+    "no-data": "Les données n'ont pas pu être récupérées. Veuillez nous contacter.",
+    "required": "Des données sont manquantes.",
+    "invalid": "Des données saisies ne sont pas valides.",
+    "game": {
+      "creation": {
+        "db": "La partie n'a pas pu être créée dans la base de données."
+      },
+      "update": "La partie n'a pas pu être mise à jour.",
+      "unknown": "La partie n'a pas été trouvée.",
+      "current": "Il n'y a pas de partie en cours.",
+      "load": "La partie n'a pas pu être chargée.",
+      "start": "La partie n'a pas pu être lancée.",
+      "pause": "La partie n'a pas pu être mise en pause.",
+      "resume": "La partie n'a pas pu être relancée.",
+      "stop": "La partie n'a pas pu être arrêtée.",
+      "started": "La partie a commencé.",
+      "paused": "La partie est en pause.",
+      "over": "La partie est terminée."
+    },
+    "players": {
+      "unknown": "Le joueur est inconnu."
+    },
+    "equipment": {
+      "letter": {
+        "unknown": "Une lettre d'équipement est inconnue.",
+        "unavailable": "Une lettre d'équipement est indisponible."
+      }
+    },
+    "config": {
+      "unknown": "La configuration n'a pas pu être récupérée.",
+      "update": "La configuration n'a pas pu être mise à jour.",
+      "openingHours": "Les heures d'ouvertures n'ont pas pu être récupérées."
+    },
+    "disconnected-headset": "Le casque {{letter}} a été déconnecté.",
+    "battery-headset": "Le niveau de charge du casque {{letter}} est critique. Veuillez changer la batterie.",
+    "number": {
+      "positive": "Ce nombre doit être positif.",
+      "required": "Cette valeur est requise.",
+      "invalid": "Cette valeur est invalide."
+    },
+    "reopening-hour": {
+      "order": "L'heure de réouverture doit être après l'heure de fermeture."
+    }
+  },
+
+  "success": {
+    "title": "Succès",
+    "default": "Tâche réalisée avec succès.",
+    "days-off": "Les fermetures exceptionnelles ont été enregistrées avec succès.",
+    "opening-hours": "Les horaires d'ouverture ont été enregistrés avec succès.",
+    "game": {
+      "create": "La partie a été créée avec succès.",
+      "update": "La partie a été modifiée avec succès.",
+      "load": "La partie a été chargée avec succès.",
+      "delete": "La partie a été supprimée avec succès."
+    }
+  }
+}

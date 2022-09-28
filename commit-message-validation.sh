@@ -12,7 +12,7 @@ Le message $(cat $1) doit respecter le pattern suivant :
 Par exemple :
     [Frontend][Structure]: Push front structure"
 
-if [[ ! $(cat $1) =~ ^(\[(Frontend|Backend|Devops)\]\[(Auth|Catalog|Chat|Order|Contact|Documents|Payment|Basket|Home|Admin|Test|Devops|Structure)\])* ]]; then
+if [[ ! $(cat $1) =~ ^(\[(Frontend|Backend|Fullstack|Devops)\]\[(Auth|Catalog|Chat|Order|Contact|Documents|Payment|Basket|Home|Admin|Test|Devops|Structure)\])* ]]; then
     echo "$error_msg" >&2
 	exit 1
 fi
