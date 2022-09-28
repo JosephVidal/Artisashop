@@ -5,14 +5,16 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
 
-Artisashop/ClientApp/.yarn
-Artisashop/ClientApp/.idea
-Artisashop/ClientApp/.vscode
-Artisashop/ClientApp/yarn.lock
-Artisashop/ClientApp/package-lock.json
-Artisashop/ClientApp/node_modules
-Artisashop/ClientApp/.yarnrc.yml
+/.idea
+/Artisashop/ClientApp/.yarn
+/Artisashop/ClientApp/.idea
+/Artisashop/ClientApp/.vscode
+/Artisashop/ClientApp/yarn.lock
+/Artisashop/ClientApp/package-lock.json
+/Artisashop/ClientApp/node_modules
+/Artisashop/ClientApp/.yarnrc.yml
 
 # User-specific files
 *.suo

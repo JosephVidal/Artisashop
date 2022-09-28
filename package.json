@@ -7,9 +7,7 @@
     "husky": "^8.0.1"
   },
   "lint-staged": {
-    "./Artisashop/ClientApp/src/**": [
-      "eslint --fix",
-      "prettier --write --ignore-unknown"
-    ]
+    "eslint": "cd ./Artisashop/ClientApp && eslint --fix ",
+    "prettier": "cd ./Artisashop/ClientApp && prettier --write --ignore-unknown"
   }
 }
