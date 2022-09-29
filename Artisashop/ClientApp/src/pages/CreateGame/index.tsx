@@ -20,7 +20,7 @@ import { handleErrors } from "globals/error";
 import Content from "components/Content";
 import { colors } from "globals/styles";
 import { TFunction } from "i18next";
-import { NavigateFunction } from "react-router/lib/hooks";
+import { NavigateFunction } from "react-router";
 import { retrieveEquipments } from "equipments";
 
 interface Props {

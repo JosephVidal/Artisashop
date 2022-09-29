@@ -24,7 +24,7 @@ import { isAfter, isBefore } from "date-fns";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { DataTableRowClickEventParams } from "primereact/datatable";
 import { useNavigate } from "react-router-dom";
-import { NavigateFunction } from "react-router/lib/hooks";
+import { NavigateFunction } from "react-router";
 import { Game } from "models/game";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { deleteGame } from "pages/Game/api";
