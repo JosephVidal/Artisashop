@@ -10,6 +10,8 @@
     "next": "Next"
   },
   "menu": {
+    "search": "Search",
+    "contact": "Contact",
     "home": "Home",
     "games": "Game List",
     "game": "Game",

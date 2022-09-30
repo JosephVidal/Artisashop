@@ -10,6 +10,8 @@
     "next": "Suivant"
   },
   "menu": {
+    "search": "Recherche",
+    "contact": "Contact",
     "home": "Accueil",
     "games": "Liste des parties",
     "game": "Partie",

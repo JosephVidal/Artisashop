@@ -1,6 +1,6 @@
 import React from "react";
-import LogoOvale from "./assets/LogoOvale.png";
-import LogoRound from "./assets/Logox150.png";
+import LogoOvale from "assets/LogoOvale.png";
+import LogoRound from "assets/Logox150.png";
 import { LogoWrapper, LogoImg } from "./styles";
 
 type LogoType = "ovale" | "round";
