@@ -29,4 +29,28 @@ export const MenuItem = styled(Quarter)`
   font-size: 1.25rem;
   font-family: "Raleway-Black", sans-serif;
   padding: 0.5rem 1rem;
+
+  & text {
+    cursor: pointer;
+  }
+
+  & text:hover {
+    color: ${colors.orange};
+  }
+`;
+
+export const RightIcons = styled(Quarter)`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 0.7rem 0 0.7rem 0;
+
+  & svg {
+    flex: 0.25;
+    cursor: pointer;
+  }
+
+  & svg:hover {
+    color: ${colors.orange};
+  }
 `;
