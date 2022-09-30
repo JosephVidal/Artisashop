@@ -1,38 +1,27 @@
 import React from "react";
-import { LogoWrapper, LogoImg, TextImg } from "./styles";
-import LogoWhite from "./assets/logo-white.svg";
-import LogoLight from "./assets/logo-light.svg";
-import LogoDark from "./assets/logo-dark.svg";
-import TextWhite from "./assets/text-white.svg";
-import TextDark from "./assets/text-dark.svg";
+import LogoOvale from "./assets/LogoOvale.png";
+import LogoRound from "./assets/Logox150.png";
+import { LogoWrapper, LogoImg } from "./styles";
 
-type LogoType = "white" | "light" | "dark";
+type LogoType = "ovale" | "round";
 
 interface Props {
   type: LogoType;
-  withText?: boolean;
+  width: string;
 }
 
-const imagesFromType: { [K in LogoType]: { logo: string; text: string } } = {
-  white: {
-    logo: LogoWhite,
-    text: TextWhite,
+const imagesFromType: { [K in LogoType]: { logo: string } } = {
+  round: {
+    logo: LogoRound,
   },
-  light: {
-    logo: LogoLight,
-    text: TextWhite,
-  },
-  dark: {
-    logo: LogoDark,
-    text: TextDark,
+  ovale: {
+    logo: LogoOvale,
   },
 };
 
-const Logo: React.FunctionComponent<Props> = ({ type, withText }) => (
+const Logo: React.FunctionComponent<Props> = ({ type, width }) => (
   <LogoWrapper>
-    <LogoImg src={imagesFromType[type].logo} withText={withText || false} />
-
-    {withText && <TextImg src={imagesFromType[type].text} />}
+    <LogoImg src={imagesFromType[type].logo} width={width} />
   </LogoWrapper>
 );
 

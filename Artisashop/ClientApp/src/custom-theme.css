@@ -3844,9 +3844,8 @@
 
 .p-menubar {
   padding: 0.5rem;
-  background: #1f2d40;
+  background: #141c26;
   color: rgba(255, 255, 255, 0.87);
-  border: 1px solid #304562;
   border-radius: 3px;
 }
 .p-menubar .p-menuitem-link {

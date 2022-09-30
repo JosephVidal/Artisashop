@@ -1,34 +1,33 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import MenuItem from "components/MenuItem";
-import HorizontalMenu from "components/HorizontalMenu";
-import Breadcrumb from "components/Breadcrumb";
-import { useTranslation } from "react-i18next";
-import { TopMenuWrapper } from "./styles";
+import { Image } from "primereact/image";
+import styled from "styled-components";
+import { TopMenuWrapper, MenuItem } from "./styles";
+import Logo from "../Logo/assets/LogoOvale.png";
 
 interface Props {}
 
-const TopMenu: React.FunctionComponent<Props> = () => {
-  const location = useLocation();
-  const { t } = useTranslation();
+const MenuItemCornerRight = styled(MenuItem)`
+  position: absolute;
+  right: 0;
+`;
 
-  return (
-    <TopMenuWrapper>
-      <HorizontalMenu
-        noBorder
-        start={
-          <Breadcrumb noBorder home={<MenuItem icon="pi pi-home" url="/" />}>
-            {location.pathname !== "/" ? (
-              <MenuItem
-                label={t(`menu.${location.pathname}`)}
-                url={location.pathname}
-              />
-            ) : undefined}
-          </Breadcrumb>
-        }
-      />
-    </TopMenuWrapper>
-  );
-};
+const MenuItemCornerLeft = styled(MenuItem)`
+  position: absolute;
+  left: 50px;
+`;
+
+const TopMenu: React.FunctionComponent<Props> = () => (
+  <TopMenuWrapper>
+    <MenuItemCornerLeft onClick={() => console.log("Recherche")}>
+      Recherche
+    </MenuItemCornerLeft>
+    <MenuItem onClick={() => console.log("Recherche")}>Recherche</MenuItem>
+    <Image src={Logo} width="50px" />
+    <MenuItem onClick={() => console.log("Contact")}>Contact</MenuItem>
+    <MenuItemCornerRight onClick={() => console.log("Contact")}>
+      Contact
+    </MenuItemCornerRight>
+  </TopMenuWrapper>
+);
 
 export default TopMenu;

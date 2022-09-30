@@ -2,9 +2,9 @@ import { createGlobalStyle } from "styled-components";
 import * as _ from "lodash/fp";
 
 export const colors = {
-  primaryColor: "#1990c6",
-  darkGray: "#212529",
-  surfaceA: "#1F2D40",
+  beige: "#f4ebe1",
+  darkBlue: "#141c26",
+  darkRed: "#5a202e",
   surfaceB: "#17212f",
   surfaceC: "#233248",
   surfaceD: "#304562",
@@ -17,7 +17,6 @@ export const colors = {
   red: "#d32f2f",
   blue: "#2196f3",
   green: "#72bb53",
-  darkBlue: "#08101a",
   grey: "#707070",
   lightGrey: "rgba(255, 255, 255, 0.6)",
   orange: "#ff8f00",

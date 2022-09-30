@@ -107,7 +107,7 @@ const getColor = (
     case "dark":
       return colors.surfaceC;
     default:
-      return colors.primaryColor;
+      return colors.beige;
   }
 };
 

@@ -8,11 +8,11 @@ export const LogoWrapper = styled.div`
 `;
 
 interface LogoImgProps {
-  withText: boolean;
+  width: string;
 }
 
 export const LogoImg = styled.img<LogoImgProps>`
-  width: ${(props) => (props.withText ? "50%" : "100%")};
+  width: ${(props) => props.width};
 `;
 
 export const TextImg = styled.img`

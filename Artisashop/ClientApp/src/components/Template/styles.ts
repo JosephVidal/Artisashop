@@ -11,7 +11,6 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex: 1;
   order: 1;
-  margin-left: 250px;
   flex-direction: column;
   align-content: flex-start;
 `;

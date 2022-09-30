@@ -40,7 +40,7 @@ export const DataTableWrapper = styled.div<LineProps>`
       }
 
       & > tbody > tr {
-        background: ${colors.surfaceA};
+        background: ${colors.darkRed};
 
         ${(props) =>
           props.clickable &&

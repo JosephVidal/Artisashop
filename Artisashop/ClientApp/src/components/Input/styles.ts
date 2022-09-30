@@ -12,12 +12,12 @@ export const InputWrapper = styled.div<InputWrapperProps>`
   & input {
     color: ${(props) => (props.error ? colors.errorColor : colors.textColor)};
     border-color: ${(props) =>
-      props.error ? colors.errorColor : colors.primaryColor};
+      props.error ? colors.errorColor : colors.beige};
   }
 
   & .p-inputtext:enabled:focus {
     border-color: ${(props) =>
-      props.error ? colors.errorColor : colors.primaryColor};
+      props.error ? colors.errorColor : colors.beige};
     box-shadow: ${(props) =>
       props.error ? `0 0 0 1px${colors.errorColor}` : "0 0 0 1px #93cbf9"};
   }
