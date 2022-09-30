@@ -23,16 +23,20 @@ namespace Artisashop.Models
             Job = model.Job;
             Bills = new List<Bill>();
             Products = new List<Product>();
+            Baskets = new List<Basket>();
         }
 
-        public Account(string lastname, string firstname, UserType role, string job)
+        public Account(string username, string email, string lastname, string firstname, UserType role, string job)
         {
+            UserName = username;
+            Email = email;
             Lastname = lastname;
             Firstname = firstname;
             Role = role;
             Job = job;
             Bills = new List<Bill>();
             Products = new List<Product>();
+            Baskets = new List<Basket>();
         }
 
         [Required]
@@ -52,7 +56,7 @@ namespace Artisashop.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; }
         public List<Product>? Products { get; set; }
-        public Basket? Basket { get; set; }
+        public List<Basket>? Baskets { get; set; }
         public List<Bill>? Bills { get; set; }
         public enum UserType
         {

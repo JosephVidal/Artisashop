@@ -1,6 +1,6 @@
 namespace Artisashop.Models.ViewModel;
 
-public class ConnectedUserViewModel
+public class ConnectedUser
 {
     public string UserId { get; set; } = "";
 

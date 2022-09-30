@@ -2,9 +2,9 @@
 
 namespace Artisashop.Models.ViewModel
 {
-    public class ChatUserDetailViewModel
+    public class ChatUserDetail
     {
-        public ChatUserDetailViewModel(string connectionId, string userID, string username)
+        public ChatUserDetail(string connectionId, string userID, string username)
         {
             ConnectionId = connectionId;
             UserID = userID;

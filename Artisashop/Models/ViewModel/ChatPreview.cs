@@ -2,9 +2,9 @@
 
 namespace Artisashop.Models.ViewModel
 {
-    public class ChatPreviewViewModel
+    public class ChatPreview
     {
-        public ChatPreviewViewModel(Account user, ChatMessage lastMsg, bool receive, string url)
+        public ChatPreview(Account user, ChatMessage lastMsg, bool receive, string url)
         {
             User = user;
             LastMsg = lastMsg;

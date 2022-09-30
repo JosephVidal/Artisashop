@@ -62,7 +62,7 @@ namespace Artisashop.Tests.Backend
                 { "validationStatus", validationStatus.ToString() }
             };
 
-            var postRequest = new HttpRequestMessage(HttpMethod.Put, "api/backoffice/changeValidationStatus");
+            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/backoffice/changeValidationStatus");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             postRequest.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
 

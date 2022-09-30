@@ -19,6 +19,7 @@ namespace Artisashop.Tests.Backend
     {
         public static readonly HttpClient _client = new TestingWebAppFactory<Program>().CreateClient();
         public static string? token;
+        public static List<string> ids = new List<string>();
 
         [Order(1)]
         [TestCase("jean.epp@epitech.eu", "Jean", "Epp", "Password_1234", Account.UserType.ADMIN, null)]
@@ -38,7 +39,7 @@ namespace Artisashop.Tests.Backend
                 Job = job
             };
 
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/account/register");
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/account");
             postRequest.Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(postRequest);
@@ -51,6 +52,7 @@ namespace Artisashop.Tests.Backend
             Assert.NotNull(result.Token);
             Assert.AreEqual(email, result.User!.Username);
             token = result.Token;
+            ids.Add(result.User.Id!);
         }
 
         [Order(2)]
@@ -82,7 +84,7 @@ namespace Artisashop.Tests.Backend
         [Order(3)]
         public static async Task GetUser()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/account/info");
+            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/account");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await _client.SendAsync(postRequest);
@@ -106,7 +108,7 @@ namespace Artisashop.Tests.Backend
                 Job = "Brouteur"
             };
 
-            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/account/update");
+            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/account");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             postRequest.Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
 
@@ -124,7 +126,7 @@ namespace Artisashop.Tests.Backend
         [Order(4)]
         public static async Task DeleteUser()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/account/delete");
+            var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/account");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await _client.SendAsync(postRequest);

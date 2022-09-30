@@ -5,7 +5,7 @@ namespace Artisashop.Hubs;
 
 public class ChatHub : Hub
 {
-    public HashSet<ConnectedUserViewModel> ConnectedUsers { get; set; } = new();
+    public HashSet<ConnectedUser> ConnectedUsers { get; set; } = new();
 
     public ChatHub()
     {
@@ -16,7 +16,7 @@ public class ChatHub : Hub
         public const string ReceiveMessage = "ReceiveMessage";
     }
 
-    public async Task Connect(string userId)
+    public void Connect(string userId)
     {
         var id = Context.ConnectionId;
     }

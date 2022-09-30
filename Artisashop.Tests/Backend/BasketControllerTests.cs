@@ -1,268 +1,111 @@
-/*using Microsoft.AspNetCore.Http;
-using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Artichaut.Interfaces.IRepository;
-using Artichaut.Interfaces.IService;
-using Artichaut.Models;
-using Artichaut.Controllers;
-using Artichaut.Repositories;
-using static Artichaut.Models.Account;
-using Artichaut.Models.ViewModel;
-using static Artichaut.Models.Basket;
-using System;
-using System.Linq;
+using System.Net.Http;
+using Artisashop.Models;
+using System.Net.Http.Json;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using static Artisashop.Models.Basket;
+using Artisashop.Models.ViewModel;
 
-namespace Artichaut.Tests.Backend
+namespace Artisashop.Tests.Backend
 {
     [TestFixture]
     public class BasketControllerTests
     {
-        Mock<IAccountRepository>? _mockAccountRepo;
-        Mock<IBasketRepository>? _mockBasketRepo;
-        Mock<IProductRepository>? _mockProductRepo;
-        Mock<IMailService>? _mockMailService;
-        Mock<StoreDbContext>? _db;
-        Mock[]? _mocks;
+        public static readonly HttpClient _client = new TestingWebAppFactory<Program>().CreateClient();
+        private string? _token;
 
-        [SetUp]
-        public void InitTest()
+        [OneTimeSetUp]
+        public async Task SetUp()
         {
-            _mocks = new Mock[] {
-                _mockAccountRepo = new Mock<IAccountRepository>(),
-                _mockBasketRepo = new Mock<IBasketRepository>(),
-                _mockProductRepo = new Mock<IProductRepository>(),
-                _mockMailService = new Mock<IMailService>(),
-                _db = new Mock<StoreDbContext>()
-            };
+            await AccountControllerTest.Login("jane.consumer@epitech.eu", "Password_1234");
+            _token = AccountControllerTest.token;
         }
 
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "Index", "View")]
-        public async Task Index(string userId, string viewName, string returnType)
-        {;
-            if (returnType == "View")
-                _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(userId, true)).Returns(new List<Basket>()).Verifiable();
+        [Order(2)]
+        [Test]
+        public async Task Index()
+        {
+            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/basket");
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.Index();
+            var response = await _client.SendAsync(postRequest);
+            response.EnsureSuccessStatusCode();
 
-            CommonTest.Control(_mocks!, result, viewName, returnType);
+            List<Basket>? result = await response.Content.ReadFromJsonAsync<List<Basket>>();
+            Assert.NotNull(result);
+            Assert.AreNotEqual(0, result!.Count);
         }
 
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "Empty basket", "ViewError", true)]
-        [TestCase("jean.epp@epitech.eu", "DeliveryInfo", "View")]
-        public async Task DeliveryInfo(string userId, string viewName, string returnType, bool empty = false)
+        [Order(1)]
+        [TestCase(1, 3)]
+        [TestCase(3, 6)]
+        public async Task Add(int productID, int quantityModifier)
         {
-            if (empty)
-                _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(userId, true)).Returns(new List<Basket>()).Verifiable();
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/basket?productID=" + productID + "&quantityModifier=" + quantityModifier);
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.DeliveryInfo();
+            var response = await _client.SendAsync(postRequest);
+            response.EnsureSuccessStatusCode();
 
-            CommonTest.Control(_mocks!, result, viewName, returnType);
+            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+            Assert.NotNull(result);
         }
 
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "Bad address", "BadRequest")]
-        [TestCase("jean.epp@epitech.eu", "Payement", "Ok", "3 All. des Centaurées, 38240 Meylan")]
-        public async Task Payement(string viewName, string returnType, string address)
+        [Order(3)]
+        [TestCase(1, 2, DeliveryOption.DELIVERY, State.ONGOING)]
+        public async Task Update(int id, int quantity, DeliveryOption deliveryOpt, State currentState)
         {
-            _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(It.IsAny<string>(), true)).Returns(new List<Basket>()).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.Payement(address);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "", "Ok")]
-        public async Task ListJSON(string userId, string viewName, string returnType)
-        {
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(userId, It.IsAny<bool>())).Returns(new List<Basket>()).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.ListJSON();
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "", "Ok")]
-        public async Task ModifyItemDeliveryOpt(string userId, string viewName, string returnType)
-        {
-            int productID = 0;
-            DeliveryOption deliveryOption = DeliveryOption.DELIVERY;
-
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.ModifyProductDeliveryOptToUser(userId, productID, deliveryOption)).ReturnsAsync(deliveryOption).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            dynamic result = await basketController.ModifyItemDeliveryOpt(productID, deliveryOption);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-            if (returnType == "Ok")
-                Assert.IsTrue("{deliveryOpt:" + deliveryOption + "}" == result.Value);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "", "Ok")]
-        public void DeleteItem(string userId, string viewName, string returnType)
-        {
-            int productID = 0;
-
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.DeleteProductQuantityToUser(userId, productID)).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = basketController.DeleteItem(productID).Result;
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "", "Ok")]
-        public async Task BasketToPaypalBill(string userId, string viewName, string returnType)
-        {
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(userId, It.IsAny<bool>())).Returns(new List<Basket>()).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.BasketToPaypalBill();
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "", "Ok")]
-        public async Task BasketSold(string userId, string viewName, string returnType)
-        {
-            Account? account = returnType == "ContentResult" ? new("Epp", "Jean", UserType.CONSUMER, "Brouteur")
+            UpdateBasket basket = new()
             {
-                Email = "jean.epp@epitech.eu"
-            } : null;
-
-            if (returnType == "Ok")
-            {
-                _mockBasketRepo!.Setup(repo => repo.GetBasketForUser(userId, It.IsAny<bool>())).Returns(new List<Basket>()).Verifiable();
-                _mockAccountRepo!.Setup(repo => repo.GetById(userId)).ReturnsAsync(account).Verifiable();
-            }
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.BasketSold();
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "CraftsmanCmdList", "Ok")]
-        public async Task CraftsmanCmdList(string userId, string viewName, string returnType)
-        {
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.GetAllForCraftsman(userId)).Returns(new List<Basket>()).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.CraftsmanCmdList();
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase("Login", "Redirect")]
-        [TestCase("", "Ok")]
-        public async Task CmdChangeStatus(object viewName, string returnType)
-        {
-            int basketID = 0;
-            State state = State.END;
-
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.ModifyCurrentState(basketID, state)).ReturnsAsync(state).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.CmdChangeStatus(basketID, state);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "CreateCustomCmd", "Ok")]
-        public async Task CreateCustomCmd(string userId, string viewName, string returnType)
-        {
-            Account account = new("test", "account", UserType.CRAFTSMAN, "Brouteur")
-            {
-                Email = "account@test.com"
+                Id = id,
+                Quantity = quantity,
+                DeliveryOpt = deliveryOpt,
+                CurrentState = currentState
             };
 
-            if (returnType == "Ok")
-                _mockAccountRepo!.Setup(repo => repo.GetById(userId)).ReturnsAsync(account).Verifiable();
+            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/basket");
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            postRequest.Content = new StringContent(JsonSerializer.Serialize(basket), Encoding.UTF8, "application/json");
 
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.CreateCustomCmd(userId);
+            var response = await _client.SendAsync(postRequest);
+            response.EnsureSuccessStatusCode();
 
-            CommonTest.Control(_mocks!, result, viewName, returnType);
+            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+            Assert.NotNull(result);
         }
 
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "Chat", "Redirect")]
-        public async Task PostCreateCustomCmd(string userId, string viewName, string returnType)
+        [Order(4)]
+        [TestCase(1)]
+        public async Task Delete(int basketId)
         {
-            CreateCustomCmdViewModel CCCVM = new("00001", "Test product", "This is a test", 1);
+            var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/basket/" + basketId);
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            if (returnType == "Ok")
-                _mockBasketRepo!.Setup(repo => repo.CreateCustomCmd(userId, CCCVM.CraftsmanID, CCCVM.Name, CCCVM.Desc, CCCVM.Quantity)).ReturnsAsync(new List<Dictionary<string, string>>()).Verifiable();
+            var response = await _client.SendAsync(postRequest);
+            response.EnsureSuccessStatusCode();
 
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.PostCreateCustomCmd(CCCVM);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
+            string? result = await response.Content.ReadFromJsonAsync<string>();
+            Assert.NotNull(result);
+            Assert.AreEqual("Basket item with id " + basketId + " not found", result);
         }
 
-        [TestCase("Login", "Redirect")]
-        [TestCase("UpdateCustomCmd", "View")]
-        public async Task UpdateCustomCmd(string viewName, string returnType)
+        [Order(5)]
+        [TestCase("4 rue de l'arc-en-ciel")]
+        public async Task Payement(string address)
         {
-            Account account = new("test", "account", UserType.CRAFTSMAN, "Brouteur")
-            {
-                Email = "account@test.com"
-            };
-            Product product = new("Table", account);
-            Basket basket = new(account, product, 1, DeliveryOption.TAKEOUT, State.WAITINGCONSUMER, Enum.GetValues(typeof(State)).Cast<State>().ToList());
+            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/basket/pay");
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            postRequest.Content = new StringContent(JsonSerializer.Serialize(address), Encoding.UTF8, "application/json");
 
-            if (returnType == "Ok")
-            {
-                //_mockBasketRepo!.Setup(repo => repo.GetItem("classes/Basket/" + basket.ObjectId, cookie.SessionToken, It.IsAny<bool>())).ReturnsAsync(basket).Verifiable();
-                _mockProductRepo!.Setup(repo => repo.GetById(product.Id)).ReturnsAsync(product).Verifiable();
-                _mockAccountRepo!.Setup(repo => repo.GetById(account.Id)).ReturnsAsync(account).Verifiable();
-            }
+            var response = await _client.SendAsync(postRequest);
+            response.EnsureSuccessStatusCode();
 
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.UpdateCustomCmd(basket.Id);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
-        }
-
-        [TestCase(null, "Login", "Redirect")]
-        [TestCase("jean.epp@epitech.eu", "Chat", "Redirect")]
-        public async Task PostUpdateCustomCmd(string objectId, object viewName, string returnType)
-        {
-            Account account = new("test", "account", UserType.CRAFTSMAN, "Brouteur")
-            {
-                Email = "account@test.com",
-            };
-            Product product = new("Table", account);
-            Basket basket = new(account, product, 1, DeliveryOption.TAKEOUT, State.WAITINGCONSUMER, Enum.GetValues(typeof(State)).Cast<State>().ToList());
-
-            if (returnType == "Redirect" && objectId != null)
-                _mockBasketRepo!.Setup(repo => repo.UpdateCustomCmd(basket)).ReturnsAsync(basket).Verifiable();
-
-            BasketController basketController = new(_mockMailService!.Object, _db!.Object);
-            var result = await basketController.PostUpdateCustomCmd(basket);
-
-            CommonTest.Control(_mocks!, result, viewName, returnType);
+            Dictionary<string, object>? result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+            Assert.NotNull(result);
         }
     }
-}*/
+}
