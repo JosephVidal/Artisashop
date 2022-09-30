@@ -1,6 +1,7 @@
 import React from "react";
 import TopMenu from "components/TopMenu";
 import LogHandler from "components/LogHandler";
+import Footer from "components/Footer";
 import { ToastHandler } from "components/Toaster";
 import { Outlet } from "react-router-dom";
 import { ContentWrapper, TemplateWrapper, ChildrenWrapper } from "./styles";
@@ -17,6 +18,7 @@ const Template: React.FunctionComponent<Props> = ({ toastHandler }) => (
         <LogHandler toastHandler={toastHandler} />
         <Outlet />
       </ChildrenWrapper>
+      <Footer />
     </ContentWrapper>
   </TemplateWrapper>
 );
