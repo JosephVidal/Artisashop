@@ -4,14 +4,14 @@ namespace Artisashop.Models
 {
     public class ChatMessage
     {
-        protected ChatMessage()
+        public ChatMessage()
         {
         }
 
         public ChatMessage(Account senderId, Account receiverId, string? content, string? joined, string? filename)
         {
-            SenderId = senderId;
-            ReceiverId = receiverId;
+            Sender = senderId;
+            Receiver = receiverId;
             Date = DateTime.Now;
             Content = content;
             Joined = joined;
@@ -20,8 +20,8 @@ namespace Artisashop.Models
 
         [Key]
         public int Id { get; set; }
-        public Account? SenderId { get; set; }
-        public Account? ReceiverId { get; set; }
+        public Account? Sender { get; set; }
+        public Account? Receiver { get; set; }
         public DateTime Date { get; set; }
         public string? Content { get; set; }
         public string? Joined { get; set; }
