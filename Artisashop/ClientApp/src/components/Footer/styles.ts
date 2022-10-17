@@ -40,6 +40,7 @@ footer {
     border-bottom: solid 1px var(--bs-white);
 
     input, ::placeholder {
+        background-color: var(--artshp-white);
         border-radius: var(--elem-radius);
         color: #2F3B4B;
     }

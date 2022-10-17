@@ -18,14 +18,14 @@ const Footer: React.FunctionComponent<Props> = () => (
       <div id="foot-content">
         <div>
           <h3>A propos</h3>
-          <a href="/">équipe</a>
+          <a href="/">L&apos;équipe</a>
           <a href="/">Nous rejoindre</a>
         </div>
         <div>
           <h3>Boutique</h3>
           <a href="/">Les créateurs</a>
           <a href="/">Leur créations</a>
-          <a href="/">inscrire</a>
+          <a href="/">S&apos;inscrire</a>
         </div>
         <div>
           <h3>Aide</h3>
