@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
-using Artisashop.Interfaces.IRepository;
 using Artisashop.Models.ViewModel;
 using Artisashop.Hubs.Clients;
 using Artisashop.Services;

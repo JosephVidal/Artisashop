@@ -5,7 +5,7 @@ namespace Artisashop.OldHubs;
 
 public class OldChatHub : Hub
 {
-    public HashSet<ConnectedUserViewModel> ConnectedUsers { get; set; } = new();
+    public HashSet<ConnectedUser> ConnectedUsers { get; set; } = new();
 
     public OldChatHub()
     {
