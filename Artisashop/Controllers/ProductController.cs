@@ -32,9 +32,9 @@ namespace Artisashop.Controllers
         /// <returns>Product Index page on success, Unauthorized if not craftsmann, AccountController::Login if not logged in or BadRequest</returns>
         [HttpGet("list")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ProductList()
         {
             try
@@ -57,9 +57,9 @@ namespace Artisashop.Controllers
         /// <returns>Product page on success, or BadRequest</returns>
         [HttpGet("info/{productId}")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Product(int productId)
         {
             try
@@ -81,15 +81,15 @@ namespace Artisashop.Controllers
         /// <param name="model">Model containing new product information</param>
         /// <returns>Update page on success, Unauthorized if not craftsman, AccountController::Login if not logged in or BadRequest</returns>
         [HttpPost("create")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create([FromBody] CreateProduct model)
         {
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
-
                 Product product = new(model, account);
+
                 var success = await _db.Products!.AddAsync(product);
                 if (success == null)
                     return BadRequest("Creation failed");
@@ -108,9 +108,9 @@ namespace Artisashop.Controllers
         /// <param name="productId">The id of the product to update</param>
         /// <returns>Update page on success, NotFound, Unauthorized if not craftsman, AccountController::Login if not logged in or BadRequest</returns>
         [HttpPatch("update/{productId}")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update(int productId, [FromBody] CreateProduct model)
         {
             try
@@ -120,7 +120,7 @@ namespace Artisashop.Controllers
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
                 product.ImagesList = JsonSerializer.Serialize(model.Images);
-                product.StyleList = JsonSerializer.Serialize(model.Styles);
+                product.StylesList = JsonSerializer.Serialize(model.Styles);
                 var success = _db.Products!.Update(product);
                 if (success == null)
                     return BadRequest("Update failed");
@@ -139,9 +139,9 @@ namespace Artisashop.Controllers
         /// <param name="productId">The id of the product to delete</param>
         /// <returns>Index page on success, Unauthorized if not craftsman, AccountController::Login if not logged in ot BadRequest</returns>
         [HttpDelete("delete/{productId}")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete(int productId)
         {
             try

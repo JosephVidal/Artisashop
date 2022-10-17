@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Artisashop.Models.ViewModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Artisashop.Models
 {
     public class Basket
     {
-        protected Basket()
+        public Basket()
         {
         }
 
@@ -23,12 +24,19 @@ namespace Artisashop.Models
 
         [Key]
         public int Id { get; set; }
+        [Required]
         public string? AccountId { get; set; }
+        [Required]
         public Account? Account { get; set; }
+        [Required]
         public int ProductId { get; set; }
+        [Required]
         public Product? Product { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public DeliveryOption DeliveryOpt { get; set; }
+        [Required]
         public State CurrentState { get; set; }
         [NotMapped]
         public List<State>? PossibleState { get; set; }

@@ -28,8 +28,8 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Home page with data or BadRequest</returns>
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
         public IActionResult Index()
         {
             try

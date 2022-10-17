@@ -11,7 +11,7 @@ namespace Artisashop.Models
         {
             ImagesList = "[]";
             Images = new List<string>();
-            StyleList = "[]";
+            StylesList = "[]";
             Styles = new List<string>();
         }
 
@@ -24,7 +24,7 @@ namespace Artisashop.Models
             CraftsmanId = craftsman.Id;
             Craftsman = craftsman;
             ImagesList = JsonSerializer.Serialize(images);
-            StyleList = JsonSerializer.Serialize(style);
+            StylesList = JsonSerializer.Serialize(style);
         }
 
         public Product(CreateProduct product, Account craftsman)
@@ -36,7 +36,7 @@ namespace Artisashop.Models
             CraftsmanId = craftsman.Id;
             Craftsman = craftsman;
             ImagesList = JsonSerializer.Serialize(product.Images);
-            StyleList = JsonSerializer.Serialize(product.Styles);
+            StylesList = JsonSerializer.Serialize(product.Styles);
         }
 
         [Key]
@@ -59,11 +59,11 @@ namespace Artisashop.Models
             get => JsonSerializer.Deserialize<List<string>>(ImagesList);
             set => ImagesList = JsonSerializer.Serialize(Images);
         }
-        public string StyleList { get; set; }
+        public string StylesList { get; set; }
         [NotMapped]
         public List<string>? Styles {
-            get => JsonSerializer.Deserialize<List<string>>(StyleList);
-            set => StyleList = JsonSerializer.Serialize(Styles);
+            get => JsonSerializer.Deserialize<List<string>>(StylesList);
+            set => StylesList = JsonSerializer.Serialize(Styles);
         }
     }
 }

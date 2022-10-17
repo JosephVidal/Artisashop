@@ -1,8 +1,8 @@
 namespace Artisashop.Models.ViewModel
 {
-    public class CmdListViewModel
+    public class OrderList
     {
-        public CmdListViewModel(Basket item, List<Basket.State> possibleState)
+        public OrderList(Basket item, List<Basket.State> possibleState)
         {
             Item = item;
             PossibleState = possibleState;

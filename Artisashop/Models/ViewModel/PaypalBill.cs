@@ -1,37 +1,37 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Artisashop.Models.ViewModel
 {
-    public class PaypalBillViewModel
+    public class PaypalBill
     {
-        [JsonConstructor]
-        public PaypalBillViewModel()
+        public PaypalBill()
         {
             PurchaseUnits = new();
         }
 
-        [JsonProperty("purchase_units")]
         public List<PurchaseUnitElem> PurchaseUnits { get; set; }
 
-        //[JsonArray("purchaseUnitElem")]
         public class PurchaseUnitElem
         {
-            [JsonConstructor]
             public PurchaseUnitElem()
             {
                 Amount = new("EUR", 0);
                 Items = new();
             }
 
-            [JsonProperty("amount")]
-            public Amount Amount { get; set; }
-            [JsonProperty("items")]
-            public List<ItemElem> Items { get; set; }
+            [Required]
+            public Amount? Amount { get; set; }
+            [Required]
+            public List<ItemElem>? Items { get; set; }
         }
-        //[JsonArray("amount")]
+
         public class Amount
         {
-            [JsonConstructor]
+            public Amount()
+            {
+            }
+
             public Amount(string currencyCode, double value)
             {
                 CurrencyCode = currencyCode;
@@ -39,17 +39,20 @@ namespace Artisashop.Models.ViewModel
                 Breakdown = new(currencyCode, value);
             }
 
-            [JsonProperty("currency_code")]
-            public string CurrencyCode { get; set; }
-            [JsonProperty("value")]
-            public double Value { get; set; }
-            [JsonProperty("breakdown")]
-            public Breakdown Breakdown { get; set; }
+            [Required]
+            public string? CurrencyCode { get; set; }
+            [Required]
+            public double? Value { get; set; }
+            [Required]
+            public Breakdown? Breakdown { get; set; }
         }
-        //[JsonArray("itemElem")]
+
         public class ItemElem
         {
-            [JsonConstructor]
+            public ItemElem()
+            {
+            }
+
             public ItemElem(string name, string? description, int quantity, string currencyCode, double value)
             {
                 Name = name;
@@ -58,26 +61,28 @@ namespace Artisashop.Models.ViewModel
                 UnitAmount = new(currencyCode, value);
             }
 
-            [JsonProperty("name")]
-            public string Name { get; set; }
-            [JsonProperty("description")]
+            [Required]
+            public string? Name { get; set; }
             public string? Description { get; set; }
-            [JsonProperty("quantity")]
-            public int Quantity { get; set; }
-            [JsonProperty("unit_amount")]
-            public UnitAmount UnitAmount { get; set; }
+            [Required]
+            public int? Quantity { get; set; }
+            [Required]
+            public UnitAmount? UnitAmount { get; set; }
         }
         //[JsonArray("breakdown")]
         public class Breakdown
         {
-            [JsonConstructor]
+            public Breakdown()
+            {
+            }
+
             public Breakdown(string currencyCode, double value)
             {
                 ItemTotal = new(currencyCode, value);
             }
 
-            [JsonProperty("item_total")]
-            public UnitAmount ItemTotal { get; set; }
+            [Required]
+            public UnitAmount? ItemTotal { get; set; }
         }
         //[JsonArray("unitAmount")]
         public class UnitAmount
@@ -88,9 +93,7 @@ namespace Artisashop.Models.ViewModel
                 Value = value;
             }
 
-            [JsonProperty("currency_code")]
             public string CurrencyCode { get; set; }
-            [JsonProperty("value")]
             public double Value { get; set; }
         }
     }

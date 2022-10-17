@@ -1,8 +1,8 @@
 namespace Artisashop.Models.ViewModel
 {
-    public class SearchViewModel
+    public class Search
     {
-        public SearchViewModel(bool searchType, string searchStr)
+        public Search(bool searchType, string searchStr)
         {
             SearchType = searchType;
             SearchStr = searchStr;

@@ -41,7 +41,7 @@ namespace Artisashop.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(AccountToken) ,(int)HttpStatusCode.OK)]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
@@ -63,9 +63,9 @@ namespace Artisashop.Controllers
 
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(AccountToken), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
@@ -83,7 +83,7 @@ namespace Artisashop.Controllers
                     var userToken = new AccountToken(new AccountViewModel(account), await GenerateJwtToken(account));
                     return Ok(userToken);
                 }
-                return BadRequest(result);
+                return BadRequest(result.ToString());
             }
             catch (Exception ex)
             {
@@ -91,11 +91,11 @@ namespace Artisashop.Controllers
             }
         }
 
-        [HttpGet("info")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [HttpGet]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUser()
+        [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAccount()
         {
             try
             {
@@ -109,18 +109,18 @@ namespace Artisashop.Controllers
             }
         }
 
-        [HttpGet("info/{crafstman}")]
+        [HttpGet("{id}")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetCraftsman([FromQuery] string craftsmanId)
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAccountId([FromQuery] string id)
         {
             try
             {
-                Account? account = await _db.Accounts!.SingleOrDefaultAsync(craftsman => craftsman.Id == craftsmanId);
+                Account? account = await _db.Accounts!.SingleOrDefaultAsync(craftsman => craftsman.Id == id);
                 if (account == null)
-                    return NotFound("Craftsman with id " + craftsmanId + " not found");
+                    return NotFound("Craftsman with id " + id + " not found");
                 return Ok(account);
             }
             catch (Exception ex)
@@ -129,10 +129,10 @@ namespace Artisashop.Controllers
             }
         }
 
-        [HttpPatch("update")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateAccount model)
+        [HttpPatch]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccount model)
         {
             try
             {
@@ -149,10 +149,10 @@ namespace Artisashop.Controllers
             }
         }
 
-        [HttpDelete("delete")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteUser()
+        [HttpDelete]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteAccount()
         {
             try
             {
