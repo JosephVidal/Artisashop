@@ -1,9 +1,14 @@
+using Artisashop.Hubs;
+using Artisashop.Hubs.Clients;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Artisashop.Services;
+using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -20,10 +25,12 @@ namespace Artisashop.Controllers
     {
         private readonly StoreDbContext _db;
         private readonly Utils _utils = new();
+        private readonly IHubContext<ChatHub, IChatClient> _chatHub;
 
-        public ChatController(StoreDbContext db)
+        public ChatController(StoreDbContext db, IHubContext<ChatHub, IChatClient> chathub)
         {
             _db = db;
+            _chatHub = chathub;
         }
 
         /// <summary>
@@ -76,8 +83,19 @@ namespace Artisashop.Controllers
                     return NotFound("Sender with id " + message.FromUserId + " not found");
                 if (receiver == null)
                     return NotFound("Receiver with id " + message.ToUserID + " not found");
-                var result = await _db.ChatMessages!.AddAsync(new ChatMessage(sender, receiver, message.Content, message.Joined, message.Filename));
+                ChatMessage dbMsg = new ChatMessage(sender, receiver, message.Content, message.Joined, message.Filename);
+                var result = await _db.ChatMessages!.AddAsync(dbMsg);
                 await _db.SaveChangesAsync();
+
+                List<ChatUserDetail> toUserList = ChatHub.connectedUsers.Where(x => x.UserID == message.ToUserID).ToList();
+                List<ChatUserDetail> fromUserList = ChatHub.connectedUsers.Where(x => x.UserID == message.FromUserId).ToList();
+                foreach (ChatUserDetail elem in toUserList)
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.Filename, message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                //await Clients.Client(elem.ConnectionId).SendAsync("PrivateMessage", false, filename, message, date, file, tmp["objectId"]);
+                foreach (ChatUserDetail elem in fromUserList)
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.Filename, message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                //await Clients.Client(elem.ConnectionId).SendAsync("PrivateMessage", true, filename, message, date, file, tmp["objectId"]);
+
                 return Ok(result.Entity);
             } catch (Exception e)
             {
@@ -144,6 +162,12 @@ namespace Artisashop.Controllers
                 message.Content = content;
                 _db.ChatMessages!.Update(message);
                 await _db.SaveChangesAsync();
+
+                List<ChatUserDetail> userList = ChatHub.connectedUsers.Where(x => (x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id)).ToList();
+                foreach (ChatUserDetail elem in userList)
+                    await _chatHub.Clients.Client(elem.ConnectionId).UpdateMsg(msgId, message.Content);
+                //await Clients.Client(elem.ConnectionId).SendAsync("UpdateMsg", msgID, content);
+
                 return Ok(message);
             } catch(Exception e)
             {
@@ -163,8 +187,15 @@ namespace Artisashop.Controllers
         {
             try
             {
-                _db.ChatMessages!.Remove(await _db.ChatMessages.FirstAsync(message => message.Id == msgId));
+                var message = await _db.ChatMessages!.FirstAsync(message => message.Id == msgId);
+                _db.ChatMessages!.Remove(message);
                 await _db.SaveChangesAsync();
+
+                List<ChatUserDetail> userList = ChatHub.connectedUsers.Where(x => (x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id)).ToList();
+                foreach (ChatUserDetail elem in userList)
+                    await _chatHub.Clients.Client(elem.ConnectionId).DeleteMsg(msgId);
+                //await Clients.Client(elem.ConnectionId).SendAsync("DeleteMsg", msgID);
+
                 return Ok("Message with id " + msgId + " deleted");
             }
             catch (Exception e)

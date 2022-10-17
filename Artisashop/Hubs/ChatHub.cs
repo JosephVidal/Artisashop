@@ -13,13 +13,10 @@ namespace Artisashop.Hubs
 {
     public class ChatHub : Hub<IChatClient>
     {
-        static readonly List<ChatUserDetail> connectedUsers = new();
-        private readonly StoreDbContext _db;
-        private readonly Utils _utils = new();
+        public static readonly List<ChatUserDetail> connectedUsers = new();
 
-        public ChatHub(StoreDbContext db)
+        public ChatHub()
         {
-            _db = db;
         }
 
         public async Task Connect(string userID, string username)
@@ -54,11 +51,11 @@ namespace Artisashop.Hubs
             await base.OnDisconnectedAsync(e);
         }
 
-        public async Task SendPrivateMessage(string toUserID, string filename, string message, DateTime date, string? file = null)
+        /*public async Task SendPrivateMessage(string toUserID, string filename, string message, DateTime date, string? file = null)
         {
             string fromConnectionID = Context.ConnectionId;
             string fromUserID = connectedUsers.Where(x => x.ConnectionId == fromConnectionID).FirstOrDefault()!.UserID;
-            int tmp = await _chatHistoryRepo.AddToHistory(fromUserID, toUserID, filename, message, date, file);
+            //int tmp = await _chatHistoryRepo.AddToHistory(fromUserID, toUserID, filename, message, date, file);
             List<ChatUserDetail> toUserList = connectedUsers.Where(x => x.UserID == toUserID).ToList();
             List<ChatUserDetail> fromUserList = connectedUsers.Where(x => x.UserID == fromUserID).ToList();
             foreach (ChatUserDetail elem in toUserList)
@@ -67,15 +64,6 @@ namespace Artisashop.Hubs
             foreach (ChatUserDetail elem in fromUserList)
                 await Clients.Client(elem.ConnectionId).PrivateMessage(true, filename, message, date, file, tmp);
                 //await Clients.Client(elem.ConnectionId).SendAsync("PrivateMessage", true, filename, message, date, file, tmp["objectId"]);
-        }
-
-        public async Task LoadHistory(string currentUserID, string otherUserID)
-        {
-            List<ChatMessage> chatHistory = _chatHistoryRepo.LoadHistory(currentUserID, otherUserID);
-            string connectionID = Context.ConnectionId;
-            foreach (ChatMessage elem in chatHistory)
-                await Clients.Client(connectionID).PrivateMessage((elem.SenderId?.Id == currentUserID), elem.Filename, elem.Content, elem.Date, elem.Joined, elem.Id);
-                //await Clients.Client(connectionID).SendAsync("PrivateMessage", (elem.SenderId.ObjectId == currentUserID), elem.Filename, elem.Content, elem.Date.Iso, elem.Joined, elem.ObjectId);
         }
 
         public async Task DeleteMsg(int msgID)
@@ -99,6 +87,6 @@ namespace Artisashop.Hubs
                     await Clients.Client(elem.ConnectionId).UpdateMsg(msgID, content);
                     //await Clients.Client(elem.ConnectionId).SendAsync("UpdateMsg", msgID, content);
             }
-        }
+        }*/
     }
 }
