@@ -17,7 +17,7 @@ export const ProductCardWrapper = styled.div`
 
         p {
             font-family: Helvetica;
-            margin: 5px;
+            margin: 5px 0px;
         }
 
         :hover {color: var(--artshp-orange);}
