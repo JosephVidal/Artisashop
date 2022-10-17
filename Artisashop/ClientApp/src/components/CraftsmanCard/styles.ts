@@ -33,4 +33,9 @@ export const CraftsmanCardWrapper = styled.div`
         font-weight: lighter;
         font-size: 1.2em;
     }
+
+    #craftsman-description {
+        font-size: 1.5em;
+        font-weight: lighter;
+    }
 `;

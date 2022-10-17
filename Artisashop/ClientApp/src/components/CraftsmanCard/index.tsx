@@ -23,7 +23,7 @@ const CraftsmanCard: React.FunctionComponent<Props> = ({
                 <p id="craftsman-job">{job}</p>
             </div>
         </div>
-        <p>{description}</p>
+        <p id="craftsman-description">{description}</p>
     </div>
   </CraftsmanCardWrapper>
 );
