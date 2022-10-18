@@ -9,12 +9,7 @@ footer {
     text-align: center;
     background-color: #2F3B4B;
 
-    a {
-        color: var(--bs-light);
-        text-decoration: none;
-
-        &:hover {color: var(--bs-secondary);}
-    }
+    a {text-decoration: none;}
 
     /* label {background-image: image-url("../../img/SocialNetwork/send.svg");} */
 }
