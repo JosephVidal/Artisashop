@@ -12,19 +12,7 @@ section {
     }
 }
 
-.search-input {
-    background-color: var(--bs-white);
-    border: 0;
-    border-radius: var(--elem-radius);
-    padding: 3px;
-    padding-left: 7px;
-    margin-right: 10px;
-    width: 20vw;
-    font-size: 1.2em;
-
-    ::placeholder {color: var(--artshp-dark-blue)}
-    :focus {border: solid 1px var(--artshp-orange)}
-}
+.search-input {width: 20vw;}
 
 .search-button {
     border: 0;
@@ -65,20 +53,6 @@ section {
     flex-direction: row;
     justify-content: space-around;
     margin-top: 80px;
-}
-
-.cta-home {
-    border-radius: var(--elem-radius);
-    background-color: var(--artshp-red);
-    color: var(--artshp-white);
-    text-decoration: none;
-    font-weight: bolder;
-    padding: 10px 40px;
-    margin-top: 90px;
-    transition: 0.3sec;
-    font-size: 0.8em;
-
-    :hover {background-color: var(--artshp-orange);}
 }
 
 #product-section, #craftsman-section {

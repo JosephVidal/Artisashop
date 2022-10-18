@@ -52,12 +52,12 @@ const Home: React.FunctionComponent<Props> = () => {
         <div id="register-dark">
           <h2>Artisan</h2>
           <p>Créez un compte et venez proposer vos produits</p>
-          <a className="cta-home" href="/register">Créer un compte artisan</a>
+          <a className="red-button" href="/register">Créer un compte artisan</a>
         </div>
         <div id="register-light">
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
-          <a className="cta-home" href="/register">Créer un compte client</a>
+          <a className="red-button" href="/register">Créer un compte client</a>
         </div>
       </section>
     </Wrapper>
