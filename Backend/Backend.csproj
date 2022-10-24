@@ -40,16 +40,4 @@
 	<ItemGroup>
 		<Folder Include="Models\Interface\" />
 	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="..\.dockerignore" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="..\.dockerignore" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="..\.dockerignore" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="..\.dockerignore" />
-	</ItemGroup>
 </Project>

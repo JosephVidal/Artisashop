@@ -8,13 +8,6 @@
 package-lock.json
 
 /.idea
-/Artisashop/ClientApp/.yarn
-/Artisashop/ClientApp/.idea
-/Artisashop/ClientApp/.vscode
-/Artisashop/ClientApp/yarn.lock
-/Artisashop/ClientApp/package-lock.json
-/Artisashop/ClientApp/node_modules
-/Artisashop/ClientApp/.yarnrc.yml
 
 # User-specific files
 *.suo
@@ -243,4 +236,3 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/Artisashop/ClientApp/.yarn/
