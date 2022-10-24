@@ -1,5 +1,5 @@
-﻿using Backend.Models;
-using Backend.Models.ViewModel;
+﻿using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static Backend.Models.Basket;
+using static Artisashop.Models.Basket;
 
 namespace Artisashop.Tests.Backend
 {

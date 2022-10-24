@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Backend.Models.ViewModel;
-using Backend.Models;
+using Artisashop.Models.ViewModel;
+using Artisashop.Models;
 
 namespace Artisashop.Tests.Backend
 {

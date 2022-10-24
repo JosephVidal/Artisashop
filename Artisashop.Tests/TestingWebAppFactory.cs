@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Artisashop.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;

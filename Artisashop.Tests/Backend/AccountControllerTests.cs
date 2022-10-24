@@ -7,8 +7,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Backend.Models;
-using Backend.Models.ViewModel;
+using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {

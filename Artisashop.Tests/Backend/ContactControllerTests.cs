@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Backend.Models.ViewModel;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {
