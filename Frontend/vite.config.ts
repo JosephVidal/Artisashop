@@ -8,11 +8,11 @@ import { execSync } from "child_process";
 
 export default defineConfig({
     plugins: [react(), mdx({})],
-    server: {
+    server: process.env.NODE_ENV === 'development' ? {
         port: 3000,
         strictPort: true,
         https: generateCerts(),
-    },
+    } : null,
 });
 
 /** Function taken from aspnetcore-https.js in ASP.NET React template */
