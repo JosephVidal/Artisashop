@@ -1,12 +1,12 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using Artisashop.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
-using Artisashop.Models.ViewModel;
 using System.Text;
 using System.Text.Json;
+using Backend.Models.ViewModel;
+using Backend.Models;
 
 namespace Artisashop.Tests.Backend
 {

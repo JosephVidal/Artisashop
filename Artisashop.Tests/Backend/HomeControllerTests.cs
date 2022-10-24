@@ -1,10 +1,8 @@
-﻿using Artisashop.Tests;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Artisashop.Models;
 using System.Net.Http.Json;
-using Artisashop.Models.ViewModel;
+using Backend.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {

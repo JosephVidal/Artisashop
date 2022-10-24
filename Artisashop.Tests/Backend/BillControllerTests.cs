@@ -1,13 +1,10 @@
-﻿using Artisashop.Models;
-using Artisashop.Models.ViewModel;
+﻿using Backend.Models;
+using Backend.Models.ViewModel;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Artisashop.Tests.Backend

@@ -1,5 +1,5 @@
-﻿using Artisashop.Models;
-using Artisashop.Models.ViewModel;
+﻿using Backend.Models;
+using Backend.Models.ViewModel;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;

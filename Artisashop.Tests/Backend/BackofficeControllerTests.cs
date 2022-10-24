@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Artisashop.Models.ViewModel;
-using Artisashop.Models;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text;
+using Backend.Models;
+using Backend.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {

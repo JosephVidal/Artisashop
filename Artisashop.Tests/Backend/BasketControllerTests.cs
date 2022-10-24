@@ -2,13 +2,13 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Net.Http;
-using Artisashop.Models;
 using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using static Artisashop.Models.Basket;
-using Artisashop.Models.ViewModel;
+using static Backend.Models.Basket;
+using Backend.Models;
+using Backend.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {

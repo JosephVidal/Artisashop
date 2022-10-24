@@ -6,10 +6,11 @@
     <ProjectGuid>d26782b6-4058-4d61-ad24-936a4443c2c7</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>artichaut</DockerServiceName>
+    <DockerServiceName>Artisashop</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="docker-compose-override.yml" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
