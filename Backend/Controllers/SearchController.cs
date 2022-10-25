@@ -26,7 +26,7 @@ namespace Backend.Controllers
         [HttpGet("product")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> ProductSearch([FromBody] ProductSearch search)
+        public async Task<IActionResult> ProductSearch([FromQuery] ProductSearch search)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Backend.Controllers
         [HttpGet("craftsman")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CraftsmanSearch([FromBody] CraftsmanSearch search)
+        public async Task<IActionResult> CraftsmanSearch([FromQuery] CraftsmanSearch search)
         {
             try
             {
