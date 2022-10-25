@@ -16,6 +16,8 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
+.yarn
+*.timestamp*
 *.suo
 *.ntvs*
 *.njsproj
