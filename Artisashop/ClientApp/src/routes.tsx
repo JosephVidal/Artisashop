@@ -8,6 +8,7 @@ import { ToastHandler } from "components/Toaster";
 import Home from "pages/Home";
 import Register from "pages/Register";
 import Login from "pages/Login";
+import Search from "pages/Search";
 import Template from "components/Template";
 
 interface Props {
@@ -21,6 +22,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) => (
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/search" element={<Search />} />
       </Route>
     </Wrapper>
   </Router>
