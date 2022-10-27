@@ -9,6 +9,7 @@ using Backend.Interfaces.IService;
 using Backend.Services.MailService;
 using Backend.Services;
 using Backend.Models.ViewModel;
+using Newtonsoft.Json;
 
 namespace Backend.Controllers
 {
@@ -33,8 +34,8 @@ namespace Backend.Controllers
         /// </summary>
         /// <returns>Serialized paypall bill or error 403</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(PaypalBill), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(PaypalBill), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> BasketToPaypalBill()
         {
             try
@@ -57,6 +58,7 @@ namespace Backend.Controllers
                 tmpPUE.Amount = new("EUR", tot);
                 paypalBill.PurchaseUnits.Add(tmpPUE);
                 return Ok(paypalBill);
+                //return Ok(JsonConvert.SerializeObject(paypalBill));
             }
             catch (Exception e)
             {
