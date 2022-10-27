@@ -114,7 +114,7 @@ namespace Backend.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAccountId([FromQuery] string id)
+        public async Task<IActionResult> GetAccountId(string id)
         {
             try
             {
