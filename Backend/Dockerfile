@@ -8,8 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Backend/Backend.csproj", "Backend/"]
-COPY ["CmaApi/src/CmaApi/CmaApi.csproj", "CmaApi/src/CmaApi/"]
-COPY ["RechercheEntreprisesApi/src/RechercheEntreprisesApi/RechercheEntreprisesApi.csproj", "RechercheEntreprisesApi/src/RechercheEntreprisesApi/"]
 RUN dotnet restore "Backend/Backend.csproj"
 COPY . .
 WORKDIR "/src/Backend"
