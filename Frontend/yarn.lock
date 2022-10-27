@@ -275,7 +275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.19.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.19.4
   resolution: "@babel/runtime@npm:7.19.4"
   dependencies:
@@ -2300,6 +2300,8 @@ __metadata:
     axios: ^0.27.2
     formik: ^2.2.9
     framer-motion: ^7.2.1
+    i18next-browser-languagedetector: ^7.0.0
+    i18next-http-backend: ^2.0.0
     primeicons: ^6.0.1
     primereact: ^8.7.0
     react: ^18.2.0
@@ -2774,6 +2776,15 @@ __metadata:
     path-type: ^4.0.0
     yaml: ^1.10.0
   checksum: 4be63e7117955fd88333d7460e4c466a90f556df6ef34efd59034d2463484e339666c41f02b523d574a797ec61f4a91918c5b89a316db2ea2f834e0d2d09465b
+  languageName: node
+  linkType: hard
+
+"cross-fetch@npm:3.1.5":
+  version: 3.1.5
+  resolution: "cross-fetch@npm:3.1.5"
+  dependencies:
+    node-fetch: 2.6.7
+  checksum: f6b8c6ee3ef993ace6277fd789c71b6acf1b504fd5f5c7128df4ef2f125a429e29cd62dc8c127523f04a5f2fa4771ed80e3f3d9695617f441425045f505cf3bb
   languageName: node
   linkType: hard
 
@@ -3670,6 +3681,24 @@ __metadata:
   dependencies:
     ms: ^2.0.0
   checksum: 9c7a74a2827f9294c009266c82031030eae811ca87b0da3dceb8d6071b9bde22c9f3daef0469c3c533cc67a97d8a167cd9fc0389350e5f415f61a79b171ded16
+  languageName: node
+  linkType: hard
+
+"i18next-browser-languagedetector@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "i18next-browser-languagedetector@npm:7.0.0"
+  dependencies:
+    "@babel/runtime": ^7.19.4
+  checksum: 4430a0bab327ce4f7370c75b54cde67da1368c028b3b2972d796c42913b4f4ae20e9b493041fa2860a8572694fd3b302465a4dfec6e19873c5188b1a88155ea8
+  languageName: node
+  linkType: hard
+
+"i18next-http-backend@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "i18next-http-backend@npm:2.0.0"
+  dependencies:
+    cross-fetch: 3.1.5
+  checksum: 2e2c8f427880540ce82a37367f095a9e4b2c816602443d1729a64062b6cedbaeb503a013e3fe5df0aa077ed0c252eb490d3c87245ef2945dbf2a11abad9872fe
   languageName: node
   linkType: hard
 
@@ -4697,7 +4726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:2.6.7, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:

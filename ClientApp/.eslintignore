@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+.idea
+.vscode
+.eslintrc.js
+build
+jest.config.ts
+src/custom-theme.css
+src/components/Logo/assets
