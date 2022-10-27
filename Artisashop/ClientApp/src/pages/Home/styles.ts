@@ -33,9 +33,9 @@ section {
     justify-content: center;
     flex-direction: column;
     height: 80vh;
-    background-image: url("../assets/31.jpeg");
+    background-image: url("img/home background.jpg");
+    background-size: contain;
     background-attachment: fixed;
-    background-color: var(--artshp-orange);
 
     h1 {
         display: block;
