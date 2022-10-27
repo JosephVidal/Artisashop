@@ -1,7 +1,9 @@
 export default function useApiUrl() {
-    return import.meta.env.VITE_ASPNETCORE_HTTPS_PORT
-        ? `https://localhost:${import.meta.env.VITE_ASPNETCORE_HTTPS_PORT}`
-        : import.meta.env.VITE_ASPNETCORE_URLS
-            ? import.meta.env.VITE_ASPNETCORE_URLS.split(";")[0]
-            : "http://localhost:5138";
+  if (process.env.REACT_APP_ASPNETCORE_HTTPS_PORT) {
+    return `https://localhost:${process.env.REACT_APP_ASPNETCORE_HTTPS_PORT}`;
+  }
+  if (process.env.REACT_APP_ASPNETCORE_URLS) {
+    return process.env.REACT_APP_ASPNETCORE_URLS.split(";")[0];
+  }
+  return "http://localhost:5138";
 }
