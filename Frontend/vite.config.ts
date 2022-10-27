@@ -13,6 +13,11 @@ export default defineConfig({
         strictPort: true,
         https: generateCerts(),
     } : null,
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
 });
 
 /** Function taken from aspnetcore-https.js in ASP.NET React template */
@@ -41,15 +46,15 @@ function generateCerts() {
     if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         const outp = execSync(
             "dotnet " +
-                [
-                    "dev-certs",
-                    "https",
-                    "--export-path",
-                    certFilePath,
-                    "--format",
-                    "Pem",
-                    "--no-password",
-                ].join(" ")
+            [
+                "dev-certs",
+                "https",
+                "--export-path",
+                certFilePath,
+                "--format",
+                "Pem",
+                "--no-password",
+            ].join(" ")
         );
         console.log(outp.toString());
     }
