@@ -23,6 +23,7 @@ export const CraftsmanCardWrapper = styled.div`
         img {
             height: 90px;
             width: 90px;
+            border-radius: 100%;
         }
     }
 
