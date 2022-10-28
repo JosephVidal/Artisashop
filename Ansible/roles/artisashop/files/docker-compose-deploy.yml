@@ -24,9 +24,9 @@ services:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_HOST}/?(.*)"
-      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://api.${ARTISASHOP_HOST}/$${3}"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_HOST}/$${3}"
 
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`api.${ARTISASHOP_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-core.loadbalancer.server.port=80"
 
