@@ -1,7 +1,7 @@
 ---
 - name: Ensure requirements
   hosts: instances
-  remote_user: admin
+  remote_user: ubuntu
   become: yes
   roles:
     - requirements
@@ -21,7 +21,7 @@
 
 - name: Create traefik and artisashop user, with current ssh key added
   hosts: instances
-  remote_user: admin
+  remote_user: ubuntu
   become: yes
   roles:
     - new_user
@@ -63,6 +63,6 @@
     artisashop_env_file: .env-artisashop
     artisashop_compose_file : docker-compose-deploy.yml
     artisashop_deploy_location : "/home/{{ ansible_user }}/artisashop"
-    artisashop_version: Dev
+    artisashop_version: dev
   tags:
     - artisashop
