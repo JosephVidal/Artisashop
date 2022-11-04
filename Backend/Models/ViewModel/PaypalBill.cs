@@ -1,19 +1,25 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Backend.Models.ViewModel
 {
     public class PaypalBill
     {
+        //[Newtonsoft.Json.JsonConstructor]
         public PaypalBill()
         {
             PurchaseUnits = new();
         }
 
+        [JsonProperty("purchase_units")]
+        [JsonPropertyName("purchase_units")]
         public List<PurchaseUnitElem> PurchaseUnits { get; set; }
 
+        //[JsonArray("purchaseUnitElem")]
         public class PurchaseUnitElem
         {
+            //[Newtonsoft.Json.JsonConstructor]
             public PurchaseUnitElem()
             {
                 Amount = new("EUR", 0);
@@ -21,13 +27,19 @@ namespace Backend.Models.ViewModel
             }
 
             [Required]
+            [JsonProperty("amount")]
+            [JsonPropertyName("amount")]
             public Amount? Amount { get; set; }
             [Required]
+            [JsonProperty("items")]
+            [JsonPropertyName("items")]
             public List<ItemElem>? Items { get; set; }
         }
 
+        //[JsonArray("amount")]
         public class Amount
         {
+            //[Newtonsoft.Json.JsonConstructor]
             public Amount()
             {
             }
@@ -40,15 +52,23 @@ namespace Backend.Models.ViewModel
             }
 
             [Required]
+            [JsonProperty("currency_code")]
+            [JsonPropertyName("currency_code")]
             public string? CurrencyCode { get; set; }
             [Required]
+            [JsonProperty("value")]
+            [JsonPropertyName("value")]
             public double? Value { get; set; }
             [Required]
+            [JsonProperty("breakdown")]
+            [JsonPropertyName("breakdown")]
             public Breakdown? Breakdown { get; set; }
         }
 
+        //[JsonArray("itemElem")]
         public class ItemElem
         {
+            //[Newtonsoft.Json.JsonConstructor]
             public ItemElem()
             {
             }
@@ -62,16 +82,25 @@ namespace Backend.Models.ViewModel
             }
 
             [Required]
+            [JsonProperty("name")]
+            [JsonPropertyName("name")]
             public string? Name { get; set; }
+            [JsonProperty("description")]
+            [JsonPropertyName("description")]
             public string? Description { get; set; }
             [Required]
+            [JsonProperty("quantity")]
+            [JsonPropertyName("quantity")]
             public int? Quantity { get; set; }
             [Required]
+            [JsonProperty("unit_amount")]
+            [JsonPropertyName("unit_amount")]
             public UnitAmount? UnitAmount { get; set; }
         }
         //[JsonArray("breakdown")]
         public class Breakdown
         {
+            //[Newtonsoft.Json.JsonConstructor]
             public Breakdown()
             {
             }
@@ -82,6 +111,8 @@ namespace Backend.Models.ViewModel
             }
 
             [Required]
+            [JsonProperty("item_total")]
+            [JsonPropertyName("item_total")]
             public UnitAmount? ItemTotal { get; set; }
         }
         //[JsonArray("unitAmount")]
@@ -93,7 +124,11 @@ namespace Backend.Models.ViewModel
                 Value = value;
             }
 
+            [JsonProperty("currency_code")]
+            [JsonPropertyName("currency_code")]
             public string CurrencyCode { get; set; }
+            [JsonProperty("value")]
+            [JsonPropertyName("value")]
             public double Value { get; set; }
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Net;
 
 namespace Backend.Controllers
@@ -71,8 +72,13 @@ namespace Backend.Controllers
         [ProducesResponseType(typeof(ChatMessage), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create([FromBody] CreateChatMessage message)
         {
-            try
-            {
+            try {
+                string[]? acceptedExt = new[] {
+                    "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm", "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx", "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
+                    "xml", "json", "txt", "csv",
+                    "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "ppm", "pgm", "pbm", "pnm", "webp", "heif", "avif", "bpg", "deep", "drw", "ecw", "fits", "flif", "ico", "ilbm", "img", "liff", "nrrd", "pam", "pcx", "pgf", "plbm", "sgi", "sid", "tga", "vicar", "xisf", "afphoto", "cd5", "clip", "cpt", "kra", "mdp", "pdn", "psd", "psp", "sai", "xcf", "cgm", "svg", "afdesign", "ai", "cdr", "gem", "gle", "hpgl", "hvif", "lottie", "mathml", "naplps", "odg", "pgml", "qcc", "regis", "rip", "vml", "xar", "xps", "amf", "blend", "dgn", "dwg", "dxf", "flt", "fvrml", "gltf", "hsf" , "iges", "imml", "ipa", "jt", "ma", "mb", "obj", "opengex", "ply", "povray", "prc", "step", "skp", "stl", "u3d", "vrml", "xaml", "xgl", "xvl", "xvrml", "x3d", "3d", "3df", "3dm", "3ds", "3dxml", "x3d", "eps", "ps", "pict", "wmf", "emf", "swf", "xaml", "mpo", "pns", "jps",
+                    "webm", "mkv", "flv", "vob", "ogv", "ogg", "drc", "gif", "gifv", "mng", "avi", "mts", "m2ts", "ts", "mov", "qt", "wmv", "yuv", "rm", "rmvb", "viv", "asf", "amv", "mp4", "m4p", "m4v", "mpg", "mp2", "mpeg", "mpe", "mpv", "mpg", "mpeg", "mpe", "mpv", "m2v", "m4v", "svi", "3gp", "3g2", "mxf", "roq", "nsv", "flv", "f4v", "f4p", "f4a", "f4b"
+                };
                 //db:
                 Account sender = await _db.Accounts!.FirstAsync(user => user.Id == message.FromUserId);
                 Account receiver = await _db.Accounts!.FirstAsync(user => user.Id == message.ToUserID);
