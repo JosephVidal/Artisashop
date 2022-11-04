@@ -46,8 +46,9 @@ export const RightIcons = styled(Quarter)`
   margin: 0.7rem 0 0.7rem 0;
 
   & svg {
-    flex: 0.25;
+    flex: 0.1;
     cursor: pointer;
+    margin: 0 5px 0 5px;
   }
 
   & svg:hover {
