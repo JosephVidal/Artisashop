@@ -43,6 +43,7 @@ namespace Backend.Models.ViewModel
             public Amount()
             {
             }
+
             public Amount(string currencyCode, double value)
             {
                 CurrencyCode = currencyCode;
@@ -71,6 +72,7 @@ namespace Backend.Models.ViewModel
             public ItemElem()
             {
             }
+
             public ItemElem(string name, string? description, int quantity, string currencyCode, double value)
             {
                 Name = name;

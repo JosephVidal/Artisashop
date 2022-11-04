@@ -1,7 +1,7 @@
 ---
 - name: Ensure requirements
   hosts: instances
-  remote_user: admin
+  remote_user: ubuntu
   become: yes
   roles:
     - requirements
@@ -20,7 +20,7 @@
 
 - name: Create develop user, with current ssh key added
   hosts: instances
-  remote_user: admin
+  remote_user: ubuntu
   become: yes
   roles:
     - new_user

@@ -113,7 +113,7 @@ namespace Backend.Controllers
         [HttpGet("update/{basketID}")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUpdate([FromQuery] int basketId)
+        public async Task<IActionResult> GetUpdate(int basketId)
         {
             try
             {

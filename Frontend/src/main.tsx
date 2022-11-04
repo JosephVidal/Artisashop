@@ -3,7 +3,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter} from 'react-router-dom'
 import App from './App'
-import './index.css'
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "./custom-theme.css";
+import { StoreProvider } from "@/reducers/utils";
+import "./i18n";
+import Loader from "@/components/Loader";
 import {ProvideAuth} from "./hooks/useAuth";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
