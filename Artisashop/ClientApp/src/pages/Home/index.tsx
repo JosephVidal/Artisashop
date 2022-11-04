@@ -44,8 +44,8 @@ const Home: React.FunctionComponent<Props> = () => {
       <section id="craftsman-section">
         <h2>Artisans de la semaine</h2>
         <div className="section-body">
-          <CraftsmanCard name="Jean Epp" job="Facteur de colliers de pâtes" img="../../assets/Logox150.png" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
-          <CraftsmanCard name="Joseph Vidal" job="Sculpteur" img="../../assets/Logox150.png" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
+          <CraftsmanCard name="Jean Epp" job="Facteur de colliers de pâtes" img="img/craftsman/Joseph.jpg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
+          <CraftsmanCard name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
         </div>
       </section>
       <section id="register-section">

@@ -11,9 +11,9 @@ const Register = () => (
           <input type="text" placeholder="Prénom"/>
           <input type="text" placeholder="Nom"/>
         </div>
-        <input className="credentials" type="text" placeholder="Email"/>
-        <input className="credentials" type="text" placeholder="Mot de passe"/>
-        <input className="credentials" type="text" placeholder="Confirmer mot de passe"/>
+        <input className="credentials" type="email" placeholder="Email"/>
+        <input className="credentials" type="password" placeholder="Mot de passe"/>
+        <input className="credentials" type="password" placeholder="Confirmer mot de passe"/>
         <button type="submit" id="register-button" className="red-button">Créer un compte</button>
       </form>
       <p>Déjà inscrit? <a href="/login">Connectez-vous</a> !</p>
