@@ -10,6 +10,7 @@ import Register from "pages/Register";
 import Login from "pages/Login";
 import Search from "pages/Search";
 import Product from "pages/Product";
+import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
 import {useAuth} from "./hooks/useAuth";
 
@@ -27,6 +28,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
           <Route path="/login" element={<Login/>}/>
           <Route path="/search" element={<Search/>}/>
           <Route path="/product" element={<Product/>}/>
+          <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />}/>
         </Route>
       </Wrapper>
     </Router>
