@@ -50,10 +50,7 @@ namespace Artisashop.Models
         [NotMapped]
         public string? Password { get; set; }
         public string? Job { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime? CreatedAt { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; }
         public List<Product>? Products { get; set; }
         public List<Basket>? Baskets { get; set; }
