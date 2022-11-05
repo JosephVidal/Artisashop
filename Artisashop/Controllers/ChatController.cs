@@ -72,6 +72,11 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(ChatMessage), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create([FromBody] CreateChatMessage message)
         {
+            if (message == null)
+            {
+                return BadRequest("Message is null");
+            }
+
             try {
                 string[]? acceptedExt = new[] {
                     "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm", "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx", "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
@@ -85,13 +90,13 @@ namespace Artisashop.Controllers
                     (null != message.Joined && (200UL * 1000000UL) >= fileSize && !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
                     return BadRequest("Invalid joined file");
                 //db:
-                Account sender = await _db.Accounts!.FirstAsync(user => user.Id == message.FromUserId);
-                Account receiver = await _db.Accounts!.FirstAsync(user => user.Id == message.ToUserID);
+                Account sender = await _db.Accounts!.FirstAsync(user => user.Id == message!.FromUserId);
+                Account receiver = await _db.Accounts!.FirstAsync(user => user.Id == message!.ToUserID);
                 if (sender == null)
-                    return NotFound("Sender with id " + message.FromUserId + " not found");
+                    return NotFound("Sender with id " + message!.FromUserId + " not found");
                 if (receiver == null)
-                    return NotFound("Receiver with id " + message.ToUserID + " not found");
-                ChatMessage dbMsg = new ChatMessage(sender, receiver, message.Content, message.Joined, message.Filename);
+                    return NotFound("Receiver with id " + message!.ToUserID + " not found");
+                ChatMessage dbMsg = new ChatMessage(sender, receiver, message!.Content, message.Joined, message.Filename);
                 var result = await _db.ChatMessages!.AddAsync(dbMsg);
                 await _db.SaveChangesAsync();
                 //chat hub:

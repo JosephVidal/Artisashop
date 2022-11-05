@@ -86,13 +86,20 @@ public class AccountController : ControllerBase
                 Id = Guid.NewGuid().ToString()
             };
             var result = await _userManager.CreateAsync(account, model.Password);
-
-            if (result.Succeeded)
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+            IdentityResult identityResult = await _userManager.AddToRoleAsync(account, Account.UserType.CONSUMER.ToString());
+            if (!identityResult.Succeeded)
+                return BadRequest(identityResult.Errors);
+            identityResult = await _userManager.AddToRoleAsync(account, model.Role.ToString());
+            if (identityResult.Succeeded)
             {
-                await _signInManager.SignInAsync(account, false);
-                var userToken = new AccountToken(new AccountViewModel(account), await GenerateJwtToken(account));
+                var appUser = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+                await _signInManager.SignInAsync(appUser, false);
+                var userToken = new AccountToken(new AccountViewModel(appUser), await GenerateJwtToken(appUser));
                 return Ok(userToken);
             }
+
             return BadRequest(result.ToString());
         }
         catch (Exception ex)
@@ -183,7 +190,7 @@ public class AccountController : ControllerBase
     [HttpPost("external-login")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public IActionResult ExternalLogin(string provider, string returnUrl = null)
+    public IActionResult ExternalLogin(string provider, string? returnUrl = null)
     {
         // Request a redirect to the external login provider.
         var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
@@ -196,7 +203,7 @@ public class AccountController : ControllerBase
     [HttpGet("external-login-callback")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(ExternalLoginConfirmationViewModel), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
+    public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null)
     {
         var info = await _signInManager.GetExternalLoginInfoAsync();
         if (info == null)
@@ -205,7 +212,7 @@ public class AccountController : ControllerBase
         }
         // acr_values are mapped to this authnclassreference claim by .NET
         string? acrValues = info.Principal?.FindFirst("http://schemas.microsoft.com/claims/authnclassreference")?.Value;
-        if (!Validation.IsEIdasLevelMet(acrValues, _franceConnectConfiguration.EIdasLevel))
+        if (!Validation.IsEIdasLevelMet(acrValues!, _franceConnectConfiguration.EIdasLevel))
         {
             // TODO: Figure that out
             // await HttpContext.SignOutAsync(FranceConnectConfiguration.ProviderScheme, new AuthenticationProperties { RedirectUri = Url.Action(nameof(Login), null, null, Request.Scheme) });

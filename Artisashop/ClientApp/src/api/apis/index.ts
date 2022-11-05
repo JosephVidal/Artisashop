@@ -11,5 +11,6 @@ export * from './HomeApi';
 export * from './OidcConfigurationApi';
 export * from './OrderApi';
 export * from './ProductApi';
+export * from './ReportApi';
 export * from './SearchApi';
 export * from './WeatherForecastApi';

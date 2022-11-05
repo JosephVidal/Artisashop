@@ -26,6 +26,8 @@ export * from './ProblemDetails';
 export * from './Product';
 export * from './PurchaseUnitElem';
 export * from './Register';
+export * from './Report';
+export * from './ReportStatus';
 export * from './State';
 export * from './UnitAmount';
 export * from './UpdateAccount';

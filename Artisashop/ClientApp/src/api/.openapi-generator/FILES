@@ -9,6 +9,7 @@ apis/HomeApi.ts
 apis/OidcConfigurationApi.ts
 apis/OrderApi.ts
 apis/ProductApi.ts
+apis/ReportApi.ts
 apis/SearchApi.ts
 apis/WeatherForecastApi.ts
 apis/index.ts
@@ -39,6 +40,8 @@ models/ProblemDetails.ts
 models/Product.ts
 models/PurchaseUnitElem.ts
 models/Register.ts
+models/Report.ts
+models/ReportStatus.ts
 models/State.ts
 models/UnitAmount.ts
 models/UpdateAccount.ts
