@@ -29,6 +29,7 @@ models/CreateChatMessage.ts
 models/CreateCustomOrder.ts
 models/CreateProduct.ts
 models/DeliveryOption.ts
+models/ExternalLoginConfirmationViewModel.ts
 models/Home.ts
 models/ItemElem.ts
 models/Login.ts

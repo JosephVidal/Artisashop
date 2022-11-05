@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Account,
   AccountToken,
+  ExternalLoginConfirmationViewModel,
   Login,
   ProblemDetails,
   Register,
@@ -27,6 +28,8 @@ import {
     AccountToJSON,
     AccountTokenFromJSON,
     AccountTokenToJSON,
+    ExternalLoginConfirmationViewModelFromJSON,
+    ExternalLoginConfirmationViewModelToJSON,
     LoginFromJSON,
     LoginToJSON,
     ProblemDetailsFromJSON,
@@ -36,6 +39,15 @@ import {
     UpdateAccountFromJSON,
     UpdateAccountToJSON,
 } from '../models';
+
+export interface ApiAccountExternalLoginCallbackGetRequest {
+    returnUrl?: string;
+}
+
+export interface ApiAccountExternalLoginPostRequest {
+    provider?: string;
+    returnUrl?: string;
+}
 
 export interface ApiAccountIdGetRequest {
     id: string;
@@ -84,6 +96,73 @@ export class AccountApi extends runtime.BaseAPI {
     async apiAccountDelete(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.apiAccountDeleteRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountExternalLoginCallbackGetRaw(requestParameters: ApiAccountExternalLoginCallbackGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ExternalLoginConfirmationViewModel>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.returnUrl !== undefined) {
+            queryParameters['returnUrl'] = requestParameters.returnUrl;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/external-login-callback`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ExternalLoginConfirmationViewModelFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountExternalLoginCallbackGet(requestParameters: ApiAccountExternalLoginCallbackGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ExternalLoginConfirmationViewModel> {
+        const response = await this.apiAccountExternalLoginCallbackGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountExternalLoginPostRaw(requestParameters: ApiAccountExternalLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.provider !== undefined) {
+            queryParameters['provider'] = requestParameters.provider;
+        }
+
+        if (requestParameters.returnUrl !== undefined) {
+            queryParameters['returnUrl'] = requestParameters.returnUrl;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/external-login`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiAccountExternalLoginPost(requestParameters: ApiAccountExternalLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiAccountExternalLoginPostRaw(requestParameters, initOverrides);
     }
 
     /**

@@ -260,6 +260,62 @@
         }
       }
     },
+    "/api/account/external-login": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/account/external-login-callback": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "parameters": [
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalLoginConfirmationViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/backoffice": {
       "get": {
         "tags": [
@@ -2330,6 +2386,44 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "ExternalLoginConfirmationViewModel": {
+        "required": [
+          "birthdate",
+          "email",
+          "familyName",
+          "gender",
+          "givenName"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "gender": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "givenName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "familyName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "preferredName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "Home": {
         "type": "object",

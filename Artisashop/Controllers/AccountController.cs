@@ -180,7 +180,7 @@ public class AccountController : ControllerBase
 
     //
     // POST: /Account/ExternalLogin
-    [HttpPost]
+    [HttpPost("external-login")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public IActionResult ExternalLogin(string provider, string returnUrl = null)
@@ -193,7 +193,7 @@ public class AccountController : ControllerBase
 
     //
     // GET: /Account/ExternalLoginCallback
-    [HttpGet]
+    [HttpGet("external-login-callback")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(ExternalLoginConfirmationViewModel), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)

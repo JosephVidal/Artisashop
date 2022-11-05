@@ -16,6 +16,7 @@ export * from './CreateChatMessage';
 export * from './CreateCustomOrder';
 export * from './CreateProduct';
 export * from './DeliveryOption';
+export * from './ExternalLoginConfirmationViewModel';
 export * from './Home';
 export * from './ItemElem';
 export * from './Login';
