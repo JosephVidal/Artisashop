@@ -10,6 +10,7 @@ import "./custom-theme.css";
 import { StoreProvider } from "reducers/utils";
 import "./i18n";
 import Loader from "components/Loader";
+import { ProvideAuth } from "hooks/useAuth";
 
 PrimeReact.ripple = true;
 
@@ -19,12 +20,13 @@ const root = createRoot(container!);
 root.render(
   <React.Suspense fallback={<Loader visible />}>
     <GlobalStyles />
-
-    <StoreProvider>
-      <Toaster>
-        {(toastHandler) => <Routes toastHandler={toastHandler} />}
-      </Toaster>
-    </StoreProvider>
+    <ProvideAuth>
+      <StoreProvider>
+        <Toaster>
+          {(toastHandler) => <Routes toastHandler={toastHandler} />}
+        </Toaster>
+      </StoreProvider>
+    </ProvideAuth>
   </React.Suspense>
 );
 export { useInterval } from "globals/useInterval";
