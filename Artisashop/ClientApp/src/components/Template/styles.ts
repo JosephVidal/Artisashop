@@ -7,12 +7,17 @@ export const TemplateWrapper = styled.div`
   flex-direction: row;
 `;
 
-export const ContentWrapper = styled.div`
+interface ContentWrapperProps {
+  background: string;
+}
+
+export const ContentWrapper = styled.div<ContentWrapperProps>`
   display: flex;
   flex: 1;
   order: 1;
   flex-direction: column;
   align-content: flex-start;
+  background: ${(props) => props.background};
 `;
 
 export const ChildrenWrapper = styled.div`

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import Logo from "assets/LogoOvale.png";
 import { BaseText } from "globals/styles";
 import { Image } from "primereact/image";
@@ -20,6 +21,7 @@ interface Props {}
 
 const TopMenu: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <TopMenuWrapper>
@@ -29,7 +31,7 @@ const TopMenu: React.FunctionComponent<Props> = () => {
           {t("menu.search")}
         </BaseText>
       </MenuItem>
-      <Image src={Logo} width="50px" />
+      <Image src={Logo} width="50px" onClick={() => navigate("/")} />
       <MenuItem>
         <BaseText onClick={() => console.log("Contact")}>
           {t("menu.contact")}
@@ -37,8 +39,8 @@ const TopMenu: React.FunctionComponent<Props> = () => {
       </MenuItem>
       <RightIcons>
         <BsCart size="100%" onClick={() => console.log("Cart")} />
-        <BsChat size="100%" onClick={() => console.log("Chat")} />
-        <BsPerson size="100%" onClick={() => console.log("Account")} />
+        <BsChat size="100%" onClick={() => navigate("/chat")} />
+        <BsPerson size="100%" onClick={() => navigate("/login")} />
       </RightIcons>
     </TopMenuWrapper>
   );
