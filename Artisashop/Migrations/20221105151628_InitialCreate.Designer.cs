@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Artisashop.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221105143358_InitialCreate")]
+    [Migration("20221105151628_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

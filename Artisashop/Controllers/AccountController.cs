@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Artisashop.Validation;
 using System.Globalization;
-using WebApp_Service_Provider_DotNet.ViewModels.Account;
+using Artisashop.Models.ViewModel.Account;
 
 [ApiController]
 [Produces("application/json")]
