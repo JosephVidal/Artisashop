@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-
-namespace WebApp_Service_Provider_DotNet.ViewModels.Data
+namespace Artisashop.Models.ViewModel.Data
 {
     public class CustomResourceViewModel : BaseResourceViewModel
     {
-        public string ValueOne { get; set; }
-        public string ValueTwo { get; set; }
+        public string ValueOne { get; set; } = null!;
+        public string ValueTwo { get; set; } = null!;
     }
 }

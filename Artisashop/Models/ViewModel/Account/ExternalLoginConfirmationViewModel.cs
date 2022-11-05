@@ -4,18 +4,18 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApp_Service_Provider_DotNet.ViewModels.Account
+namespace Artisashop.Models.ViewModel.Account
 {
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
         [EmailAddress]
         [Display(Name = "Adresse e-mail")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [Display(Name = "Sexe")]
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -25,14 +25,14 @@ namespace WebApp_Service_Provider_DotNet.ViewModels.Account
 
         [Required]
         [Display(Name = "Prénom")]
-        public string GivenName { get; set; }
+        public string? GivenName { get; set; }
 
         [Required]
         [Display(Name = "Nom")]
-        public string FamilyName { get; set; }
+        public string? FamilyName { get; set; }
 
         [Display(Name = "Nom d'usage")]
-        public string PreferredName { get; set; }
-        
+        public string? PreferredName { get; set; }
+
     }
 }

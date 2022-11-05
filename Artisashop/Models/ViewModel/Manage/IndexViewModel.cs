@@ -11,7 +11,7 @@ namespace Artisashop.Models.ViewModel.Manage
     {
         public bool HasPassword { get; set; }
 
-        public IList<UserLoginInfo> Logins { get; set; }
+        public IList<UserLoginInfo> Logins { get; set; } = new List<UserLoginInfo>();
 
         public bool BrowserRemembered { get; set; }
     }

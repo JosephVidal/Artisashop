@@ -3,13 +3,13 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApp_Service_Provider_DotNet.ViewModels.Account
+namespace Artisashop.Models.ViewModel.Account
 {
     public class ForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]
         [Display(Name = "Adresse e-mail")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
     }
 }

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace WebApp_Service_Provider_DotNet.ViewModels.Data
+namespace Artisashop.Models.ViewModel.Data
 {
     public class BaseResourceViewModel
     {
