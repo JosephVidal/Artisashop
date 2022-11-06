@@ -235,3 +235,5 @@ deployment_key
 deployment_key.pub
 .env-traefik
 .env-traefik-demo
+
+client_secret*
