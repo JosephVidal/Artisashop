@@ -1,22 +1,30 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y \
+        nodejs \
+    && rm -rf /var/lib/apt/lists/*
+RUN ["npm", "install", "--global", "yarn"]
+RUN ["corepack", "enable"]
+RUN ["yarn", "set", "version", "stable"]
+
 WORKDIR /src
-COPY ["Backend/Backend.csproj", "Backend/"]
-RUN dotnet restore "Backend/Backend.csproj"
+COPY ["Artisashop/Artisashop.csproj", "Artisashop/"]
+RUN dotnet restore "Artisashop/Artisashop.csproj"
 COPY . .
-WORKDIR "/src/Backend"
-RUN dotnet build "Backend.csproj" -c Release -o /app/build
+WORKDIR "/src/Artisashop"
+RUN dotnet build "Artisashop.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Artisashop.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Backend.dll"]
+ENTRYPOINT ["dotnet", "Artisashop.dll"]

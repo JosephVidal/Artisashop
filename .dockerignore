@@ -1,4 +1,3 @@
-**/.classpath
 **/.dockerignore
 **/.env
 **/.git
@@ -8,6 +7,7 @@
 **/.toolstarget
 **/.vs
 **/.vscode
+**/.idea
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -24,6 +24,4 @@
 LICENSE
 README.md
 
-./Frontend
-./my-new-app
-./Ansible
+Ansible
