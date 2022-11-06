@@ -29,6 +29,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
           <Route path="/search" element={<Search/>}/>
           <Route path="/product" element={<Product/>}/>
           <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />}/>
+          <Route path="*" element={<div>404</div>}/>
         </Route>
       </Wrapper>
     </Router>
