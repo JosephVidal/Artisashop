@@ -17,7 +17,7 @@ RUN ["yarn", "set", "version", "stable"]
 WORKDIR /src
 COPY ["Artisashop/Artisashop.csproj", "Artisashop/"]
 RUN dotnet restore "Artisashop/Artisashop.csproj"
-COPY ./Artisashop ./Libs ./
+COPY . .
 WORKDIR "/src/Artisashop"
 RUN dotnet build "Artisashop.csproj" -c Release -o /app/build
 
