@@ -27,7 +27,7 @@ services:
         # Uncomment for production purpose
         - "--certificatesresolvers.artisashopresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
         #TODO Get an email aqqqddress from the group
-        - "--certificatesresolvers.artisashopresolver.acme.email=matthis.cusin@gmail.com"
+        - "--certificatesresolvers.artisashopresolver.acme.email=thomas.colonna@epitech.eu"
         - "--certificatesresolvers.artisashopresolver.acme.storage=/letsencrypt/acme.json"
       ports:
         - "80:80"
