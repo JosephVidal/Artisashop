@@ -73,57 +73,56 @@ builder.Services.AddAuthentication(options =>
     };
     options.RequireHttpsMetadata = false;
 })
-// .AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName, oidc_options =>
-//     {
-//         var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
+.AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName, oidc_options =>
+    {
+        var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
 
-//         // FC refuses unknown parameters in the requests, so the two following options are needed 
-//         oidc_options.DisableTelemetry = true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
-//         oidc_options.UsePkce = false; // This is true by default on .NET Core 3.1, and enables the PKCE mechanism which is not supported by FC.
+        // FC refuses unknown parameters in the requests, so the two following options are needed 
+        oidc_options.DisableTelemetry = true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
+        oidc_options.UsePkce = false; // This is true by default on .NET Core 3.1, and enables the PKCE mechanism which is not supported by FC.
 
-//         // FC has restrictions in the nonce (max 128 alphanumeric characters) and errors out in the logout flow otherwise. We use this option so that the nonce does not contain a dot.
-//         oidc_options.ProtocolValidator.RequireTimeStampInNonce = false;
+        // FC has restrictions in the nonce (max 128 alphanumeric characters) and errors out in the logout flow otherwise. We use this option so that the nonce does not contain a dot.
+        oidc_options.ProtocolValidator.RequireTimeStampInNonce = false;
 
-//         oidc_options.SaveTokens = true; // This is needed to keep the id_token obtained for authentication : we have to send it back to FC to logout.
+        oidc_options.SaveTokens = true; // This is needed to keep the id_token obtained for authentication : we have to send it back to FC to logout.
 
-//         oidc_options.ClientId = fcConfig.ClientId;
-//         oidc_options.ClientSecret = fcConfig.ClientSecret;
-//         oidc_options.CallbackPath = fcConfig.CallbackPath;
-//         oidc_options.SignedOutCallbackPath = fcConfig.SignedOutCallbackPath;
-//         oidc_options.Authority = fcConfig.Issuer;
-//         oidc_options.ResponseType = OpenIdConnectResponseType.Code;
-//         oidc_options.Scope.Clear();
-//         oidc_options.Scope.Add("openid");
-//         foreach (string scope in fcConfig.Scopes)
-//         {
-//             oidc_options.Scope.Add(scope);
-//         }
-//         oidc_options.GetClaimsFromUserInfoEndpoint = true;
-//         oidc_options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(fcConfig.ClientSecret));
-//         oidc_options.Configuration = new OpenIdConnectConfiguration
-//         {
-//             Issuer = fcConfig.Issuer,
-//             AuthorizationEndpoint = fcConfig.AuthorizationEndpoint,
-//             TokenEndpoint = fcConfig.TokenEndpoint,
-//             UserInfoEndpoint = fcConfig.UserInfoEndpoint,
-//             EndSessionEndpoint = fcConfig.EndSessionEndpoint,
-//         };
-//         oidc_options.Events = new OpenIdConnectEvents
-//         {
-//             OnRedirectToIdentityProvider = (context) =>
-//                 {
-//                     context.ProtocolMessage.AcrValues = "eidas" + fcConfig.EIdasLevel;
-//                     return Task.FromResult(0);
-//                 }
-//         };
-//         // We specify claims to be kept, as .NET Core 2.0+ doesn't keep claims it does not expect.
-//         oidc_options.ClaimActions.MapUniqueJsonKey("preferred_username", "preferred_username");
-//         oidc_options.ClaimActions.MapUniqueJsonKey("birthcountry", "birthcountry");
-//         oidc_options.ClaimActions.MapUniqueJsonKey("birthdate", "birthdate");
-//         oidc_options.ClaimActions.MapUniqueJsonKey("birthplace", "birthplace");
-//         oidc_options.ClaimActions.MapUniqueJsonKey("gender", "gender");
-//     });
-;
+        oidc_options.ClientId = fcConfig.ClientId;
+        oidc_options.ClientSecret = fcConfig.ClientSecret;
+        oidc_options.CallbackPath = fcConfig.CallbackPath;
+        oidc_options.SignedOutCallbackPath = fcConfig.SignedOutCallbackPath;
+        oidc_options.Authority = fcConfig.Issuer;
+        oidc_options.ResponseType = OpenIdConnectResponseType.Code;
+        oidc_options.Scope.Clear();
+        oidc_options.Scope.Add("openid");
+        foreach (string scope in fcConfig.Scopes)
+        {
+            oidc_options.Scope.Add(scope);
+        }
+        oidc_options.GetClaimsFromUserInfoEndpoint = true;
+        oidc_options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(fcConfig.ClientSecret));
+        oidc_options.Configuration = new OpenIdConnectConfiguration
+        {
+            Issuer = fcConfig.Issuer,
+            AuthorizationEndpoint = fcConfig.AuthorizationEndpoint,
+            TokenEndpoint = fcConfig.TokenEndpoint,
+            UserInfoEndpoint = fcConfig.UserInfoEndpoint,
+            EndSessionEndpoint = fcConfig.EndSessionEndpoint,
+        };
+        oidc_options.Events = new OpenIdConnectEvents
+        {
+            OnRedirectToIdentityProvider = (context) =>
+                {
+                    context.ProtocolMessage.AcrValues = "eidas" + fcConfig.EIdasLevel;
+                    return Task.FromResult(0);
+                }
+        };
+        // We specify claims to be kept, as .NET Core 2.0+ doesn't keep claims it does not expect.
+        oidc_options.ClaimActions.MapUniqueJsonKey("preferred_username", "preferred_username");
+        oidc_options.ClaimActions.MapUniqueJsonKey("birthcountry", "birthcountry");
+        oidc_options.ClaimActions.MapUniqueJsonKey("birthdate", "birthdate");
+        oidc_options.ClaimActions.MapUniqueJsonKey("birthplace", "birthplace");
+        oidc_options.ClaimActions.MapUniqueJsonKey("gender", "gender");
+    });
 
 builder.Services.AddAuthorization(options =>
 {
