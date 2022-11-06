@@ -150,11 +150,6 @@ const Chat: FC = () => {
   const [file, setFile] = useState<Maybe<File>>(None());
   const [edit, setEdit] = useState<Maybe<number>>(None());
 
-  file.cata(
-    () => null,
-    (f) => console.log(f.type)
-  )
-
   const renderContact = (contact: Contact) => {
     const interlocutor = contact.Receive ? contact.LastMsg.SenderId.UserName : contact.LastMsg.ReceiverId.UserName;
 
@@ -240,7 +235,7 @@ const Chat: FC = () => {
                   if (edit.isSome())
                     editMessage(setInput, setEdit, setConversation, conversation, edit, input)
                   else
-                    sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input)
+                    sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input, file)
                 }
               }} />
             <label htmlFor="file-upload">
@@ -248,7 +243,9 @@ const Chat: FC = () => {
               <ImAttachment size="100%" onClick={() => console.log("File")} />
             </label>
             <FaPaperPlane size="100%" onClick={() =>
-              edit.isSome() ? editMessage(setInput, setEdit, setConversation, conversation, edit, input) : sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input)
+              edit.isSome() ?
+                editMessage(setInput, setEdit, setConversation, conversation, edit, input) :
+                sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input, file)
             }/>
           </ChatInputWrapper>
         </ChatBottomWrapper>
