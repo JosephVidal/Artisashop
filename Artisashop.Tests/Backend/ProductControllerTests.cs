@@ -1,5 +1,5 @@
-﻿using Backend.Models;
-using Backend.Models.ViewModel;
+﻿using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -55,7 +55,7 @@ namespace Artisashop.Tests.Backend
         [TestCase("Table", "Jolie table", 39.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
         [TestCase("Chaise", "Jolie chaise", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
         [TestCase("Lampe", "Jolie lampe", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
-        public async Task Create(string name, string description, double price, int quantity, string images, string styles)
+        public async Task Create(string name, string description, decimal price, int quantity, string images, string styles)
         {
             CreateProduct newProduct = new()
             {
@@ -86,7 +86,7 @@ namespace Artisashop.Tests.Backend
 
         [Order(3)]
         [TestCase(2, "Chaise", "Jolie table", 19.99, 4, "[\"image1\"]", "[\"style2\"]")]
-        public async Task Update(int productId, string name, string description, double price, int quantity, string images, string styles)
+        public async Task Update(int productId, string name, string description, decimal price, int quantity, string images, string styles)
         {
             CreateProduct newProduct = new()
             {

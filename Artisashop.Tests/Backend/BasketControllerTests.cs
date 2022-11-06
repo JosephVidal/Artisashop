@@ -6,9 +6,9 @@ using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Backend.Models;
-using static Backend.Models.Basket;
-using Backend.Models.ViewModel;
+using Artisashop.Models;
+using static Artisashop.Models.Basket;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {

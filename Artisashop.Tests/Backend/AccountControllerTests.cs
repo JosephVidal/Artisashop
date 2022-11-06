@@ -1,21 +1,16 @@
-using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Backend.Models;
-using Backend.Models.ViewModel;
-using Microsoft.AspNetCore.Identity;
-using static IdentityModel.OidcConstants;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-using System.Globalization;
 using System.Net;
+using NUnit.Framework;
+using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {
