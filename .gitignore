@@ -235,5 +235,7 @@ deployment_key
 deployment_key.pub
 .env-traefik
 .env-traefik-demo
+Ansible/id_*
+!Ansible/id_*.pub
 
 client_secret*
