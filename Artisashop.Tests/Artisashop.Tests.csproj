@@ -9,7 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Dangl.Xunit.Extensions.Ordering" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="coverlet.collector" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
@@ -22,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backend\Backend.csproj" />
+    <ProjectReference Include="..\Artisashop\Artisashop.csproj" />
   </ItemGroup>
 
 </Project>

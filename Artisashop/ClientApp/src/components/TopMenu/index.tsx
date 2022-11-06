@@ -1,13 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router";
 import Logo from "assets/LogoOvale.png";
 import { BaseText } from "globals/styles";
+import { Link } from "react-router-dom";
 import { Image } from "primereact/image";
 import { useTranslation } from "react-i18next";
 import { BsCart, BsChat, BsPerson } from "react-icons/bs";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
-interface Props {}
+interface Props { }
 //
 // const MenuItemCornerRight = styled(MenuItem)`
 //   position: absolute;
@@ -21,7 +21,6 @@ interface Props {}
 
 const TopMenu: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   return (
     <TopMenuWrapper>
@@ -31,16 +30,16 @@ const TopMenu: React.FunctionComponent<Props> = () => {
           {t("menu.search")}
         </BaseText>
       </MenuItem>
-      <Image src={Logo} width="50px" onClick={() => navigate("/")} />
+      <Link to="/"><Image src={Logo} width="50px" /></Link>
       <MenuItem>
         <BaseText onClick={() => console.log("Contact")}>
           {t("menu.contact")}
         </BaseText>
       </MenuItem>
       <RightIcons>
-        <BsCart size="100%" onClick={() => console.log("Cart")} />
-        <BsChat size="100%" onClick={() => navigate("/chat")} />
-        <BsPerson size="100%" onClick={() => navigate("/login")} />
+        <Link to="/mon-panier"><BsCart size="100%" /></Link>
+        <Link to="/chat"><BsChat size="100%" /></Link>
+        <Link to="/login"><BsPerson size="100%" /></Link>
       </RightIcons>
     </TopMenuWrapper>
   );

@@ -31,6 +31,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           <h3>Aide</h3>
           <a href="/">FAQ</a>
           <a href="/contact">Nous contacter</a>
+          <a href="/politique-de-confidentialite">Politique de confidentialité</a>
         </div>
       </div>
       <div id="links">

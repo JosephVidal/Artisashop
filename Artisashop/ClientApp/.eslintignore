@@ -8,3 +8,4 @@ build
 jest.config.ts
 src/custom-theme.css
 src/components/Logo/assets
+src/*.js

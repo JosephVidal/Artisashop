@@ -125,6 +125,13 @@ builder.Services.AddAuthentication(options =>
 //     });
 ;
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
+    options.AddPolicy("RequireSellerRole", policy => policy.RequireRole("Seller"));
+});
+
 builder.Services.AddTransient<IRechercheTextuelleApiAsync, RechercheTextuelleApi>();
 builder.Services.AddTransient<RepertoireNationalMetiersApi.Api.IDefaultApiAsync, RepertoireNationalMetiersApi.Api.DefaultApi>();
 
