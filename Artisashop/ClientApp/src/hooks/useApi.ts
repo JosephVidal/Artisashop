@@ -1,5 +1,5 @@
-﻿import useApiUrl from "./useApiUrl";
-import {Configuration} from "../api";
+﻿import {Configuration} from "api";
+import useApiUrl from "./useApiUrl";
 
 /**
  * Returns a configured instance of the API.
@@ -9,6 +9,7 @@ import {Configuration} from "../api";
 const useApi = <T,>(type: { new(config: Configuration) : T;}) : T => {
   const apiUrl = useApiUrl();
   const config = new Configuration({ basePath: apiUrl });
+  // eslint-disable-next-line new-cap
   return new type(config);
 }
 

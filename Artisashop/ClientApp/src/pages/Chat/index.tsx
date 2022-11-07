@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
   MessageBubble,
   ChatWrapper,
@@ -24,138 +24,139 @@ import { generate } from "shortid";
 import {InputText} from "primereact/inputtext";
 import { random } from "lodash";
 import {Maybe, None, Some} from "monet";
+import useApi from "hooks/useApi";
+import {Account, ApiChatHistoryGetRequest, ChatApi, ChatHistory, ChatMessage, ChatPreview, UserType} from "api";
 
 const ref = new Date();
 
-interface Account {
-  Id: string,
-  UserName: string,
-  Email: string,
-  Lastname: string,
-  Firstname: string,
-  Role: AccountType
+// enum AccountType {
+//   NONE = -1,
+//   CONSUMER = 0,
+//   CRAFTSMAN = 1,
+//   PARTNER = 2,
+//   ADMIN = 3
+// }
+
+const Joseph: Account = {
+  id: "1",
+  userName: "Joseph",
+  email: "",
+  password: "",
+  lastname: "Vidal",
+  firstname: "Joseph",
+  role: UserType.NUMBER_0
 }
 
-enum AccountType {
-  NONE = -1,
-  CONSUMER = 0,
-  CRAFTSMAN = 1,
-  PARTNER = 2,
-  ADMIN = 3
-}
+// const Margot: Account = {
+//   id: "2",
+//   userName: "Margot",
+//   email: "",
+//   lastname: "Togram",
+//   firstname: "Margot",
+//   role: AccountType.CRAFTSMAN
+// }
+//
+// const Jojo: Account = {
+//   id: "3",
+//   userName: "Jojo",
+//   email: "",
+//   lastname: "Vidul",
+//   firstname: "Jojo",
+//   role: AccountType.CRAFTSMAN
+// }
+//
+// interface ChatMessage {
+//   Id: number;
+//   SenderId: Account;
+//   ReceiverId: Account;
+//   Date: Date;
+//   Content: string;
+//   Joined?: string;
+//   Filename?: string;
+// }
+//
+// const contacts: ChatPreview[] = [
+//   {
+//     lastMsg: {
+//       id: 1,
+//       sender: Jojo,
+//       receiver: Joseph,
+//       Date: new Date(ref.getTime() - 30000),
+//       Content: "Tu veux voir ma chaise"
+//     },
+//     Receive: true
+//   },
+//   {
+//     lastMsg: {
+//       id: 2,
+//       sender: Margot,
+//       receiver: Joseph,
+//       Date: new Date(ref.getTime() - 172800000),
+//       Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
+//     },
+//     Receive: true
+//   }
+// ];
+//
+// const historyMargot: ChatMessage[] = [{
+//   id: 1,
+//   senderId: Margot,
+//   receiver: Joseph,
+//   Date: new Date(ref.getTime() - 172800000),
+//   Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
+// },{
+//   id: 2,
+//   senderId: Joseph,
+//   receiver: Margot,
+//   Date: new Date(ref.getTime() - 21600000),
+//   Content: "Ptdr j'avoue"
+// },{
+//   id: 3,
+//   senderId: Joseph,
+//   receiver: Margot,
+//   Date: new Date(ref.getTime() - 360000),
+//   Content: "C'est bô"
+// }]
+//
+// const historyJojo: ChatMessage[] = [{
+//   id: 1,
+//   senderId: Jojo,
+//   receiver: Joseph,
+//   Date: new Date(ref.getTime() - 30000),
+//   Content: "Tu veux voir ma chaise"
+// }]
 
-const Joseph = {
-  Id: "1",
-  UserName: "Joseph",
-  Email: "",
-  Lastname: "Vidal",
-  Firstname: "Joseph",
-  Role: AccountType.CONSUMER
-}
+type MaybeString = string | null | undefined;
 
-const Margot = {
-  Id: "2",
-  UserName: "Margot",
-  Email: "",
-  Lastname: "Togram",
-  Firstname: "Margot",
-  Role: AccountType.CRAFTSMAN
-}
-
-const Jojo = {
-  Id: "3",
-  UserName: "Jojo",
-  Email: "",
-  Lastname: "Vidul",
-  Firstname: "Jojo",
-  Role: AccountType.CRAFTSMAN
-}
-
-interface ChatMessage {
-  Id: number;
-  SenderId: Account;
-  ReceiverId: Account;
-  Date: Date;
-  Content: string;
-  Joined?: string;
-  Filename?: string;
-}
-
-interface Contact {
-  LastMsg: ChatMessage,
-  Receive: boolean
-}
-
-const contacts: Contact[] = [
-  {
-    LastMsg: {
-      Id: 1,
-      SenderId: Jojo,
-      ReceiverId: Joseph,
-      Date: new Date(ref.getTime() - 30000),
-      Content: "Tu veux voir ma chaise"
-    },
-    Receive: true
-  },
-  {
-    LastMsg: {
-      Id: 2,
-      SenderId: Margot,
-      ReceiverId: Joseph,
-      Date: new Date(ref.getTime() - 172800000),
-      Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
-    },
-    Receive: true
-  }
-];
-
-const historyMargot: ChatMessage[] = [{
-  Id: 1,
-  SenderId: Margot,
-  ReceiverId: Joseph,
-  Date: new Date(ref.getTime() - 172800000),
-  Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
-},{
-  Id: 2,
-  SenderId: Joseph,
-  ReceiverId: Margot,
-  Date: new Date(ref.getTime() - 21600000),
-  Content: "Ptdr j'avoue"
-},{
-  Id: 3,
-  SenderId: Joseph,
-  ReceiverId: Margot,
-  Date: new Date(ref.getTime() - 360000),
-  Content: "C'est bô"
-}]
-
-const historyJojo: ChatMessage[] = [{
-  Id: 1,
-  SenderId: Jojo,
-  ReceiverId: Joseph,
-  Date: new Date(ref.getTime() - 30000),
-  Content: "Tu veux voir ma chaise"
-}]
+type MaybeAccount = Account | undefined;
 
 interface Conversation {
   history: ChatMessage[],
-  interlocutor: Account
+  interlocutor?: Account
 }
 
 const Chat: FC = () => {
-  const [contactList, setContactList] = useState<Contact[]>(contacts);
-  const [conversation, setConversation] = useState<Conversation>({ history: historyMargot, interlocutor: Margot });
+  const [contactList, setContactList] = useState<ChatPreview[]>([]);
+  const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [file, setFile] = useState<Maybe<File>>(None());
   const [edit, setEdit] = useState<Maybe<number>>(None());
+  const useChat = useApi(ChatApi);
 
-  const renderContact = (contact: Contact) => {
-    const interlocutor = contact.Receive ? contact.LastMsg.SenderId.UserName : contact.LastMsg.ReceiverId.UserName;
+  useEffect(() => {
+    useChat.apiChatListGet().then((r) => {
+      setContactList(r);
+      console.log(r);
+    });
+  }, [])
+
+  const renderContact = (contact: ChatPreview) => {
+    const interlocutor: string = contact.receive ? contact.lastMsg!.sender!.userName! : contact.lastMsg!.receiver!.userName!;
 
     return (
-      <ContactWrapper selected={interlocutor === conversation.interlocutor.UserName} key={generate()} onClick={() => {
-        getConversation(setConversation, contact.LastMsg.SenderId.Id, contact.LastMsg.ReceiverId.Id);
+      <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
+        getConversation(useChat, setConversation, contact.lastMsg!.sender!, contact.lastMsg!.receiver!);
         setInput("");
         setEdit(None());
         setFile(None());
@@ -163,36 +164,36 @@ const Chat: FC = () => {
         {interlocutor}
         <ContactPreview>
           <MessagePreview>
-            {contact.LastMsg.SenderId.UserName}: {contact.LastMsg.Content}
+            {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
           </MessagePreview>
-          {timeIndicator(contact.LastMsg.Date)}
+          {timeIndicator(contact.lastMsg!.date!)}
         </ContactPreview>
       </ContactWrapper>
     )
   };
 
   const renderMessage = (message: ChatMessage) => {
-    const self = message.SenderId.UserName === "Joseph";
+    const self = message.sender!.userName! === "Joseph";
 
     return (
-      <MessageTooltipWrapper key={message.Id} self={self} onMouseOver={() => setHover(message.Id)} onMouseOut={() => setHover(0)}>
-        {(self && hover === message.Id) && (
+      <MessageTooltipWrapper key={message.id} self={self} onMouseOver={() => setHover(message.id!)} onMouseOut={() => setHover(0)}>
+        {(self && hover === message.id) && (
           <>
             <BsPencil size="100%" onClick={() => {
-              setEdit(Some(message.Id));
-              setInput(message.Content);
+              setEdit(Some(message.id!));
+              setInput(message.content!);
             }} />
-            <BsTrash size="100%" onClick={() => removeMessage(setConversation, message.Id)} />
+            <BsTrash size="100%" onClick={() => removeMessage(setConversation, message.id!)} />
           </>
           )
         }
         <MessageWrapper self={self}>
-          {message.SenderId.UserName}
+          {message.sender!.userName!}
           <MessageBubble self={self}>
-            {message.Content}
+            {message.content!}
           </MessageBubble>
           <MessageDate>
-            {hover === message.Id && timeIndicator(message.Date)}
+            {hover === message.id! && timeIndicator(message.date!)}
           </MessageDate>
         </MessageWrapper>
       </MessageTooltipWrapper>
@@ -206,9 +207,9 @@ const Chat: FC = () => {
       </ContactList>
       <ConversationWrapper>
         <ConversationTitle>Conversation avec
-          {conversation.history[0].SenderId.UserName !== "Joseph" ?
-            conversation.history[0].SenderId.UserName :
-            conversation.history[0].ReceiverId.UserName}
+          {conversation.history[0].sender!.userName !== "Joseph" ?
+            conversation.history[0].sender!.userName! :
+            conversation.history[0].receiver!.userName!}
         </ConversationTitle>
         <ChatWrapper>
           {conversation.history.map(renderMessage)}
@@ -235,7 +236,7 @@ const Chat: FC = () => {
                   if (edit.isSome())
                     editMessage(setInput, setEdit, setConversation, conversation, edit, input)
                   else
-                    sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input, file)
+                    sendMessage(setInput, setConversation, Joseph, conversation.interlocutor, input, file)
                 }
               }} />
             <label htmlFor="file-upload">
@@ -245,7 +246,7 @@ const Chat: FC = () => {
             <FaPaperPlane size="100%" onClick={() =>
               edit.isSome() ?
                 editMessage(setInput, setEdit, setConversation, conversation, edit, input) :
-                sendMessage(setInput, setConversation, Joseph, conversation.interlocutor.Id, input, file)
+                sendMessage(setInput, setConversation, Joseph, conversation.interlocutor, input, file)
             }/>
           </ChatInputWrapper>
         </ChatBottomWrapper>
@@ -269,33 +270,39 @@ const timeIndicator = (date: Date): string => {
   return `${Math.floor(diff / 86400000)  } j`;
 }
 
-const getConversation = (setConversation: SetState<Conversation>, idOne: string, idTwo: string) => {
-  if (idOne === "2")
-    setConversation({history: historyMargot, interlocutor: Margot});
-  if (idOne === "3")
-    setConversation({history: historyJojo, interlocutor: Jojo})
-  if (idTwo === "2")
-    setConversation({history: historyMargot, interlocutor: Margot})
-  if (idTwo === "3")
-  setConversation({history: historyJojo, interlocutor: Jojo})
+const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, accountOne: Account, accountTwo: Account) => {
+  const request: ApiChatHistoryGetRequest = {
+    chatHistory: {
+      userIDOne: accountOne.id!,
+      userIDTwo: accountTwo.id!
+    }
+  };
+
+  chatApi.apiChatHistoryGet(request).then((h: ChatMessage[]) => {
+    if (accountOne.id! !== Joseph.id!) {
+      setConversation({history: h, interlocutor: accountOne})
+    }
+    setConversation({history: h, interlocutor: accountTwo})
+  }
+);
 }
 
 const editMessage = (setInput: SetState<string>, setEdit: SetState<Maybe<number>>, setConversation: SetState<Conversation>, conversation: Conversation, messageId: Maybe<number>, message: string) => {
   messageId.cata(
     () => null,
     (id) => {
-      const toEdit = conversation.history.find((m) => m.Id === id);
+      const toEdit = conversation.history.find((m) => m.id === id);
       if (!toEdit)
         return;
       setConversation((prevState) => ({
         ...prevState,
-        history: prevState.history.filter((m) => m.Id !== id)
+        history: prevState.history.filter((m) => m.id !== id)
       }));
       setConversation((prevState) => ({
         ...prevState,
         history: prevState.history.concat({
           ...toEdit,
-          Content: message
+          content: message
         })
       }));
       setInput("");
@@ -304,13 +311,13 @@ const editMessage = (setInput: SetState<string>, setEdit: SetState<Maybe<number>
   )
 }
 
-const sendMessage = (setInput: SetState<string>, setConversation: SetState<Conversation>, user: Account, to: string, message: string, file: Maybe<File>) => {
+const sendMessage = (setInput: SetState<string>, setConversation: SetState<Conversation>, user: Account, to: MaybeAccount, message: string, file: Maybe<File>) => {
   const newMessage: ChatMessage = {
-    Id: random(0, 1000),
-    SenderId: user,
-    ReceiverId: to === "2" ? Margot : Jojo,
-    Date: new Date(),
-    Content: message
+    id: random(0, 1000),
+    sender: user,
+    receiver: to,
+    date: new Date(),
+    content: message
   };
   setConversation((prevState) => ({
     ...prevState,
@@ -322,7 +329,7 @@ const sendMessage = (setInput: SetState<string>, setConversation: SetState<Conve
 const removeMessage = (setConversation: SetState<Conversation>, id: number) => {
   setConversation((prevState) => ({
     ...prevState,
-      history: prevState.history.filter((message) => message.Id !== id)
+      history: prevState.history.filter((message) => message.id !== id)
   }))
 }
 
