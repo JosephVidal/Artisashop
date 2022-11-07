@@ -68,5 +68,18 @@ namespace Artisashop.Controllers
             }
         }
 
+        private double Haversine(GPSCoord a, GPSCoord b, double radius = 6371000)
+        {
+            double radFact = Math.PI / 180;
+            double phiA = radFact * a.Latitude;
+            double phiB = radFact * b.Latitude;
+            double deltaPhi = radFact * (b.Latitude - a.Latitude);
+            double deltaLambda = radFact * (a.Longitude - b.Longitude);
+            double A = Math.Pow(Math.Sin(deltaPhi / 2), 2) + (Math.Cos(phiA) * Math.Cos(phiB) * Math.Pow(Math.Sin(deltaLambda), 2));
+            double C = 2 * Math.Atan2(Math.Sqrt(A), Math.Sqrt(1 - A));
+            double D = radius * C;
+            return D;
+        }
+
     }
 }
