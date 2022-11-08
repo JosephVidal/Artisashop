@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Artisashop.Validation;
 using System.Globalization;
 using Artisashop.Models.ViewModel.Account;
+using System.Net.Http.Headers;
 
 [ApiController]
 [Produces("application/json")]
@@ -30,6 +31,7 @@ public class AccountController : ControllerBase
     private readonly IUtils _utils;
     private readonly FranceConnectConfiguration _franceConnectConfiguration;
     private readonly ILogger<AccountController> _logger;
+    private static HttpClient _googleMapsClient = new HttpClient();
 
     public AccountController(
         UserManager<Account> userManager,
@@ -47,6 +49,10 @@ public class AccountController : ControllerBase
         _utils = utils;
         _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
+
+        _googleMapsClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/");
+        _googleMapsClient.DefaultRequestHeaders.Accept.Clear();
+        _googleMapsClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     [HttpPost("login")]
@@ -279,5 +285,14 @@ public class AccountController : ControllerBase
         );
 
         return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
+    }
+
+    private async Task<GPSCoord> AddressToGPSCoord(string address)
+    {
+        GPSCoord? ret = null;
+        HttpResponseMessage response = await _googleMapsClient.GetAsync("geocode/json?address=" + address);
+        if (response.IsSuccessStatusCode)
+            ret = await response.Content.ReadFromJsonAsync<GPSCoord>();
+        return (ret != null) ? ret : new GPSCoord();
     }
 }
