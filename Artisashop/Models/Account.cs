@@ -50,6 +50,8 @@ namespace Artisashop.Models
         [NotMapped]
         public string? Password { get; set; }
         public string? Job { get; set; }
+        public string? Address { get; set; }
+        public GPSCoord? AddressGPS { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<Product>? Products { get; set; }
