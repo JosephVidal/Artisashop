@@ -33,6 +33,7 @@ export const Wrapper = styled.div`
         flex-direction: row;
         justify-content: space-between;
         padding: 15vh 10vw;
+        color: var(--artshp-dark-blue);
     }
 
     #product-info {
