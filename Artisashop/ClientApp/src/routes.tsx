@@ -9,7 +9,7 @@ import Home from "pages/Home";
 import Register from "pages/Register";
 import Login from "pages/Login";
 import Search from "pages/Search";
-import Product from "pages/Product";
+import ProductView from "pages/Product";
 import Template from "components/Template";
 import Chat from "pages/Chat";
 import {colors} from "globals/styles";
@@ -28,7 +28,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) => (
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product:id" element={<ProductView />} />
       </Route>
     </Wrapper>
   </Router>
