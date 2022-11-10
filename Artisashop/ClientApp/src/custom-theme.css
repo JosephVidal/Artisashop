@@ -27,6 +27,7 @@
   --artshp-red: #5A202E;
   --artshp-orange: #DC6D04;
   --artshp-dark-blue: #141C26;
+  --artshp-med-blue: #536a86;
   --artshp-blue: #79B8F6;
   --artshp-trans: 0.3s;
   --card-radius: 30px;
@@ -47,7 +48,7 @@ a, button, input {transition: var(--artshp-trans);}
 a:hover:not(.red-button) {color: var(--artshp-orange);}
 a {color: var(--artshp-white);}
 
-input::placeholder {color: var(--artshp-dark-blue)}
+input::placeholder {color: var(--artshp-med-blue)}
 input:focus {border: solid 1px var(--artshp-orange)}
 input {
   background-color: var(--bs-white);
