@@ -1,4 +1,4 @@
-using Artisashop;
+namespace Artisashop.Configurations;
 
 public class FranceConnectConfiguration
 {

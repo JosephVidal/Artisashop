@@ -1,13 +1,11 @@
-﻿using Artisashop.Identity;
-using Artisashop.Models;
+﻿using Artisashop.Models;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 
 namespace Artisashop;
 
-public static class Seed
+public static class Seeder
 {
-
     /// <summary>
     /// Configures the roles for the Identity system.
     /// </summary>
@@ -34,30 +32,39 @@ public static class Seed
         await userManager.AddToRoleAsync(admin, Roles.Admin);
     }
 
-    public static async Task SeedDemoDataAsync(UserManager<Account> userManager, StoreDbContext context)
+    public static async Task SeedDemoDataAsync(UserManager<Account> userManager, RoleManager<IdentityRole> roleManager, StoreDbContext context)
     {
-        var users = new Faker<Account>()
+        // Create users
+        var userFaker = new Faker<Account>()
             .StrictMode(true)
             .RuleFor(o => o.Email, f => f.Internet.Email())
             .RuleFor(o => o.UserName, f => f.Internet.UserName())
             .RuleFor(o => o.Firstname, f => f.Name.FirstName())
             .RuleFor(o => o.EmailConfirmed, true);
-        context.Users.AddRange(users.Generate(50));
+        context.Users.AddRange(userFaker.Generate(50));
 
+        // Assign some users to the seller role
+        foreach (var account in context.Users.Take(10))
+        {
+            await userManager.AddToRoleAsync(account, Roles.Seller);
+        }
+        var sellers = await userManager.GetUsersInRoleAsync(Roles.Seller);
+
+        // Create styles for products
         var styles = new Faker<Style>()
             .StrictMode(true)
             .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
             .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
         context.Styles.AddRange(styles.Generate(50));
 
+        // Create products
         var products = new Faker<Product>()
             .StrictMode(true)
             .RuleFor(o => o.Name, f => f.Commerce.ProductName())
             .RuleFor(o => o.Description, f => f.Commerce.ProductDescription())
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
-            .RuleFor(o => o.Craftsman,
-                f => f.PickRandom(context.Users.Where(user => user.Role == Account.UserType.CRAFTSMAN).ToList()));
+            .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers));
         context.Products.AddRange(products.Generate(100));
     }
 }

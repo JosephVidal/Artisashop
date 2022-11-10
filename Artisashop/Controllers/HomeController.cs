@@ -2,6 +2,7 @@ using System.Net;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +18,15 @@ namespace Artisashop.Controllers
     public class HomeController : ControllerBase
     {
         private readonly StoreDbContext _db;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(StoreDbContext db)
+        public HomeController(StoreDbContext db, RoleManager<IdentityRole> roleManager,
+            UserManager<IdentityUser> userManager)
         {
             _db = db;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -30,21 +36,32 @@ namespace Artisashop.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                List<Account> users = _db.Accounts!.Where(user => user.Role == Account.UserType.CRAFTSMAN).ToList();
-                int userCount = users.Count;
+                var sellerRole = _db.Roles.FirstOrDefault(x => x.Name == Roles.Seller);
+
+                // var craftsmen = from c in _db.Users
+                //     join role in _db.UserRoles on c.Id equals role.UserId
+                //     where role.RoleId == sellerRole.Id
+                //     select c;
+                // // join u in _db.Users on c.UserId equals u.Id
+                // // where u.Roles.Any(r => r.RoleId == sellerRole.Id)
+                // // select c;
+
+                var sellers = await _userManager.GetUsersInRoleAsync(Roles.Seller);
+                int userCount = sellers.Count;
                 List<Product> items = _db.Products!.Include(item => item.Craftsman).ToList();
                 int productCount = items.Count;
                 Home viewModel = new Home()
                 {
                     CraftsmanNumber = userCount,
                     ProductNumber = productCount,
-                    CraftsmanSample = SelectRandom(users, 5),
+                    CraftsmanSample = SelectRandom(sellers, 5),
                     ProductSample = SelectRandom(items, 5),
-                    Inscrit = _db.Accounts!.Count(user => user.Role == Account.UserType.CONSUMER || user.Role == Account.UserType.CRAFTSMAN)
+                    Inscrit = _db.Users!.Count(user =>
+                        user.Role == Account.UserType.CONSUMER || user.Role == Account.UserType.CRAFTSMAN)
                 };
                 return Ok(viewModel);
             }
@@ -61,7 +78,7 @@ namespace Artisashop.Controllers
         /// <param name="list">List of element to randomize</param>
         /// <param name="number">Number of element to have in the list</param>
         /// <returns>List of randomized element</returns>
-        private static List<T> SelectRandom<T>(List<T> list, int number)
+        private static List<T> SelectRandom<T>(IList<T> list, int number)
         {
             return list.OrderBy(x => Guid.NewGuid()).Take(number).ToList();
         }

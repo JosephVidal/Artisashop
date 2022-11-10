@@ -1,0 +1,7 @@
+
+Xcsharpsquid:S1854E";Remove this useless assignment to local variable 'message'.(åíê¢
+fcsharpsquid:S33581"DExtract this nested ternary operation into an independent statement.(ä²õÀùÿÿÿÿ
+fcsharpsquid:S33582"DExtract this nested ternary operation into an independent statement.(‰øìÿÿÿÿÿ
+bcsharpsquid:S3358¥"DExtract this nested ternary operation into an independent statement.(–ãÁ‡
+gcsharpsquid:S3358¦"DExtract this nested ternary operation into an independent statement.(‰øìÿÿÿÿÿ
+xcsharpsquid:S4487"VRemove this unread private field '_emailSender' or refactor the code to use its value.(±é’Šÿÿÿÿÿ

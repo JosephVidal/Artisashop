@@ -1,4 +1,6 @@
-﻿namespace Artisashop.Controllers;
+﻿using Artisashop.Configurations;
+
+namespace Artisashop.Controllers;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -64,13 +66,13 @@ public class AccountController : ControllerBase
                 var userToken = new AccountToken(new AccountViewModel(appUser), await GenerateJwtToken(appUser));
                 return Ok(userToken);
             }
+
             return BadRequest("Login failed");
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-
     }
 
     [HttpPost]
@@ -81,32 +83,35 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account account = new(model)
-            {
-                Id = Guid.NewGuid().ToString()
-            };
-            var result = await _userManager.CreateAsync(account, model.Password);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-            IdentityResult identityResult = await _userManager.AddToRoleAsync(account, Account.UserType.CONSUMER.ToString());
-            if (!identityResult.Succeeded)
-                return BadRequest(identityResult.Errors);
-            identityResult = await _userManager.AddToRoleAsync(account, model.Role.ToString());
-            if (identityResult.Succeeded)
-            {
-                var appUser = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-                await _signInManager.SignInAsync(appUser, false);
-                var userToken = new AccountToken(new AccountViewModel(appUser), await GenerateJwtToken(appUser));
-                return Ok(userToken);
-            }
-
-            return BadRequest(result.ToString());
+            var user = await CreateUser(model, new[] { Roles.User });
+            await _signInManager.SignInAsync(user, false);
+            var token = new AccountToken(new AccountViewModel(user), await GenerateJwtToken(user));
+            return Ok(token);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
+
+    public async Task<Account> CreateUser(Register model, string[]? roles = null)
+    {
+        roles ??= new string[] { Roles.User };
+
+        var result = await _userManager.CreateAsync(new Account(model), model.Password);
+        // TODO: Create exception types
+        if (!result.Succeeded)
+            throw new Exception(result.Errors.ToString());
+        var account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+        var roleResult = await _userManager.AddToRolesAsync(account, roles);
+        // TODO: Create exception types
+        if (!roleResult.Succeeded)
+            throw new Exception(roleResult.Errors.ToString());
+        return account;
+    }
+
+    public async Task SignInAccount(Account account, bool isPersistent = false)
+        => await _signInManager.SignInAsync(account, isPersistent);
 
     [HttpGet]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
@@ -210,6 +215,7 @@ public class AccountController : ControllerBase
         {
             return RedirectToAction(nameof(Login));
         }
+
         // acr_values are mapped to this authnclassreference claim by .NET
         string? acrValues = info.Principal?.FindFirst("http://schemas.microsoft.com/claims/authnclassreference")?.Value;
         if (!Validation.IsEIdasLevelMet(acrValues!, _franceConnectConfiguration.EIdasLevel))
@@ -218,6 +224,7 @@ public class AccountController : ControllerBase
             // await HttpContext.SignOutAsync(FranceConnectConfiguration.ProviderScheme, new AuthenticationProperties { RedirectUri = Url.Action(nameof(Login), null, null, Request.Scheme) });
             throw new UnauthorizedAccessException("Requested EIdas level not met");
         }
+
         // Sign in the user with this external login provider if the user already has a login.
         var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
         if (user != null)
@@ -228,6 +235,7 @@ public class AccountController : ControllerBase
                 // return View("Lockout");
                 return Ok();
             }
+
             await _signInManager.SignInAsync(user, info.AuthenticationProperties, info.LoginProvider);
             _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
             // TODO: replace
@@ -241,7 +249,8 @@ public class AccountController : ControllerBase
             // ViewData["ReturnUrl"] = returnUrl;
             // ViewData["LoginProvider"] = info.ProviderDisplayName;
 
-            DateTime.TryParseExact(info.Principal.FindFirstValue("birthdate"), "yyyy-MM-dd", new CultureInfo("fr-FR"), DateTimeStyles.AssumeUniversal, out DateTime parsedBirthDate);
+            DateTime.TryParseExact(info.Principal.FindFirstValue("birthdate"), "yyyy-MM-dd", new CultureInfo("fr-FR"),
+                DateTimeStyles.AssumeUniversal, out DateTime parsedBirthDate);
             ExternalLoginConfirmationViewModel model = new()
             {
                 Email = info.Principal.FindFirstValue("email"),
@@ -256,23 +265,27 @@ public class AccountController : ControllerBase
         }
     }
 
-    private Task<string> GenerateJwtToken(Account user)
+    public Task<string> GenerateJwtToken(Account user)
     {
+        var roles = _userManager.GetRolesAsync(user).Result;
+
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Role, user.Role.ToString() ?? "")
+            new Claim(ClaimTypes.Role, string.Join(",", roles) ?? "")
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var jwtConfiguration = _configuration.GetSection("Jwt").Get<JwtConfiguration>();
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Jwt:ExpireDays"]));
+        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.Expiration));
 
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Issuer"],
+            jwtConfiguration.Issuer,
+            jwtConfiguration.Audience,
             claims,
             expires: expires,
             signingCredentials: creds

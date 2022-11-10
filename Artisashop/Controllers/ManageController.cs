@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using Artisashop.Configurations;
+
 namespace Artisashop.Controllers;
 
 using Microsoft.AspNetCore.Authorization;
