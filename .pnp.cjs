@@ -33,15 +33,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["husky", "npm:8.0.1"]\
           ],\
           "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["husky", [\
+        ["npm:8.0.1", {\
+          "packageLocation": "./.yarn/cache/husky-npm-8.0.1-85fede8470-943a73a13d.zip/node_modules/husky/",\
+          "packageDependencies": [\
+            ["husky", "npm:8.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["root-workspace-0b6124", [\
         ["workspace:.", {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["root-workspace-0b6124", "workspace:."]\
+            ["root-workspace-0b6124", "workspace:."],\
+            ["husky", "npm:8.0.1"]\
           ],\
           "linkType": "SOFT"\
         }]\

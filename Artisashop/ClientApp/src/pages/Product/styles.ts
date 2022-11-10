@@ -10,6 +10,7 @@ export const Tag = styled.span`
 export const Craftsman = styled.div`
     display: flex;
     flex-direction: row;
+    text-align: left;
     font-size: 30px;
     font-weight: lighter;
     padding-bottom: 30px;
@@ -17,11 +18,12 @@ export const Craftsman = styled.div`
     img {
         width: auto;
         height: auto;
+        object-fit: cover;
     }
 
     a {
         text-decoration: none;
-        margin: auto;
+        margin: auto 20px;
     }
 `;
 
@@ -30,7 +32,7 @@ export const Wrapper = styled.div`
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding: 15vh 10vh;
+        padding: 15vh 10vw;
     }
 
     #product-info {
