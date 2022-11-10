@@ -19,10 +19,10 @@ namespace Artisashop.Controllers
     {
         private readonly StoreDbContext _db;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Account> _userManager;
 
         public HomeController(StoreDbContext db, RoleManager<IdentityRole> roleManager,
-            UserManager<IdentityUser> userManager)
+            UserManager<Account> userManager)
         {
             _db = db;
             _roleManager = roleManager;
@@ -51,17 +51,19 @@ namespace Artisashop.Controllers
                 // // select c;
 
                 var sellers = await _userManager.GetUsersInRoleAsync(Roles.Seller);
-                int userCount = sellers.Count;
+                int sellerCount = sellers.Count;
+                var users = await _userManager.GetUsersInRoleAsync(Roles.User);
+                int userCount = users.Count;
                 List<Product> items = _db.Products!.Include(item => item.Craftsman).ToList();
                 int productCount = items.Count;
+
                 Home viewModel = new Home()
                 {
-                    CraftsmanNumber = userCount,
+                    CraftsmanNumber = sellerCount,
                     ProductNumber = productCount,
                     CraftsmanSample = SelectRandom(sellers, 5),
                     ProductSample = SelectRandom(items, 5),
-                    Inscrit = _db.Users!.Count(user =>
-                        user.Role == Account.UserType.CONSUMER || user.Role == Account.UserType.CRAFTSMAN)
+                    Inscrit = userCount,
                 };
                 return Ok(viewModel);
             }

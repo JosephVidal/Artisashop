@@ -57,7 +57,8 @@ public class ManageController : Controller
             Logins = await _userManager.GetLoginsAsync(user),
             BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
         };
-        return View(model);
+        // return View(model);
+        return Ok(model);
     }
 
     //
@@ -89,24 +90,18 @@ public class ManageController : Controller
         }
     }
 
-    //
-    // GET: /Manage/ChangePassword
-    [HttpGet]
-    public IActionResult ChangePassword()
-    {
-        return View();
-    }
+    // // GET: /Manage/ChangePassword
+    // [HttpGet]
+    // public IActionResult ChangePassword()
+    // {
+    //     return View();
+    // }
 
-    //
     // POST: /Manage/ChangePassword
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
         var user = await GetCurrentUserAsync();
         if (user != null)
         {
@@ -118,18 +113,19 @@ public class ManageController : Controller
                 return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
-            return View(model);
+            return Ok(model);
+            // return View(model);
         }
         return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
     }
 
     //
     // GET: /Manage/SetPassword
-    [HttpGet]
-    public IActionResult SetPassword()
-    {
-        return View();
-    }
+    // [HttpGet]
+    // public IActionResult SetPassword()
+    // {
+    //     return View();
+    // }
 
     //
     // POST: /Manage/SetPassword
@@ -137,11 +133,6 @@ public class ManageController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
         var user = await GetCurrentUserAsync();
         if (user != null)
         {
@@ -151,7 +142,7 @@ public class ManageController : Controller
                 return RedirectToAction(nameof(Index), new { Message = ManageMessageId.SetPasswordSuccess });
             }
             AddErrors(result);
-            return View(model);
+            return Ok(model);
         }
         return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
     }
@@ -173,7 +164,7 @@ public class ManageController : Controller
         var userLogins = await _userManager.GetLoginsAsync(user);
         var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
         var availableProviders = schemes.Where(auth => userLogins.All(ul => auth.Name != ul.LoginProvider)).ToList();
-        return View(new ManageLoginsViewModel
+        return Ok(new ManageLoginsViewModel()
         {
             IsLinkedToFranceConnect = userLogins.Any(auth => auth.LoginProvider == FranceConnectConfiguration.ProviderScheme),
             CanRemoveExternalLogin = user.PasswordHash != null || userLogins.Count > 1,
@@ -245,7 +236,7 @@ public class ManageController : Controller
             PreferredName = GetClaimValue(claims, "preferred_username"),
             Email = GetClaimValue(claims, "email")
         };
-        return View(pivotIdentity);
+        return Ok(pivotIdentity);
     }
 
     #region Helpers

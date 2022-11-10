@@ -1,30 +1,29 @@
-﻿using Artisashop.Models;
+﻿namespace Artisashop.Extensions;
+
+using Artisashop.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Artisashop.Extensions
+public static class MigrationManager
 {
-    public static class MigrationManager
+    public static WebApplication MigrateDatabase(this WebApplication webApp)
     {
-        public static WebApplication MigrateDatabase(this WebApplication webApp)
+        using (var scope = webApp.Services.CreateScope())
         {
-            using (var scope = webApp.Services.CreateScope())
+            using (var appContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>())
             {
-                using (var appContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>())
+                try
                 {
-                    try
-                    {
-                        if (appContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-                            appContext.Database.Migrate();
-                    }
-                    catch (Exception ex)
-                    {
-                        //Log errors or do anything you think it's needed
-                        throw new Exception(ex.Message);
-                    }
+                    if (appContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                        appContext.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    //Log errors or do anything you think it's needed
+                    throw new Exception(ex.Message);
                 }
             }
-
-            return webApp;
         }
+
+        return webApp;
     }
 }

@@ -40,6 +40,13 @@ namespace Artisashop.Models
                         .Property<DateTime?>(nameof(IUpdatedAt.UpdatedAt))
                         .ValueGeneratedOnUpdate();
                 }
+
+                builder.Entity<Account>(options =>
+                {
+                    options.HasOne<Seller>(account => account.Seller)
+                        .WithOne(seller => seller.Account)
+                        .HasForeignKey<Seller>(seller => seller.AccountId);
+                });
             }
         }
     }

@@ -29,13 +29,13 @@ namespace Artisashop.Tests.Backend
         public static List<string> ids = new List<string>();
 
         [Order(1)]
-        [TestCase("jean.epp@epitech.eu", "Jean", "Epp", "Password_1234", Account.UserType.ADMIN, null, "", TestName = "Add Jean Epp", Category = "Register Success")]
-        [TestCase("john.artisan@epitech.eu", "John", "Artisan", "Password_1234", Account.UserType.CRAFTSMAN, null, "", TestName = "Add John Artisan", Category = "Register Success")]
-        [TestCase("baby.partner@epitech.eu", "Baby", "Partner", "Password_1234", Account.UserType.PARTNER, null, "", TestName = "Add Baby Partner", Category = "Register Success")]
-        [TestCase("jane.consumer@epitech.eu", "Jane", "Consumer", "Password_1234", Account.UserType.CONSUMER, null, "", TestName = "Add Jane Consumer", Category = "Register Success")]
-        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Account.UserType.CONSUMER, null, "", TestName = "Add Delete User", Category = "Register Success")]
-        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Account.UserType.CONSUMER, null, "Error", TestName = "Account already exist", Category = "Register Fail")]
-        public static async Task Register(string email, string firstname, string lastname, string password, Account.UserType role, string job, string responseType)
+        [TestCase("jean.epp@epitech.eu", "Jean", "Epp", "Password_1234", Roles.Admin, null, "", TestName = "Add Jean Epp", Category = "Register Success")]
+        [TestCase("john.artisan@epitech.eu", "John", "Artisan", "Password_1234", Roles.Seller, null, "", TestName = "Add John Artisan", Category = "Register Success")]
+        [TestCase("baby.partner@epitech.eu", "Baby", "Partner", "Password_1234", Roles.Partner, null, "", TestName = "Add Baby Partner", Category = "Register Success")]
+        [TestCase("jane.consumer@epitech.eu", "Jane", "Consumer", "Password_1234", Roles.User, null, "", TestName = "Add Jane Consumer", Category = "Register Success")]
+        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Roles.User, null, "", TestName = "Add Delete User", Category = "Register Success")]
+        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Roles.User, null, "Error", TestName = "Account already exist", Category = "Register Fail")]
+        public static async Task Register(string email, string firstname, string lastname, string password, string role, string job, string responseType)
         {
             Register model = new()
             {

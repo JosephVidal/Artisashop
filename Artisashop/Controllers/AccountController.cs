@@ -1,4 +1,5 @@
 ﻿using Artisashop.Configurations;
+using Artisashop.Helpers;
 
 namespace Artisashop.Controllers;
 
@@ -15,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Artisashop.Validation;
 using System.Globalization;
 using Artisashop.Models.ViewModel.Account;
 
@@ -93,25 +93,25 @@ public class AccountController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
-    public async Task<Account> CreateUser(Register model, string[]? roles = null)
+    
+    private async Task<Account> CreateUser(Register model, string[]? roles = null)
     {
         roles ??= new string[] { Roles.User };
 
         var result = await _userManager.CreateAsync(new Account(model), model.Password);
         // TODO: Create exception types
         if (!result.Succeeded)
-            throw new Exception(result.Errors.ToString());
+            throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
         var account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+        
         var roleResult = await _userManager.AddToRolesAsync(account, roles);
-        // TODO: Create exception types
         if (!roleResult.Succeeded)
             throw new Exception(roleResult.Errors.ToString());
         return account;
     }
 
-    public async Task SignInAccount(Account account, bool isPersistent = false)
-        => await _signInManager.SignInAsync(account, isPersistent);
+    // private async Task SignInAccount(Account account, bool isPersistent = false)
+    //     => await _signInManager.SignInAsync(account, isPersistent);
 
     [HttpGet]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
@@ -265,7 +265,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    public Task<string> GenerateJwtToken(Account user)
+    private Task<string> GenerateJwtToken(Account user)
     {
         var roles = _userManager.GetRolesAsync(user).Result;
 

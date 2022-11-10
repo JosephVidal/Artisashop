@@ -5,10 +5,21 @@
 /// </summary>
 public static class Roles
 {
-    public const string Admin = "Admin";
-    public const string User = "User";
-    public const string Seller = "Seller";
-    public const string Partner = "Partner";
+    public const string Admin = "ADMIN";
+    public const string User = "USER";
+    public const string Seller = "SELLER";
+    public const string Partner = "PARTNER";
+    
+    public static IEnumerable<string> AllRoles
+    {
+        get
+        {
+            yield return Admin;
+            yield return User;
+            yield return Seller;
+            yield return Partner;
+        }
+    }
 }
 
 /// <summary>

@@ -16,5 +16,7 @@ public class Register
     public string? Lastname { get; set; }
     [Required]
     public string? Firstname { get; set; }
+    [Required]
+    public string? Role { get; set; }
     public string? Job { get; set; }
 }
