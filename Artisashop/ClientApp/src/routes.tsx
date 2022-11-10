@@ -10,7 +10,7 @@ import Home from "pages/Home";
 import Register from "pages/Register";
 import Login from "pages/Login";
 import Search from "pages/Search";
-import Product from "pages/Product";
+import ProductView from "pages/Product";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
 import Chat from "pages/Chat";
@@ -29,7 +29,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
           <Route path="/register" element={<Register/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/search" element={<Search/>}/>
-          <Route path="/product" element={<Product/>}/>
+          <Route path="/product/:id" element={<ProductView/>}/>
           <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />}/>
           <Route path="/chat" element={<Chat />} />
         </Route>
