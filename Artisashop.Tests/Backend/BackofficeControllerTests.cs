@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Artisashop.Models.ViewModel;
-using Artisashop.Models;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text;
+using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
 {
@@ -62,7 +62,7 @@ namespace Artisashop.Tests.Backend
                 { "validationStatus", validationStatus.ToString() }
             };
 
-            var postRequest = new HttpRequestMessage(HttpMethod.Put, "api/backoffice/changeValidationStatus");
+            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/backoffice/changeValidationStatus");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             postRequest.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
 

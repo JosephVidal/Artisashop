@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Artisashop.Models
 {
-    public class StoreDbContext : IdentityDbContext
+    public class StoreDbContext : IdentityDbContext<Account>
     {
         public StoreDbContext(DbContextOptions options) : base(options)
         {
@@ -14,12 +14,12 @@ namespace Artisashop.Models
         {
         }
 
-        public DbSet<Account>? Accounts { get; set; }
-        public DbSet<Product>? Products { get; set; }
-        public DbSet<Basket>? Baskets { get; set; }
-        public DbSet<Bill>? Bills { get; set; }
-        public DbSet<ChatMessage>? ChatMessages { get; set; }
-        public DbSet<Style>? Styles { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<Basket> Baskets { get; set; } = null!;
+        public virtual DbSet<Bill> Bills { get; set; } = null!;
+        public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+        public virtual DbSet<Style> Styles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

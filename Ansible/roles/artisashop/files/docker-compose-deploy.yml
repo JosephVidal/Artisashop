@@ -7,7 +7,7 @@ services:
       - PARSE_ARTISASHOP_MASTER_KEY=${PARSE_ARTISASHOP_MASTER_KEY}
       - PARSE_ARTISASHOP_RESTAPI_KEY=${PARSE_ARTISASHOP_RESTAPI_KEY}
     build:
-      context: ./Artisashop
+      context: ./
       dockerfile: Dockerfile
     expose:
       - 80
@@ -24,115 +24,64 @@ services:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_HOST}/?(.*)"
-      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://www.${ARTISASHOP_HOST}/$${3}"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_HOST}/$${3}"
 
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`www.${ARTISASHOP_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-core.loadbalancer.server.port=80"
 
-  parse-server:
-    build:
-      context: ./parse
-      dockerfile: Dockerfile
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      - PARSE_SERVER_APPLICATION_ID=myParse
-      - PARSE_SERVER_APP_NAME=artisashop
-      - PARSE_SERVER_MASTER_KEY=${PARSE_ARTISASHOP_MASTER_KEY}
-      - PARSE_SERVER_DATABASE_URI=mongodb://admin:admin@mongo:27017/
-      - PARSE_PUBLIC_SERVER_URL=https://${ARTISASHOP_HOST}/parse
-      - PARSE_SERVER_VERIFY_USER_EMAILS=true
-    volumes:
-      - ./parse/config:/config
-      - ./parse/cloud:/cloud
-      - ./parse/templates:/parse-server/views/email/templates
-    command:  '/config/config.js --cloud /cloud/main.js'
+      MYSQL_ROOT_PASSWORD: 'R291Z25hZmllcg=='
+      MYSQL_DATABASE: 'store_db'
+      MYSQL_USER: 'store_user'
+      MYSQL_PASSWORD: 'store_user'
     expose:
-      - "1337"
-      - "25/tcp"
-      - "25/udp"
-    networks:
-      - traefik-tier
-      - parse-tier
-      - db-tier
-      - mail-tier
-    depends_on:
-      - mongo
-      - smtp-server
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse.rule=Host(`${ARTISASHOP_HOST}`) && PathPrefix(`/parse`)"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse.entrypoints=websecure"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse.priority=800"
-      - "traefik.http.services.parse-server.loadbalancer.server.port=1337"
-
-  parse-dashboard:
-    image: 'parseplatform/parse-dashboard'
-    expose:
-        - '4040'
-    depends_on:
-        - parse-server
-    networks:
-        - parse-tier
-        - traefik-tier
-    environment:
-        - MOUNT_PATH=/dashboard/parse
-        - PARSE_DASHBOARD_ALLOW_INSECURE_HTTP=1
-        - PARSE_DASHBOARD_MASTER_KEY=${PARSE_ARTISASHOP_MASTER_KEY}
-        - PARSE_DASHBOARD_SERVER_URL=https://${ARTISASHOP_HOST}/parse
-        - PARSE_DASHBOARD_APP_NAME=artisashop
-        - PARSE_DASHBOARD_APP_ID=myParse
-        - PARSE_DASHBOARD_USER_ID=CraftmanInception
-        - PARSE_DASHBOARD_USER_PASSWORD=h4rd2fyndeuh
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse-dashboard.rule=Host(`${ARTISASHOP_HOST}`) && (Path(`/dashboard/parse`) || PathPrefix(`/dashboard/parse`)) "
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse-dashboard.entrypoints=websecure"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse-dashboard.priority=810"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-parse-dashboard.service=parse-dashboard"
-      - "traefik.http.services.parse-dashboard.loadbalancer.server.port=4040"
-
-  mongo:
-    image: mongo
-    restart: always
-    expose:
-      - 27017
-    environment:
-      #TODO Should use env var
-      MONDO_INITDB_DATABASE: artisashop
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_USERNAME: 'api'
-      MONGO_PASSWORD: 'password'
-    volumes:
-      - db-data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init.js
-    networks:
-      - db-tier
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    expose:
-      - "8081"
-    depends_on:
-      - mongo
+      - '3306'
     networks:
       - traefik-tier
       - db-tier
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_SITE_BASEURL=/dashboard/mongo/
-      - ME_CONFIG_BASICAUTH_USERNAME=CraftmanInception
-      - ME_CONFIG_BASICAUTH_PASSWORD=h4rd2fyndeuh
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.rule=Host(`${ARTISASHOP_HOST}`) && (Path(`/dashboard/mongo`) || PathPrefix(`/dashboard/mongo`))"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.priority=820"
       - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   expose:
+  #     - "8081"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - traefik-tier
+  #     - db-tier
+  #   environment:
+  #     - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+  #     - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
+  #     - ME_CONFIG_MONGODB_SERVER=mongo
+  #     - ME_CONFIG_SITE_BASEURL=/dashboard/mongo/
+  #     - ME_CONFIG_BASICAUTH_USERNAME=CraftmanInception
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=h4rd2fyndeuh
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.rule=Host(`${ARTISASHOP_HOST}`) && (Path(`/dashboard/mongo`) || PathPrefix(`/dashboard/mongo`))"
+  #     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.entrypoints=websecure"
+  #     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.priority=820"
+  #     - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
 
   smtp-server:
     image: namshi/smtp:latest

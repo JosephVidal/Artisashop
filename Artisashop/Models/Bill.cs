@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Artisashop.Models.Interface;
 
 namespace Artisashop.Models
 {
-    public class Bill
+    public class Bill : ICreatedAt
     {
         public Bill(string craftsmanName, string consumerName, string productName, int quantity, double priceTot)
         {
@@ -15,6 +17,8 @@ namespace Artisashop.Models
 
         [Key]
         public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime? CreatedAt { get; set; }
         public string CraftsmanName { get; set; }
         public string ConsumerName { get; set; }
         public string ProductName { get; set; }

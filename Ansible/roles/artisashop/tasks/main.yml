@@ -10,7 +10,7 @@
 
 - name: Clone artisashop repo on root
   ansible.builtin.git:
-    repo: git@gitlab.com:artisashop/Artisashop.git
+    repo: git@github.com:Artisashop/Artisashop.git
     dest: "{{ artisashop_deploy_location }}"
     key_file: "/home/{{ ansible_user }}/.secret/deploy_key"
     version: "{{ artisashop_version }}"

@@ -1,10 +1,10 @@
-﻿using Artisashop.Interfaces.IService;
+﻿using System.Net;
+using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using static Artisashop.Models.Account;
 
 namespace Artisashop.Controllers
@@ -32,8 +32,8 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Index page if user is amdin, Unauthorized if not admin, redirect to AccountController::Login if not logged in or BadRequest</returns>
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Index()
         {
             try
@@ -53,8 +53,8 @@ namespace Artisashop.Controllers
         /// <returns>The stat page on success, Unauthorized if not admin, redirect to AccountController::Login or BadRequest</returns>
         [HttpGet("stats")]
         [AllowAnonymous]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Stats()
         {
             try
@@ -79,9 +79,9 @@ namespace Artisashop.Controllers
         /// <param name="username">The user id of the account to delete as string</param>
         /// <param name="validationStatus">The changed value</param>
         /// <returns>Success JsonResult or error message</returns>
-        [HttpPut("changeValidationStatus")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpPatch("changeValidationStatus")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ChangeCraftsmanValidationStatus([FromBody] Dictionary<string, string> model)
         {
             try

@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Net.Mail;
-using Microsoft.AspNetCore.Authorization;
-using Artisashop.Models.ViewModel;
 using Artisashop.Interfaces.IService;
+using Artisashop.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Artisashop.Controllers
 {
@@ -29,8 +28,8 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Contact page</returns>
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Contact), (int)HttpStatusCode.OK)]
         public IActionResult Index()
         {
             try
@@ -49,8 +48,8 @@ namespace Artisashop.Controllers
         /// <param name="contact">Model with contact information and message</param>
         /// <returns>HomeController::Index on success or BadRequest</returns>
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public IActionResult Send(Contact contact)
         {
             try

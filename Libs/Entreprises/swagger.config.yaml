@@ -1,0 +1,6 @@
+additionalProperties:
+  apiName: EntreprisesApi
+  packageName: EntreprisesApi
+  targetFramework: net6.0
+  library: httpclient
+  nullableReferenceType: false # default

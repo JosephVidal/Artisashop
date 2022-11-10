@@ -1,9 +1,9 @@
+using System.Net;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace Artisashop.Controllers
 {
@@ -28,8 +28,8 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Home page with data or BadRequest</returns>
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
         public IActionResult Index()
         {
             try
@@ -44,7 +44,7 @@ namespace Artisashop.Controllers
                     ProductNumber = productCount,
                     CraftsmanSample = SelectRandom(users, 5),
                     ProductSample = SelectRandom(items, 5),
-                    Inscrit = _db.Accounts!.Count(user => user.Role == Models.Account.UserType.CONSUMER || user.Role == Models.Account.UserType.CRAFTSMAN)
+                    Inscrit = _db.Accounts!.Count(user => user.Role == Account.UserType.CONSUMER || user.Role == Account.UserType.CRAFTSMAN)
                 };
                 return Ok(viewModel);
             }

@@ -1,7 +1,7 @@
-﻿using Artisashop.Models.ViewModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Models
 {
@@ -11,11 +11,11 @@ namespace Artisashop.Models
         {
             ImagesList = "[]";
             Images = new List<string>();
-            StyleList = "[]";
+            StylesList = "[]";
             Styles = new List<string>();
         }
 
-        public Product(string name, Account craftsman, double? price = null, string? description = null, int quantity = 1, List<string>? images = null, List<string>? style = null)
+        public Product(string name, Account craftsman, decimal? price = null, string? description = null, int quantity = 1, List<string>? images = null, List<string>? style = null)
         {
             Name = name;
             Price = price;
@@ -24,7 +24,7 @@ namespace Artisashop.Models
             CraftsmanId = craftsman.Id;
             Craftsman = craftsman;
             ImagesList = JsonSerializer.Serialize(images);
-            StyleList = JsonSerializer.Serialize(style);
+            StylesList = JsonSerializer.Serialize(style);
         }
 
         public Product(CreateProduct product, Account craftsman)
@@ -36,7 +36,7 @@ namespace Artisashop.Models
             CraftsmanId = craftsman.Id;
             Craftsman = craftsman;
             ImagesList = JsonSerializer.Serialize(product.Images);
-            StyleList = JsonSerializer.Serialize(product.Styles);
+            StylesList = JsonSerializer.Serialize(product.Styles);
         }
 
         [Key]
@@ -45,7 +45,7 @@ namespace Artisashop.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public double? Price { get; set; }
+        public decimal? Price { get; set; }
         public string? Description { get; set; }
         [Required]
         public int Quantity { get; set; }
@@ -55,15 +55,17 @@ namespace Artisashop.Models
         public Account? Craftsman { get; set; }
         public string ImagesList { get; set; }
         [NotMapped]
-        public List<string>? Images {
+        public List<string>? Images
+        {
             get => JsonSerializer.Deserialize<List<string>>(ImagesList);
             set => ImagesList = JsonSerializer.Serialize(Images);
         }
-        public string StyleList { get; set; }
+        public string StylesList { get; set; }
         [NotMapped]
-        public List<string>? Styles {
-            get => JsonSerializer.Deserialize<List<string>>(StyleList);
-            set => StyleList = JsonSerializer.Serialize(Styles);
+        public List<string>? Styles
+        {
+            get => JsonSerializer.Deserialize<List<string>>(StylesList);
+            set => StylesList = JsonSerializer.Serialize(Styles);
         }
     }
 }

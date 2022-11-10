@@ -1,9 +1,9 @@
-﻿using Artisashop.Models;
+﻿using System.Net;
+using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace Artisashop.Controllers
 {
@@ -24,9 +24,9 @@ namespace Artisashop.Controllers
         }
 
         [HttpGet("product")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> ProductSearch([FromBody] ProductSearch search)
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> ProductSearch([FromQuery] ProductSearch search)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Artisashop.Controllers
                     query = query.Where(item => item.Craftsman!.Job == search.Job);
                 if (search.Styles != null)
                     foreach (string style in search.Styles)
-                        query = query.Where(item => item.StyleList!.Contains(style));
+                        query = query.Where(item => item.StylesList!.Contains(style));
                 return Ok(await query.ToListAsync());
             }
             catch (Exception e)
@@ -47,9 +47,9 @@ namespace Artisashop.Controllers
         }
 
         [HttpGet("craftsman")]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CraftsmanSearch([FromBody] CraftsmanSearch search)
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CraftsmanSearch([FromQuery] CraftsmanSearch search)
         {
             try
             {

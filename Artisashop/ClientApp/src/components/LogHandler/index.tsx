@@ -21,7 +21,7 @@ const LogHandler: React.FunctionComponent<Props> = ({ toastHandler }) => {
   const [{ logs }, dispatch] = useContext(StoreContext);
   const { t } = useTranslation();
 
-  useEffect(getRealTimeLogs(dispatch), []);
+  // useEffect(getRealTimeLogs(dispatch), []);
 
   useEffect(
     () =>

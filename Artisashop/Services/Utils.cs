@@ -1,9 +1,9 @@
-using Artisashop.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.EntityFrameworkCore;
 using Artisashop.Interfaces.IService;
+using Artisashop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Artisashop.Services
 {
