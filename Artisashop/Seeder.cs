@@ -1,4 +1,5 @@
-﻿using Artisashop.Models;
+﻿using Artisashop.Identity;
+using Artisashop.Models;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,22 +7,35 @@ namespace Artisashop;
 
 public static class Seed
 {
-    private const string ADMIN_EMAIL = "thomas.colonna@epitech.eu";
-    private const string ADMIN_PASSWORD = "Password123!";
-    private const string ADMIN_USERNAME = "Admin";
-    private const string ADMIN_FIRSTNAME = "Thomas";
 
-    public static async Task SeedData(UserManager<Account> userManager, StoreDbContext context)
+    /// <summary>
+    /// Configures the roles for the Identity system.
+    /// </summary>
+    /// <param name="roleManager"></param>
+    public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
     {
-        var admin = new Faker<Account>()
-            .StrictMode(true)
-            .RuleFor(o => o.Email, f => ADMIN_EMAIL)
-            .RuleFor(o => o.UserName, f => ADMIN_USERNAME)
-            .RuleFor(o => o.Firstname, f => ADMIN_FIRSTNAME)
-            .RuleFor(o => o.EmailConfirmed, true)
-            .RuleFor(o => o.Role, f => Account.UserType.ADMIN).Generate(1).First();
-        await userManager.CreateAsync(admin, ADMIN_PASSWORD);
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+        await roleManager.CreateAsync(new IdentityRole("User"));
+        await roleManager.CreateAsync(new IdentityRole("Seller"));
+        await roleManager.CreateAsync(new IdentityRole("Partner"));
+    }
 
+    public static async Task SeedUsersAsync(UserManager<Account> userManager)
+    {
+        var admin = new Account()
+        {
+            Email = "thomas.colonna@epitech.eu",
+            UserName = "Admin",
+            Firstname = "Thomas",
+            Lastname = "Colonna"
+        };
+
+        await userManager.CreateAsync(admin, "Password123!");
+        await userManager.AddToRoleAsync(admin, Roles.Admin);
+    }
+
+    public static async Task SeedDemoDataAsync(UserManager<Account> userManager, StoreDbContext context)
+    {
         var users = new Faker<Account>()
             .StrictMode(true)
             .RuleFor(o => o.Email, f => f.Internet.Email())

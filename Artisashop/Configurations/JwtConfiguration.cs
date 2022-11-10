@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+namespace Artisashop.Configurations;
 
-namespace Artisashop;
+using System.ComponentModel.DataAnnotations;
 
 public class JwtConfiguration
 {
