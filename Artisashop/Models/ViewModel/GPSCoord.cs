@@ -1,4 +1,8 @@
-﻿namespace Artisashop.Models.ViewModel
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace Artisashop.Models.ViewModel
 {
     public class GPSCoord
     {
@@ -13,7 +17,18 @@
             Latitude = latitude;
         }
 
-        public double Longitude { get; set; }
+
+        [Key]
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int Id { get; set; }
+
+        [JsonProperty("lat")]
+        [JsonPropertyName("lat")]
         public double Latitude { get; set; }
+
+        [JsonProperty("lng")]
+        [JsonPropertyName("lng")]
+        public double Longitude { get; set; }
     }
 }

@@ -17,6 +17,7 @@ using Artisashop.Validation;
 using System.Globalization;
 using Artisashop.Models.ViewModel.Account;
 using System.Net.Http.Headers;
+using System.Net.Http;
 
 [ApiController]
 [Produces("application/json")]
@@ -31,7 +32,7 @@ public class AccountController : ControllerBase
     private readonly IUtils _utils;
     private readonly FranceConnectConfiguration _franceConnectConfiguration;
     private readonly ILogger<AccountController> _logger;
-    private static HttpClient _googleMapsClient = new HttpClient();
+    private static HttpClient _opencageDataClient = new HttpClient();
 
     public AccountController(
         UserManager<Account> userManager,
@@ -50,9 +51,9 @@ public class AccountController : ControllerBase
         _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
 
-        _googleMapsClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/");
-        _googleMapsClient.DefaultRequestHeaders.Accept.Clear();
-        _googleMapsClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _opencageDataClient.BaseAddress = new Uri("https://api.opencagedata.com/");
+        _opencageDataClient.DefaultRequestHeaders.Accept.Clear();
+        _opencageDataClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     [HttpPost("login")]
@@ -289,10 +290,11 @@ public class AccountController : ControllerBase
 
     private async Task<GPSCoord> AddressToGPSCoord(string address)
     {
+        string GoogleKey = "acdfe36c88484444850da3d8adb97890";
         GPSCoord? ret = null;
-        HttpResponseMessage response = await _googleMapsClient.GetAsync("geocode/json?address=" + address);
+        HttpResponseMessage response = await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
         if (response.IsSuccessStatusCode)
-            ret = await response.Content.ReadFromJsonAsync<GPSCoord>();
+            ret = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!.Results[0].Geometry;
         return (ret != null) ? ret : new GPSCoord();
     }
 }
