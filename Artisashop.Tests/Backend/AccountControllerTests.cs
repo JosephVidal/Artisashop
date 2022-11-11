@@ -69,7 +69,10 @@ namespace Artisashop.Tests.Backend
             {
                 if (responseType == "Error")
                 {
-                    Assert.AreEqual("Failed : DuplicateUserName", await response.Content.ReadFromJsonAsync<string>());
+                    var content = await response.Content.ReadFromJsonAsync<string>();
+                    Assert.NotNull(content);
+                    Console.WriteLine(content);
+                    Assert.True(content!.StartsWith("Failed : DuplicateUserName"));
                 }
             }
         }
