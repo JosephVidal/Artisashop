@@ -224,7 +224,11 @@ var app = builder.Build();
 
             if (!context.Roles.Any(r => r.Name == role))
             {
-                var result = await roleStore.CreateAsync(new IdentityRole(role));
+                var result = await roleStore.CreateAsync(new IdentityRole()
+                {
+                    Name = role,
+                    NormalizedName = role.ToUpper(),
+                });
                 if (!result.Succeeded)
                 {
                     throw new Exception($"Error creating role {role} : {result.Errors.First().Description}");
