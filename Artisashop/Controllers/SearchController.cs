@@ -2,6 +2,7 @@
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +18,12 @@ namespace Artisashop.Controllers
     public class SearchController : ControllerBase
     {
         private readonly StoreDbContext _db;
+        private readonly UserManager<Account> _userManager;
 
-        public SearchController(StoreDbContext db)
+        public SearchController(StoreDbContext db, UserManager<Account> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         [HttpGet("product")]
@@ -51,9 +54,16 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CraftsmanSearch([FromQuery] CraftsmanSearch search)
         {
+            var sellerRole = _db.Roles.FirstOrDefault(x => x.Name == Roles.Seller);
+
             try
             {
-                IQueryable<Account> query = _db.Accounts!.Where(account => account.Role == Account.UserType.CRAFTSMAN).AsQueryable();
+                IQueryable<Account> query = _db.Users
+                    .Join(_db.UserRoles, 
+                        user => user.Id,
+                        userRole => userRole.UserId,
+                        (user, userRole) => new { user, userRole }).Where(x => x.userRole.RoleId == sellerRole.Id)
+                    .Select(x => x.user).AsQueryable();
                 if (search.FirstName != null && search.FirstName != "")
                     query = query.Where(item => item.Firstname == search.FirstName);
                 if (search.LastName != null && search.LastName != "")
@@ -67,6 +77,5 @@ namespace Artisashop.Controllers
                 return BadRequest(e.Message);
             }
         }
-
     }
 }

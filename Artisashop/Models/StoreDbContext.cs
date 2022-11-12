@@ -14,12 +14,12 @@ namespace Artisashop.Models
         {
         }
 
-        public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Basket> Baskets { get; set; } = null!;
         public virtual DbSet<Bill> Bills { get; set; } = null!;
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
         public virtual DbSet<Style> Styles { get; set; } = null!;
+        public virtual DbSet<Seller> Sellers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,6 +40,13 @@ namespace Artisashop.Models
                         .Property<DateTime?>(nameof(IUpdatedAt.UpdatedAt))
                         .ValueGeneratedOnUpdate();
                 }
+
+                builder.Entity<Account>(options =>
+                {
+                    options.HasOne<Seller>(account => account.Seller)
+                        .WithOne(seller => seller.Account)
+                        .HasForeignKey<Seller>(seller => seller.AccountId);
+                });
             }
         }
     }

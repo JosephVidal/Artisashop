@@ -82,7 +82,7 @@ namespace Artisashop.Controllers
                 List<Bill> bills = new();
                 foreach (Basket item in basket)
                 {
-                    Account? craftsman = await _db.Accounts!.SingleAsync(account => account.Id == item.Product!.CraftsmanId!);
+                    Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == item.Product!.CraftsmanId!);
                     if (craftsman == null)
                         return BadRequest("Craftsman not found, id: " + item.Product!.CraftsmanId);
                     Bill tmp = new(craftsman.Firstname + " " + craftsman.Lastname,
@@ -102,7 +102,7 @@ namespace Artisashop.Controllers
                 {
                     foreach (string craftsmanID in craftsmanIDs)
                     {
-                        Account? craftsman = await _db.Accounts!.SingleAsync(account => account.Id == craftsmanID);
+                        Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == craftsmanID);
                         if (craftsman == null)
                             return BadRequest("Craftsman account not found, id: " + craftsmanID);
                         List<Basket> tmpBasket = basket.FindAll(x => x.Product.CraftsmanId == craftsmanID);

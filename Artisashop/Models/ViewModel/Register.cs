@@ -17,6 +17,6 @@ public class Register
     [Required]
     public string? Firstname { get; set; }
     [Required]
-    public UserType Role { get; set; }
+    public string? Role { get; set; }
     public string? Job { get; set; }
 }

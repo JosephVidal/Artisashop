@@ -12,210 +12,245 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RechercheEntreprisesApi.Api;
-
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-using System.Threading.Tasks;
+using Artisashop.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-IConfiguration jwtConfig = builder.Configuration.GetSection("Jwt");
-builder.Services.Configure<JwtConfiguration>(jwtConfig);
-
-IConfiguration franceConnectConfig = builder.Configuration.GetSection("FranceConnect");
-builder.Services.Configure<FranceConnectConfiguration>(franceConnectConfig);
-
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
-builder.Services.AddControllers()
-.AddJsonOptions(options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; });
-builder.Services.AddSignalR();
-
-builder.Services.AddIdentity<Account, IdentityRole>()
-    .AddEntityFrameworkStores<StoreDbContext>()
-    .AddDefaultTokenProviders();
-builder.Services.AddDbContext<StoreDbContext>(options =>
-    options.UseSqlite("Data Source=./app.db"));
-builder.Services.AddAuthentication(options =>
+// add services to DI container
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    var config = jwtConfig.Get<JwtConfiguration>();
+    IConfiguration jwtConfig = builder.Configuration.GetSection("Jwt");
+    builder.Services.Configure<JwtConfiguration>(jwtConfig);
 
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidIssuer = config.Issuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key))
-    };
-    options.RequireHttpsMetadata = false;
-})
-.AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName, oidc_options =>
-    {
-        var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
+    IConfiguration franceConnectConfig = builder.Configuration.GetSection("FranceConnect");
+    builder.Services.Configure<FranceConnectConfiguration>(franceConnectConfig);
 
-        // FC refuses unknown parameters in the requests, so the two following options are needed 
-        oidc_options.DisableTelemetry = true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
-        oidc_options.UsePkce = false; // This is true by default on .NET Core 3.1, and enables the PKCE mechanism which is not supported by FC.
-
-        // FC has restrictions in the nonce (max 128 alphanumeric characters) and errors out in the logout flow otherwise. We use this option so that the nonce does not contain a dot.
-        oidc_options.ProtocolValidator.RequireTimeStampInNonce = false;
-
-        oidc_options.SaveTokens = true; // This is needed to keep the id_token obtained for authentication : we have to send it back to FC to logout.
-
-        oidc_options.ClientId = fcConfig.ClientId;
-        oidc_options.ClientSecret = fcConfig.ClientSecret;
-        oidc_options.CallbackPath = fcConfig.CallbackPath;
-        oidc_options.SignedOutCallbackPath = fcConfig.SignedOutCallbackPath;
-        oidc_options.Authority = fcConfig.Issuer;
-        oidc_options.ResponseType = OpenIdConnectResponseType.Code;
-        oidc_options.Scope.Clear();
-        oidc_options.Scope.Add("openid");
-        foreach (string scope in fcConfig.Scopes)
+    // Add services to the container.
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
         {
-            oidc_options.Scope.Add(scope);
-        }
-        oidc_options.GetClaimsFromUserInfoEndpoint = true;
-        oidc_options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(fcConfig.ClientSecret));
-        oidc_options.Configuration = new OpenIdConnectConfiguration
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            // serialize enums as strings in api responses (e.g. Role)
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+
+    builder.Services.AddSignalR();
+
+    builder.Services.AddDbContext<StoreDbContext>(options =>
+        options.UseSqlite("Data Source=./app.db"));
+
+    builder.Services.AddIdentity<Account, IdentityRole>()
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<StoreDbContext>()
+        .AddDefaultTokenProviders();
+
+    builder.Services.AddAuthentication(options =>
         {
-            Issuer = fcConfig.Issuer,
-            AuthorizationEndpoint = fcConfig.AuthorizationEndpoint,
-            TokenEndpoint = fcConfig.TokenEndpoint,
-            UserInfoEndpoint = fcConfig.UserInfoEndpoint,
-            EndSessionEndpoint = fcConfig.EndSessionEndpoint,
-        };
-        oidc_options.Events = new OpenIdConnectEvents
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
         {
-            OnRedirectToIdentityProvider = (context) =>
+            var config = jwtConfig.Get<JwtConfiguration>();
+
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidIssuer = config.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key))
+            };
+            options.RequireHttpsMetadata = false;
+        })
+        .AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName,
+            oidc_options =>
+            {
+                var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
+
+                // FC refuses unknown parameters in the requests, so the two following options are needed 
+                oidc_options.DisableTelemetry =
+                    true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
+                oidc_options.UsePkce =
+                    false; // This is true by default on .NET Core 3.1, and enables the PKCE mechanism which is not supported by FC.
+
+                // FC has restrictions in the nonce (max 128 alphanumeric characters) and errors out in the logout flow otherwise. We use this option so that the nonce does not contain a dot.
+                oidc_options.ProtocolValidator.RequireTimeStampInNonce = false;
+
+                oidc_options.SaveTokens =
+                    true; // This is needed to keep the id_token obtained for authentication : we have to send it back to FC to logout.
+
+                oidc_options.ClientId = fcConfig.ClientId;
+                oidc_options.ClientSecret = fcConfig.ClientSecret;
+                oidc_options.CallbackPath = fcConfig.CallbackPath;
+                oidc_options.SignedOutCallbackPath = fcConfig.SignedOutCallbackPath;
+                oidc_options.Authority = fcConfig.Issuer;
+                oidc_options.ResponseType = OpenIdConnectResponseType.Code;
+                oidc_options.Scope.Clear();
+                oidc_options.Scope.Add("openid");
+                foreach (string scope in fcConfig.Scopes)
                 {
-                    context.ProtocolMessage.AcrValues = "eidas" + fcConfig.EIdasLevel;
-                    return Task.FromResult(0);
+                    oidc_options.Scope.Add(scope);
                 }
-        };
-        // We specify claims to be kept, as .NET Core 2.0+ doesn't keep claims it does not expect.
-        oidc_options.ClaimActions.MapUniqueJsonKey("preferred_username", "preferred_username");
-        oidc_options.ClaimActions.MapUniqueJsonKey("birthcountry", "birthcountry");
-        oidc_options.ClaimActions.MapUniqueJsonKey("birthdate", "birthdate");
-        oidc_options.ClaimActions.MapUniqueJsonKey("birthplace", "birthplace");
-        oidc_options.ClaimActions.MapUniqueJsonKey("gender", "gender");
+
+                oidc_options.GetClaimsFromUserInfoEndpoint = true;
+                oidc_options.TokenValidationParameters.IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(fcConfig.ClientSecret));
+                oidc_options.Configuration = new OpenIdConnectConfiguration
+                {
+                    Issuer = fcConfig.Issuer,
+                    AuthorizationEndpoint = fcConfig.AuthorizationEndpoint,
+                    TokenEndpoint = fcConfig.TokenEndpoint,
+                    UserInfoEndpoint = fcConfig.UserInfoEndpoint,
+                    EndSessionEndpoint = fcConfig.EndSessionEndpoint,
+                };
+                oidc_options.Events = new OpenIdConnectEvents
+                {
+                    OnRedirectToIdentityProvider = (context) =>
+                    {
+                        context.ProtocolMessage.AcrValues = "eidas" + fcConfig.EIdasLevel;
+                        return Task.FromResult(0);
+                    }
+                };
+                // We specify claims to be kept, as .NET Core 2.0+ doesn't keep claims it does not expect.
+                oidc_options.ClaimActions.MapUniqueJsonKey("preferred_username", "preferred_username");
+                oidc_options.ClaimActions.MapUniqueJsonKey("birthcountry", "birthcountry");
+                oidc_options.ClaimActions.MapUniqueJsonKey("birthdate", "birthdate");
+                oidc_options.ClaimActions.MapUniqueJsonKey("birthplace", "birthplace");
+                oidc_options.ClaimActions.MapUniqueJsonKey("gender", "gender");
+            });
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy(Policies.RequireAdminRole, policy => policy.RequireRole(Roles.Admin));
+        options.AddPolicy(Policies.RequireUserRole, policy => policy.RequireRole(Roles.User));
+        options.AddPolicy(Policies.RequireSellerRole, policy => policy.RequireRole(Roles.Seller));
     });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
-    options.AddPolicy("RequireSellerRole", policy => policy.RequireRole("Seller"));
-});
-
-builder.Services.AddTransient<IRechercheTextuelleApiAsync, RechercheTextuelleApi>();
-builder.Services.AddTransient<RepertoireNationalMetiersApi.Api.IDefaultApiAsync, RepertoireNationalMetiersApi.Api.DefaultApi>();
+    builder.Services
+        .AddTransient<IRechercheTextuelleApiAsync, RechercheTextuelleApi>()
+        .AddTransient<RepertoireNationalMetiersApi.Api.IDefaultApiAsync, RepertoireNationalMetiersApi.Api.DefaultApi>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(options =>
     {
-        Title = "API Artichaut",
-        Version = "v1",
-    });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description =
-            "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        options.SwaggerDoc("v1", new OpenApiInfo
         {
-            new OpenApiSecurityScheme
+            Title = "API Artisashop",
+            Version = "v1",
+        });
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description =
+                "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+        });
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
             {
-                Reference = new OpenApiReference
+                new OpenApiSecurityScheme
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer",
-                }
-            },
-            Array.Empty<string>()
-        }
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer",
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
     });
-});
-builder.Services.AddScoped<IMailService, MailService>();
-builder.Services.AddScoped<IUtils, Utils>();
+    builder.Services.AddScoped<IMailService, MailService>();
+    builder.Services.AddScoped<IUtils, Utils>();
+}
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
 {
-    app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-    // Cleans up the database on each run
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    
+    
+    // Setup environment specific pipelines
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        // Cleans up the database on each run
+        using (var scope = app.Services.CreateScope())
+        {
+            using var context = scope.ServiceProvider.GetService<StoreDbContext>();
+            context?.Database.EnsureDeleted();
+            context?.Database.Migrate();
+        }
+
+        app.UseMigrationsEndPoint();
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    else // Production
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            using var context = scope.ServiceProvider.GetService<StoreDbContext>();
+            context?.Database.Migrate();
+        }
+
+
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
+
+    // Create roles
     using (var scope = app.Services.CreateScope())
     {
-        using var context = scope.ServiceProvider.GetService<StoreDbContext>();
-        context?.Database.EnsureCreated();
+        var context = scope.ServiceProvider.GetService<StoreDbContext>()!;
+
+        foreach (string role in Roles.AllRoles)
+        {
+            var roleStore = new RoleStore<IdentityRole>(context);
+
+            if (!context.Roles.Any(r => r.Name == role))
+            {
+                var result = await roleStore.CreateAsync(new IdentityRole()
+                {
+                    Name = role,
+                    NormalizedName = role.ToUpper(),
+                });
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Error creating role {role} : {result.Errors.First().Description}");
+                }
+            }
+        }
     }
-    app.UseMigrationsEndPoint();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "api/{controller}/{action=Index}/{id?}");
+
+    app.MapHub<ChatHub>("/chatHub");
 }
-else
-{
-    // Cleans up the database on each run
-    using (var scope = app.Services.CreateScope())
-    {
-        using var context = scope.ServiceProvider.GetService<StoreDbContext>();
-        context?.Database.EnsureCreated();
-    }
-
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "api/{controller}/{action=Index}/{id?}");
-
-app.MapHub<ChatHub>("/chatHub");
-
 app.Run();
 
 namespace Artisashop
 {
-    public partial class Program { }
+    public partial class Program
+    {
+    }
 }

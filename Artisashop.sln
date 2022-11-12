@@ -5,8 +5,6 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Artisashop.Tests", "Artisashop.Tests\Artisashop.Tests.csproj", "{6531F81C-91EA-409E-8A0B-4395072690AB}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D26782B6-4058-4D61-AD24-936A4443C2C7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{1C1A52CC-CE63-4066-A01A-7B34B7CD9819}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entreprises", "Entreprises", "{BB6AD772-B498-4614-A1C7-6EC563A2E3C6}"
@@ -53,10 +51,6 @@ Global
 		{6531F81C-91EA-409E-8A0B-4395072690AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6531F81C-91EA-409E-8A0B-4395072690AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6531F81C-91EA-409E-8A0B-4395072690AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D26782B6-4058-4D61-AD24-936A4443C2C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{735ABD0B-98AC-40D2-86EB-2456EDCFCF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{735ABD0B-98AC-40D2-86EB-2456EDCFCF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{735ABD0B-98AC-40D2-86EB-2456EDCFCF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
