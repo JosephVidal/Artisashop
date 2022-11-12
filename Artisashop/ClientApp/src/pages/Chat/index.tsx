@@ -25,7 +25,7 @@ import {InputText} from "primereact/inputtext";
 import { random } from "lodash";
 import {Maybe, None, Some} from "monet";
 import useApi from "hooks/useApi";
-import {Account, ApiChatHistoryGetRequest, ChatApi, ChatHistory, ChatMessage, ChatPreview, UserType} from "api";
+import {Account, ApiChatHistoryGetRequest, ChatApi, ChatHistory, ChatMessage, ChatPreview} from "api";
 
 const ref = new Date();
 
@@ -44,7 +44,6 @@ const Joseph: Account = {
   password: "",
   lastname: "Vidal",
   firstname: "Joseph",
-  role: UserType.NUMBER_0
 }
 
 // const Margot: Account = {
