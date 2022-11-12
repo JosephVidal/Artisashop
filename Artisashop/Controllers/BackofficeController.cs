@@ -3,6 +3,7 @@ using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Artisashop.Models.Account;
@@ -20,11 +21,13 @@ namespace Artisashop.Controllers
     {
         private readonly IMailService _mailService;
         private readonly StoreDbContext _db;
+        private readonly UserManager<Account> _userManager;
 
-        public BackofficeController(IMailService mailService, StoreDbContext db)
+        public BackofficeController(IMailService mailService, StoreDbContext db, UserManager<Account> userManager)
         {
             _mailService = mailService;
             _db = db;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -38,8 +41,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                List<Account> list = await _db.Accounts!.Where(user => user.Role == UserType.CRAFTSMAN).ToListAsync();
-                return Ok(list);
+                var users = _userManager.GetUsersInRoleAsync(Roles.Seller);
+                return Ok(users);
             }
             catch (Exception e)
             {
@@ -59,12 +62,17 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Home viewModel = new()
+                var sellerCount = _userManager.GetUsersInRoleAsync(Roles.Seller).Result.Count;
+                var productCount = _db.Products.Count();
+                var userCount = _userManager.GetUsersInRoleAsync(Roles.User).Result.Count;
+
+                Home viewModel = new Home()
                 {
-                    CraftsmanNumber = (await _db.Accounts!.Where(account => account.Role == UserType.CRAFTSMAN).ToListAsync()).Count,
-                    ProductNumber = (await _db.Products!.ToListAsync()).Count,
-                    Inscrit = (await _db.Accounts!.Where(account => account.Role == UserType.CONSUMER || account.Role == UserType.CRAFTSMAN).ToListAsync()).Count
+                    CraftsmanNumber = sellerCount,
+                    ProductNumber = productCount,
+                    Inscrit = userCount,
                 };
+
                 return Ok(viewModel);
             }
             catch (Exception e)
@@ -86,12 +94,13 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Account? account = await _db.Accounts!.SingleAsync(account => account.UserName == model["username"]);
-                if (account == null)
+                var user = await _userManager.FindByNameAsync(model["username"]);
+
+                if (user == null)
                     return NotFound("Account with username " + model["username"] + " not found");
                 if (bool.Parse(model["validationStatus"]) == true)
-                    _mailService.SendMail(account.Email, "Artisashop - Validation de compte", "");
-                return Ok("Validation status for " + model["username"] + " : " + account.EmailConfirmed);
+                    _mailService.SendMail(user.Email, "Artisashop - Validation de compte", "");
+                return Ok("Validation status for " + model["username"] + " : " + user.EmailConfirmed);
             }
             catch (Exception e)
             {
