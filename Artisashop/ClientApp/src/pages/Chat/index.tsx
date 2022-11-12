@@ -29,101 +29,13 @@ import {Account, ApiChatHistoryGetRequest, ChatApi, ChatHistory, ChatMessage, Ch
 
 const ref = new Date();
 
-// enum AccountType {
-//   NONE = -1,
-//   CONSUMER = 0,
-//   CRAFTSMAN = 1,
-//   PARTNER = 2,
-//   ADMIN = 3
-// }
-
 const Joseph: Account = {
   id: "1",
   userName: "Joseph",
   email: "",
-  password: "",
   lastname: "Vidal",
   firstname: "Joseph",
 }
-
-// const Margot: Account = {
-//   id: "2",
-//   userName: "Margot",
-//   email: "",
-//   lastname: "Togram",
-//   firstname: "Margot",
-//   role: AccountType.CRAFTSMAN
-// }
-//
-// const Jojo: Account = {
-//   id: "3",
-//   userName: "Jojo",
-//   email: "",
-//   lastname: "Vidul",
-//   firstname: "Jojo",
-//   role: AccountType.CRAFTSMAN
-// }
-//
-// interface ChatMessage {
-//   Id: number;
-//   SenderId: Account;
-//   ReceiverId: Account;
-//   Date: Date;
-//   Content: string;
-//   Joined?: string;
-//   Filename?: string;
-// }
-//
-// const contacts: ChatPreview[] = [
-//   {
-//     lastMsg: {
-//       id: 1,
-//       sender: Jojo,
-//       receiver: Joseph,
-//       Date: new Date(ref.getTime() - 30000),
-//       Content: "Tu veux voir ma chaise"
-//     },
-//     Receive: true
-//   },
-//   {
-//     lastMsg: {
-//       id: 2,
-//       sender: Margot,
-//       receiver: Joseph,
-//       Date: new Date(ref.getTime() - 172800000),
-//       Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
-//     },
-//     Receive: true
-//   }
-// ];
-//
-// const historyMargot: ChatMessage[] = [{
-//   id: 1,
-//   senderId: Margot,
-//   receiver: Joseph,
-//   Date: new Date(ref.getTime() - 172800000),
-//   Content: "Mes meubles c'est du bois d'arbre top qualité tavu"
-// },{
-//   id: 2,
-//   senderId: Joseph,
-//   receiver: Margot,
-//   Date: new Date(ref.getTime() - 21600000),
-//   Content: "Ptdr j'avoue"
-// },{
-//   id: 3,
-//   senderId: Joseph,
-//   receiver: Margot,
-//   Date: new Date(ref.getTime() - 360000),
-//   Content: "C'est bô"
-// }]
-//
-// const historyJojo: ChatMessage[] = [{
-//   id: 1,
-//   senderId: Jojo,
-//   receiver: Joseph,
-//   Date: new Date(ref.getTime() - 30000),
-//   Content: "Tu veux voir ma chaise"
-// }]
 
 type MaybeString = string | null | undefined;
 
