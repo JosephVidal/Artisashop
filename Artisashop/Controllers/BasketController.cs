@@ -42,7 +42,7 @@ namespace Artisashop.Controllers
 
                 foreach (Basket elem in basket)
                 {
-                    Account? craftsman = await _db.Accounts!.FirstOrDefaultAsync(account => account.Id == elem.Product!.CraftsmanId!);
+                    Account? craftsman = await _db.Users!.FirstOrDefaultAsync(account => account.Id == elem.Product!.CraftsmanId!);
                     if (craftsman == null)
                         return BadRequest("Craftman missing in product: " + elem.Product!.Id);
                     elem.Product!.Craftsman = craftsman;

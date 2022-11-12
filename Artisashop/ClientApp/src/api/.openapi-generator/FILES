@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/AccountApi.ts
 apis/BackofficeApi.ts
 apis/BasketApi.ts
@@ -9,8 +10,8 @@ apis/HomeApi.ts
 apis/OidcConfigurationApi.ts
 apis/OrderApi.ts
 apis/ProductApi.ts
-apis/ReportApi.ts
 apis/SearchApi.ts
+apis/SellerApi.ts
 apis/WeatherForecastApi.ts
 apis/index.ts
 index.ts
@@ -40,14 +41,12 @@ models/ProblemDetails.ts
 models/Product.ts
 models/PurchaseUnitElem.ts
 models/Register.ts
-models/Report.ts
-models/ReportStatus.ts
+models/Seller.ts
 models/State.ts
 models/UnitAmount.ts
 models/UpdateAccount.ts
 models/UpdateBasket.ts
 models/UpdateCustomOrder.ts
-models/UserType.ts
 models/WeatherForecast.ts
 models/index.ts
 runtime.ts

@@ -1,8 +1,8 @@
-namespace Artisashop.Validation;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
+
+namespace Artisashop.Helpers;
 
 public static class Validation
     {

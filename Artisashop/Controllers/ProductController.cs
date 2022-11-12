@@ -14,7 +14,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/product/")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "CRAFTSMAN, ADMIN")]
     public class ProductController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace Artisashop.Controllers
         /// Displays a craftsman product list
         /// </summary>
         /// <returns>Product Index page on success, Unauthorized if not craftsmann, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet("list")]
+        [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]

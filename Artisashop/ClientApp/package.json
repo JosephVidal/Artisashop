@@ -1,6 +1,6 @@
 {
   "name": "Artisashop",
-  "version": "0.1",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@fullcalendar/core": "^5.11.2",
@@ -53,7 +53,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "patch-package",
-    "prepare": "husky install",
     "api:fetch": "rm -f swagger.json && wget http://localhost:5138/swagger/v1/swagger.json",
     "api:generate": "openapi-generator-cli generate -i swagger.json -g typescript-fetch -o ./src/api"
   },
