@@ -20,24 +20,23 @@ const Home: React.FunctionComponent<Props> = () => {
               <i className="fas fa-search"/>
             </button>
           </label>
-        </div>
-
-        <div id="searchType">
-          <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
-          <label className="wordCarousel" htmlFor="SearchType">
-            <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
-              <li>By product</li>
-              <li>By craftsman</li>
-            </ul>
-          </label>
+          <div id="searchType">
+            <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
+            <label className="wordCarousel" htmlFor="SearchType">
+              <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
+                <li>By product</li>
+                <li>By craftsman</li>
+              </ul>
+            </label>
+          </div>
         </div>
       </section>
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="../../assets/Logox150.png" serie="Petite série" name="table trop bien" price={1500}/>
-          <ProductCard img="../../assets/Logox150.png" serie="Pièce unique" name="table chouette et pas cher" price={30}/>
-          <ProductCard img="../../assets/Logox150.png" serie="Petite série" name="tabouret" price={200}/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500}/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Pièce unique" name="table chouette et pas cher" price={30}/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="tabouret" price={200}/>
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>

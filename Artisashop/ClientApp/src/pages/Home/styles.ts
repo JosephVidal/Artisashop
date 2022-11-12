@@ -45,7 +45,10 @@ section {
         margin: 0;
     }
 
-    #search-block {display: inline;}
+    #search-block {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 .section-body {
