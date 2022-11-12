@@ -92,6 +92,8 @@ public class AccountController : ControllerBase
             {
                 Id = Guid.NewGuid().ToString()
             };
+            if (account.Address != null)
+                account.AddressGPS = await AddressToGPSCoord(account.Address);
             var result = await _userManager.CreateAsync(account, model.Password);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
@@ -288,13 +290,30 @@ public class AccountController : ControllerBase
         return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
     }
 
+    /*[HttpGet("GetTestAddressToGPSCoord")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GPSCoord), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetTestAddressToGPSCoord([FromQuery] string address)
+    {
+        try {
+            return Ok(await AddressToGPSCoord(address));
+        } catch (Exception ex) {
+            return BadRequest(ex.Message);
+        }
+    }*/
+
     private async Task<GPSCoord> AddressToGPSCoord(string address)
     {
         string GoogleKey = "acdfe36c88484444850da3d8adb97890";
         GPSCoord? ret = null;
+        OpencageDataGeocode tmp;
         HttpResponseMessage response = await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
-        if (response.IsSuccessStatusCode)
-            ret = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!.Results[0].Geometry;
+        if (response.IsSuccessStatusCode) {
+            tmp = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
+            if (tmp.Results != null)
+                ret = tmp.Results[0].Geometry;
+        }
         return (ret != null) ? ret : new GPSCoord();
     }
 }
