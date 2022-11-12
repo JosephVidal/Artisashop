@@ -22,9 +22,10 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Job = model.Job;
         Bills = new List<Bill>();
         Baskets = new List<Basket>();
+        Address = model.Address;
     }
 
-    public Account(string username, string email, string lastname, string firstname, string job)
+    public Account(string username, string email, string lastname, string firstname, string job, string? address)
     {
         UserName = username;
         Email = email;
@@ -33,6 +34,7 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Job = job;
         Bills = new List<Bill>();
         Baskets = new List<Basket>();
+        Address = address;
     }
 
     [Required] public string? Lastname { get; set; }

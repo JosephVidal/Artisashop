@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Artisashop.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221110091507_InitialCreate")]
+    [Migration("20221112112359_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,12 @@ namespace Artisashop.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AddressGPSId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -94,6 +100,8 @@ namespace Artisashop.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressGPSId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -307,6 +315,23 @@ namespace Artisashop.Migrations
                     b.ToTable("Styles");
                 });
 
+            modelBuilder.Entity("Artisashop.Models.ViewModel.GPSCoord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GPSCoord");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -433,6 +458,15 @@ namespace Artisashop.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Artisashop.Models.Account", b =>
+                {
+                    b.HasOne("Artisashop.Models.ViewModel.GPSCoord", "AddressGPS")
+                        .WithMany()
+                        .HasForeignKey("AddressGPSId");
+
+                    b.Navigation("AddressGPS");
                 });
 
             modelBuilder.Entity("Artisashop.Models.Basket", b =>

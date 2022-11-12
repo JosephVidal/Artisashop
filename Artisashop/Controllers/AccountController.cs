@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
     private readonly IUtils _utils;
     private readonly FranceConnectConfiguration _franceConnectConfiguration;
     private readonly ILogger<AccountController> _logger;
-    private static HttpClient _opencageDataClient = new HttpClient();
+    private readonly HttpClient _opencageDataClient = new HttpClient();
 
     public AccountController(
         UserManager<Account> userManager,
