@@ -11,6 +11,7 @@ import Register from "pages/Register";
 import Login from "pages/Login";
 import Search from "pages/Search";
 import ProductView from "pages/Product";
+import CraftsmanView from "pages/Craftsman";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
 import Chat from "pages/Chat";
@@ -30,9 +31,9 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
           <Route path="/login" element={<Login/>}/>
           <Route path="/search" element={<Search/>}/>
           <Route path="/product/:id" element={<ProductView/>}/>
+          <Route path="/craftsman/:id" element={<CraftsmanView/>}/>
           <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />}/>
           <Route path="/chat" element={<Chat />} />
-          <Route path="*" element={<div>404</div>}/>
         </Route>
       </Wrapper>
     </Router>

@@ -11,8 +11,8 @@ export const ProductCardWrapper = styled.div`
         transition: 0.3s;
 
         img {
-            width: 400px;
-            height: 400px;
+            width: 300px;
+            height: 300px;
             object-fit: cover;
             border-radius: var(--elem-radius);
         }
