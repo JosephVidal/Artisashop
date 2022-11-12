@@ -6,12 +6,13 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
-RUN ["npm", "install", "--global", "yarn"]
+#RUN ["npm", "install", "--global", "yarn"]
 RUN ["corepack", "enable"]
+RUN ["corepack", "prepare", "yarn@stable", "--activate"]
 RUN ["yarn", "set", "version", "stable"]
 
 WORKDIR /src
