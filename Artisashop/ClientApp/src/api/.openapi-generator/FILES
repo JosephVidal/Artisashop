@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/AccountApi.ts
 apis/BackofficeApi.ts
 apis/BasketApi.ts
