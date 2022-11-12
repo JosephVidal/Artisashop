@@ -1,7 +1,7 @@
-﻿using Artisashop.Configurations;
-using Artisashop.Helpers;
+﻿namespace Artisashop.Controllers;
 
-namespace Artisashop.Controllers;
+using Artisashop.Configurations;
+using Artisashop.Helpers;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -18,6 +18,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using Artisashop.Models.ViewModel.Account;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 [ApiController]
 [Produces("application/json")]
@@ -32,6 +34,7 @@ public class AccountController : ControllerBase
     private readonly IUtils _utils;
     private readonly FranceConnectConfiguration _franceConnectConfiguration;
     private readonly ILogger<AccountController> _logger;
+    private readonly HttpClient _opencageDataClient = new HttpClient();
 
     public AccountController(
         UserManager<Account> userManager,
@@ -49,6 +52,10 @@ public class AccountController : ControllerBase
         _utils = utils;
         _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
+
+        _opencageDataClient.BaseAddress = new Uri("https://api.opencagedata.com/");
+        _opencageDataClient.DefaultRequestHeaders.Accept.Clear();
+        _opencageDataClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     [HttpPost("login")]
@@ -98,11 +105,17 @@ public class AccountController : ControllerBase
     {
         roles ??= new string[] { Roles.User };
 
-        var result = await _userManager.CreateAsync(new Account(model), model.Password);
+        var account = new Account(model);
+        
+        if (account.Address != null)
+            account.AddressGPS = await AddressToGPSCoord(account.Address);
+
+        
+        var result = await _userManager.CreateAsync(account, model.Password);
         // TODO: Create exception types
         if (!result.Succeeded)
             throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
-        var account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+        account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
         
         var roleResult = await _userManager.AddToRolesAsync(account, roles);
         if (!roleResult.Succeeded)
@@ -292,5 +305,32 @@ public class AccountController : ControllerBase
         );
 
         return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
+    }
+
+    /*[HttpGet("GetTestAddressToGPSCoord")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GPSCoord), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetTestAddressToGPSCoord([FromQuery] string address)
+    {
+        try {
+            return Ok(await AddressToGPSCoord(address));
+        } catch (Exception ex) {
+            return BadRequest(ex.Message);
+        }
+    }*/
+
+    private async Task<GPSCoord> AddressToGPSCoord(string address)
+    {
+        string GoogleKey = "acdfe36c88484444850da3d8adb97890";
+        GPSCoord? ret = null;
+        OpencageDataGeocode tmp;
+        HttpResponseMessage response = await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
+        if (response.IsSuccessStatusCode) {
+            tmp = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
+            if (tmp.Results != null)
+                ret = tmp.Results[0].Geometry;
+        }
+        return (ret != null) ? ret : new GPSCoord();
     }
 }
