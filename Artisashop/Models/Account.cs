@@ -25,41 +25,24 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Address = model.Address;
     }
 
-    public Account(string username, string email, string lastname, string firstname, string job, string? address)
-    {
-        UserName = username;
-        Email = email;
-        Lastname = lastname;
-        Firstname = firstname;
-        Job = job;
-        Bills = new List<Bill>();
-        Baskets = new List<Basket>();
-        Address = address;
-    }
-
     [Required] public string? Lastname { get; set; }
     [Required] public string? Firstname { get; set; }
-
-    [Required]
-    [PasswordPropertyText]
-    [NotMapped]
-    public string? Password { get; set; }
-
+    // TODO: make it more elegant
+    public string? ProfilePicture { get; set; }
     public string? Job { get; set; }
+    public string? Biography { get; set; }
     public string? Address { get; set; }
     public GPSCoord? AddressGPS { get; set; }
 
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    /// <summary>
-    /// Seller account of the user.
-    /// </summary>
-    public virtual Seller? Seller { get; set; }
-    
-    public int? SellerId { get; set; }
-
     public List<Basket>? Baskets { get; set; }
-
     public List<Bill>? Bills { get; set; }
+
+    #region Seller
+
+    public virtual List<Product>? Products { get; set; }
+
+    #endregion
 }

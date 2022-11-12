@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Artisashop.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221112112359_InitialCreate")]
+    [Migration("20221112173109_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Artisashop.Migrations
 
                     b.Property<int?>("AddressGPSId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -82,11 +85,11 @@ namespace Artisashop.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("SecurityStamp")
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SellerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
@@ -243,9 +246,6 @@ namespace Artisashop.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SellerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("StylesList")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -254,38 +254,7 @@ namespace Artisashop.Migrations
 
                     b.HasIndex("CraftsmanId");
 
-                    b.HasIndex("SellerId");
-
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Artisashop.Models.Seller", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StoreName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnUpdate()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("Artisashop.Models.Style", b =>
@@ -513,27 +482,12 @@ namespace Artisashop.Migrations
             modelBuilder.Entity("Artisashop.Models.Product", b =>
                 {
                     b.HasOne("Artisashop.Models.Account", "Craftsman")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CraftsmanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Artisashop.Models.Seller", null)
-                        .WithMany("Products")
-                        .HasForeignKey("SellerId");
-
                     b.Navigation("Craftsman");
-                });
-
-            modelBuilder.Entity("Artisashop.Models.Seller", b =>
-                {
-                    b.HasOne("Artisashop.Models.Account", "Account")
-                        .WithOne("Seller")
-                        .HasForeignKey("Artisashop.Models.Seller", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -593,11 +547,6 @@ namespace Artisashop.Migrations
 
                     b.Navigation("Bills");
 
-                    b.Navigation("Seller");
-                });
-
-            modelBuilder.Entity("Artisashop.Models.Seller", b =>
-                {
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

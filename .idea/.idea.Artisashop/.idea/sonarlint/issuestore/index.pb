@@ -13,8 +13,6 @@ S
 ,Artisashop/Models/ViewModel/CreateProduct.cs,8\6\8694a072f6c31604a20011134f405aa8f4b05200
 e
 5Artisashop/Controllers/OidcConfigurationController.cs,c\4\c4458856f24dbe19f8e91cff455c17584c6d8edc
-Y
-)Artisashop/Controllers/OrderController.cs,4\7\478a9163fb3d3ee63f42c2819a54e0a5e0e6af1b
 K
 Artisashop/appsettings.json,5\6\56828114213a41e4e9426a0892b0562e42ebee52
 g
@@ -23,26 +21,12 @@ b
 2Artisashop/Configurations/ConfigurationSections.cs,3\1\31362d005ac51921ccf7d7dd2b24e1fc4beb0c51
 ]
 -Artisashop/Configurations/JwtConfiguration.cs,4\b\4ba855d3951ab2d8ce6acc14ed888ef899837bd7
-Z
-*Artisashop/Controllers/BasketController.cs,4\a\4a97811c6e8bdd3c6a3fe030e6dc1e5a2d670ff1
-X
-(Artisashop/Controllers/ChatController.cs,d\4\d4bdddce9c84c0c565e95b20daa0849363849c5d
 J
 Artisashop/Models/Style.cs,d\b\db5bef2da58d2d10a906e38e29119b1c64d1f48a
-^
-.Artisashop/Controllers/BackofficeController.cs,7\5\75992f0448ed30a94e72cbe7b2b67017485740be
-K
-Artisashop/Models/Seller.cs,5\c\5cd47bea8e3d4f3afd89a344faf34e022e8563b0
-X
-(Artisashop/Controllers/BillController.cs,1\b\1bcf547a56a98117e13ff50dfb238e2e044b2ce5
 Q
 !Artisashop/ClientApp/swagger.json,6\e\6e09460c90fed7a99d59047d6b806ca467c1a2cd
 c
 3Artisashop/Controllers/WeatherForecastController.cs,8\c\8ce282cd562d3626dbcc69420a6e44c136c8990f
-[
-+Artisashop/Controllers/ProfileController.cs,d\7\d7e93fe1182b8c6f4c795c60277ca291b32b8b34
-[
-+Artisashop/Controllers/ProductController.cs,7\1\71b03d22e57ffe14cdc6f5cd3496f323da07940c
 L
 Artisashop/Models/Product.cs,d\f\df0c7849131271a43c469f6b2af8298253c3f3ec
 Z
@@ -51,5 +35,3 @@ _
 /Artisashop/Controllers/CustomOrderController.cs,b\e\be3c445dcc79fe4d2942985fc8e67579caa4fb7d
 ]
 -Libs/Sirene/src/SireneApi/Client/ApiClient.cs,9\6\96d56fbb35f10d72485198f02ee484048d42c8ef
-Z
-*Artisashop/Controllers/SellerController.cs,b\6\b6e793d6bd05b437812931945be049765202ef93

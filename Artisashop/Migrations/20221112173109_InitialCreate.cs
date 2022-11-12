@@ -81,12 +81,13 @@ namespace Artisashop.Migrations
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Lastname = table.Column<string>(type: "TEXT", nullable: false),
                     Firstname = table.Column<string>(type: "TEXT", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "TEXT", nullable: true),
                     Job = table.Column<string>(type: "TEXT", nullable: true),
+                    Biography = table.Column<string>(type: "TEXT", nullable: true),
                     Address = table.Column<string>(type: "TEXT", nullable: true),
                     AddressGPSId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    SellerId = table.Column<int>(type: "INTEGER", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -250,28 +251,6 @@ namespace Artisashop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sellers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    StoreName = table.Column<string>(type: "TEXT", nullable: true),
-                    AccountId = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sellers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sellers_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -283,8 +262,7 @@ namespace Artisashop.Migrations
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     CraftsmanId = table.Column<string>(type: "TEXT", nullable: false),
                     ImagesList = table.Column<string>(type: "TEXT", nullable: false),
-                    StylesList = table.Column<string>(type: "TEXT", nullable: false),
-                    SellerId = table.Column<int>(type: "INTEGER", nullable: true)
+                    StylesList = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -295,11 +273,6 @@ namespace Artisashop.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Sellers_SellerId",
-                        column: x => x.SellerId,
-                        principalTable: "Sellers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -402,17 +375,6 @@ namespace Artisashop.Migrations
                 name: "IX_Products_CraftsmanId",
                 table: "Products",
                 column: "CraftsmanId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_SellerId",
-                table: "Products",
-                column: "SellerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sellers_AccountId",
-                table: "Sellers",
-                column: "AccountId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -449,9 +411,6 @@ namespace Artisashop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "Sellers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
