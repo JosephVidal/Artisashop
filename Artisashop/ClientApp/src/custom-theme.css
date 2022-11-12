@@ -19,18 +19,19 @@
   --bs-primary: #5A202E;
   --bs-secondary: #DC6D04;
   --bs-tertiary: #79B8F6;
-  --elem-radius: 30px;
+  --elem-radius: 20px;
   --bs-hv-dark: rgba(20, 28, 38, 0.25);
   --bs-hv-light: rgba(244, 235, 225, 0.25);
 
   --artshp-white: #F4EBE1;
   --artshp-red: #5A202E;
   --artshp-orange: #DC6D04;
+  --artshp-brown: #452A16;
   --artshp-dark-blue: #141C26;
   --artshp-med-blue: #536a86;
   --artshp-blue: #79B8F6;
   --artshp-trans: 0.3s;
-  --card-radius: 30px;
+  --card-radius: 20px;
 }
 
 * {
@@ -72,4 +73,11 @@ input {
   font-size: 0.8em;
   padding: 10px 40px;
   border: 0;
+}
+
+.tag {
+  padding: 3px 10px;
+  border-radius: var(--elem-radius);
+  background-color: var(--artshp-brown);
+  color: var(--bs-light);
 }
