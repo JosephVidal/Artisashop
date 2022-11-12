@@ -14,7 +14,20 @@ puis entrer le token d'authentification dans le champ "Value" et cliquer sur le 
 
 ![api-account-auth.png](api-account-auth.png)
 
-_Exemple de connexion avec Swagger. Dans le champ **role**, il faut mettre le rôle requis par la route API à tester._
+_Exemple d'enregistrement avec Swagger. Dans le champ **role**, il faut mettre le rôle requis par la route API à tester._
+
+Données insérées dans le corps de la requête :
+```json
+    {
+    "email": "bob-bricoleur@example.com",
+    "password": "123!Bob",
+    "lastname": "Bob",
+    "firstname": "Bricoleur",
+    "role": "USER",
+    "job": "Bricoleur",
+    "address": "123 Rue de la révolution, Paris"
+    }
+```
 
 ![api-account-auth-return.png](api-account-auth-return.png)
 
@@ -24,7 +37,7 @@ La valeur du champ "token" est à copier dans le champ "Value" de l'interface sw
 
 ![img.png](img.png)
 
-Une fois identifié, il est possible de tester les différentes routes de l'API.
+Une fois identifié, il est possible de tester les différentes routes de l'API (Avec le rôle "USER" pour cet exemple).
 
 ## Migrer la base de données
 
