@@ -1747,6 +1747,38 @@
                 "type": "string"
               }
             }
+          },
+          {
+            "name": "UserGPSCoord.Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
           }
         ],
         "responses": {
@@ -1802,6 +1834,38 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "UserGPSCoord.Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
           }
         ],
         "responses": {
@@ -1824,120 +1888,6 @@
                   "items": {
                     "$ref": "#/components/schemas/Account"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Seller": {
-      "get": {
-        "tags": [
-          "Seller"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/Seller/{userId}": {
-      "get": {
-        "tags": [
-          "Seller"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Seller"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/Seller/{username}": {
-      "get": {
-        "tags": [
-          "Seller"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Seller"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Seller"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Seller"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -1989,8 +1939,7 @@
       "Account": {
         "required": [
           "firstname",
-          "lastname",
-          "password"
+          "lastname"
         ],
         "type": "object",
         "properties": {
@@ -2059,13 +2008,24 @@
             "minLength": 1,
             "type": "string"
           },
-          "password": {
-            "minLength": 1,
-            "type": "string"
+          "profilePicture": {
+            "type": "string",
+            "nullable": true
           },
           "job": {
             "type": "string",
             "nullable": true
+          },
+          "biography": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressGPS": {
+            "$ref": "#/components/schemas/GPSCoord"
           },
           "createdAt": {
             "type": "string",
@@ -2075,14 +2035,6 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "seller": {
-            "$ref": "#/components/schemas/Seller"
-          },
-          "sellerId": {
-            "type": "integer",
-            "format": "int32",
             "nullable": true
           },
           "baskets": {
@@ -2096,6 +2048,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Bill"
+            },
+            "nullable": true
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
             },
             "nullable": true
           }
@@ -2535,6 +2494,20 @@
         },
         "additionalProperties": false
       },
+      "GPSCoord": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "Home": {
         "type": "object",
         "properties": {
@@ -2783,43 +2756,9 @@
           "job": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Seller": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
-          "createdAt": {
+          "address": {
             "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "storeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "account": {
-            "$ref": "#/components/schemas/Account"
-          },
-          "accountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Product"
-            },
             "nullable": true
           }
         },

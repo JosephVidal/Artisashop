@@ -42,7 +42,7 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
 
     #region Seller
 
-    public virtual List<Product>? Products { get; set; }
+    public List<Product>? Products { get; set; }
 
     #endregion
 }
