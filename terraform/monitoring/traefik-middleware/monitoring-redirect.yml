@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: ${name}
+  namespace: ${namespace}
+spec:
+  redirectRegex:
+    permanent: true
+    regex: ^http://${hostname}/?$
+    replacement: http://${hostname}${grafana_path_prefix}

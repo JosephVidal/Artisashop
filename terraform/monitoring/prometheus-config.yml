@@ -1,0 +1,30 @@
+alertmanager:
+  enabled: false
+server:
+  namespace: ${namespace}
+  hostAliases:
+    - ip: ${hostIp}
+      hostnames:
+        - ${hostname}
+  extraArgs:
+    web.external-url: "http://${hostname}${pathPrefix}"
+    web.route-prefix: "/"
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+extraScrapeConfigs: |
+  - job_name: "traefik"
+    static_configs:
+      - targets: ["${traefikTarget}"]
+  - job_name: "redis_exporter"
+    static_configs:
+      - targets: ["${redisExporterTarget}"]
+  - job_name: "mongodb_exporter"
+    static_configs:
+      - targets: ["${mongodbExporterTarget}"]
+  - job_name: "${minioExporterName}"
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: http
+    static_configs:
+      - targets: ["${minioExporterTarget}"]
