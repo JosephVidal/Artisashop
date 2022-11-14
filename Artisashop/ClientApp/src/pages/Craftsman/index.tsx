@@ -18,7 +18,7 @@ const CraftsmanView = () => {
 
   // useEffect(() => {
   //   if (id) {
-  //     fetch(`/api/craftsman/info/${id}`)
+  //     fetch(`/api/account/${id}`)
   //     .then(response => response.json())
   //     .then(data => setProduct(data as Account));
   //   }
@@ -116,9 +116,7 @@ const CraftsmanView = () => {
             <p id="job">{craftsman.job}</p>
           </div>
           <span className="tag">Test</span>
-          <p>
-            {craftsman.biography}
-          </p>
+          <p id="bio">{craftsman.biography}</p>
         </div>
       </section>
       <ProductsList>
