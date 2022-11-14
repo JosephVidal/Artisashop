@@ -5,7 +5,25 @@ import { Wrapper, Craftsman, Tag } from "./styles";
 
 const ProductView = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const product: Product =
+    {
+      id: 1,
+      name: "Product 1",
+      description: "Description 1",
+      price: 10,
+      images: ["default.png"],
+      craftsmanId: "fakeID",
+      quantity: 2,
+      craftsman: {
+        id: "fakeID",
+        firstname: "John",
+        lastname: "Doe",
+        job: "Fake job",
+        biography: "Fake description",
+        address: "Fake address",
+      }
+    }
+  // const [product, setProduct] = useState<Product | null>(null);
   const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
   const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.png", [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
@@ -15,7 +33,7 @@ const ProductView = () => {
     if (id) {
       fetch(`/api/product/info/${id}`)
       .then(response => response.json())
-      .then(data => setProduct(data as Product));
+      // .then(data => setProduct(data as Product));
     }
   }, [id]);
 

@@ -16,14 +16,18 @@ export const Craftsman = styled.div`
     padding-bottom: 30px;
 
     img {
-        width: auto;
-        height: auto;
-        object-fit: cover;
+        width: 50px;
+        height: 50px;
+        /* object-fit: cover; */
+        margin-right: 20px;
+        object-fit: fill;
+        border-radius: 100%;
+        box-shadow: 0px 0px 30px #a0a0a0;
     }
 
     a {
         text-decoration: none;
-        margin: auto 20px;
+        margin: auto 0;
     }
 `;
 
@@ -39,13 +43,7 @@ export const Wrapper = styled.div`
     #product-info {
         max-width: 30vw;
         height: 600px;
-
-        img {
-            height: 50px;
-            object-fit: fill;
-            border-radius: 100%;
-            box-shadow: 0px 0px 30px #a0a0a0;
-        }
+        width: auto;
 
         h1 {
             font-size: 45px;
