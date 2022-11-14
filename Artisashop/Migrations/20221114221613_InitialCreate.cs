@@ -304,6 +304,42 @@ namespace Artisashop.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Complaints",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: true),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Complaints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Complaints_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Complaints_Bills_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Bills",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Complaints_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -372,6 +408,21 @@ namespace Artisashop.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Complaints_OrderId",
+                table: "Complaints",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complaints_ProductId",
+                table: "Complaints",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complaints_UserId",
+                table: "Complaints",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CraftsmanId",
                 table: "Products",
                 column: "CraftsmanId");
@@ -398,16 +449,19 @@ namespace Artisashop.Migrations
                 name: "Baskets");
 
             migrationBuilder.DropTable(
-                name: "Bills");
+                name: "ChatMessages");
 
             migrationBuilder.DropTable(
-                name: "ChatMessages");
+                name: "Complaints");
 
             migrationBuilder.DropTable(
                 name: "Styles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Bills");
 
             migrationBuilder.DropTable(
                 name: "Products");

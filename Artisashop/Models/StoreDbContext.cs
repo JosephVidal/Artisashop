@@ -19,6 +19,7 @@ namespace Artisashop.Models
         public virtual DbSet<Bill> Bills { get; set; } = null!;
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
         public virtual DbSet<Style> Styles { get; set; } = null!;
+        public virtual DbSet<Complaint> Complaints { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
