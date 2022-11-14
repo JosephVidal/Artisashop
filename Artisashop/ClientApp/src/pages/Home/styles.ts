@@ -101,6 +101,7 @@ section {
     }
 }
 
+#register-dark {background-color: var(--artshp-dark-blue);}
 #register-light {
     background-color: var(--artshp-white);
     color: var(--artshp-red);
