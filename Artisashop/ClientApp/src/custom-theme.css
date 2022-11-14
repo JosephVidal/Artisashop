@@ -24,6 +24,7 @@
   --bs-hv-light: rgba(244, 235, 225, 0.25);
 
   --artshp-white: #F4EBE1;
+  --artshp-light-red: #88666f;
   --artshp-red: #5A202E;
   --artshp-orange: #DC6D04;
   --artshp-brown: #452A16;
@@ -61,7 +62,7 @@ input {
   font-size: 1.2em;
 }
 
-.disabled {background-color: var(--bs-hv-light);}
+.disabled {background-color: var(--artshp-light-red) !important;}
 
 .red-button:hover:not(.disabled) {background-color: var(--artshp-orange);}
 .red-button {
