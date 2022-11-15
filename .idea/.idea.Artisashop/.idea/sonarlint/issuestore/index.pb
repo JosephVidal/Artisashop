@@ -3,12 +3,8 @@ i
 9Artisashop/ClientApp/src/components/GoogleLogin/index.tsx,1\6\16ef7847683d18b70ba051273e9c1e6e04b0d210
 ^
 .Artisashop/ClientApp/src/pages/Login/index.tsx,c\a\ca9bed8958ee6a2cf125426b65d36d7622e7bb81
-P
- Artisashop/ClientApp/src/conf.ts,b\1\b1d61a350d4b4e251191182e6a3984db4b927ad6
 W
 'Artisashop/appsettings.Development.json,2\5\25a4f5ca466e67a5b5dcf5264114cc6e7834f5fc
-S
-#Artisashop/ClientApp/src/routes.tsx,7\f\7fe677881ea41f0790393cbebd29f6baf65468c6
 \
 ,Artisashop/Models/ViewModel/CreateProduct.cs,8\6\8694a072f6c31604a20011134f405aa8f4b05200
 e
@@ -17,8 +13,6 @@ K
 Artisashop/appsettings.json,5\6\56828114213a41e4e9426a0892b0562e42ebee52
 g
 7Artisashop/Configurations/FranceConnectConfiguration.cs,b\d\bde62a32300f80ce5443604ba35fee3e69a6b118
-b
-2Artisashop/Configurations/ConfigurationSections.cs,3\1\31362d005ac51921ccf7d7dd2b24e1fc4beb0c51
 ]
 -Artisashop/Configurations/JwtConfiguration.cs,4\b\4ba855d3951ab2d8ce6acc14ed888ef899837bd7
 J
@@ -35,3 +29,15 @@ _
 /Artisashop/Controllers/CustomOrderController.cs,b\e\be3c445dcc79fe4d2942985fc8e67579caa4fb7d
 ]
 -Libs/Sirene/src/SireneApi/Client/ApiClient.cs,9\6\96d56fbb35f10d72485198f02ee484048d42c8ef
+a
+1Artisashop/ClientApp/src/pages/Register/index.tsx,3\f\3fb6172dc5745d98dbdcdb10136d82abbbaaa4d2
+[
++Artisashop/Controllers/AccountController.cs,f\b\fbc91b1e1b8fe9b27f2f741b366954f1637b2a63
+I
+Artisashop/Models/Bill.cs,2\d\2db0df1d9682b026229eb50cd6696f44c5e4f762
+K
+Artisashop/Models/Basket.cs,0\a\0a4723cd1e6619d0b4f9842e514e6fbef72f7a12
+X
+(Artisashop/Controllers/BillController.cs,1\b\1bcf547a56a98117e13ff50dfb238e2e044b2ce5
+d
+4Artisashop/Migrations/StoreDbContextModelSnapshot.cs,6\0\60562abe6b4f963b2966951453867ac7d1405108

@@ -1,4 +1,7 @@
 import React from "react";
+
+import {Link} from "react-router-dom";
+
 import { FooterWrapper } from "./styles";
 
 interface Props {}
@@ -20,6 +23,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           <h3>A propos</h3>
           <a href="/">L&apos;équipe</a>
           <a href="/">Nous rejoindre</a>
+           <Link to="/admin">Portail modérateur</Link> 
         </div>
         <div>
           <h3>Boutique</h3>

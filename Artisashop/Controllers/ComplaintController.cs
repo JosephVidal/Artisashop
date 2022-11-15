@@ -37,25 +37,4 @@ public class ComplaintController : ControllerBase
     {
         return await _storeDbContext.Complaints.FirstOrDefaultAsync(x => x.Id == id);
     }
-
-    [HttpPut]
-    [Authorize(Roles = "admin")]
-    public async Task<Complaint> Put(Complaint complaint)
-    {
-        var elem = _storeDbContext.Complaints.Update(complaint);
-        await _storeDbContext.SaveChangesAsync();
-        return elem.Entity;
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize(Roles = "admin")]
-    public async Task Delete(int id)
-    {
-        var elem = await _storeDbContext.Complaints.FirstOrDefaultAsync(x => x.Id == id);
-        if (elem != null)
-        {
-            _storeDbContext.Complaints.Remove(elem);
-            await _storeDbContext.SaveChangesAsync();
-        }
-    }
 }

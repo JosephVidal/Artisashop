@@ -138,7 +138,7 @@ var builder = WebApplication.CreateBuilder(args);
         .AddTransient<IRechercheTextuelleApiAsync, RechercheTextuelleApi>()
         .AddTransient<RepertoireNationalMetiersApi.Api.IDefaultApiAsync, RepertoireNationalMetiersApi.Api.DefaultApi>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
     {
@@ -183,12 +183,18 @@ var app = builder.Build();
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseRouting();
-    
-    
+
+
     // Setup environment specific pipelines
     if (app.Environment.IsDevelopment())
     {
-        app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        app.UseCors(builder =>
+        {
+            builder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .WithExposedHeaders("Content-Range");
+        });
         // Cleans up the database on each run
         using (var scope = app.Services.CreateScope())
         {
