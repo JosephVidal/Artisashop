@@ -24,8 +24,8 @@ const Register = () => {
             role: "USER",
           }}
 
-          onSubmit={values => {
-            auth?.signup(values)
+          onSubmit={async values => {
+            await auth?.signup(values)
               .then(res => res.user && navigate("/"))
           }}
 
@@ -52,7 +52,7 @@ const Register = () => {
             </Form>
           )}
         </Formik>
-        <p>Déjà inscrit? <Link to="/login">Connectez-vous</Link> !</p>
+        <p>Déjà inscrit? <Link to="/app/login">Connectez-vous</Link> !</p>
       </div>
     </Wrapper>
   );

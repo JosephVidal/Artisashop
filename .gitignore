@@ -254,3 +254,4 @@ Ansible/id_*
 !Ansible/id_*.pub
 
 client_secret*
+Artisashop/app.db

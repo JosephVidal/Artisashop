@@ -33,7 +33,12 @@ export default function useLocalStorage<TModel>(key: string, initialValue: TMode
             setStoredValue(valueToStore);
             // Save to local storage
             if (typeof window !== "undefined") {
+              if (typeof valueToStore === "string") {
+                window.localStorage.setItem(key, valueToStore);
+              }
+              else {
                 window.localStorage.setItem(key, JSON.stringify(valueToStore));
+              }
             }
         } catch (error) {
             // A more advanced implementation would handle the error case

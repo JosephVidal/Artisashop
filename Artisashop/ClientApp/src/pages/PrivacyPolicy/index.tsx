@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Container } from "./styles";
 
 const PrivacyPolicy = () => (
@@ -37,7 +38,7 @@ const PrivacyPolicy = () => (
     <h3 id="source-des-donn-es">Source des données</h3>
     <p>Les données sont issues de l’enregistrement, par la personne souhaitant
       s’inscrire sur le site Artisashop, depuis le champ d’inscription en pied
-      de page du site Artisashop <a href="https://www.artisashop.fr/create-account#pills-client">https://www.artisashop.fr/create-account#pills-client</a>.</p>
+      de page du site Artisashop <Link to="/app/register">https://www.artisashop.fr/create-account#pills-client</Link>.</p>
     <h3 id="caract-re-obligatoire-du-recueil-des-donn-es">Caractère obligatoire du recueil des données</h3>
     <p>Le recueil de l’adresse de courrier électronique est obligatoire pour
       l’envoi de la lettre d’information, l&#39;authentification et contacter la
@@ -49,7 +50,7 @@ const PrivacyPolicy = () => (
     <p>Le traitement prévoit une <a href="https://www.cnil.fr/fr/profilage-et-decision-entierement-automatisee">prise de décision automatisée</a>.</p>
     <h2 id="personnes-concern-es">Personnes concernées</h2>
     <p>Le traitement de données concerne uniquement les personnes qui souhaitent
-      s’enregistrer en tant que client sur <a href="https://www.artisashop.com">artisashop.fr</a>.</p>
+      s’enregistrer en tant que client sur <Link to="/">artisashop.fr</Link>.</p>
     <h2 id="destinataires-des-donn-es">Destinataires des données</h2>
     <h3 id="cat-gories-de-destinataires">Catégories de destinataires</h3>
     <p>Sont destinataires des données :</p>
@@ -85,7 +86,7 @@ const PrivacyPolicy = () => (
       traitement.</p>
     <ul>
       <li>Contacter le DPO par voie électronique</li>
-      <li><a href="https://www.artisashop.fr/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</a></li>
+      <li><Link to="/app/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</Link></li>
       <li>Contacter le DPO par courrier postal</li>
     </ul>
     <p>Le délégué à la protection des données :<br />

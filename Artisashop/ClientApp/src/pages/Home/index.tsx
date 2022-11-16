@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { InputSwitch } from 'primereact/inputswitch';
 import CraftsmanCard from "components/CraftsmanCard";
 import ProductCard from "components/ProductCard";
+import { Link } from "react-router-dom";
 import { Wrapper } from "./styles";
 
 interface Props {}
@@ -51,12 +52,12 @@ const Home: React.FunctionComponent<Props> = () => {
         <div id="register-dark">
           <h2>Artisan</h2>
           <p>Créez un compte et venez proposer vos produits</p>
-          <a className="red-button" href="/register">Créer un compte artisan</a>
+          <Link className="red-button" to="/app/register">Créer un compte artisan</Link>
         </div>
         <div id="register-light">
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
-          <a className="red-button" href="/register">Créer un compte client</a>
+          <Link className="red-button" to="/register">Créer un compte client</Link>
         </div>
       </section>
     </Wrapper>

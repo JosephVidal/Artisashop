@@ -11,7 +11,7 @@
   --primary-color: #1990c6;
   --primary-color-text: #212529; */
   --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
-  Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 
   --bs-dark: #141C26 !important;
   --bs-light: #F4EBE1;
@@ -24,10 +24,12 @@
   --bs-hv-light: rgba(244, 235, 225, 0.25);
 
   --artshp-white: #F4EBE1;
+  --artshp-light-red: #88666f;
   --artshp-red: #5A202E;
   --artshp-orange: #DC6D04;
   --artshp-brown: #452A16;
   --artshp-dark-blue: #141C26;
+  --artshp-med-blue: #536a86;
   --artshp-blue: #79B8F6;
   --artshp-trans: 0.3s;
   --card-radius: 20px;
@@ -87,6 +89,7 @@ input {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
   0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
+
 .p-dropdown-panel .p-dropdown-items {
   padding: 0.5rem 0;
   font-weight: bold;

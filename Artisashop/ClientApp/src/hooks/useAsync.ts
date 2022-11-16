@@ -21,11 +21,11 @@ const useAsync = <T, E = string>(
 
         return asyncFunction()
             .then((response: any) => {
-                setValue(response);
+                setValue(response as T);
                 setStatus("success");
             })
-            .catch((error: any) => {
-                setError(error);
+            .catch((err: any) => {
+                setError(err as E);
                 setStatus("error");
             });
     }, [asyncFunction]);
