@@ -23,8 +23,6 @@ c
 3Artisashop/Controllers/WeatherForecastController.cs,8\c\8ce282cd562d3626dbcc69420a6e44c136c8990f
 L
 Artisashop/Models/Product.cs,d\f\df0c7849131271a43c469f6b2af8298253c3f3ec
-Z
-*Artisashop/Controllers/SearchController.cs,a\e\ae0df8f98b8c39a2c0cb3e81d66ac053028e190e
 _
 /Artisashop/Controllers/CustomOrderController.cs,b\e\be3c445dcc79fe4d2942985fc8e67579caa4fb7d
 ]
