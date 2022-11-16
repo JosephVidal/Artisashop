@@ -3,11 +3,13 @@ import {Admin, EditGuesser, ListGuesser, Resource, ShowGuesser} from "react-admi
 import simpleRestProvider from "ra-data-simple-rest";
 import {REACT_APP_API_URL} from "conf";
 
+import UserCreate from "./Resources/Users/Create";
+
 const AdminDashboard = () => (
   <Admin basename="/app/admin" dataProvider={simpleRestProvider(`${REACT_APP_API_URL}/api/admin`)}>
     <Resource name="product" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
     <Resource name="complaint" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
-    <Resource name="user" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
+    <Resource name="user" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} create={UserCreate} />
   </Admin>
 );
 
