@@ -30,4 +30,5 @@ public static class Policies
     public const string RequireAdminRole = "RequireAdminRole";
     public const string RequireUserRole = "RequireUserRole";
     public const string RequireSellerRole = "RequireSellerRole";
+    public const string RequirePartnerRole = "RequirePartnerRole";
 }
