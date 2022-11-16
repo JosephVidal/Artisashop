@@ -1,5 +1,4 @@
 ﻿import {useCallback, useEffect, useState} from "react";
-import { useNavigate } from "react-router";
 
 const useAsync = <T, E = string>(
     asyncFunction: () => Promise<T>,
