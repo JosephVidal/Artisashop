@@ -4,7 +4,7 @@ import simpleRestProvider from "ra-data-simple-rest";
 import {REACT_APP_API_URL} from "conf";
 
 const AdminDashboard = () => (
-  <Admin basename="/app/admin" dataProvider={simpleRestProvider(`${REACT_APP_API_URL}/admin`)}>
+  <Admin basename="/app/admin" dataProvider={simpleRestProvider(`${REACT_APP_API_URL}/api/admin`)}>
     <Resource name="product" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
     <Resource name="complaint" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
     <Resource name="user" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
