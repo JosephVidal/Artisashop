@@ -1,7 +1,7 @@
 // Hook (use-auth.js)
 import React, {useContext, createContext} from "react";
 import useLocalStorage from "./useLocalstorage";
-import {AccountApi, Configuration, Register, AccountToken, Account, AccountViewModel} from "../api";
+import {AccountApi, Configuration, Register, AccountToken, Account, AccountViewModel, DefaultConfig} from "../api";
 import { REACT_APP_API_URL } from "../conf";
 
 export interface IProvideAuth {
