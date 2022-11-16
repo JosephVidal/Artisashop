@@ -19,7 +19,7 @@ export const colors = {
   green: "#72bb53",
   grey: "#707070",
   lightGrey: "rgba(255, 255, 255, 0.6)",
-  orange: "#ff8f00",
+  orange: "#d16508",
   warning: "#ffcc00",
 };
 

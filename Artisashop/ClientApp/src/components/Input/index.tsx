@@ -41,6 +41,7 @@ const Input: React.FunctionComponent<Props> = (props: Props) => {
 
       {props.type === "number" && (
         <InputNumber
+          type="minmax"
           id={id}
           value={Number(props.value)}
           onChange={onInputNumberChange(props)}

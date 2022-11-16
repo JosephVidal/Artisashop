@@ -5,7 +5,7 @@ export const TopMenuWrapper = styled.div`
   background-color: ${colors.darkBlue};
   box-shadow: 0 10px 20px 0 black;
   position: fixed;
-  z-index: 1;
+  z-index: 11;
   width: 100%;
   display: flex;
   justify-content: center;

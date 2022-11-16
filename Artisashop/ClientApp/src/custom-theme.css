@@ -535,7 +535,7 @@ input {
   border: 1px solid #304562;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s,
     box-shadow 0.2s;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 .p-dropdown:not(.p-disabled):hover {
   border-color: #1990c6;
@@ -564,8 +564,8 @@ input {
   background: transparent;
   color: rgba(255, 255, 255, 0.6);
   width: 2.357rem;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .p-dropdown .p-dropdown-clear-icon {
   color: rgba(255, 255, 255, 0.6);
@@ -577,54 +577,63 @@ input {
 }
 
 .p-dropdown-panel {
-  background: #1f2d40;
-  color: rgba(255, 255, 255, 0.87);
-  border: 1px solid #304562;
-  border-radius: 3px;
+  background: #f4ebe1;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #5a202e;
+  border-radius: 5px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .p-dropdown-panel .p-dropdown-header {
   padding: 0.5rem 1rem;
   border-bottom: 0 none;
-  color: rgba(255, 255, 255, 0.87);
+  color: black;
+  font-weight: bold;
   background: #1f2d40;
   margin: 0;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
   padding-right: 1.5rem;
+  font-weight: bold;
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
   right: 0.5rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: black;
+  font-weight: bold;
 }
 .p-dropdown-panel .p-dropdown-items {
   padding: 0.5rem 0;
+  font-weight: bold;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
   margin: 0;
   padding: 0.5rem 1rem;
   border: 0 none;
-  color: rgba(255, 255, 255, 0.87);
+  color: black;
+  font-weight: bold;
   background: transparent;
   transition: box-shadow 0.2s;
   border-radius: 0;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
-  color: rgba(255, 255, 255, 0.87);
-  background: rgba(100, 181, 246, 0.16);
+  color: black;
+  font-weight: bold;
+  background: #f2cec9;
 }
 .p-dropdown-panel
   .p-dropdown-items
   .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
-  color: rgba(255, 255, 255, 0.87);
-  background: rgba(255, 255, 255, 0.03);
+  color: white;
+  font-weight: bold;
+  background: #5a202e;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message {
   padding: 0.5rem 1rem;
   color: rgba(255, 255, 255, 0.87);
+  font-weight: bold;
   background: transparent;
 }
 
