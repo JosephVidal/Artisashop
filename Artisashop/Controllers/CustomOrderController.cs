@@ -62,7 +62,7 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Account? account = await _db.Accounts!.SingleOrDefaultAsync(account => account.Id == craftsmanId);
+                Account? account = await _db.Users!.SingleOrDefaultAsync(account => account.Id == craftsmanId);
 
                 if (account == null)
                     return NotFound("Account with id " + craftsmanId + " not found");
@@ -88,7 +88,7 @@ namespace Artisashop.Controllers
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
-                Account? craftsman = await _db.Accounts!.SingleOrDefaultAsync(account => account.Id == order.CraftsmanId);
+                Account? craftsman = await _db.Users!.SingleOrDefaultAsync(account => account.Id == order.CraftsmanId);
 
                 if (craftsman == null)
                     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");

@@ -45,7 +45,10 @@ section {
         margin: 0;
     }
 
-    #search-block {display: inline;}
+    #search-block {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 .section-body {
@@ -98,6 +101,7 @@ section {
     }
 }
 
+#register-dark {background-color: var(--artshp-dark-blue);}
 #register-light {
     background-color: var(--artshp-white);
     color: var(--artshp-red);

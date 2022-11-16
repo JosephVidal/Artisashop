@@ -21,14 +21,16 @@ namespace Artisashop.Tests.Backend
                     services.Remove(descriptor);
                 services.AddDbContext<StoreDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase("InMemoryDbTest");
+                    options.UseSqlite("Data Source=./tests.db");
+                    // options.UseInMemoryDatabase("InMemoryDbTest");
                 });
                 var sp = services.BuildServiceProvider();
                 using var scope = sp.CreateScope();
                 using var appContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
                 try
                 {
-                    appContext.Database.EnsureCreated();
+                    appContext.Database.EnsureDeleted();
+                    appContext.Database.Migrate();
                 }
                 catch (Exception ex)
                 {

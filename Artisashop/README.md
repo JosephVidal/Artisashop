@@ -1,5 +1,44 @@
 ﻿# Artisashop
 
+## Tester l'API
+
+Afin de tester l'API, il faut aller sur le lien suivant : <https://localhost:7095/swagger/index.html>
+
+![api-artisashop.png](api-artisashop.png)
+
+_Interface swagger d'Artisashop_
+
+Afin d'utiliser les APIs pour lesquelles il faut être authentifié, il faut se connecter avec un compte utilisateur.
+Pour cela, il faut cliquer sur le bouton "Authorize" en haut à droite de l'interface swagger,
+puis entrer le token d'authentification dans le champ "Value" et cliquer sur le bouton "Authorize".
+
+![api-account-auth.png](api-account-auth.png)
+
+_Exemple d'enregistrement avec Swagger. Dans le champ **role**, il faut mettre le rôle requis par la route API à tester._
+
+Données insérées dans le corps de la requête :
+```json
+    {
+    "email": "bob-bricoleur@example.com",
+    "password": "123!Bob",
+    "lastname": "Bob",
+    "firstname": "Bricoleur",
+    "role": "USER",
+    "job": "Bricoleur",
+    "address": "123 Rue de la révolution, Paris"
+    }
+```
+
+![api-account-auth-return.png](api-account-auth-return.png)
+
+_Récupérer la valeur du champ **token**._
+
+La valeur du champ "token" est à copier dans le champ "Value" de l'interface swagger, avec le préfixe "`Bearer `".
+
+![img.png](img.png)
+
+Une fois identifié, il est possible de tester les différentes routes de l'API (Avec le rôle "USER" pour cet exemple).
+
 ## Migrer la base de données
 
 Lorsque les définitions ou les relations des modèles, il faut créer une migration

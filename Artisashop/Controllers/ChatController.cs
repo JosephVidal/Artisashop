@@ -90,8 +90,8 @@ namespace Artisashop.Controllers
                     (null != message.Joined && (200UL * 1000000UL) >= fileSize && !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
                     return BadRequest("Invalid joined file");
                 //db:
-                Account sender = await _db.Accounts!.FirstAsync(user => user.Id == message!.FromUserId);
-                Account receiver = await _db.Accounts!.FirstAsync(user => user.Id == message!.ToUserID);
+                Account sender = await _db.Users!.FirstAsync(user => user.Id == message!.FromUserId);
+                Account receiver = await _db.Users!.FirstAsync(user => user.Id == message!.ToUserID);
                 if (sender == null)
                     return NotFound("Sender with id " + message!.FromUserId + " not found");
                 if (receiver == null)

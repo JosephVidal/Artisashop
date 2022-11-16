@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "API Artichaut",
+    "title": "API Artisashop",
     "version": "v1"
   },
   "paths": {
@@ -1459,7 +1459,7 @@
         }
       }
     },
-    "/api/product/list": {
+    "/api/Product": {
       "get": {
         "tags": [
           "Product"
@@ -1501,7 +1501,7 @@
         }
       }
     },
-    "/api/product/info/{productId}": {
+    "/api/Product/info/{productId}": {
       "get": {
         "tags": [
           "Product"
@@ -1551,7 +1551,7 @@
         }
       }
     },
-    "/api/product/create": {
+    "/api/Product/create": {
       "post": {
         "tags": [
           "Product"
@@ -1599,7 +1599,7 @@
         }
       }
     },
-    "/api/product/update/{productId}": {
+    "/api/Product/update/{productId}": {
       "patch": {
         "tags": [
           "Product"
@@ -1668,7 +1668,7 @@
         }
       }
     },
-    "/api/product/delete/{productId}": {
+    "/api/Product/delete/{productId}": {
       "delete": {
         "tags": [
           "Product"
@@ -1718,274 +1718,6 @@
         }
       }
     },
-    "/api/reports/{id}": {
-      "get": {
-        "tags": [
-          "Report"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Report"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Report"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/reports": {
-      "get": {
-        "tags": [
-          "Report"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Report"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Report"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Report"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Report"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Report"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/reports/{id}/resolve": {
-      "post": {
-        "tags": [
-          "Report"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/search/product": {
       "get": {
         "tags": [
@@ -2014,6 +1746,38 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "UserGPSCoord.Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
             }
           }
         ],
@@ -2069,6 +1833,38 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "UserGPSCoord.Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
             }
           }
         ],
@@ -2143,9 +1939,7 @@
       "Account": {
         "required": [
           "firstname",
-          "lastname",
-          "password",
-          "role"
+          "lastname"
         ],
         "type": "object",
         "properties": {
@@ -2214,16 +2008,24 @@
             "minLength": 1,
             "type": "string"
           },
-          "role": {
-            "$ref": "#/components/schemas/UserType"
-          },
-          "password": {
-            "minLength": 1,
-            "type": "string"
+          "profilePicture": {
+            "type": "string",
+            "nullable": true
           },
           "job": {
             "type": "string",
             "nullable": true
+          },
+          "biography": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressGPS": {
+            "$ref": "#/components/schemas/GPSCoord"
           },
           "createdAt": {
             "type": "string",
@@ -2233,13 +2035,6 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Product"
-            },
             "nullable": true
           },
           "baskets": {
@@ -2253,6 +2048,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Bill"
+            },
+            "nullable": true
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
             },
             "nullable": true
           }
@@ -2649,11 +2451,10 @@
       },
       "DeliveryOption": {
         "enum": [
-          0,
-          1
+          "DELIVERY",
+          "TAKEOUT"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "ExternalLoginConfirmationViewModel": {
         "required": [
@@ -2689,6 +2490,20 @@
           "preferredName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GPSCoord": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -2935,86 +2750,31 @@
             "type": "string"
           },
           "role": {
-            "$ref": "#/components/schemas/UserType"
+            "minLength": 1,
+            "type": "string"
           },
           "job": {
             "type": "string",
             "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
-      },
-      "Report": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "reporterId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "reporter": {
-            "$ref": "#/components/schemas/Account"
-          },
-          "status": {
-            "$ref": "#/components/schemas/ReportStatus"
-          },
-          "reason": {
-            "type": "string",
-            "nullable": true
-          },
-          "reportedUserId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "reportedUser": {
-            "$ref": "#/components/schemas/Account"
-          },
-          "reportedProductId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "reportedProduct": {
-            "$ref": "#/components/schemas/Product"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ReportStatus": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
-        "type": "integer",
-        "format": "int32"
       },
       "State": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6
+          "WAITINGCRAFTSMAN",
+          "WAITINGCONSUMER",
+          "REFUSED",
+          "VALIDATED",
+          "ONGOING",
+          "DELIVERY",
+          "END"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "UnitAmount": {
         "type": "object",
@@ -3115,17 +2875,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "UserType": {
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          -1
-        ],
-        "type": "integer",
-        "format": "int32"
       },
       "WeatherForecast": {
         "type": "object",

@@ -4,7 +4,6 @@ import { Formik, Field, Form } from "formik";
 import { Link } from "react-router-dom";
 import { Wrapper } from "./styles";
 import { useAuth } from "../../hooks/useAuth";
-import { UserType } from "../../api";
 
 const Register = () => {
   const auth = useAuth()
@@ -22,7 +21,7 @@ const Register = () => {
             email: '',
             password: '',
             passwordConfirm: '',
-            role: UserType.NUMBER_0,
+            role: "USER",
           }}
 
           onSubmit={values => {

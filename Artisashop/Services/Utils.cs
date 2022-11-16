@@ -66,7 +66,7 @@ namespace Artisashop.Services
             var handler = new JwtSecurityTokenHandler();
             var jwt = handler.ReadJwtToken(token);
             var username = jwt.Claims.First(claim => claim.Type == "sub").Value;
-            return await db.Accounts!.SingleAsync(u => u.UserName == username);
+            return await db.Users!.SingleAsync(u => u.UserName == username);
         }
 
         public void UpdateObject(object modelToUpdate, object modelUpdating)

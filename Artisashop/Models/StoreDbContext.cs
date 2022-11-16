@@ -14,7 +14,6 @@ namespace Artisashop.Models
         {
         }
 
-        public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Basket> Baskets { get; set; } = null!;
         public virtual DbSet<Bill> Bills { get; set; } = null!;
