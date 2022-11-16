@@ -37,9 +37,9 @@ const TopMenu: React.FunctionComponent<Props> = () => {
         </BaseText>
       </MenuItem>
       <RightIcons>
-        <Link to="/mon-panier"><BsCart size="100%" /></Link>
-        <Link to="/chat"><BsChat size="100%" /></Link>
-        <Link to="/login"><BsPerson size="100%" /></Link>
+        <Link to="/app/mon-panier"><BsCart size="100%" /></Link>
+        <Link to="/app/chat"><BsChat size="100%" /></Link>
+        <Link to="/app/login"><BsPerson size="100%" /></Link>
       </RightIcons>
     </TopMenuWrapper>
   );

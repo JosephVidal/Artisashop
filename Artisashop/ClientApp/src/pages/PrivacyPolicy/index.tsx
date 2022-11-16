@@ -86,7 +86,7 @@ const PrivacyPolicy = () => (
       traitement.</p>
     <ul>
       <li>Contacter le DPO par voie électronique</li>
-      <li><Link to="/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</Link></li>
+      <li><Link to="/app/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</Link></li>
       <li>Contacter le DPO par courrier postal</li>
     </ul>
     <p>Le délégué à la protection des données :<br />
