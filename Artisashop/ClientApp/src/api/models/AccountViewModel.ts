@@ -49,6 +49,12 @@ export interface AccountViewModel {
      * @memberof AccountViewModel
      */
     twoFactorEnabled?: boolean | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AccountViewModel
+     */
+    roles?: Array<string> | null;
 }
 
 /**
@@ -75,6 +81,7 @@ export function AccountViewModelFromJSONTyped(json: any, ignoreDiscriminator: bo
         'email': !exists(json, 'email') ? undefined : json['email'],
         'emailConfirmed': !exists(json, 'emailConfirmed') ? undefined : json['emailConfirmed'],
         'twoFactorEnabled': !exists(json, 'twoFactorEnabled') ? undefined : json['twoFactorEnabled'],
+        'roles': !exists(json, 'roles') ? undefined : json['roles'],
     };
 }
 
@@ -92,6 +99,7 @@ export function AccountViewModelToJSON(value?: AccountViewModel | null): any {
         'email': value.email,
         'emailConfirmed': value.emailConfirmed,
         'twoFactorEnabled': value.twoFactorEnabled,
+        'roles': value.roles,
     };
 }
 

@@ -2,7 +2,7 @@
 import React, {useContext, createContext} from "react";
 import useLocalStorage from "./useLocalstorage";
 import {AccountApi, Configuration, Register, AccountToken, Account, AccountViewModel} from "../api";
-import { REACT_APP_API_HOST } from "../conf";
+import { REACT_APP_API_URL } from "../conf";
 
 export interface IProvideAuth {
   signin: (username: string, password: string) => Promise<AccountToken>
@@ -31,7 +31,7 @@ export const useAuth = () => useContext(AuthContext);
 function useProvideAuth(): IProvideAuth {
   const [user, setUser] = useLocalStorage<AccountViewModel>("user", null);
   const [token, setToken] = useLocalStorage("token", "")
-  const apiUrl = REACT_APP_API_HOST;
+  const apiUrl = REACT_APP_API_URL;
   const api = new AccountApi(new Configuration({
     basePath: apiUrl,
   }));

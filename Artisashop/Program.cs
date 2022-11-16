@@ -131,6 +131,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.AddPolicy(Policies.RequireAdminRole, policy => policy.RequireRole(Roles.Admin));
         options.AddPolicy(Policies.RequireUserRole, policy => policy.RequireRole(Roles.User));
         options.AddPolicy(Policies.RequireSellerRole, policy => policy.RequireRole(Roles.Seller));
+        options.AddPolicy(Policies.RequirePartnerRole, policy => policy.RequireRole(Roles.Partner));
     });
 
     builder.Services

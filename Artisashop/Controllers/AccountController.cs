@@ -2,7 +2,6 @@
 
 using Artisashop.Configurations;
 using Artisashop.Helpers;
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -69,9 +68,19 @@ public class AccountController : ControllerBase
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
             if (result.Succeeded)
             {
-                var appUser = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-                var userToken = new AccountToken(new AccountViewModel(appUser), await GenerateJwtToken(appUser));
-                return Ok(userToken);
+                var user = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+                var roles = await _userManager.GetRolesAsync(user);
+                var viewModel = new AccountViewModel
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    Roles = roles?.ToList() ?? new List<string>(),
+                };
+                var token = new AccountToken(viewModel, await GenerateJwtToken(user));
+                return Ok(token);
             }
 
             return BadRequest("Login failed");
@@ -92,7 +101,17 @@ public class AccountController : ControllerBase
         {
             var user = await CreateUser(model, new[] { Roles.User });
             await _signInManager.SignInAsync(user, false);
-            var token = new AccountToken(new AccountViewModel(user), await GenerateJwtToken(user));
+            var roles = await _userManager.GetRolesAsync(user);
+            var viewModel = new AccountViewModel
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                Roles = roles?.ToList() ?? new List<string>(),
+            };
+            var token = new AccountToken(viewModel, await GenerateJwtToken(user));
             return Ok(token);
         }
         catch (Exception ex)
@@ -100,23 +119,23 @@ public class AccountController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
+
     private async Task<Account> CreateUser(Register model, string[]? roles = null)
     {
         roles ??= new string[] { Roles.User };
 
         var account = new Account(model);
-        
+
         if (account.Address != null)
             account.AddressGPS = await AddressToGPSCoord(account.Address);
 
-        
+
         var result = await _userManager.CreateAsync(account, model.Password);
         // TODO: Create exception types
         if (!result.Succeeded)
             throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
         account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-        
+
         var roleResult = await _userManager.AddToRolesAsync(account, roles);
         if (!roleResult.Succeeded)
             throw new Exception(roleResult.Errors.ToString());
@@ -325,12 +344,15 @@ public class AccountController : ControllerBase
         string GoogleKey = "acdfe36c88484444850da3d8adb97890";
         GPSCoord? ret = null;
         OpencageDataGeocode tmp;
-        HttpResponseMessage response = await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
-        if (response.IsSuccessStatusCode) {
+        HttpResponseMessage response =
+            await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
+        if (response.IsSuccessStatusCode)
+        {
             tmp = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
             if (tmp.Results != null)
                 ret = tmp.Results[0].Geometry;
         }
+
         return (ret != null) ? ret : new GPSCoord();
     }
 }

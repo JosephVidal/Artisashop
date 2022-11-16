@@ -37,7 +37,7 @@ export const teamsColors = {
 export const teamColorNameFromHex = (hexColor: string): string =>
   _.findKey((c) => c === hexColor)(teamsColors) || "white";
 
-export const BaseText = styled.text`
+export const BaseText = styled.p`
   color: ${colors.textColor};
 `;
 
