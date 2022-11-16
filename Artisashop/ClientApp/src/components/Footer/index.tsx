@@ -23,7 +23,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           <h3>A propos</h3>
           <a href="/">L&apos;équipe</a>
           <a href="/">Nous rejoindre</a>
-           <Link to="/admin">Portail modérateur</Link> 
+           <Link to="/app/admin">Portail modérateur</Link> 
         </div>
         <div>
           <h3>Boutique</h3>
