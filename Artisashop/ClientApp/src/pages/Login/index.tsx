@@ -20,8 +20,8 @@ const Login = () => {
             email: "",
             password: "",
           }}
-          onSubmit={values => {
-            auth?.signin(values.email, values.password)
+          onSubmit={async values => {
+            await auth?.signin(values.email, values.password)
               .then(res => res.user && navigate("/"))
           }}
         >

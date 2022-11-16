@@ -24,8 +24,8 @@ const Register = () => {
             role: "USER",
           }}
 
-          onSubmit={values => {
-            auth?.signup(values)
+          onSubmit={async values => {
+            await auth?.signup(values)
               .then(res => res.user && navigate("/"))
           }}
 
