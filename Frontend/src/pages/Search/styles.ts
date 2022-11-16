@@ -29,7 +29,6 @@ export const SearchFilter = styled.aside`
     position: sticky;
     max-height: 20vh;
     bottom: 10vh;
-    font-family: Helvetica;
     color: var(--bs-dark);
     width: 15vw;
     padding: 20px;
@@ -86,6 +85,8 @@ export const SearchBar = styled.div`
 `;
 
 export const Wrapper = styled.div`
+    color: var(--artshp-dark-blue);
+
     .search {
         padding-top: 56px;
 
@@ -179,10 +180,7 @@ export const Wrapper = styled.div`
         align-items: flex-start;
         width: 80vw;
 
-        h2 {
-            font-family: Helvetica, sans-serif;
-            font-weight: lighter;
-        }
+        h2 {font-weight: lighter;}
     }
 
     #resultList {

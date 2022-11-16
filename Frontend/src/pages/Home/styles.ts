@@ -33,8 +33,8 @@ section {
     justify-content: center;
     flex-direction: column;
     height: 80vh;
-    background-image: url("img/home background.jpg");
-    background-size: contain;
+    background-image: url("/img/home background.jpg");
+    background-size: cover;
     background-attachment: fixed;
 
     h1 {

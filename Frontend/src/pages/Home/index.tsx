@@ -3,34 +3,53 @@ import { InputSwitch } from 'primereact/inputswitch';
 import CraftsmanCard from "components/CraftsmanCard";
 import ProductCard from "components/ProductCard";
 import { Link } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { useNavigate } from "react-router";
 import { Wrapper } from "./styles";
 
 interface Props {}
 
 const Home: React.FunctionComponent<Props> = () => {
   const [searchType, setType] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Wrapper>
       <section id="search-section">
         <h1>Artisashop</h1>
-        <div id="search-block">
-          <input className="search-input" placeholder="Rechercher..."/>
-          <label htmlFor="SearchStr">
-            <button type="submit" id="sendButton" className="search-button">
-              <i className="fas fa-search"/>
-            </button>
-          </label>
-          <div id="searchType">
-            <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
-            <label className="wordCarousel" htmlFor="SearchType">
-              <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
-                <li>By product</li>
-                <li>By craftsman</li>
-              </ul>
-            </label>
-          </div>
-        </div>
+        <Formik
+          initialValues={{
+            searchStr: "",
+            searchType: false,
+          }}
+          onSubmit={async values => {
+            navigate({
+              pathname: '/app/search',
+              search: `?q=${values.searchStr}&t=${values.searchType.toString()}`,
+            })
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form id="search-block">
+              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..."/>
+              <label htmlFor="SearchStr">
+                <button type="submit" id="sendButton" className="search-button">
+                  <i className="fas fa-search"/>
+                </button>
+              </label>
+              <div id="searchType">
+                <Field type="checkbox" name="searchType"/>
+                <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
+                <label className="wordCarousel" htmlFor="SearchType">
+                  <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
+                    <li>By product</li>
+                    <li>By craftsman</li>
+                  </ul>
+                </label>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </section>
       <section id="product-section">
         <h2>Produits de la semaine</h2>

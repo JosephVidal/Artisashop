@@ -41,7 +41,7 @@ const CraftsmanView = () => {
       name: "Product 1",
       description: "Description 1",
       price: 10,
-      images: ["default.png"],
+      images: ["table à thé.jpg"],
       craftsmanId: "fakeID",
       quantity: 10,
       craftsman: {
@@ -58,7 +58,7 @@ const CraftsmanView = () => {
       name: "Product 2",
       description: "Description 2",
       price: 10,
-      images: ["default.png"],
+      images: ["table à thé.jpg"],
       craftsmanId: "fakeID",
       quantity: 10,
       craftsman: {
@@ -75,7 +75,7 @@ const CraftsmanView = () => {
       name: "Product 3",
       description: "Description 3",
       price: 10,
-      images: ["default.png"],
+      images: ["table à thé.jpg"],
       craftsmanId: "fakeID",
       quantity: 10,
       craftsman: {
@@ -92,7 +92,7 @@ const CraftsmanView = () => {
       name: "Product 4",
       description: "Description 4",
       price: 10,
-      images: ["default.png"],
+      images: ["table à thé.jpg"],
       craftsmanId: "fakeID",
       quantity: 10,
       craftsman: {
