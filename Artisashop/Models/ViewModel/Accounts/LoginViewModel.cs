@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Artisashop.Models.ViewModel.Account
+namespace Artisashop.Models.ViewModel.Accounts
 {
     public class LoginViewModel
     {

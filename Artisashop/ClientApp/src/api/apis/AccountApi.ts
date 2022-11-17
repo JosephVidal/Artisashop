@@ -18,6 +18,7 @@ import type {
   Account,
   AccountToken,
   ExternalLoginConfirmationViewModel,
+  GetAccountResult,
   Login,
   ProblemDetails,
   Register,
@@ -30,6 +31,8 @@ import {
     AccountTokenToJSON,
     ExternalLoginConfirmationViewModelFromJSON,
     ExternalLoginConfirmationViewModelToJSON,
+    GetAccountResultFromJSON,
+    GetAccountResultToJSON,
     LoginFromJSON,
     LoginToJSON,
     ProblemDetailsFromJSON,
@@ -51,6 +54,12 @@ export interface ApiAccountExternalLoginPostRequest {
 
 export interface ApiAccountIdGetRequest {
     id: string;
+}
+
+export interface ApiAccountIdRoleRolePostRequest {
+    id: string;
+    role: string;
+    isDeleted?: boolean;
 }
 
 export interface ApiAccountLoginPostRequest {
@@ -195,7 +204,7 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountIdGetRaw(requestParameters: ApiAccountIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+    async apiAccountIdGetRaw(requestParameters: ApiAccountIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiAccountIdGet.');
         }
@@ -215,13 +224,53 @@ export class AccountApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetAccountResultFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiAccountIdGet(requestParameters: ApiAccountIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+    async apiAccountIdGet(requestParameters: ApiAccountIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
         const response = await this.apiAccountIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountIdRoleRolePostRaw(requestParameters: ApiAccountIdRoleRolePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiAccountIdRoleRolePost.');
+        }
+
+        if (requestParameters.role === null || requestParameters.role === undefined) {
+            throw new runtime.RequiredError('role','Required parameter requestParameters.role was null or undefined when calling apiAccountIdRoleRolePost.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.isDeleted !== undefined) {
+            queryParameters['isDeleted'] = requestParameters.isDeleted;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/{id}/role/{role}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"role"}}`, encodeURIComponent(String(requestParameters.role))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetAccountResultFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountIdRoleRolePost(requestParameters: ApiAccountIdRoleRolePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
+        const response = await this.apiAccountIdRoleRolePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

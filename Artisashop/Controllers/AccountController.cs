@@ -1,4 +1,6 @@
-﻿namespace Artisashop.Controllers;
+﻿using Artisashop.Models.ViewModel.Accounts;
+
+namespace Artisashop.Controllers;
 
 using Artisashop.Configurations;
 using Artisashop.Helpers;
@@ -16,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
-using Artisashop.Models.ViewModel.Account;
 using System.Net.Http.Headers;
 using System.Net.Http;
 
@@ -167,15 +168,69 @@ public class AccountController : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(GetAccountResult), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetAccountId(string id)
     {
         try
         {
             Account? account = await _db.Users!.SingleOrDefaultAsync(craftsman => craftsman.Id == id);
             if (account == null)
-                return NotFound("Craftsman with id " + id + " not found");
-            return Ok(account);
+                return NotFound($"Craftsman with id {id} not found");
+            IList<string>? roles = await _userManager.GetRolesAsync(account);
+            if (roles == null)
+                return BadRequest($"Impossible to get roles for user {id}");
+            return Ok(new GetAccountResult(account, roles));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Assigns or removes a role to a user.
+    /// Available roles are found in <see cref="Roles"/>
+    /// </summary>
+    /// <param name="id">Id of the user</param>
+    /// <param name="role">Name of the role</param>
+    /// <param name="isDeleted">Is the role added or deleted</param>
+    /// <returns></returns>
+    [HttpPost("{id}/role/{role}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(GetAccountResult), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> UpdateRole(string id, string role, bool isDeleted)
+    {
+        try
+        {
+            Account? account = await _db.Users!.SingleOrDefaultAsync(craftsman => craftsman.Id == id);
+            if (account == null)
+                return NotFound($"Craftsman with id {id} not found");
+            IdentityResult identityResult;
+
+            var identityRole = _db.Roles.FirstOrDefault(x => x.NormalizedName == role.ToUpper());
+            if (identityRole == null)
+            {
+                return NotFound($"Role {role} not found");
+            }
+
+            if (isDeleted)
+            {
+                identityResult = await _userManager.RemoveFromRoleAsync(account, role.ToUpper());
+            }
+            else
+            {
+                identityResult = await _userManager.AddToRoleAsync(account, role.ToUpper());
+            }
+
+            if (!identityResult.Succeeded)
+            {
+                return BadRequest(
+                    $"Impossible to update roles for user {id} : {FormatErrorMessages(identityResult.Errors)}");
+            }
+
+            return Ok($"Role {role} {(isDeleted ? "removed" : "added")} to user {id}");
         }
         catch (Exception ex)
         {
@@ -313,7 +368,7 @@ public class AccountController : ControllerBase
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(2);
+        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.Expiration));
 
         var token = new JwtSecurityToken(
             jwtConfiguration.Issuer,
@@ -355,4 +410,10 @@ public class AccountController : ControllerBase
 
         return (ret != null) ? ret : new GPSCoord();
     }
+
+    private string FormatErrorMessages(IEnumerable<IdentityError> errors)
+        => ConcatErrorMessages(errors.Select(x => $"{x.Code} - {x.Description}"));
+
+    private string ConcatErrorMessages(IEnumerable<string> messages)
+        => string.Join(", ", messages);
 }
