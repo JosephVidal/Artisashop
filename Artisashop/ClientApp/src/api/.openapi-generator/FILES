@@ -15,8 +15,8 @@ apis/OidcConfigurationApi.ts
 apis/ProductApi.ts
 apis/SearchApi.ts
 apis/WeatherForecastApi.ts
-apis/index.ts
-index.ts
+apis/index.tsx
+index.tsx
 models/Account.ts
 models/AccountToken.ts
 models/AccountViewModel.ts
@@ -52,5 +52,5 @@ models/UpdateAccount.ts
 models/UpdateBasket.ts
 models/UpdateCustomOrder.ts
 models/WeatherForecast.ts
-models/index.ts
+models/index.tsx
 runtime.ts

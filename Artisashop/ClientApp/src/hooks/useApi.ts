@@ -1,6 +1,6 @@
 ﻿import { useMemo } from "react";
-import {Configuration, ConfigurationParameters} from "../api";
-import { REACT_APP_API_URL } from "../conf";
+import {Configuration, ConfigurationParameters} from "api";
+import { REACT_APP_API_URL } from "conf";
 import { useAuth } from "./useAuth";
 
 /**
@@ -10,10 +10,11 @@ import { useAuth } from "./useAuth";
  */
 const useApi = <T,>(Api: { new(config: Configuration) : T;}) : T => {
   const auth = useAuth()
-  const config = useMemo(() => 
+  const config = useMemo(() =>
     {
       const base : ConfigurationParameters = {
         basePath: REACT_APP_API_URL,
+        headers: {"Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token") || ""}`}
       }
       return auth?.token
         ? new Configuration({ ...base, accessToken: auth.token })
