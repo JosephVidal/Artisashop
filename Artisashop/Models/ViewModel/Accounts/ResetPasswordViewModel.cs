@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Artisashop.Models.ViewModel.Account
+namespace Artisashop.Models.ViewModel.Accounts
 {
-    public class RegisterViewModel
+    public class ResetPasswordViewModel
     {
         [Required]
         [EmailAddress]
@@ -24,24 +23,6 @@ namespace Artisashop.Models.ViewModel.Account
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; } = null!;
 
-        [Display(Name = "Sexe")]
-        public string Gender { get; set; } = null!;
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Date de naissance")]
-        public DateTime? Birthdate { get; set; }
-
-        [Required]
-        [Display(Name = "Prénom")]
-        public string GivenName { get; set; } = null!;
-
-        [Required]
-        [Display(Name = "Nom")]
-        public string FamilyName { get; set; } = null!;
-
-        [Display(Name = "Nom d'usage")]
-        public string PreferredName { get; set; } = null!;
-
+        public string Code { get; set; } = null!;
     }
 }

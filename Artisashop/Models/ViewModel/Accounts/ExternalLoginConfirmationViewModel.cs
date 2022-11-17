@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Artisashop.Models.ViewModel.Account
+namespace Artisashop.Models.ViewModel.Accounts
 {
     public class ExternalLoginConfirmationViewModel
     {
