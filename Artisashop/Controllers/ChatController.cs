@@ -43,12 +43,14 @@ namespace Artisashop.Controllers
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
                 List<ChatPreview> chatPreview = new();
-                var groups = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).AsEnumerable().GroupBy(d => d.Sender);
+                var groups = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).AsEnumerable()
+                    .GroupBy(d => d.Sender);
                 foreach (var group in groups)
                 {
                     ChatMessage? mostRecent = group.Last();
                     chatPreview.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
                 }
+
                 return Ok(chatPreview);
             }
             catch (Exception e)
@@ -77,17 +79,35 @@ namespace Artisashop.Controllers
                 return BadRequest("Message is null");
             }
 
-            try {
-                string[]? acceptedExt = new[] {
-                    "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm", "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx", "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
+            try
+            {
+                string[]? acceptedExt = new[]
+                {
+                    "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm",
+                    "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx",
+                    "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
                     "odt", "ods", "odp", "odg",
                     "xml", "json", "txt", "csv",
-                    "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "ppm", "pgm", "pbm", "pnm", "webp", "heif", "avif", "bpg", "deep", "drw", "ecw", "fits", "flif", "ico", "ilbm", "img", "liff", "nrrd", "pam", "pcx", "pgf", "plbm", "sgi", "sid", "tga", "vicar", "xisf", "afphoto", "cd5", "clip", "cpt", "kra", "mdp", "pdn", "psd", "psp", "sai", "xcf", "cgm", "svg", "afdesign", "ai", "cdr", "gem", "gle", "hpgl", "hvif", "lottie", "mathml", "naplps", "odg", "pgml", "qcc", "regis", "rip", "vml", "xar", "xps", "amf", "blend", "dgn", "dwg", "dxf", "flt", "fvrml", "gltf", "hsf" , "iges", "imml", "ipa", "jt", "ma", "mb", "obj", "opengex", "ply", "povray", "prc", "step", "skp", "stl", "u3d", "vrml", "xaml", "xgl", "xvl", "xvrml", "x3d", "3d", "3df", "3dm", "3ds", "3dxml", "x3d", "eps", "ps", "pict", "wmf", "emf", "swf", "xaml", "mpo", "pns", "jps",
-                    "webm", "mkv", "flv", "vob", "ogv", "ogg", "drc", "gif", "gifv", "mng", "avi", "mts", "m2ts", "ts", "mov", "qt", "wmv", "yuv", "rm", "rmvb", "viv", "asf", "amv", "mp4", "m4p", "m4v", "mpg", "mp2", "mpeg", "mpe", "mpv", "mpg", "mpeg", "mpe", "mpv", "m2v", "m4v", "svi", "3gp", "3g2", "mxf", "roq", "nsv", "flv", "f4v", "f4p", "f4a", "f4b"
+                    "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "ppm", "pgm", "pbm", "pnm", "webp", "heif",
+                    "avif", "bpg", "deep", "drw", "ecw", "fits", "flif", "ico", "ilbm", "img", "liff", "nrrd", "pam",
+                    "pcx", "pgf", "plbm", "sgi", "sid", "tga", "vicar", "xisf", "afphoto", "cd5", "clip", "cpt", "kra",
+                    "mdp", "pdn", "psd", "psp", "sai", "xcf", "cgm", "svg", "afdesign", "ai", "cdr", "gem", "gle",
+                    "hpgl", "hvif", "lottie", "mathml", "naplps", "odg", "pgml", "qcc", "regis", "rip", "vml", "xar",
+                    "xps", "amf", "blend", "dgn", "dwg", "dxf", "flt", "fvrml", "gltf", "hsf", "iges", "imml", "ipa",
+                    "jt", "ma", "mb", "obj", "opengex", "ply", "povray", "prc", "step", "skp", "stl", "u3d", "vrml",
+                    "xaml", "xgl", "xvl", "xvrml", "x3d", "3d", "3df", "3dm", "3ds", "3dxml", "x3d", "eps", "ps",
+                    "pict", "wmf", "emf", "swf", "xaml", "mpo", "pns", "jps",
+                    "webm", "mkv", "flv", "vob", "ogv", "ogg", "drc", "gif", "gifv", "mng", "avi", "mts", "m2ts", "ts",
+                    "mov", "qt", "wmv", "yuv", "rm", "rmvb", "viv", "asf", "amv", "mp4", "m4p", "m4v", "mpg", "mp2",
+                    "mpeg", "mpe", "mpv", "mpg", "mpeg", "mpe", "mpv", "m2v", "m4v", "svi", "3gp", "3g2", "mxf", "roq",
+                    "nsv", "flv", "f4v", "f4p", "f4a", "f4b"
                 };
-                ulong fileSize = (null == message.Joined) ? 0UL : Convert.ToUInt64(message.Joined.Length) * Convert.ToUInt64(sizeof(char));
-                if ((null != message.Joined && null == message.Filename) || 
-                    (null != message.Joined && (200UL * 1000000UL) >= fileSize && !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
+                ulong fileSize = (null == message.Joined)
+                    ? 0UL
+                    : Convert.ToUInt64(message.Joined.Length) * Convert.ToUInt64(sizeof(char));
+                if ((null != message.Joined && null == message.Filename) ||
+                    (null != message.Joined && (200UL * 1000000UL) >= fileSize &&
+                     !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
                     return BadRequest("Invalid joined file");
                 //db:
                 Account sender = await _db.Users!.FirstAsync(user => user.Id == message!.FromUserId);
@@ -96,16 +116,27 @@ namespace Artisashop.Controllers
                     return NotFound("Sender with id " + message!.FromUserId + " not found");
                 if (receiver == null)
                     return NotFound("Receiver with id " + message!.ToUserID + " not found");
-                ChatMessage dbMsg = new ChatMessage(sender, receiver, message!.Content, message.Joined, message.Filename);
+                ChatMessage dbMsg = new ChatMessage
+                {
+                    Sender = sender,
+                    Receiver = receiver,
+                    Content = message.Content,
+                    Joined = message.Joined,
+                    Filename = message.Filename,
+                };
                 var result = await _db.ChatMessages!.AddAsync(dbMsg);
                 await _db.SaveChangesAsync();
                 //chat hub:
-                List<ChatUserDetail> toUserList = ChatHub.connectedUsers.Where(x => x.UserID == message.ToUserID).ToList();
-                List<ChatUserDetail> fromUserList = ChatHub.connectedUsers.Where(x => x.UserID == message.FromUserId).ToList();
+                List<ChatUserDetail> toUserList =
+                    ChatHub.connectedUsers.Where(x => x.UserID == message.ToUserID).ToList();
+                List<ChatUserDetail> fromUserList =
+                    ChatHub.connectedUsers.Where(x => x.UserID == message.FromUserId).ToList();
                 foreach (ChatUserDetail elem in toUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.Filename, message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.Filename,
+                        message.Content, DateTime.Now, message.Joined, dbMsg.Id);
                 foreach (ChatUserDetail elem in fromUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.Filename, message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.Filename,
+                        message.Content, DateTime.Now, message.Joined, dbMsg.Id);
 
                 return Ok(result.Entity);
             }
@@ -118,19 +149,28 @@ namespace Artisashop.Controllers
         /// <summary>
         /// Get a chat history
         /// </summary>
-        /// <param name="userIDOne">Sender or receiver id</param>
-        /// <param name="userIDTwo">Sender or receiver id</param>
+        /// <param name="model"></param>
         /// <returns>A list of message from a chat</returns>
         [HttpGet("history")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<ChatMessage>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> LoadHistory([FromBody] ChatHistory model)
+        public async Task<IActionResult> GetConversationHistory([FromQuery] string[] users)
         {
+            if (users.Length != 2)
+                return BadRequest("Query only accepts 2 users");
+
+            var user1 = users[0];
+            var user2 = users[1];
+
             try
             {
-                List<ChatMessage> messages = await _db.ChatMessages!.Include("Sender").Include("Receiver").Where(message =>
-                    message.Sender!.Id == model.UserIDOne && message.Receiver!.Id == model.UserIDTwo ||
-                    message.Receiver!.Id == model.UserIDOne && message.Sender!.Id == model.UserIDTwo).ToListAsync();
+                List<ChatMessage> messages = await _db.ChatMessages!
+                    .Include(x => x.Sender)
+                    .Include(x => x.Receiver)
+                    .Where(message =>
+                        message.SenderId == user1 && message.ReceiverId == user2 ||
+                        message.SenderId == user2 && message.ReceiverId == user1)
+                    .ToListAsync();
                 return Ok(messages);
             }
             catch (Exception e)
@@ -157,7 +197,6 @@ namespace Artisashop.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
 
         /// <summary>
@@ -179,7 +218,8 @@ namespace Artisashop.Controllers
                 _db.ChatMessages!.Update(message);
                 await _db.SaveChangesAsync();
                 //chat hub:
-                List<ChatUserDetail> userList = ChatHub.connectedUsers.Where(x => x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id).ToList();
+                List<ChatUserDetail> userList = ChatHub.connectedUsers
+                    .Where(x => x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id).ToList();
                 foreach (ChatUserDetail elem in userList)
                     await _chatHub.Clients.Client(elem.ConnectionId).UpdateMsg(msgId, message.Content);
 
@@ -208,7 +248,8 @@ namespace Artisashop.Controllers
                 _db.ChatMessages!.Remove(message);
                 await _db.SaveChangesAsync();
                 //chat hub:
-                List<ChatUserDetail> userList = ChatHub.connectedUsers.Where(x => x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id).ToList();
+                List<ChatUserDetail> userList = ChatHub.connectedUsers
+                    .Where(x => x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id).ToList();
                 foreach (ChatUserDetail elem in userList)
                     await _chatHub.Clients.Client(elem.ConnectionId).DeleteMsg(msgId);
 
@@ -218,7 +259,6 @@ namespace Artisashop.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
     }
 }

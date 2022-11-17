@@ -7,7 +7,6 @@ export * from './Amount';
 export * from './Basket';
 export * from './Bill';
 export * from './Breakdown';
-export * from './ChatHistory';
 export * from './ChatMessage';
 export * from './ChatPreview';
 export * from './Complaint';

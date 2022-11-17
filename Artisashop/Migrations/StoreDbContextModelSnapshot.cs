@@ -192,7 +192,8 @@ namespace Artisashop.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Filename")
@@ -202,9 +203,11 @@ namespace Artisashop.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ReceiverId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SenderId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -512,11 +515,15 @@ namespace Artisashop.Migrations
                 {
                     b.HasOne("Artisashop.Models.Account", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverId");
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Artisashop.Models.Account", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId");
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Receiver");
 

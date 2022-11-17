@@ -1672,25 +1672,22 @@
         "tags": [
           "Chat"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatHistory"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatHistory"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatHistory"
-              }
+        "parameters": [
+          {
+            "name": "UserIDOne",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "UserIDTwo",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "400": {
             "description": "Bad Request",
@@ -3095,20 +3092,6 @@
         "properties": {
           "itemTotal": {
             "$ref": "#/components/schemas/UnitAmount"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ChatHistory": {
-        "type": "object",
-        "properties": {
-          "userIDOne": {
-            "type": "string",
-            "nullable": true
-          },
-          "userIDTwo": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

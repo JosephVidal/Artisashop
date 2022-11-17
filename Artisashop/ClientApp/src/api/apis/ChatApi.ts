@@ -15,14 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  ChatHistory,
   ChatMessage,
   ChatPreview,
   CreateChatMessage,
 } from '../models';
 import {
-    ChatHistoryFromJSON,
-    ChatHistoryToJSON,
     ChatMessageFromJSON,
     ChatMessageToJSON,
     ChatPreviewFromJSON,
@@ -32,7 +29,8 @@ import {
 } from '../models';
 
 export interface ApiChatHistoryGetRequest {
-    chatHistory?: ChatHistory;
+    userIDOne?: string;
+    userIDTwo?: string;
 }
 
 export interface ApiChatMsgIdDeleteRequest {
@@ -62,9 +60,15 @@ export class ChatApi extends runtime.BaseAPI {
     async apiChatHistoryGetRaw(requestParameters: ApiChatHistoryGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ChatMessage>>> {
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+        if (requestParameters.userIDOne !== undefined) {
+            queryParameters['UserIDOne'] = requestParameters.userIDOne;
+        }
 
-        headerParameters['Content-Type'] = 'application/json';
+        if (requestParameters.userIDTwo !== undefined) {
+            queryParameters['UserIDTwo'] = requestParameters.userIDTwo;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
@@ -75,7 +79,6 @@ export class ChatApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: ChatHistoryToJSON(requestParameters.chatHistory),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ChatMessageFromJSON));

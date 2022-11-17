@@ -24,7 +24,6 @@ models/Amount.ts
 models/Basket.ts
 models/Bill.ts
 models/Breakdown.ts
-models/ChatHistory.ts
 models/ChatMessage.ts
 models/ChatPreview.ts
 models/Complaint.ts
