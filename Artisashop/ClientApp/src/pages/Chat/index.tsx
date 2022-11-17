@@ -25,7 +25,7 @@ import {InputText} from "primereact/inputtext";
 import { random } from "lodash";
 import {Maybe, None, Some} from "monet";
 import useApi from "hooks/useApi";
-import {Account, ApiChatHistoryGetRequest, ChatApi, ChatHistory, ChatMessage, ChatPreview} from "api";
+import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
 
 const ref = new Date();
 
@@ -77,7 +77,7 @@ const Chat: FC = () => {
           <MessagePreview>
             {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
           </MessagePreview>
-          {timeIndicator(contact.lastMsg!.date!)}
+          {timeIndicator(contact.lastMsg!.createdAt!)}
         </ContactPreview>
       </ContactWrapper>
     )
@@ -104,7 +104,7 @@ const Chat: FC = () => {
             {message.content!}
           </MessageBubble>
           <MessageDate>
-            {hover === message.id! && timeIndicator(message.date!)}
+            {hover === message.id! && timeIndicator(message.createdAt!)}
           </MessageDate>
         </MessageWrapper>
       </MessageTooltipWrapper>
@@ -183,10 +183,7 @@ const timeIndicator = (date: Date): string => {
 
 const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, accountOne: Account, accountTwo: Account) => {
   const request: ApiChatHistoryGetRequest = {
-    chatHistory: {
-      userIDOne: accountOne.id!,
-      userIDTwo: accountTwo.id!
-    }
+    users: [accountOne.id!, accountTwo.id!]
   };
 
   chatApi.apiChatHistoryGet(request).then((h: ChatMessage[]) => {
@@ -227,7 +224,6 @@ const sendMessage = (setInput: SetState<string>, setConversation: SetState<Conve
     id: random(0, 1000),
     sender: user,
     receiver: to,
-    date: new Date(),
     content: message
   };
   setConversation((prevState) => ({
