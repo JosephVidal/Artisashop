@@ -29,8 +29,7 @@ import {
 } from '../models';
 
 export interface ApiChatHistoryGetRequest {
-    userIDOne?: string;
-    userIDTwo?: string;
+    users?: Array<string>;
 }
 
 export interface ApiChatMsgIdDeleteRequest {
@@ -60,12 +59,8 @@ export class ChatApi extends runtime.BaseAPI {
     async apiChatHistoryGetRaw(requestParameters: ApiChatHistoryGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ChatMessage>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.userIDOne !== undefined) {
-            queryParameters['UserIDOne'] = requestParameters.userIDOne;
-        }
-
-        if (requestParameters.userIDTwo !== undefined) {
-            queryParameters['UserIDTwo'] = requestParameters.userIDTwo;
+        if (requestParameters.users) {
+            queryParameters['users'] = requestParameters.users;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

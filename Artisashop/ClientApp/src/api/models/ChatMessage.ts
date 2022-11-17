@@ -40,16 +40,28 @@ export interface ChatMessage {
     sender?: Account;
     /**
      * 
+     * @type {string}
+     * @memberof ChatMessage
+     */
+    senderId?: string | null;
+    /**
+     * 
      * @type {Account}
      * @memberof ChatMessage
      */
     receiver?: Account;
     /**
      * 
+     * @type {string}
+     * @memberof ChatMessage
+     */
+    receiverId?: string | null;
+    /**
+     * 
      * @type {Date}
      * @memberof ChatMessage
      */
-    date?: Date;
+    createdAt?: Date | null;
     /**
      * 
      * @type {string}
@@ -91,8 +103,10 @@ export function ChatMessageFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'sender': !exists(json, 'sender') ? undefined : AccountFromJSON(json['sender']),
+        'senderId': !exists(json, 'senderId') ? undefined : json['senderId'],
         'receiver': !exists(json, 'receiver') ? undefined : AccountFromJSON(json['receiver']),
-        'date': !exists(json, 'date') ? undefined : (new Date(json['date'])),
+        'receiverId': !exists(json, 'receiverId') ? undefined : json['receiverId'],
+        'createdAt': !exists(json, 'createdAt') ? undefined : (json['createdAt'] === null ? null : new Date(json['createdAt'])),
         'content': !exists(json, 'content') ? undefined : json['content'],
         'joined': !exists(json, 'joined') ? undefined : json['joined'],
         'filename': !exists(json, 'filename') ? undefined : json['filename'],
@@ -110,8 +124,10 @@ export function ChatMessageToJSON(value?: ChatMessage | null): any {
         
         'id': value.id,
         'sender': AccountToJSON(value.sender),
+        'senderId': value.senderId,
         'receiver': AccountToJSON(value.receiver),
-        'date': value.date === undefined ? undefined : (value.date.toISOString()),
+        'receiverId': value.receiverId,
+        'createdAt': value.createdAt === undefined ? undefined : (value.createdAt === null ? null : value.createdAt.toISOString()),
         'content': value.content,
         'joined': value.joined,
         'filename': value.filename,

@@ -1674,17 +1674,13 @@
         ],
         "parameters": [
           {
-            "name": "UserIDOne",
+            "name": "users",
             "in": "query",
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "UserIDTwo",
-            "in": "query",
-            "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         ],
@@ -3106,12 +3102,21 @@
           "sender": {
             "$ref": "#/components/schemas/Account"
           },
+          "senderId": {
+            "type": "string",
+            "nullable": true
+          },
           "receiver": {
             "$ref": "#/components/schemas/Account"
           },
-          "date": {
+          "receiverId": {
             "type": "string",
-            "format": "date-time"
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           },
           "content": {
             "type": "string",
