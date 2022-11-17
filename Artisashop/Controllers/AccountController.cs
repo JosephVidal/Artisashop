@@ -195,7 +195,7 @@ public class AccountController : ControllerBase
     /// <param name="role">Name of the role</param>
     /// <param name="isDeleted">Is the role added or deleted</param>
     /// <returns></returns>
-    [HttpGet("{id}/role/{role}")]
+    [HttpPost("{id}/role/{role}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]

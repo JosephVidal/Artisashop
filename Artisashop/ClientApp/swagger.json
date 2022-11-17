@@ -261,7 +261,7 @@
       }
     },
     "/api/account/{id}/role/{role}": {
-      "get": {
+      "post": {
         "tags": [
           "Account"
         ],

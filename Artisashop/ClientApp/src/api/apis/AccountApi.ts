@@ -56,7 +56,7 @@ export interface ApiAccountIdGetRequest {
     id: string;
 }
 
-export interface ApiAccountIdRoleRoleGetRequest {
+export interface ApiAccountIdRoleRolePostRequest {
     id: string;
     role: string;
     isDeleted?: boolean;
@@ -236,13 +236,13 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountIdRoleRoleGetRaw(requestParameters: ApiAccountIdRoleRoleGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
+    async apiAccountIdRoleRolePostRaw(requestParameters: ApiAccountIdRoleRolePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiAccountIdRoleRoleGet.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiAccountIdRoleRolePost.');
         }
 
         if (requestParameters.role === null || requestParameters.role === undefined) {
-            throw new runtime.RequiredError('role','Required parameter requestParameters.role was null or undefined when calling apiAccountIdRoleRoleGet.');
+            throw new runtime.RequiredError('role','Required parameter requestParameters.role was null or undefined when calling apiAccountIdRoleRolePost.');
         }
 
         const queryParameters: any = {};
@@ -259,7 +259,7 @@ export class AccountApi extends runtime.BaseAPI {
 
         const response = await this.request({
             path: `/api/account/{id}/role/{role}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"role"}}`, encodeURIComponent(String(requestParameters.role))),
-            method: 'GET',
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
@@ -269,8 +269,8 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountIdRoleRoleGet(requestParameters: ApiAccountIdRoleRoleGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
-        const response = await this.apiAccountIdRoleRoleGetRaw(requestParameters, initOverrides);
+    async apiAccountIdRoleRolePost(requestParameters: ApiAccountIdRoleRolePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
+        const response = await this.apiAccountIdRoleRolePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
