@@ -38,7 +38,7 @@ const BasketView: FC = () => {
   const basketAPI: BasketApi = useApi(BasketApi);
 
   useEffect(() => {
-    basketAPI.apiBasketGet().then(setBasket)
+    basketAPI.apiBasketGet().then((list) => setBasket(list.filter((item) => item.currentState === "WAITINGCONSUMER")))
   }, []);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const BasketView: FC = () => {
               currency: "EUR"
             }}
           >
-            <CheckoutButtons basket={basket} total={deliveryCost + basket.reduce(
+            <CheckoutButtons basketAPI={basketAPI} setBasket={setBasket} basket={basket} total={deliveryCost + basket.reduce(
               (previousValue, currentValue) => previousValue + currentValue.quantity * currentValue.product.price, 0)}
             />
           </PayPalScriptProvider>

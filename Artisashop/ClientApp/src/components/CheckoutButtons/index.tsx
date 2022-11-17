@@ -1,8 +1,11 @@
 import React, {useEffect} from "react";
 import {PayPalButtons, usePayPalScriptReducer} from "@paypal/react-paypal-js";
-import {Basket} from "api";
+import {Basket, BasketApi} from "api";
+import {SetState} from "globals/state";
 
 interface Props {
+  basketAPI: BasketApi,
+  setBasket: SetState<Basket[]>,
   basket: Basket[],
   total: number
 }
@@ -10,8 +13,8 @@ interface Props {
 const currency = "EUR";
 const style = {"layout":"vertical"};
 
-const CheckoutButtons: React.FC<Props> = ({ basket, total }) => {
-  const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
+const CheckoutButtons: React.FC<Props> = ({ basketAPI, setBasket, basket, total }) => {
+  const [{ options }, dispatch] = usePayPalScriptReducer();
 
   useEffect(() => {
     dispatch({
@@ -39,14 +42,17 @@ const CheckoutButtons: React.FC<Props> = ({ basket, total }) => {
           },
         ],
       })
-      .then((orderId) => {
-        console.log("orderId");
-        console.log(orderId);
-        return orderId;
-      })}
+      .then((orderId) => orderId)}
     onApprove={(data, actions) => actions.order!.capture().then((response) => {
-      console.log("orderRespo,se");
-      console.log(response);
+      if (response.status === "COMPLETED") {
+        basket.forEach((item) => basketAPI.apiBasketPatch({
+          updateBasket: {
+            ...item,
+            currentState: "WAITINGCRAFTSMAN"
+          }
+        }));
+        setBasket([]);
+      }
       // Your code here after capture the order
     })}
   />
