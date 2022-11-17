@@ -1,5 +1,5 @@
 ﻿import { useMemo } from "react";
-import {Configuration} from "../api";
+import {Configuration, ConfigurationParameters} from "../api";
 import { REACT_APP_API_URL } from "../conf";
 import { useAuth } from "./useAuth";
 
@@ -11,9 +11,14 @@ import { useAuth } from "./useAuth";
 const useApi = <T,>(Api: { new(config: Configuration) : T;}) : T => {
   const auth = useAuth()
   const config = useMemo(() => 
-    auth?.token
-      ? new Configuration({ basePath: REACT_APP_API_URL, accessToken: auth.token })
-      : new Configuration({ basePath: REACT_APP_API_URL })
+    {
+      const base : ConfigurationParameters = {
+        basePath: REACT_APP_API_URL,
+      }
+      return auth?.token
+        ? new Configuration({ ...base, accessToken: auth.token })
+        : new Configuration({ ...base });
+    }
   , [auth, auth?.token])
   return useMemo(() => new Api(config), [Api, config]);
 }
