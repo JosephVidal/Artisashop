@@ -35,7 +35,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
             <Route path="login" element={<Login/>}/>
             <Route path="search" element={<Search/>}/>
             <Route path="product/:id" element={<ProductView/>}/>
-            <Route path="/mon-panier" element={<Basket />}/>
+            <Route path="mon-panier" element={<Basket />}/>
             <Route path="craftsman/:id" element={<CraftsmanView/>}/>
             <Route path="politique-de-confidentialite" element={<PrivacyPolicy/>}/>
             <Route path="chat" element={<Chat/>}/>
