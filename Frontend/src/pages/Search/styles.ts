@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const SearchHeader = styled.div`
     display: flex;
-    padding: 5px;
+    padding: 15px;
     flex-direction: row;
     background-color: #2F3B4B;
 
@@ -23,15 +23,22 @@ export const SearchHeader = styled.div`
     ul {margin: 0;}
 
     label {margin: auto 0;}
+
+    #search-bar {
+        display: flex;
+        flex-direction: row;
+        margin-right: 4%;
+    }
 `;
 
-export const SearchFilter = styled.aside`
+export const SearchFilters = styled.aside`
     position: sticky;
     max-height: 20vh;
     bottom: 10vh;
     color: var(--bs-dark);
     width: 15vw;
     padding: 20px;
+    width: 20vw;
 
     .filter {
         &:not(:last-child) {padding-bottom: 20px;}

@@ -12,6 +12,7 @@ interface Props {}
 const Home: React.FunctionComponent<Props> = () => {
   const [searchType, setType] = useState(false);
   const navigate = useNavigate();
+  const type = "Par produit";
 
   return (
     <Wrapper>
@@ -41,10 +42,7 @@ const Home: React.FunctionComponent<Props> = () => {
                 <Field type="checkbox" name="searchType"/>
                 <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
                 <label className="wordCarousel" htmlFor="SearchType">
-                  <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
-                    <li>By product</li>
-                    <li>By craftsman</li>
-                  </ul>
+                  <span className="search-type-text">{type}</span>
                 </label>
               </div>
             </Form>
