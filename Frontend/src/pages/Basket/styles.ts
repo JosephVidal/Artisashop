@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { colors } from "globals/styles";
-import { InputNumber } from "primereact/inputnumber";
 import {InputText} from "primereact/inputtext";
 
 export const Wrapper = styled.div`
@@ -96,11 +95,6 @@ export const ProductDetails = styled.div`
   flex-direction: column;
   justify-content: center;
   flex: 0.7;
-
-  & svg {
-    width: 15px;
-    margin: 2px;
-  }
   
   & div {
     display: flex;
@@ -151,59 +145,6 @@ export const PriceWrapper = styled.div`
   align-items: center;
   color: black;
   font-weight: bold;
-`;
-
-export const QuantityInput = styled(InputNumber)`
-  justify-content: center;
-  height: 25px;
-  
-  & input {
-    background: ${colors.beige};
-    color: black;
-    font-weight: bold;
-    height: 25px;
-    width: 40px;
-    text-align: center;
-    border: 1px solid ${colors.darkRed};
-    border-radius: 0;
-  }
-
-  .p-inputnumber-button-group {
-    height: 25px;
-  }
-
-  .p-inputtext:enabled:hover {
-    border-color: ${colors.darkRed};
-  }
-
-  .p-inputtext:enabled:focus {
-    border-color: ${colors.darkRed};
-    box-shadow: none;
-  }
-`;
-
-interface PlusMinusProps {
-  isRight: boolean
-}
-
-export const PlusMinus = styled.div<PlusMinusProps>`
-  background: ${colors.darkRed};
-  height: 25px !important;
-  width: 20px;
-  color: white;
-  border-radius: ${(props) => props.isRight ? "0 5px 5px 0" : "5px 0 0 5px"};
-  margin-left: ${(props) => props.isRight ? "0" : "10px"};
-  justify-content: center;
-  cursor: pointer;
-  
-  :hover {
-    background: ${colors.orange};
-  }
-
-  & svg {
-    width: 10px;
-    height: 10px;
-  }
 `;
 
 export const AddressInput = styled(InputText)`

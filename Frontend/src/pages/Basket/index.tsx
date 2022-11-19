@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { Basket, BasketApi, DeliveryOption } from "api";
 import { SetState } from "globals/state";
-import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import Select from "components/Select";
 import Option from "components/Select/Option";
 import {
@@ -11,6 +10,7 @@ import { Divider } from "primereact/divider";
 import CheckoutButtons from "components/CheckoutButtons";
 import useApi from "hooks/useApi";
 import { REACT_APP_PAYPAL_CLIENT } from "conf";
+import QuantityInput from "components/QuantityInuput";
 import {
   Wrapper,
   BasketDeliveryWrapper,
@@ -22,8 +22,6 @@ import {
   ProductDetails,
   LeftWrapper,
   PriceWrapper,
-  QuantityInput,
-  PlusMinus,
   AddressInput,
   TextRight,
   ProductBill,
@@ -55,16 +53,7 @@ const BasketView: FC = () => {
         <div>{basketItem.product.name}</div>
         <div>
           <div>Quantité:</div>
-          <PlusMinus isRight={false} onClick={() => changeQuantity(basketAPI, setBasket, basketItem.id!, basketItem.quantity - 1)}>
-            <BsDashLg />
-          </PlusMinus>
-          <QuantityInput
-            value={basketItem.quantity}
-            onChange={(value) => changeQuantity(basketAPI, setBasket, basketItem.id!, value.value)}
-          />
-          <PlusMinus isRight onClick={() => changeQuantity(basketAPI, setBasket, basketItem.id!, basketItem.quantity + 1)}>
-            <BsPlusLg />
-          </PlusMinus>
+          <QuantityInput quantity={basketItem.quantity} onChange={changeQuantity(basketAPI, setBasket, basketItem.id!)} />
         </div>
       </ProductDetails>
       <LeftWrapper>
@@ -177,7 +166,7 @@ const changeDelivery = (basketApi: BasketApi, setProducts: SetState<Basket[]>, i
     );
 }
 
-const changeQuantity = (basketApi: BasketApi, setProducts: SetState<Basket[]>, id: number, quantity: number | null) => {
+const changeQuantity = (basketApi: BasketApi, setProducts: SetState<Basket[]>, id: number) => (quantity: number | null) => {
   if (quantity === null || quantity === 0) {
     basketApi.apiBasketBasketIdDelete({basketId: id})
       .then(() => setProducts((prevState) => prevState.filter((product) => product.id !== id)))
