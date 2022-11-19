@@ -1,6 +1,0 @@
-additionalProperties:
-  apiName: RechercheEntreprisesApi
-  packageName: RechercheEntreprisesApi
-  targetFramework: net6.0
-  library: httpclient
-  nullableReferenceType: false # default

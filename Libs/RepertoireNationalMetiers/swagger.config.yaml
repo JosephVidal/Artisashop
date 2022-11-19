@@ -1,6 +1,0 @@
-additionalProperties:
-  apiName: RepertoireNationalMetiersApi
-  packageName: RepertoireNationalMetiersApi
-  targetFramework: net6.0
-  library: httpclient
-  nullableReferenceType: false # default

@@ -1,6 +1,4 @@
 
-i
-9Artisashop/ClientApp/src/components/GoogleLogin/index.tsx,1\6\16ef7847683d18b70ba051273e9c1e6e04b0d210
 W
 'Artisashop/appsettings.Development.json,2\5\25a4f5ca466e67a5b5dcf5264114cc6e7834f5fc
 \
@@ -23,14 +21,6 @@ X
 (Artisashop/Controllers/BillController.cs,1\b\1bcf547a56a98117e13ff50dfb238e2e044b2ce5
 h
 8Artisashop/Models/ViewModel/Accounts/GetAccountResult.cs,e\c\ec8339a05eca55fc34519b562f0b7a3ad9adbd6b
-Q
-!Artisashop/ClientApp/swagger.json,6\e\6e09460c90fed7a99d59047d6b806ca467c1a2cd
-\
-,Artisashop/ClientApp/src/api/models/index.ts,9\1\91698b0c74e58bfe2c29296bf10d16a51d3d44b8
-e
-5Artisashop/ClientApp/src/api/.openapi-generator/FILES,6\a\6a9db26f82a45e68dfb4249c9ef9510726db2f90
-\
-,Artisashop/ClientApp/src/api/apis/ChatApi.ts,f\c\fc615adda51470aea4faca73d24806329f8dd5f8
 b
 2Artisashop/Controllers/AdminComplaintController.cs,2\5\25766c594d5ec3c35cf0fdde8b4d3db61bd3a40c
 ^
@@ -59,3 +49,17 @@ M
 ,Artisashop/Models/ViewModel/ProductSearch.cs,2\f\2fc420dd90c240997c002091a92ebfd66d52e47a
 Z
 *Artisashop/Controllers/SearchController.cs,a\e\ae0df8f98b8c39a2c0cb3e81d66ac053028e190e
+J
+Artisashop/Models/Style.cs,d\b\db5bef2da58d2d10a906e38e29119b1c64d1f48a
+e
+5Artisashop/Migrations/20221118215004_InitialCreate.cs,7\8\78da8fd0da2e02ac311b0ec1e078d1a9555d029a
+n
+>Artisashop/Migrations/20221118215004_InitialCreate.Designer.cs,f\3\f385eeef8eff3555d4cc79d9d906e34cf4688847
+d
+4Artisashop/Migrations/StoreDbContextModelSnapshot.cs,6\0\60562abe6b4f963b2966951453867ac7d1405108
+E
+Artisashop/Program.cs,d\1\d1eca47d01ab1b69ce296bf831959e3469cc9d26
+U
+%Artisashop/Models/AccountViewModel.cs,c\8\c8b4522e64248188a5c3b9f350f03f91c6115659
+D
+Artisashop/Seeder.cs,e\1\e1270a6482bbb798b0afe889b8ee48318afe334f
