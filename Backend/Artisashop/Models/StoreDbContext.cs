@@ -41,16 +41,6 @@ namespace Artisashop.Models
                         .ValueGeneratedOnUpdate();
                 }
             }
-            
-            builder.Entity<Product>()
-                .HasMany(p => p.Styles)
-                .WithOne(s => s.Product)
-                .HasForeignKey(p => p.StyleId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Product>()
-                .HasMany(p => p.Images)
-                .WithOne(i => i.Product);
         }
     }
 }

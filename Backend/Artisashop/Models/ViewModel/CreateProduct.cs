@@ -4,6 +4,12 @@ namespace Artisashop.Models.ViewModel
 {
     public class CreateProduct
     {
+        public CreateProduct()
+        {
+            Images = new List<string>();
+            Styles = new List<string>();
+        }
+
         [Required]
         public string? Name { get; set; }
         [Required]
@@ -12,8 +18,7 @@ namespace Artisashop.Models.ViewModel
         public decimal Price { get; set; }
         [Required]
         public int Quantity { get; set; }
-
-        public List<string> Images { get; set; } = new List<string>();
-        public List<Style> Styles { get; set; } = new List<Style>();
+        public List<string> Images { get; set; }
+        public List<string> Styles { get; set; }
     }
 }

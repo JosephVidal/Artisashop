@@ -20,8 +20,6 @@ namespace Artisashop.Models.ViewModel
         public string Desc { get; set; }
         [Required]
         public int Quantity { get; set; }
-        
-        public List<int>? StylesIds { get; set; }
 
     }
 }
