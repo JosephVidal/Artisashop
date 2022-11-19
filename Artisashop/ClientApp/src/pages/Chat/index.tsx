@@ -54,8 +54,12 @@ const Chat: FC = () => {
   const [file, setFile] = useState<Maybe<File>>(None());
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
+  const [user, setUser] = useState<Account>();
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser)
+      setUser(JSON.parse(storedUser) as Account);
     useChat.apiChatListGet().then((r) => {
       setContactList(r);
       console.log(r);
@@ -67,7 +71,7 @@ const Chat: FC = () => {
 
     return (
       <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
-        getConversation(useChat, setConversation, contact.lastMsg!.sender!, contact.lastMsg!.receiver!);
+        getConversation(useChat, setConversation, user!.id!, contact.lastMsg!.sender!, contact.lastMsg!.receiver!);
         setInput("");
         setEdit(None());
         setFile(None());
@@ -77,7 +81,7 @@ const Chat: FC = () => {
           <MessagePreview>
             {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
           </MessagePreview>
-          {timeIndicator(contact.lastMsg!.createdAt!)}
+          {contact.lastMsg!.createdAt ? timeIndicator(contact.lastMsg!.createdAt) : null}
         </ContactPreview>
       </ContactWrapper>
     )
@@ -117,10 +121,15 @@ const Chat: FC = () => {
         {contactList.map(renderContact)}
       </ContactList>
       <ConversationWrapper>
-        <ConversationTitle>Conversation avec
-          {conversation.history[0].sender!.userName !== "Joseph" ?
-            conversation.history[0].sender!.userName! :
-            conversation.history[0].receiver!.userName!}
+        <ConversationTitle>
+          {conversation.history.length !== 0 && (
+            <div>
+              Conversation avec
+              {conversation.history[0].sender!.id !== user!.id ?
+                conversation.history[0].sender!.userName! :
+                conversation.history[0].receiver!.userName!}
+            </div>
+          )}
         </ConversationTitle>
         <ChatWrapper>
           {conversation.history.map(renderMessage)}
@@ -167,6 +176,7 @@ const Chat: FC = () => {
 }
 
 const timeIndicator = (date: Date): string => {
+  console.log(date);
   const now = new Date();
   const diff = now.getTime() - date.getTime();
 
@@ -181,13 +191,14 @@ const timeIndicator = (date: Date): string => {
   return `${Math.floor(diff / 86400000)  } j`;
 }
 
-const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, accountOne: Account, accountTwo: Account) => {
+const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, self: string, accountOne: Account, accountTwo: Account) => {
   const request: ApiChatHistoryGetRequest = {
     users: [accountOne.id!, accountTwo.id!]
   };
+  console.log(request);
 
   chatApi.apiChatHistoryGet(request).then((h: ChatMessage[]) => {
-    if (accountOne.id! !== Joseph.id!) {
+    if (accountOne.id! !== self) {
       setConversation({history: h, interlocutor: accountOne})
     }
     setConversation({history: h, interlocutor: accountTwo})
