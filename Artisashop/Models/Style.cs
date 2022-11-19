@@ -5,6 +5,8 @@ namespace Artisashop.Models
 {
     public class Style : IIdentifiable, ICreatedAt
     {
+        public Style() {}
+        
         public Style(string name, string description, string image)
         {
             Name = name;
@@ -13,9 +15,9 @@ namespace Artisashop.Models
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Image { get; set; }
         public DateTime? CreatedAt { get; set; }
     }
 }

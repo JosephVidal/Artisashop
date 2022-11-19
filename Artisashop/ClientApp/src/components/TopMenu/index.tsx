@@ -1,10 +1,13 @@
 import React from "react";
-import Logo from "assets/LogoOvale.png";
-import { BaseText } from "globals/styles";
 import { Link } from "react-router-dom";
+import { useAtom } from "jotai";
 import { Image } from "primereact/image";
 import { useTranslation } from "react-i18next";
 import { BsCart, BsChat, BsPerson } from "react-icons/bs";
+
+import Logo from "assets/LogoOvale.png";
+import { BaseText } from "globals/styles";
+import userAtom from "states/atoms/user";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
 interface Props { }
@@ -21,6 +24,7 @@ interface Props { }
 
 const TopMenu: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation();
+  const [user] = useAtom(userAtom);
 
   return (
     <TopMenuWrapper>
@@ -37,9 +41,15 @@ const TopMenu: React.FunctionComponent<Props> = () => {
         </BaseText>
       </MenuItem>
       <RightIcons>
-        <Link to="/app/mon-panier"><BsCart size="100%" /></Link>
-        <Link to="/app/chat"><BsChat size="100%" /></Link>
-        <Link to="/app/login"><BsPerson size="100%" /></Link>
+        {user
+          ? (<>
+            <Link to="/app/mon-panier"><BsCart size="100%" /></Link>
+            <Link to="/app/chat"><BsChat size="100%" /></Link>
+            <Link to="/app/profile"><BsPerson size="100%" /></Link>
+          </>)
+          : (<Link to="/app/login"><BsPerson size="100%" /></Link>
+          )
+        }
       </RightIcons>
     </TopMenuWrapper>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../states/auth";
 import { Wrapper } from "./styles";
 import GoogleLogin from "../../components/GoogleLogin";
 

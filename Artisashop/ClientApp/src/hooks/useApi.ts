@@ -1,26 +1,30 @@
 ﻿import { useMemo } from "react";
-import {Configuration, ConfigurationParameters} from "api";
+import { Configuration, ConfigurationParameters } from "api";
 import { REACT_APP_API_URL } from "conf";
-import { useAuth } from "./useAuth";
+import tokenAtom from "states/atoms/token";
+import { useAtom } from "jotai";
 
 /**
  * Returns a configured instance of the API.
  * @param Api the type of the API to return
  * @example `const api = useApi(AccountApi)`
  */
-const useApi = <T,>(Api: { new(config: Configuration) : T;}) : T => {
-  const auth = useAuth()
-  const config = useMemo(() =>
-    {
-      const base : ConfigurationParameters = {
-        basePath: REACT_APP_API_URL,
-        headers: {"Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token") || ""}`}
+const useApi = <T,>(Api: { new(config: Configuration): T; }): T => {
+  const [token] = useAtom(tokenAtom);
+
+  const config = useMemo(() => {
+    const base: ConfigurationParameters = {
+      basePath: REACT_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+        // "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
       }
-      return auth?.token
-        ? new Configuration({ ...base, accessToken: auth.token })
-        : new Configuration({ ...base });
     }
-  , [auth, auth?.token])
+    return token
+      ? new Configuration({ ...base, accessToken: token })
+      : new Configuration({ ...base });
+  }
+    , [token])
   return useMemo(() => new Api(config), [Api, config]);
 }
 

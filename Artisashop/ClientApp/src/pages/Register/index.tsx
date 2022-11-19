@@ -2,8 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { Formik, Field, Form } from "formik";
 import { Link } from "react-router-dom";
+
+import useAuth from "states/auth";
 import { Wrapper } from "./styles";
-import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
   const auth = useAuth()

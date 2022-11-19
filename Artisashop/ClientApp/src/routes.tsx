@@ -16,6 +16,7 @@ import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
 import Chat from "pages/Chat";
 import Basket from "pages/Basket";
+import ProfilePage from "pages/Profile";
 
 const AdminDashboard = React.lazy(() => import("pages/Admin"));
 
@@ -39,6 +40,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
             <Route path="craftsman/:id" element={<CraftsmanView/>}/>
             <Route path="politique-de-confidentialite" element={<PrivacyPolicy/>}/>
             <Route path="chat" element={<Chat/>}/>
+            <Route path="profile" element={<ProfilePage />}/>
           </Route>
           <Route path="admin/*" element={<AdminDashboard/>}/>
         </Route>

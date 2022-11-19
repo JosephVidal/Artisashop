@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import Routes from "routes";
+import { Provider as JotaiProvider } from "jotai";
 import PrimeReact from "primereact/api";
 import { GlobalStyles } from "globals/styles";
 import Toaster from "components/Toaster";
@@ -10,7 +11,6 @@ import "./custom-theme.css";
 import { StoreProvider } from "reducers/utils";
 import "./i18n";
 import Loader from "components/Loader";
-import { ProvideAuth } from "hooks/useAuth";
 
 PrimeReact.ripple = true;
 
@@ -20,13 +20,13 @@ const root = createRoot(container!);
 root.render(
   <React.Suspense fallback={<Loader visible />}>
     <GlobalStyles />
-    <ProvideAuth>
+    <JotaiProvider>
       <StoreProvider>
         <Toaster>
           {(toastHandler) => <Routes toastHandler={toastHandler} />}
         </Toaster>
       </StoreProvider>
-    </ProvideAuth>
+    </JotaiProvider>
   </React.Suspense>
 );
 export { useInterval } from "globals/useInterval";
