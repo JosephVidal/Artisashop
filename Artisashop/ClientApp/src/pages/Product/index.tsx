@@ -1,10 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "api/models/Product";
+import { SetState } from "globals/state";
+import QuantityInput from "components/QuantityInuput";
+import { BasketApi } from "api";
+import useApi from "hooks/useApi";
 import { Wrapper, Craftsman, Tag } from "./styles";
 
 const ProductView = () => {
   const { id } = useParams();
+  const [quantity, setQuantity] = useState<number>(1);
+  const basketApi = useApi(BasketApi);
   const product: Product =
     {
       id: 1,
@@ -57,11 +63,23 @@ const ProductView = () => {
           </div>
           <p id="description">{product?.description}</p>
           <p id="stock">{productStock}</p>
-          <button className={buttonClass} type="submit">Ajouter au panier</button>
+          <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product.quantity)} />
+          <button className={buttonClass} onClick={() => addToBasket(basketApi, product.id, quantity)} type="submit">Ajouter au panier</button>
         </div>
       </div>
     </Wrapper>
   )
 };
+
+const changeQuantity = (setQuantity: SetState<number>, max: number) => (value: number | null) => {
+  if (value && value > 0 && value <= max)
+    setQuantity(value);
+}
+
+const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
+  basketApi.apiBasketPost({
+    productID: id,
+    quantityModifier: quantity
+  })
 
 export default ProductView;
