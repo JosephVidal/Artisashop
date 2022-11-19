@@ -53,6 +53,12 @@ L'application est accessible à l'adresse [http://localhost:3000](http://localho
 
 L'interface Swagger est disponible à l'adresse [https://localhost:7095/swagger](https://localhost:7095/swagger).
 
+## Mettre à jour le client OpenAPI-Generator
+
+Afin de mettre à jour les routes du backend dans le frontend, il est nécessaire de lancer le backend.
+
+Une fois lancé, le backend 
+
 ## CmaApi and RechercheEntreprisesApi
 
 Ces projets sont générés à l'aide de l'outil openapi-generator-cli (<https://openapi-generator.tech>).
