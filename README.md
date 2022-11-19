@@ -18,9 +18,9 @@ Les deux applications sont séparées dans leurs dossiers respectifs `Backend/` 
 
 ### Installation des dépendances
 
-```bash
 Il est nécessaire d'installer les dépendances de chaque projet avant de pouvoir les lancer.
 
+```bash
 **backend**
 ```bash
 cd Backend/Artisashop
