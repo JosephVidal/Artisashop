@@ -37,7 +37,8 @@ namespace Artisashop.Controllers
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
 
-                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman").Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
+                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman")
+                    .Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
                 var cmdList = new List<OrderList>();
                 foreach (Basket item in tmpList)
                     cmdList.Add(new OrderList(item, GenPossibleState(item.CurrentState, item.DeliveryOpt)));
@@ -93,8 +94,24 @@ namespace Artisashop.Controllers
                 if (craftsman == null)
                     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
 
-                Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
-                Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
+                Product product =
+                    new Product()
+                    {
+                        Craftsman = craftsman,
+                        Name = order.Name,
+                        Description = order.Desc,
+                        // Price = order.Price,
+                        Styles = _db.Styles
+                            .Where(s => order.StylesIds.Contains(s.Id))
+                            .Select(x => new ProductStyle { StyleId = x.Id })
+                            .ToList(),
+                        Images = new List<ProductImage>()
+                        {
+                            new ProductImage() { Content = "/img/Product/default.png" }
+                        },
+                    };
+                Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN,
+                    GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
                 await _db.SaveChangesAsync();
                 return Ok(basket);
@@ -117,7 +134,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product.Craftsman").SingleOrDefaultAsync(basket => basket.Id == basketId);
+                Basket? basket = await _db.Baskets!.Include("Product.Craftsman")
+                    .SingleOrDefaultAsync(basket => basket.Id == basketId);
 
                 if (basket == null)
                     return NotFound("Basket item with id " + basketId + " not found");
@@ -142,7 +160,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product").FirstOrDefaultAsync(basket => basket.Id == model.Id);
+                Basket? basket = await _db.Baskets!.Include("Product")
+                    .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
                 if (basket == null)
                     return NotFound("Basket with id " + model.Id + " not found");
@@ -150,7 +169,8 @@ namespace Artisashop.Controllers
                 basket.Quantity = model.Quantity == null ? basket.Quantity : (int)model.Quantity;
                 basket.DeliveryOpt = model.DeliveryOpt == null ? basket.DeliveryOpt : (DeliveryOption)model.DeliveryOpt;
                 basket.Product!.Name = model.Name == null ? basket.Product.Name : model.Name;
-                basket.Product!.Description = model.Description == null ? basket.Product.Description : model.Description;
+                basket.Product!.Description =
+                    model.Description == null ? basket.Product.Description : model.Description;
                 basket.Product!.Price = model.Price == null ? basket.Product.Price : model.Price;
                 basket.Product!.Quantity = model.Quantity == null ? basket.Product.Quantity : (int)model.Quantity;
                 _db.Baskets!.Update(basket);
@@ -199,7 +219,7 @@ namespace Artisashop.Controllers
             switch (state)
             {
                 case State.WAITINGCRAFTSMAN:
-                    return new List<State> { State.REFUSED/*, State.WAITINGCONSUMER*/ };
+                    return new List<State> { State.REFUSED /*, State.WAITINGCONSUMER*/ };
                 case State.VALIDATED:
                     if (DeliveryOption.TAKEOUT == delOpt)
                         return new List<State> { State.ONGOING, State.DELIVERY, State.END };

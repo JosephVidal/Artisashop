@@ -1,6 +1,7 @@
 version: "3.9"
 services:
-  artisashop:
+
+  backend:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
@@ -20,6 +21,23 @@ services:
       - mail-tier
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisaback.rule=Host(`${ARTISASHOP_API_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisaback.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisaback.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_API_HOST}/?(.*)"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_API_HOST}/$${3}"
+
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`${ARTISASHOP_API_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.entrypoints=websecure"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME}-core.loadbalancer.server.port=80"
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+
+    labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
@@ -29,6 +47,9 @@ services:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-core.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-core.loadbalancer.server.port=80"
+
+    networks:
+      - traefik-tier
 
 # db:
 #   image: mysql
@@ -99,8 +120,6 @@ volumes:
 
 networks:
   db-tier:
-    driver: bridge
-  parse-tier:
     driver: bridge
   mail-tier:
     driver: bridge
