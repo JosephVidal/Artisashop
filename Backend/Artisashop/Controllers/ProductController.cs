@@ -119,8 +119,8 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.Images = model.Images.Select(x => new ProductImage() { Content = x }).ToList();
-                product.Styles = model.Styles.Select(x => new ProductStyle() { StyleId = x.Id }).ToList();
+                product.ImagesList = JsonSerializer.Serialize(model.Images);
+                product.StylesList = JsonSerializer.Serialize(model.Styles);
                 var success = _db.Products!.Update(product);
                 if (success == null)
                     return BadRequest("Update failed");
