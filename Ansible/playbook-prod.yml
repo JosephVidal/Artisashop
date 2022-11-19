@@ -55,7 +55,7 @@
 
 - name: Launch artisashop project
   hosts: instances
-  remote_user: artisashop
+  remote_user: ubuntu
   roles:
     - artisashop
   vars:
