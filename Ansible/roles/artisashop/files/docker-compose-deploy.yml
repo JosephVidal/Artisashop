@@ -8,7 +8,7 @@ services:
       - PARSE_ARTISASHOP_MASTER_KEY=${PARSE_ARTISASHOP_MASTER_KEY}
       - PARSE_ARTISASHOP_RESTAPI_KEY=${PARSE_ARTISASHOP_RESTAPI_KEY}
     build:
-      context: ./
+      context: ./Backend/Artisashop
       dockerfile: Dockerfile
     expose:
       - 80
@@ -16,7 +16,6 @@ services:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
     networks:
       - traefik-tier
-      - parse-tier
       - db-tier
       - mail-tier
     labels:
