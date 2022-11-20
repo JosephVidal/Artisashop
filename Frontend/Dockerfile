@@ -1,9 +1,11 @@
 ﻿FROM node:18-alpine as build
 RUN ["yarn", "--verions"]
 RUN ["corepack", "enable"]
+RUN ["yarn", "set", "version", "stable"]
 WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
-RUN yarn
+COPY package.json yarn.lock .yarn .yarnrc.yml ./
+RUN yarn install
+RUN ["ls"]
 COPY . ./
 RUN yarn build
 
