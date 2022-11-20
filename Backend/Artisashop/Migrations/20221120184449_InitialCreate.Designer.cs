@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Artisashop.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221118215004_InitialCreate")]
+    [Migration("20221120184449_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,10 @@ namespace Artisashop.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool?>("Suspended")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
@@ -101,6 +105,10 @@ namespace Artisashop.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Validation")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

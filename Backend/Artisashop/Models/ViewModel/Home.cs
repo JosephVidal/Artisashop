@@ -15,4 +15,5 @@ public class Home
     public List<Artisashop.Models.Account> CraftsmanSample { get; set; }
     public List<Product> ProductSample { get; set; }
     public int Inscrit { get; set; }
+    public int Sales { get; set; }
 }

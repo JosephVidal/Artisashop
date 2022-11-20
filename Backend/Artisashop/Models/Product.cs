@@ -57,14 +57,14 @@ namespace Artisashop.Models
         [NotMapped]
         public List<string>? Images
         {
-            get => JsonSerializer.Deserialize<List<string>>(ImagesList);
+            get => ImagesList == null ? new List<string> { } : JsonSerializer.Deserialize<List<string>>(ImagesList);
             set => ImagesList = JsonSerializer.Serialize(Images);
         }
         public string StylesList { get; set; }
         [NotMapped]
         public List<string>? Styles
         {
-            get => JsonSerializer.Deserialize<List<string>>(StylesList);
+            get => StylesList == null ? new List<string> { } : JsonSerializer.Deserialize<List<string>>(StylesList);
             set => StylesList = JsonSerializer.Serialize(Styles);
         }
     }
