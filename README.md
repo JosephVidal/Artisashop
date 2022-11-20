@@ -1,6 +1,63 @@
-# Artichaut
+# Artisashop
 
-Source for the Artichaut EIP (Epitech Innovative Project).
+Source for the Artisashop EIP (Epitech Innovative Project).
+
+## Architecture
+
+Ce projet est un monorepo composé d'un backend en .NET 6 et d'un frontend en React.
+
+Les deux applications sont séparées dans leurs dossiers respectifs `Backend/` et `Frontend/`.
+
+## Développement
+
+### Prérequis
+
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
+- [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
+
+### Installation des dépendances
+
+Il est nécessaire d'installer les dépendances de chaque projet avant de pouvoir les lancer.
+
+```bash
+**backend**
+```bash
+cd Backend/Artisashop
+dotnet restore
+```
+
+**frontend**
+```bash
+cd Frontend
+yarn install
+```
+
+### Lancer le projet
+
+> Par simplicité, il est recommandé d'utiliser deux terminaux séparés pour lancer le backend et le frontend.
+
+```bash
+# Backend
+cd Backend/Artisashop
+dotnet run
+
+# Frontend
+cd Frontend
+yarn start
+```
+
+### Accéder à l'application
+
+L'application est accessible à l'adresse [http://localhost:3000](http://localhost:3000).
+
+L'interface Swagger est disponible à l'adresse [https://localhost:7095/swagger](https://localhost:7095/swagger).
+
+## Mettre à jour le client OpenAPI-Generator
+
+Afin de mettre à jour les routes du backend dans le frontend, il est nécessaire de lancer le backend.
+
+Une fois lancé, le backend 
 
 ## CmaApi and RechercheEntreprisesApi
 
@@ -24,4 +81,5 @@ openapi-generator-cli.cmd generate -g csharp-netcore -i ./cma.openapi.json -o Cm
 openapi-generator-cli.cmd generate -g csharp-netcore -i ./recherche-entreprises.openapi.json -o RechercheEntreprisesApi -c ./recherche-entreprises.openapi.config.yaml
 ```
 
-> Attention, ces clients ne doivent être regénérés qu'en cas de mise à jour de la configuration ou du générateur associé.
+> Attention, ces clients ne doivent être regénérés qu'en cas de mise à jour de la configuration ou du générateur
+> associé.

@@ -1,0 +1,152 @@
+@charset "UTF-8";
+:root {
+  /* --surface-a: #1f2d40;
+  --surface-b: #17212f;
+  --surface-c: rgba(255, 255, 255, 0.03);
+  --surface-d: #304562;
+  --surface-e: #1f2d40;
+  --surface-f: #1f2d40;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --text-color-secondary: rgba(255, 255, 255, 0.6);
+  --primary-color: #1990c6;
+  --primary-color-text: #212529; */
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+
+  --bs-dark: #141C26 !important;
+  --bs-light: #F4EBE1;
+  --bs-white: #F4EBE1;
+  --bs-primary: #5A202E;
+  --bs-secondary: #DC6D04;
+  --bs-tertiary: #79B8F6;
+  --elem-radius: 20px;
+  --bs-hv-dark: rgba(20, 28, 38, 0.25);
+  --bs-hv-light: rgba(244, 235, 225, 0.25);
+
+  --artshp-white: #F4EBE1;
+  --artshp-light-red: #88666f;
+  --artshp-red: #5A202E;
+  --artshp-orange: #DC6D04;
+  --artshp-brown: #452A16;
+  --artshp-dark-blue: #141C26;
+  --artshp-med-blue: #536a86;
+  --artshp-blue: #79B8F6;
+  --artshp-trans: 0.3s;
+  --card-radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Helvetica;
+}
+
+@font-face {
+  font-family: Artisashop;
+  src: url("assets/Fonts/MyBlackford-Regular.ttf");
+}
+
+a, button, input {transition: var(--artshp-trans);}
+
+a:hover {color: var(--artshp-orange);}
+a {color: var(--artshp-white);}
+
+input::placeholder {color: var(--artshp-dark-blue)}
+input:focus {border: solid 1px var(--artshp-orange)}
+input {
+  background-color: var(--bs-white);
+  border: 0;
+  border-radius: var(--elem-radius);
+  padding: 5px;
+  padding-left: 7px;
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+li {list-style: none;}
+
+.disabled {background-color: var(--artshp-light-red) !important;}
+
+.red-button:hover:not(.disabled) {background-color: var(--artshp-orange);}
+.red-button {
+  border-radius: var(--elem-radius);
+  background-color: var(--artshp-red);
+  color: var(--artshp-white);
+  text-decoration: none;
+  font-weight: bolder;
+  padding: 10px 40px;
+  border: 0;
+}
+
+.search-button:hover {
+  background-color: var(--artshp-orange);
+  color: var(--artshp-white);
+}
+.search-button {
+  background-color: var(--artshp-blue);
+  color: var(--artshp-dark-blue);
+  border-radius: var(--elem-radius);
+  border: 0;
+  height: 100%;
+  font-size: 1em;
+  padding: 0px 8px;
+}
+
+.tag {
+   padding: 3px 10px;
+   border-radius: var(--elem-radius);
+   background-color: var(--artshp-brown);
+   color: var(--bs-light);
+ }
+
+.p-dropdown-panel {
+  background: #f4ebe1;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #5a202e;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+  0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.p-dropdown-panel .p-dropdown-items {
+  padding: 0.5rem 0;
+  font-weight: bold;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border: 0 none;
+  color: black;
+  font-weight: bold;
+  background: transparent;
+  transition: box-shadow 0.2s;
+  border-radius: 0;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  color: black;
+  font-weight: bold;
+  background: #f2cec9;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+  color: white;
+  font-weight: bold;
+  background: #5a202e;
+}
+
+.p-inputtext {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.87);
+  padding: 0.5rem 0.5rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+  box-shadow 0.2s;
+  appearance: none;
+  border-radius: 3px;
+}
+
+.search-type-text {
+  font-weight: bold;
+  color: var(--artshp-white);}
+
+#searchType {margin: auto;}
