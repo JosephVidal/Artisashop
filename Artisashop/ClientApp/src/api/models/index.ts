@@ -12,6 +12,7 @@ export * from './ChatPreview';
 export * from './Complaint';
 export * from './ComplaintStatus';
 export * from './Contact';
+export * from './CreateBasket';
 export * from './CreateChatMessage';
 export * from './CreateCustomOrder';
 export * from './CreateProduct';

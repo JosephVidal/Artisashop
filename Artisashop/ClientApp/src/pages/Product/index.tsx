@@ -78,8 +78,11 @@ const changeQuantity = (setQuantity: SetState<number>, max: number) => (value: n
 
 const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
   basketApi.apiBasketPost({
-    productID: id,
-    quantityModifier: quantity
+    createBasket: {
+      productId: id,
+      quantity,
+      currentState: "VALIDATED"
+    }
   })
 
 export default ProductView;
