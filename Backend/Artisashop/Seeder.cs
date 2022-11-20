@@ -66,43 +66,37 @@ public static class Seeder
         {
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "TCOLONNA",
+                Email = "thomas@artisashop.fr",
                 Firstname = "Thomas",
                 Lastname = "Colonna",
             },
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "HGVALOT",
+                Email = "helena@artisashop.fr",
                 Firstname = "Helena",
                 Lastname = "Ganeman-Valot",
             },
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "JVIDAL",
+                Email = "joseph@artisashop.fr",
                 Firstname = "Joseph",
                 Lastname = "Vidal",
             },
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "JEPP",
+                Email = "jean@artisashop.fr",
                 Firstname = "Jean",
                 Lastname = "Epp",
             },
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "GFISCHER",
+                Email = "guillaume@artisashop.fr",
                 Firstname = "Guillaume",
                 Lastname = "Fischer",
             },
             new()
             {
-                Email = "contact@artisashop.fr",
-                UserName = "YOSMONT",
+                Email = "yann@artisashop.fr",
                 Firstname = "Yann",
                 Lastname = "Osmont",
             },
@@ -113,6 +107,7 @@ public static class Seeder
             var password = new PasswordHasher<Account>();
             var hashed = password.HashPassword(account, "Artisashop@2022");
             account.PasswordHash = hashed;
+            account.UserName = account.Email;
 
             var userStore = new UserStore<Account>(dbContext);
             await userStore.CreateAsync(account);
