@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import useAuth from "../../states/auth";
 import { Wrapper } from "./styles";
-import GoogleLogin from "../../components/GoogleLogin";
 
 const Login = () => {
   const auth = useAuth()
@@ -35,9 +34,6 @@ const Login = () => {
             </Form>
           )}
         </Formik>
-        <div>
-          <GoogleLogin />  
-        </div>
         <p>Pas encore inscrit? <Link to="/app/register">Rejoignez-nous</Link> !</p>
       </div>
     </Wrapper>
