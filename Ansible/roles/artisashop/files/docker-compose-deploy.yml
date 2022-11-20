@@ -8,7 +8,7 @@ services:
       - PARSE_ARTISASHOP_MASTER_KEY=${PARSE_ARTISASHOP_MASTER_KEY}
       - PARSE_ARTISASHOP_RESTAPI_KEY=${PARSE_ARTISASHOP_RESTAPI_KEY}
     build:
-      context: ./Backend/Artisashop
+      context: ./Backend
       dockerfile: Dockerfile
     expose:
       - 80
