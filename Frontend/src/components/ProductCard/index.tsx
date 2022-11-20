@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ProductCardWrapper } from "./styles";
 
 interface Props {
@@ -15,14 +16,14 @@ const ProductCard: React.FunctionComponent<Props> = ({
     price,
 }) => (
   <ProductCardWrapper>
-    <a id="product-card" href="/product/test">
+    <Link id="product-card" to="/app/product/test">
         <img src={img} alt="" />
         <div>
             <p id="product-name">{name}</p>
             <p id="product-serie">{serie}</p>
             <p id="product-price">{price}€</p>
         </div>
-    </a>
+    </Link>
   </ProductCardWrapper>
 );
 
