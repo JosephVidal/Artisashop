@@ -88,6 +88,8 @@ namespace Artisashop.Migrations
                     AddressGPSId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Suspended = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Validation = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),

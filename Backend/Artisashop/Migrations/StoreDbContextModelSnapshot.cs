@@ -89,6 +89,10 @@ namespace Artisashop.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool?>("Suspended")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
@@ -99,6 +103,10 @@ namespace Artisashop.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Validation")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
