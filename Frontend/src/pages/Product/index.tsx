@@ -4,6 +4,7 @@ import { Product } from "api/models/Product";
 import { SetState } from "globals/state";
 import QuantityInput from "components/QuantityInuput";
 import { BasketApi } from "api";
+import { ProductApi } from "../../api";
 import useApi from "hooks/useApi";
 import { Wrapper, Craftsman, Tag } from "./styles";
 
@@ -11,36 +12,21 @@ const ProductView = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState<number>(1);
   const basketApi = useApi(BasketApi);
-  const product: Product =
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description 1",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 2,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    }
-  // const [product, setProduct] = useState<Product | null>(null);
+  const productApi = useApi(ProductApi);
+  const [product, setProduct] = useState<Product | null>(null);
   const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
   const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.png", [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
   useEffect(() => {
-    if (id) {
-      fetch(`/api/product/info/${id}`)
-      .then(response => response.json())
-      // .then(data => setProduct(data as Product));
+    const getProducts = async () => {
+      if (id) {
+        const result = await productApi.apiProductInfoProductIdGet({productId: id});
+        setProduct(result ?? null);
+      }
     }
+    getProducts();
   }, [id]);
 
   return (

@@ -175,7 +175,7 @@ export const Wrapper = styled.div`
     }
 
 
-    #search-block {
+    #search-result-block {
         padding: 20px;
         border-left: solid 2px var(--bs-dark);
     }

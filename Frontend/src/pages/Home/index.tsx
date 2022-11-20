@@ -39,8 +39,12 @@ const Home: React.FunctionComponent<Props> = () => {
                 </button>
               </label>
               <div id="searchType">
-                <Field type="checkbox" name="searchType"/>
-                <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
+                <label className="switch">
+                  <Field type="checkbox" name="searchType"/>
+                  <span className="slider round" />
+                </label>
+                {/* <Field type="checkbox" name="searchType" className="form-switch"/> */}
+                {/* <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} /> */}
                 <label className="wordCarousel" htmlFor="SearchType">
                   <span className="search-type-text">{type}</span>
                 </label>
@@ -52,9 +56,9 @@ const Home: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500}/>
-          <ProductCard img="img/product/table à thé.jpg" serie="Pièce unique" name="table chouette et pas cher" price={30}/>
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="tabouret" price={200}/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Pièce unique" name="table chouette et pas cher" price={30} href="/app/product/test"/>
+          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="tabouret" price={200} href="/app/product/test"/>
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>

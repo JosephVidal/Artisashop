@@ -44,11 +44,6 @@ section {
         font-size: 8em;
         margin: 0;
     }
-
-    #search-block {
-        display: flex;
-        flex-direction: row;
-    }
 }
 
 .section-body {
@@ -107,7 +102,16 @@ section {
     color: var(--artshp-red);
 }
 
-.wordCarousel {color: var(--artshp-white);}
+#searchType, .wordCarousel {margin-left: 10px;}
+
+.wordCarousel {
+    color: var(--artshp-white);
+    height: 100%;
+}
+
+.search-type-text {
+    margin: auto 0;
+}
 
 .flip2 {
     animation: flip2 1s cubic-bezier(0.23, 1, 0.32, 1.2);
