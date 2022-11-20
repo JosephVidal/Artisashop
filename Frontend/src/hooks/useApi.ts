@@ -17,7 +17,7 @@ const useApi = <T,>(Api: { new(config: Configuration): T; }): T => {
       basePath: REACT_APP_API_URL,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
+        "Authorization": `Bearer ${token || ""}`,
       }
     }
     return token
