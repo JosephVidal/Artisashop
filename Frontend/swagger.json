@@ -2343,6 +2343,15 @@
         "tags": [
           "Product"
         ],
+        "parameters": [
+          {
+            "name": "sellerId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "400": {
             "description": "Bad Request",
