@@ -17,7 +17,7 @@ const ProductView = () => {
       name: "Product 1",
       description: "Description 1",
       price: 10,
-      images: ["default.png"],
+      images: ["table à thé.jpg"],
       craftsmanId: "fakeID",
       quantity: 2,
       craftsman: {
@@ -48,7 +48,7 @@ const ProductView = () => {
       <div id="product-page">
         <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
           <div role="listbox">
-            <img className="carrousel-img active" alt="600x600" src={productImg} data-holder-rendered="true" />
+            <img className="carrousel-img" alt="600x600" src={productImg} />
           </div>
         </div>
         <div id="product-info">

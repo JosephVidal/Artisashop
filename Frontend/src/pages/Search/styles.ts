@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const SearchHeader = styled.div`
     display: flex;
-    padding: 5px;
+    padding: 15px;
     flex-direction: row;
     background-color: #2F3B4B;
 
@@ -23,16 +23,22 @@ export const SearchHeader = styled.div`
     ul {margin: 0;}
 
     label {margin: auto 0;}
+
+    #search-bar {
+        display: flex;
+        flex-direction: row;
+        margin-right: 4%;
+    }
 `;
 
-export const SearchFilter = styled.aside`
+export const SearchFilters = styled.aside`
     position: sticky;
     max-height: 20vh;
     bottom: 10vh;
-    font-family: Helvetica;
     color: var(--bs-dark);
     width: 15vw;
     padding: 20px;
+    width: 20vw;
 
     .filter {
         &:not(:last-child) {padding-bottom: 20px;}
@@ -86,6 +92,8 @@ export const SearchBar = styled.div`
 `;
 
 export const Wrapper = styled.div`
+    color: var(--artshp-dark-blue);
+
     .search {
         padding-top: 56px;
 
@@ -179,10 +187,7 @@ export const Wrapper = styled.div`
         align-items: flex-start;
         width: 80vw;
 
-        h2 {
-            font-family: Helvetica, sans-serif;
-            font-weight: lighter;
-        }
+        h2 {font-weight: lighter;}
     }
 
     #resultList {

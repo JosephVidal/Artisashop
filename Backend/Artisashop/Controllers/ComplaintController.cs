@@ -27,9 +27,16 @@ public class ComplaintController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Complaint>> Get()
+    public async Task<IEnumerable<Complaint>> Get(string? userId = null, int? productId = null)
     {
-        return await _storeDbContext.Complaints.ToListAsync();
+        IQueryable<Complaint> query = _storeDbContext.Complaints;
+        if (userId != null) {
+            query = query.Where(x => x.UserId == userId);
+        }
+        if (productId != null) {
+            query = query.Where(x => x.ProductId == productId);
+        }
+        return await query.ToListAsync();
     }
 
     [HttpGet("{id}")]

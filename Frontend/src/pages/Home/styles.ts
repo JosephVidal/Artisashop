@@ -14,7 +14,7 @@ section {
 
 .search-input {width: 20vw;}
 
-.search-button {
+/* .search-button {
     border: 0;
     color: var(--artshp-white);
     border-radius: var(--elem-radius);
@@ -25,7 +25,7 @@ section {
         background-color: var(--bs-light);
         color: var(--bs-dark);
     }
-}
+} */
 
 #search-section {
     display: flex;
@@ -33,8 +33,8 @@ section {
     justify-content: center;
     flex-direction: column;
     height: 80vh;
-    background-image: url("img/home background.jpg");
-    background-size: contain;
+    background-image: url("/img/home background.jpg");
+    background-size: cover;
     background-attachment: fixed;
 
     h1 {
