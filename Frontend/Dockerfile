@@ -1,4 +1,5 @@
 ﻿FROM node:18-alpine as build
+RUN ["corepack", "enable"]
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn
