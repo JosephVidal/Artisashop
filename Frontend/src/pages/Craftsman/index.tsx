@@ -58,6 +58,7 @@ const CraftsmanView = () => {
             name={elem.name}
             price={elem.price}
             href={`/app/product/${elem?.id}`}
+            styles={elem?.stylesList ?? ""}
           />
         ))}
       </ProductsList>

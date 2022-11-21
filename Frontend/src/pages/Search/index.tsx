@@ -96,7 +96,7 @@ const Search: React.FunctionComponent<Props> = () => {
           <section id="search-result-block">
             <h2>Résultats pour : {searchParams.get("q")}</h2>
             <div id="result-list">
-              {productResult?.map(elem => <ProductCard img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
+              {productResult?.map(elem => <ProductCard styles={elem?.stylesList ?? ""} img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
               {accountResult?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.png"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
             </div>
           </section>
@@ -104,8 +104,8 @@ const Search: React.FunctionComponent<Props> = () => {
         <div id="suggestions">
           <h2>Pour vous :</h2>
           <div id="suggestions-wrapper">
-            <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
-            <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
+            <ProductCard styles="LouisXV" img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
+            <ProductCard styles="LouisXV" img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
           </div>
         </div>
       </div>
