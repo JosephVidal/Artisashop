@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import ProductCard from "components/ProductCard";
 import CraftsmanresultCard from "components/CraftsmanresultCard";
 import { useSearchParams } from "react-router-dom";
@@ -9,27 +9,50 @@ import { Wrapper, SearchHeader, SearchFilters } from "./styles";
 
 interface Props {}
 
+interface FilterCheckboxProps {
+  name: string,
+  // id: number,
+  checked: boolean,
+}
+
 const Search: React.FunctionComponent<Props> = () => {
   const [searchType, setType] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [productResult, setProductresult] = useState<Product[] | null>(null);
   const [accountResult, setAccountresult] = useState<Account[] | null>(null);
+  const [stylesFilters, setStylesfilters] = useState<FilterCheckboxProps[] | null>(null);
+  const [jobFilters, setjobfilters] = useState<FilterCheckboxProps[] | null>(null);
   const api = useApi(SearchApi);
   const type = searchType ? "Par produit" : "Par métier";
+  const filteredProducts = useMemo(() => productResult
+    ?.filter(value => stylesFilters?.filter(f => !!value?.styles
+    ?.filter(s => s === f.name))),
+    [productResult, stylesFilters]);
+  const filteredCraftsman = useMemo(() => accountResult
+    ?.filter(value => jobFilters?.filter(f => value?.job)),
+    [accountResult, jobFilters]);
+  // const filteredCraftsman = useMemo(() => accountResult?.filter(value => jobFilters?.filter(f => value?.job === f)),
+  //   [accountResult, jobFilters]);
 
   useEffect(
     () => {
       const search = async () => {
         if (searchParams.get("t") === "true") {
           const result = await api.apiSearchProductGetRaw({name: searchParams.get("q") ?? ""});
-          setProductresult(await result.value());
+          const products = await result.value();
+
+          setProductresult(products);
           setAccountresult(null);
           setType(true);
+          setStylesfilters(products.reduce<FilterCheckboxProps[]>((accumulator, current) => accumulator.concat(current.styles?.map<FilterCheckboxProps>(elem => ({name: elem, checked: false})) ?? []), []).filter(value => !!value?.name));
         } else {
           const result = await api.apiSearchCraftsmanGetRaw({job: searchParams.get("q") ?? ""});
-          setAccountresult(await result.value());
+          const accounts = await result.value();
+
+          setAccountresult(accounts);
           setProductresult(null);
           setType(false);
+          setjobfilters(accounts.reduce<FilterCheckboxProps[]>((accumulator, current) => accumulator.concat([{name: current.job ?? "", checked: false}]), []).filter(value => !!value.name));
         }
       };
       search();
@@ -59,7 +82,7 @@ const Search: React.FunctionComponent<Props> = () => {
             <div id="searchType">
               <label className="switch">
                 <Field type="checkbox" name="searchType"/>
-                <span className="slider round" />
+                <span className="round search-slider" />
               </label>
               <label className="wordCarousel" htmlFor="SearchType">
                 <span className="search-type-text">{type}</span>
@@ -67,11 +90,11 @@ const Search: React.FunctionComponent<Props> = () => {
             </div>
           </Form>
         </Formik>
-          <span>
+          <span className="category">
             <a href="#search" className="search-header-link">Mobilier 🪑</a>
             <a href="#search" className="search-header-link">Poterie 🏺</a>
           </span>
-          <span>
+          <span className="category">
             <a href="#search" className="search-header-link">Arts de la table 🍴</a>
             <a href="#search" className="search-header-link">Vêtements 👗</a>
           </span>
@@ -84,20 +107,30 @@ const Search: React.FunctionComponent<Props> = () => {
                   <input type="range" min="0" className="slider" id="distance" />
               </div> */}
             <div className="filter">
-                <h2>Styles</h2>
-                <ul id="styles">
-                  <li>
-                    <input type="checkbox" />
-                    <span>test</span>
-                  </li>
-                </ul>
+              <h2>Filtres</h2>
+              <ul id="styles">
+                {stylesFilters?.map(elem =>
+                    <li key={elem.name}>
+                      <input type="checkbox" value={elem.checked.toString()}/>
+                      {elem.name}
+                    </li>
+                  )
+                }
+                {jobFilters?.map(elem =>
+                    <li key={elem.name}>
+                      <input type="checkbox" value={elem.checked.toString()}/>
+                      {elem.name}
+                    </li>
+                  )
+                }
+              </ul>
             </div>
           </SearchFilters>
           <section id="search-result-block">
             <h2>Résultats pour : {searchParams.get("q")}</h2>
             <div id="result-list">
-              {productResult?.map(elem => <ProductCard styles={elem?.stylesList ?? ""} img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
-              {accountResult?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.png"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
+              {filteredProducts?.map(elem => <ProductCard styles={elem?.stylesList ?? ""} img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
+              {filteredCraftsman?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.png"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
             </div>
           </section>
         </div>
