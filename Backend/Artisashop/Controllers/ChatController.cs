@@ -42,13 +42,30 @@ namespace Artisashop.Controllers
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
+                List<ChatPreview> chatPreviewReceiver = new();
+                List<ChatPreview> chatPreviewSender = new();
                 List<ChatPreview> chatPreview = new();
-                var groups = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).AsEnumerable()
-                    .GroupBy(d => d.Sender);
-                foreach (var group in groups)
-                {
-                    ChatMessage? mostRecent = group.Last();
-                    chatPreview.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
+                var groupsReceiver = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Sender!.Id == account.Id).AsEnumerable().GroupBy(d => d.Receiver);
+                var groupsSender = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Receiver!.Id == account.Id).AsEnumerable().GroupBy(d => d.Sender);
+                foreach (var group in groupsReceiver) {
+                    ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
+                    chatPreviewReceiver.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
+                }
+                foreach (var group in groupsSender) {
+                    ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
+                    chatPreviewSender.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
+                }
+                foreach (ChatPreview CPR in chatPreviewReceiver) {
+                    List<ChatPreview> CPS = chatPreviewSender.Where(x => x.LastMsg!.Sender!.Id == CPR.LastMsg!.Receiver!.Id).ToList();
+                    if (CPS.Count() != 0) {
+                        chatPreview.Add((CPR.LastMsg.CreatedAt > CPS[0].LastMsg.CreatedAt) ? CPR : CPS[0]);
+                        chatPreviewSender.Remove(CPS[0]);
+                    } else {
+                        chatPreview.Add(CPR);
+                    }
+                }
+                foreach (ChatPreview CPS in chatPreviewSender) {
+                    chatPreview.Add(CPS);
                 }
 
                 return Ok(chatPreview);
