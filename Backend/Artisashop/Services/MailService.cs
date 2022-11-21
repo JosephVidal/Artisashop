@@ -1,4 +1,4 @@
-﻿namespace Artisashop.Services.MailService;
+﻿namespace Artisashop.Services;
 
 using System.Net.Mail;
 using Artisashop.Interfaces.IService;

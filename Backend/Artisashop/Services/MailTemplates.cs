@@ -1,4 +1,4 @@
-namespace Artisashop.Services.MailService;
+namespace Artisashop.Services;
 
 using Artisashop.Models;
 using Artisashop.Models.Enum;
