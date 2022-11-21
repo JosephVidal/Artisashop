@@ -5,6 +5,7 @@ export const CraftsmanCardWrapper = styled.div`
         background-color: white;
         border-radius: var(--elem-radius);
         padding: 20px;
+        margin: 10px;
         width: 500px;
 
         p {

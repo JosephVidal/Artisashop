@@ -49,6 +49,7 @@ section {
 .section-body {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
     margin-top: 80px;
 }
@@ -80,7 +81,7 @@ section {
     height: 80vh;
     align-items: center;
 
-    p {margin-bottom: 30%}
+    p {margin-bottom: 60px}
 
     div {
         height: 100%;
@@ -133,5 +134,17 @@ section {
     0% {margin-top: -53px;}
 
     100% {margin-top: -5px;}
+}
+
+@media (max-width: 1300px) {
+    #register-section {
+        div {font-size: 1.5em;}
+    }
+}
+
+@media (max-width: 930px) {
+    #register-section {
+        div {font-size: 1em;}
+    }
 }
 `;

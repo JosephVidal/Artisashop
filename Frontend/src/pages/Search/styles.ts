@@ -20,7 +20,7 @@ export const SearchHeader = styled.div`
         :not(:first-child) {margin-left: 15px;}
     }
 
-    ul {margin: 0;}
+    ul {padding: 0;}
 
     label {margin: auto 0;}
 
@@ -205,6 +205,14 @@ export const Wrapper = styled.div`
 
                 &:hover {color: var(--bs-secondary);}
             }
+        }
+    }
+
+    @media (max-width: 930px) {
+        .category {
+            flex-direction: column;
+            justify-content: right;
+            width: auto;
         }
     }
 `;

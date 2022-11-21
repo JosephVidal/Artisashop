@@ -28,4 +28,13 @@ export const CraftsmanresultCardWrapper = styled.div`
     #craftsman-name {font-size: 1.5em;}
 
     #craftsman-job {font-weight: lighter}
+
+    @media (max-width: 930px) {
+        #craftsman-result-card {
+            img {
+                height: 150px;
+                width: 150px;
+            }
+        }
+    }
 `;
