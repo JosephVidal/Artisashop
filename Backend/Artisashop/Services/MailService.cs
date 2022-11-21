@@ -1,7 +1,7 @@
 ﻿namespace Artisashop.Services;
 
 using System.Net.Mail;
-using Artisashop.Interfaces.IService;
+using Interface;
 
 public class MailService : IMailService
 {

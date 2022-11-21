@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using System.Net;
-using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Artisashop.Models.Enum;
 using Artisashop.Models.ViewModel;
@@ -11,6 +10,7 @@ using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Interface;
 using static Artisashop.Models.Basket;
 
 [ApiController]

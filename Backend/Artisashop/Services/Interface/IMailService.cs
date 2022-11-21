@@ -1,4 +1,4 @@
-﻿namespace Artisashop.Interfaces.IService;
+﻿namespace Artisashop.Services.Interface;
 
 /// <summary>
 /// Interface for cookie service

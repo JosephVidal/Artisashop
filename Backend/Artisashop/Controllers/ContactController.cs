@@ -2,10 +2,10 @@
 
 using System.Diagnostics;
 using System.Net;
-using Artisashop.Interfaces.IService;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interface;
 
 /// <summary>
 /// Handles contacts to artisashop

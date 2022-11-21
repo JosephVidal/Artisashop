@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;

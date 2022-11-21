@@ -1,12 +1,12 @@
 ﻿namespace Artisashop.Controllers;
 
 using System.Net;
-using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interface;
 
 /// <summary>
 /// This controller displays the admin interface
