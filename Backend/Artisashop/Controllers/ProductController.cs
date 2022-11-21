@@ -44,6 +44,7 @@ namespace Artisashop.Controllers
                 {
                     query = query.Where(p => p.CraftsmanId == sellerId);
                 }
+
                 List<Product> products = await query.ToListAsync();
                 if (!products.Any())
                     return NotFound("Didn't find any products");
@@ -69,7 +70,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Product product = await _db.Products!.Include("Craftsman").FirstAsync(product => product.Id == productId);
+                Product product =
+                    await _db.Products!.Include("Craftsman").FirstAsync(product => product.Id == productId);
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 return Ok(product);
@@ -92,8 +94,23 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Account account = await _utils.GetFromCookie(Request, _db);
-                Product product = new(model, account);
+                
+                Account? account = await _utils.GetFromCookie(Request, _db);
+                if (account == null)
+                {
+                    return Unauthorized("You are not logged in");
+                }
+                
+                
+                Product product = new Product
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    Craftsman = account,
+                    CraftsmanId = account.Id,
+                    Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList(),
+                };
 
                 var success = await _db.Products!.AddAsync(product);
                 if (success == null)
@@ -124,7 +141,15 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.ImagesList = JsonSerializer.Serialize(model.Images);
+                product.Images= model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+                
+                var styles = await _db.Styles.Where(s => s.Name != null && model.Styles.Contains(s.Name)).ToListAsync();
+                var newStyles = model.Styles.Where(s => !styles.Any(st => st.Name == s)).Select(s => new Style() { Name = s }).ToList();
+                await _db.Styles.AddRangeAsync(newStyles);
+                await _db.SaveChangesAsync();
+                await _db.Styles.Where();
+                
+                product.images = JsonSerializer.Serialize(model.Images);
                 product.StylesList = JsonSerializer.Serialize(model.Styles);
                 var success = _db.Products!.Update(product);
                 if (success == null)

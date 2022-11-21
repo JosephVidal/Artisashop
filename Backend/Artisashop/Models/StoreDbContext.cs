@@ -20,7 +20,9 @@ namespace Artisashop.Models
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
         public virtual DbSet<Style> Styles { get; set; } = null!;
         public virtual DbSet<Complaint> Complaints { get; set; } = null!;
-
+        public virtual DbSet<ProductStyle> ProductStyles { get; set; } = null!;
+        public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
+    
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -41,6 +43,19 @@ namespace Artisashop.Models
                         .ValueGeneratedOnUpdate();
                 }
             }
+            
+            builder.Entity<Product>()
+                .HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .HasForeignKey(p => p.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Product>()
+                .HasMany(p => p.Styles)
+                .WithOne(s => s.Product)
+                .HasForeignKey(s => s.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

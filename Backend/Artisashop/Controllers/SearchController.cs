@@ -38,9 +38,11 @@ namespace Artisashop.Controllers
                     query = query.Where(item => item.Name.Contains(search.Name));
                 if (search.Job != null && search.Job != "")
                     query = query.Where(item => item.Craftsman != null && item.Craftsman.Job == search.Job);
-                if (search.Styles != null)
-                    foreach (string style in search.Styles)
-                        query = query.Where(item => item.StylesList != null && item.StylesList.Contains(style));
+                if (search.StyleIds != null)
+                {
+                    var styles = _db.ProductStyles.Where(ps => search.StyleIds.Contains(ps.Id)).ToList();
+                    query = query.Where(item => item.Styles != null && item.Styles.Any(style => styles.Contains(style)));
+                }
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
                     query = query.Where(item => item.Craftsman != null && item.Craftsman.AddressGPS != null && Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance);
                 return Ok(await query.ToListAsync());

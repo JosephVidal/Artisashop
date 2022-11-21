@@ -62,7 +62,7 @@ namespace Artisashop.Services
 
         public async Task<Account> GetFromCookie(HttpRequest request, StoreDbContext db)
         {
-            string? token = request.Headers["Authorization"].ToString().Split(" ")[1];
+            var token = request.Headers.Authorization.ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             var jwt = handler.ReadJwtToken(token);
             var username = jwt.Claims.First(claim => claim.Type == "sub").Value;

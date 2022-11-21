@@ -235,8 +235,11 @@ public static class Seeder
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
-            .RuleFor(o => o.StylesList,
-                f => JsonSerializer.Serialize(f.PickRandom(dbContext.Styles.ToList(), 3).Select(x => x.Id)));
+            .RuleFor(o => o.Styles,
+                f => f.PickRandom(dbContext.Styles
+                    .Select(x => new ProductStyle() { StyleId = x.Id }).ToList(), f.Random.Int(1, 5)))
+            .RuleFor(o => o.Images,
+                f => new List<ProductImage>() { new ProductImage() { Content = "" } });
         var products = productsFaker.Generate(100);
         dbContext.Products.AddRange(products);
         await dbContext.SaveChangesAsync();
