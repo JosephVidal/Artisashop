@@ -4,7 +4,6 @@ using Artisashop;
 using Artisashop.Hubs;
 using Artisashop.Interfaces.IService;
 using Artisashop.Models;
-using Artisashop.Services;
 using Artisashop.Services.MailService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Artisashop.Configurations;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Artisashop.Helpers;
 
 // Add services to DI container
 var builder = WebApplication.CreateBuilder(args);

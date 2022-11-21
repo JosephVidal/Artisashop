@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Artisashop.Controllers
 {
+    using Helpers;
+
     /// <summary>
     /// Handles product display and interactions
     /// </summary>

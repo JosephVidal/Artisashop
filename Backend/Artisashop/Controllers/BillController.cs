@@ -8,6 +8,7 @@ using Artisashop.Models.Enum;
 using Artisashop.Models.ViewModel;
 using Artisashop.Services;
 using Artisashop.Services.MailService;
+using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

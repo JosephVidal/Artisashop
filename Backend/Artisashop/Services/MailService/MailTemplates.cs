@@ -2,6 +2,7 @@ namespace Artisashop.Services.MailService;
 
 using Artisashop.Models;
 using Artisashop.Models.Enum;
+using Helpers;
 
 public struct MailTemplates
 {

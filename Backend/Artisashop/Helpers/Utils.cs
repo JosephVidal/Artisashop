@@ -1,4 +1,4 @@
-namespace Artisashop.Services;
+namespace Artisashop.Helpers;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
