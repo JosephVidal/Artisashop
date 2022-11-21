@@ -35,7 +35,7 @@ namespace Artisashop.Controllers
             {
                 IQueryable<Product> query = _db.Products!.Include(item => item.Craftsman).AsQueryable();
                 if (search.Name != null && search.Name != "")
-                    query = query.Where(item => item.Name == search.Name);
+                    query = query.Where(item => item.Name.Contains(search.Name));
                 if (search.Job != null && search.Job != "")
                     query = query.Where(item => item.Craftsman != null && item.Craftsman.Job == search.Job);
                 if (search.Styles != null)
