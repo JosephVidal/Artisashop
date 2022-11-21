@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Account} from "api/models/Account";
+import {Product} from "api/models/Product";
 import ProductCard from "components/ProductCard";
 import {Wrapper, ProductsList, Craftsman} from "./styles";
 import useApi from "../../hooks/useApi";
@@ -9,6 +10,7 @@ import {AccountApi, ProductApi} from "../../api";
 const CraftsmanView = () => {
   const { id } = useParams();
   const [account, setAccount] = useState<Account | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(null);
   const accountApi = useApi(AccountApi);
   const productApi = useApi(ProductApi);
   const craftsmantImg = useMemo(() => account?.profilePicture ? `/img/craftsman/${account?.profilePicture}` : "/img/craftsman/default.png", [account]);
@@ -17,7 +19,7 @@ const CraftsmanView = () => {
   const craftsmanJob = useMemo(() => account?.job, [account]);
   const craftsmanDescription = useMemo(() => account?.biography, [account]);
   const craftsmanAddress = useMemo(() => account?.address, [account]);
-  const craftsmanProducts = useMemo(() => account?., [account]);
+  const craftsmanProducts = useMemo(() => products, [products]);
 
   useEffect(() => {
     const update = async () => {
@@ -28,8 +30,8 @@ const CraftsmanView = () => {
     }
     const getProducts = async () => {
       if (id) {
-        const result = await productApi.apiProductGet();
-        setAccount(result ?? null);
+        const result = await productApi.apiProductGet({sellerId: id});
+        setProducts(result ?? null);
       }
     }
     update();
@@ -44,6 +46,7 @@ const CraftsmanView = () => {
           <div id="craftsman">
             <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
             <p id="job">{craftsmanJob}</p>
+            <p>{craftsmanAddress}</p>
           </div>
         </Craftsman>
         <p id="bio">{craftsmanDescription}</p>
