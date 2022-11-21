@@ -1,84 +1,11 @@
 import React, {useEffect, useState} from "react";
-import { InputSwitch } from 'primereact/inputswitch';
 import ProductCard from "components/ProductCard";
 import CraftsmanresultCard from "components/CraftsmanresultCard";
 import { useSearchParams } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
-import useAsync from "hooks/useAsync";
 import { Account, Product, SearchApi } from "../../api";
-import { Wrapper, SearchHeader, SearchFilters, SearchBar } from "./styles";
-
-const defaultResults: Product[] = [
-  {
-    id: 1,
-    name: "Product 1",
-    description: "Description 1",
-    price: 10,
-    images: ["/img/product/table à thé.jpg"],
-    craftsmanId: "fakeID",
-    quantity: 10,
-    craftsman: {
-      id: "fakeID",
-      firstname: "John",
-      lastname: "Doe",
-      job: "Fake job",
-      biography: "Fake description",
-      address: "Fake address",
-    }
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    description: "Description 2",
-    price: 10,
-    images: ["/img/product/table à thé.jpg"],
-    craftsmanId: "fakeID",
-    quantity: 10,
-    craftsman: {
-      id: "fakeID",
-      firstname: "John",
-      lastname: "Doe",
-      job: "Fake job",
-      biography: "Fake description",
-      address: "Fake address",
-    }
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    description: "Description 3",
-    price: 10,
-    images: ["/img/product/table à thé.jpg"],
-    craftsmanId: "fakeID",
-    quantity: 10,
-    craftsman: {
-      id: "fakeID",
-      firstname: "John",
-      lastname: "Doe",
-      job: "Fake job",
-      biography: "Fake description",
-      address: "Fake address",
-    }
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    description: "Description 4",
-    price: 10,
-    images: ["/img/product/table à thé.jpg"],
-    craftsmanId: "fakeID",
-    quantity: 10,
-    craftsman: {
-      id: "fakeID",
-      firstname: "John",
-      lastname: "Doe",
-      job: "Fake job",
-      biography: "Fake description",
-      address: "Fake address",
-    }
-  },
-];
+import { Wrapper, SearchHeader, SearchFilters } from "./styles";
 
 interface Props {}
 
@@ -88,7 +15,7 @@ const Search: React.FunctionComponent<Props> = () => {
   const [productResult, setProductresult] = useState<Product[] | null>(null);
   const [accountResult, setAccountresult] = useState<Account[] | null>(null);
   const api = useApi(SearchApi);
-  const type = "Par produit";
+  const type = searchType ? "Par produit" : "Par métier";
 
   useEffect(
     () => {
@@ -97,10 +24,12 @@ const Search: React.FunctionComponent<Props> = () => {
           const result = await api.apiSearchProductGetRaw({name: searchParams.get("q") ?? ""});
           setProductresult(await result.value());
           setAccountresult(null);
+          setType(true);
         } else {
           const result = await api.apiSearchCraftsmanGetRaw({job: searchParams.get("q") ?? ""});
           setAccountresult(await result.value());
           setProductresult(null);
+          setType(false);
         }
       };
       search();
@@ -120,64 +49,24 @@ const Search: React.FunctionComponent<Props> = () => {
             setSearchParams({"q": values.searchStr, "t": values.searchType.toString()});
           }}
         >
-          {({ isSubmitting }) => (
-            // <Form id="search-bar">
-            //   <label htmlFor="SearchStr">
-            //     <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..."/>
-            //     <button type="submit" id="sendButton" className="search-button">
-            //       <i className="fas fa-search"/>
-            //     </button>
-            //   </label>
-            //   <div id="searchType">
-            //     <Field type="checkbox" name="searchType" />
-            //     <label className="switch">
-            //       <Field type="checkbox" name="searchType"/>
-            //       <span className="slider round" />
-            //     </label>
-            //     {/* <InputSwitch checked={searchType} onChange={(e) => {setType(e.value); type = e.value ? "Par artisan" : "Par produit"}} /> */}
-            //     <label className="wordCarousel" htmlFor="SearchType">
-            //       <span className="search-type-text">{type}</span>
-            //     </label>
-            //   </div>
-            // </Form>
-            <Form id="search-block">
-              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..."/>
-              <label htmlFor="SearchStr">
-                <button type="submit" id="sendButton" className="search-button">
-                  <i className="fas fa-search"/>
-                </button>
-              </label>
-              <div id="searchType">
-                <label className="switch">
-                  <Field type="checkbox" name="searchType"/>
-                  <span className="slider round" />
-                </label>
-                {/* <Field type="checkbox" name="searchType" className="form-switch"/> */}
-                {/* <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} /> */}
-                <label className="wordCarousel" htmlFor="SearchType">
-                  <span className="search-type-text">{type}</span>
-                </label>
-              </div>
-            </Form>
-          )}
-        </Formik>
-          {/* <SearchBar>
-            <input className="search-input" placeholder="Rechercher..."/>
+          <Form id="search-block">
+            <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..."/>
             <label htmlFor="SearchStr">
               <button type="submit" id="sendButton" className="search-button">
                 <i className="fas fa-search"/>
               </button>
             </label>
             <div id="searchType">
-              <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
+              <label className="switch">
+                <Field type="checkbox" name="searchType"/>
+                <span className="slider round" />
+              </label>
               <label className="wordCarousel" htmlFor="SearchType">
-                <ul className={`text-start ${searchType ? "flip2": "flip3"} fs-5`}>
-                  <li>By product</li>
-                  <li>By craftsman</li>
-                </ul>
+                <span className="search-type-text">{type}</span>
               </label>
             </div>
-          </SearchBar> */}
+          </Form>
+        </Formik>
           <span>
             <a href="#search" className="search-header-link">Mobilier 🪑</a>
             <a href="#search" className="search-header-link">Poterie 🏺</a>
@@ -208,7 +97,7 @@ const Search: React.FunctionComponent<Props> = () => {
             <h2>Résultats pour : {searchParams.get("q")}</h2>
             <div id="result-list">
               {productResult?.map(elem => <ProductCard img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
-              {accountResult?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? ""} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
+              {accountResult?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.png"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
             </div>
           </section>
         </div>

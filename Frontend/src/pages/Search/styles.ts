@@ -79,18 +79,6 @@ export const SearchFilters = styled.aside`
     }
 `;
 
-export const SearchBar = styled.div`
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    margin: auto 0;
-
-    #searchType {
-        display: flex;
-        height: auto;
-    }
-`;
-
 export const Wrapper = styled.div`
     color: var(--artshp-dark-blue);
 
