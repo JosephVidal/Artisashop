@@ -124,8 +124,7 @@ const Chat: FC = () => {
         <ConversationTitle>
           {conversation.history.length !== 0 && (
             <div>
-              Conversation avec
-              {conversation.history[0].sender!.id !== user!.id ?
+              Conversation avec {conversation.history[0].sender!.id !== user!.id ?
                 conversation.history[0].sender!.userName! :
                 conversation.history[0].receiver!.userName!}
             </div>

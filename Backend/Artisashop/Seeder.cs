@@ -243,4 +243,39 @@ public static class Seeder
 
         return result;
     }
+
+    /// <summary>
+    /// Seeds some messages for the application.
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    /// <exception cref="Exception"></exception>
+    public static async Task SeedMessages(IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+
+        var sender = dbContext.Users.FirstOrDefault(i => i.Email == "joseph@artisashop.fr");
+        var receiver = dbContext.Users.FirstOrDefault(i => i.Email == "helena@artisashop.fr");
+
+        Console.WriteLine("Hello outside");
+        if (sender != null && receiver != null)
+        {
+            Console.WriteLine("Hello");
+            var Messages = new List<ChatMessage>()
+            {
+                new()
+                {
+                    SenderId = sender.Id,
+                    ReceiverId = receiver.Id,
+                    Content = "Carré"
+                },
+            };
+
+            foreach (var message in Messages)
+            {
+                dbContext.ChatMessages.Add(message);
+                await dbContext.SaveChangesAsync();
+            } 
+        }
+    }
 }

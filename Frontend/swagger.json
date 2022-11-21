@@ -1265,24 +1265,25 @@
         "tags": [
           "Basket"
         ],
-        "parameters": [
-          {
-            "name": "productID",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "quantityModifier",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBasket"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBasket"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBasket"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "400": {
             "description": "Bad Request",
@@ -3235,6 +3236,31 @@
           "receiver": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateBasket": {
+        "required": [
+          "currentState",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentState": {
+            "$ref": "#/components/schemas/State"
           }
         },
         "additionalProperties": false

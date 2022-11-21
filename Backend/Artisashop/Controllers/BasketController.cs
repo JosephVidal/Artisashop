@@ -65,22 +65,22 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Redirect)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Add([FromQuery] int productID, [FromQuery] int quantityModifier)
+        public async Task<IActionResult> Add([FromBody] CreateBasket newBasket)
         {
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
-                Basket? basket = await _db.Baskets!.Include("Product").FirstOrDefaultAsync(basket => basket.AccountId == account.Id && basket.CurrentState == State.WAITINGCONSUMER && basket.ProductId == productID);
+                Basket? basket = await _db.Baskets!.Include("Product").FirstOrDefaultAsync(basket => basket.AccountId == account.Id && basket.CurrentState == newBasket.CurrentState && basket.ProductId == newBasket!.ProductId);
 
                 if (basket != null)
                 {
-                    basket.Quantity = quantityModifier;
+                    basket.Quantity = newBasket.Quantity;
                     return RedirectToAction("Update", basket);
                 }
 
-                Product product = await _db.Products!.SingleAsync(product => product.Id == productID);
+                Product product = await _db.Products!.SingleAsync(product => product.Id == newBasket.ProductId);
 
-                basket = (await _db.Baskets!.AddAsync(new(account, product, Math.Min(quantityModifier, product.Quantity), DeliveryOption.DELIVERY, State.WAITINGCONSUMER,
+                basket = (await _db.Baskets!.AddAsync(new(account, product, Math.Min(newBasket.Quantity, product.Quantity), DeliveryOption.DELIVERY, newBasket.CurrentState,
                     Enum.GetValues(typeof(State)).Cast<State>().ToList()))).Entity;
 
                 await _db.SaveChangesAsync();
