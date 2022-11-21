@@ -171,8 +171,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.AddScoped<IMailService, MailService>();
-builder.Services.AddScoped<IUtils, Utils>();
-
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();

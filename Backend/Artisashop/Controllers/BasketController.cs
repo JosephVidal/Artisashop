@@ -21,7 +21,6 @@ using static Artisashop.Models.Basket;
 public class BasketController : ControllerBase
 {
     private readonly StoreDbContext _db;
-    private readonly Utils _utils = new();
 
     public BasketController(StoreDbContext db)
     {
@@ -39,23 +38,26 @@ public class BasketController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
-            List<Basket> basket = await _db.Baskets
-                .Include(basket => basket.Product)
-                .Where(basket =>
-                    basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER)
-                .ToListAsync();
+            // Account account = await Utils.GetFromCookie(Request, _db);
+            // List<Basket> basket = await _db.Baskets
+                // .Include(basket => basket.Product)
+                // .Where(basket =>
+                    // basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER)
+                // .ToListAsync();
 
-            foreach (Basket elem in basket)
-            {
-                Account? craftsman =
-                    await _db.Users!.FirstOrDefaultAsync(account => account.Id == elem.Product!.CraftsmanId!);
-                if (craftsman == null)
-                    return BadRequest("Craftman missing in product: " + elem.Product!.Id);
-                elem.Product!.Craftsman = craftsman;
-            }
+            // foreach (Basket elem in basket)
+            // {
+                // Account? craftsman =
+                    // await _db.Users!.FirstOrDefaultAsync(account => account.Id == elem.Product!.CraftsmanId!);
+                // if (craftsman == null)
+                    // return BadRequest("Craftman missing in product: " + elem.Product!.Id);
+                // elem.Product!.Craftsman = craftsman;
+            // }
 
-            return Ok(basket);
+            // return Ok(basket);
+            
+            //TODO: Implement basket
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {
@@ -77,38 +79,41 @@ public class BasketController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
-            var basket = await _db.Baskets
-                .Include("Product")
-                .FirstOrDefaultAsync(basket =>
-                    basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER &&
-                    basket.ProductId == productID);
-
-            if (basket != null)
-            {
-                basket.Quantity = quantityModifier;
-                return RedirectToAction("Update", basket);
-            }
-
-            Product product = await _db.Products!.SingleAsync(product => product.Id == productID);
-
-            var newBasket = new Basket()
-            {
-                Account = account,
-                Product = product,
-                Quantity = Math.Min(quantityModifier, product.Quantity),
-                DeliveryOpt = DeliveryOption.DELIVERY,
-                CurrentState = DeliveryState.WAITINGCONSUMER,
-                PossibleState = NextDeliveryStates
-                    .GetNextDeliveryStates(DeliveryState.WAITINGCONSUMER, DeliveryOption.DELIVERY)
-                    .Select(x => new BasketPossibleState() { DeliveryState = x })
-                    .ToList(),
-            };
-
-            var elem = await _db.Baskets.AddAsync(newBasket);
-
-            await _db.SaveChangesAsync();
-            return Ok(elem.Entity);
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
+            // var basket = await _db.Baskets
+            //     .Include("Product")
+            //     .FirstOrDefaultAsync(basket =>
+            //         basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER &&
+            //         basket.ProductId == productID);
+            //
+            // if (basket != null)
+            // {
+            //     basket.Quantity = quantityModifier;
+            //     return RedirectToAction("Update", basket);
+            // }
+            //
+            // Product product = await _db.Products!.SingleAsync(product => product.Id == productID);
+            //
+            // var newBasket = new Basket()
+            // {
+            //     Account = account,
+            //     Product = product,
+            //     Quantity = Math.Min(quantityModifier, product.Quantity),
+            //     DeliveryOpt = DeliveryOption.DELIVERY,
+            //     CurrentState = DeliveryState.WAITINGCONSUMER,
+            //     PossibleState = NextDeliveryStates
+            //         .GetNextDeliveryStates(DeliveryState.WAITINGCONSUMER, DeliveryOption.DELIVERY)
+            //         .Select(x => new BasketPossibleState() { DeliveryState = x })
+            //         .ToList(),
+            // };
+            //
+            // var elem = await _db.Baskets.AddAsync(newBasket);
+            //
+            // await _db.SaveChangesAsync();
+            // return Ok(elem.Entity);
+            
+            // TODO: Implement basket
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {
@@ -196,19 +201,22 @@ public class BasketController : ControllerBase
             if (address == "")
                 return BadRequest("Adresse Invalide");
 
-            Account account = await _utils.GetFromCookie(Request, _db);
-            List<Basket> basket = await _db.Baskets!.Include(basket => basket.Product).Where(basket =>
-                    basket.AccountId == account.Id && (basket.CurrentState == DeliveryState.WAITINGCONSUMER ||
-                                                       basket.CurrentState == DeliveryState.WAITINGCRAFTSMAN))
-                .ToListAsync();
-            double totPrice = 0;
-
-            if (basket.Count == 0)
-                return NotFound("No basket item found");
-            foreach (Basket elem in basket)
-                totPrice += (double)elem.Product!.Price! * elem.Quantity +
-                            (elem.DeliveryOpt == DeliveryOption.DELIVERY ? 20 : 0);
-            return Ok(new { basket, address, totPrice });
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
+            // List<Basket> basket = await _db.Baskets!.Include(basket => basket.Product).Where(basket =>
+            //         basket.AccountId == account.Id && (basket.CurrentState == DeliveryState.WAITINGCONSUMER ||
+            //                                            basket.CurrentState == DeliveryState.WAITINGCRAFTSMAN))
+            //     .ToListAsync();
+            // double totPrice = 0;
+            //
+            // if (basket.Count == 0)
+            //     return NotFound("No basket item found");
+            // foreach (Basket elem in basket)
+            //     totPrice += (double)elem.Product!.Price! * elem.Quantity +
+            //                 (elem.DeliveryOpt == DeliveryOption.DELIVERY ? 20 : 0);
+            // return Ok(new { basket, address, totPrice });
+            
+            // TODO: Implement basket
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {

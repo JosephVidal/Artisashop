@@ -7,19 +7,15 @@ using Artisashop.Interfaces.IService;
 using Artisashop.Models;
 using Microsoft.EntityFrameworkCore;
 
-public class Utils : IUtils
+public static class RandomUtils
 {
-    public Utils()
-    {
-    }
-
     /// <summary>
     /// Get a random number between two numbers
     /// </summary>
     /// <param name="min">Minimum value</param>
     /// <param name="max">Maximum value</param>
     /// <returns>A number</returns>
-    public int RandomNumber(int min, int max)
+    public static int RandomNumber(int min, int max)
     {
         Random random = new();
         return random.Next(min, max);
@@ -30,7 +26,7 @@ public class Utils : IUtils
     /// </summary>
     /// <param name="size">Size of the string to generate</param>
     /// <returns>A string</returns>
-    public string RandomString(int size)
+    public static string RandomString(int size)
     {
         StringBuilder builder = new();
         Random random = new();
@@ -49,7 +45,7 @@ public class Utils : IUtils
     /// </summary>
     /// <param name="size">Size of the string to generate</param>
     /// <returns>A code</returns>
-    public string RandomCode(int size)
+    public static string RandomCode(int size)
     {
         StringBuilder builder = new();
         if (size <= 5)
@@ -58,26 +54,5 @@ public class Utils : IUtils
         builder.Append(RandomNumber(1000, 9999));
         builder.Append(RandomString((size - 4) / 3));
         return builder.ToString();
-    }
-
-    public async Task<Account> GetFromCookie(HttpRequest request, StoreDbContext db)
-    {
-        var token = request.Headers.Authorization.ToString().Replace("Bearer ", "");
-        var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
-        var username = jwt.Claims.First(claim => claim.Type == "sub").Value;
-        return await db.Users!.SingleAsync(u => u.UserName == username);
-    }
-
-    public void UpdateObject(object modelToUpdate, object modelUpdating)
-    {
-        PropertyInfo[] properties = modelToUpdate.GetType().GetProperties();
-        PropertyInfo[] propertiesBis = modelUpdating.GetType().GetProperties();
-        foreach (PropertyInfo property in properties)
-        {
-            foreach (PropertyInfo propertyBis in propertiesBis)
-                if (property.Name == propertyBis.Name)
-                    property.SetValue(modelToUpdate, propertyBis.GetValue(modelUpdating));
-        }
     }
 }

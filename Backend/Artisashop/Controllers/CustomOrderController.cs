@@ -18,7 +18,6 @@ using static Artisashop.Models.Basket;
 public class CustomOrderController : ControllerBase
 {
     private readonly StoreDbContext _db;
-    private readonly Utils _utils = new();
 
     public CustomOrderController(StoreDbContext db)
     {
@@ -37,14 +36,17 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
+            //
+            // List<OrderList> tmpList = await _db.Baskets!.Include("Product.Craftsman")
+            //     .Where(basket => basket.Product!.Craftsman!.Id == account.Id)
+            //     .Select(x =>
+            //         new OrderList(x, NextDeliveryStates.GetNextDeliveryStates(x.CurrentState, x.DeliveryOpt)))
+            //     .ToListAsync();
+            // return Ok(tmpList);
 
-            List<OrderList> tmpList = await _db.Baskets!.Include("Product.Craftsman")
-                .Where(basket => basket.Product!.Craftsman!.Id == account.Id)
-                .Select(x =>
-                    new OrderList(x, NextDeliveryStates.GetNextDeliveryStates(x.CurrentState, x.DeliveryOpt)))
-                .ToListAsync();
-            return Ok(tmpList);
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {
@@ -90,41 +92,44 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
-            Account? craftsman = await _db.Users!.SingleOrDefaultAsync(account => account.Id == order.CraftsmanId);
-
-            if (craftsman == null)
-                return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
-
-            var styles = await CreateStyles(order.Styles);
-
-            Product product =
-                new Product()
-                {
-                    Name = order.Name,
-                    Description = order.Description,
-                    Price = order.Price,
-                    Quantity = order.Quantity,
-                    CraftsmanId = order.CraftsmanId,
-                    Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList(),
-                };
-
-            Basket basket = new Basket()
-            {
-                Account = account,
-                Product = product,
-                Quantity = order.Quantity,
-                DeliveryOpt = DeliveryOption.DELIVERY,
-                CurrentState = DeliveryState.WAITINGCRAFTSMAN,
-                PossibleState = NextDeliveryStates
-                    .GetNextDeliveryStates(DeliveryState.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY)
-                    .Select(ds => new BasketPossibleState() { DeliveryState = ds })
-                    .ToList(),
-            };
-
-            await _db.Baskets!.AddAsync(basket);
-            await _db.SaveChangesAsync();
-            return Ok(basket);
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
+            // Account? craftsman = await _db.Users!.SingleOrDefaultAsync(account => account.Id == order.CraftsmanId);
+            //
+            // if (craftsman == null)
+            //     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
+            //
+            // var styles = await CreateStyles(order.Styles);
+            //
+            // Product product =
+            //     new Product()
+            //     {
+            //         Name = order.Name,
+            //         Description = order.Description,
+            //         Price = order.Price,
+            //         Quantity = order.Quantity,
+            //         CraftsmanId = order.CraftsmanId,
+            //         Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList(),
+            //     };
+            //
+            // Basket basket = new Basket()
+            // {
+            //     Account = account,
+            //     Product = product,
+            //     Quantity = order.Quantity,
+            //     DeliveryOpt = DeliveryOption.DELIVERY,
+            //     CurrentState = DeliveryState.WAITINGCRAFTSMAN,
+            //     PossibleState = NextDeliveryStates
+            //         .GetNextDeliveryStates(DeliveryState.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY)
+            //         .Select(ds => new BasketPossibleState() { DeliveryState = ds })
+            //         .ToList(),
+            // };
+            //
+            // await _db.Baskets!.AddAsync(basket);
+            // await _db.SaveChangesAsync();
+            // return Ok(basket);
+            
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {

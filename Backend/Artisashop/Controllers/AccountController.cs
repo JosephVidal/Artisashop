@@ -30,7 +30,6 @@ public class AccountController : ControllerBase
     private readonly UserManager<Account> _userManager;
     private readonly IConfiguration _configuration;
     private readonly StoreDbContext _db;
-    private readonly IUtils _utils;
     private readonly FranceConnectConfiguration _franceConnectConfiguration;
     private readonly ILogger<AccountController> _logger;
     private readonly HttpClient _opencageDataClient = new HttpClient();
@@ -40,7 +39,6 @@ public class AccountController : ControllerBase
         SignInManager<Account> signInManager,
         IConfiguration configuration,
         StoreDbContext db,
-        IUtils utils,
         IOptions<FranceConnectConfiguration> franceConnectConfiguration,
         ILoggerFactory loggerFactory)
     {
@@ -48,7 +46,6 @@ public class AccountController : ControllerBase
         _signInManager = signInManager;
         _configuration = configuration;
         _db = db;
-        _utils = utils;
         _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
 
@@ -153,9 +150,11 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
+            // TODO: FIX
+            // Account account = await RandomUtils.GetFromCookie(Request, _db);
 
-            return Ok(account);
+            // return Ok(account);
+            throw new NotImplementedException();
         }
         catch (Exception ex)
         {
@@ -244,12 +243,14 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
+            // Account account = await Utils.GetFromCookie(Request, _db);
 
-            _utils.UpdateObject(account, model);
-            await _userManager!.UpdateAsync(account);
-            await _db.SaveChangesAsync();
-            return Ok(account);
+            // _utils.UpdateObject(account, model);
+            // await _userManager!.UpdateAsync(account);
+            // await _db.SaveChangesAsync();
+            // return Ok(account);
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception ex)
         {
@@ -264,11 +265,14 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
+            // Account account = await _utils.GetFromCookie(Request, _db);
 
-            await _userManager.DeleteAsync(account);
-            await _db.SaveChangesAsync();
-            return Ok("User with id " + account.UserName + " successfully deleted");
+            // await _userManager.DeleteAsync(account);
+            // await _db.SaveChangesAsync();
+            // return Ok("User with id " + account.UserName + " successfully deleted");
+            
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception ex)
         {

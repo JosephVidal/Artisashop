@@ -21,7 +21,6 @@ public class BillController : ControllerBase
 {
     private readonly IMailService _mailService;
     private readonly StoreDbContext _db;
-    private readonly Utils _utils = new();
 
     public BillController(IMailService mailService, StoreDbContext db)
     {
@@ -40,29 +39,32 @@ public class BillController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
-            List<Basket> basket = await _db.Baskets!.Where(basket =>
-                    basket.AccountId == account.Id && (basket.CurrentState == DeliveryState.WAITINGCONSUMER ||
-                                                       basket.CurrentState == DeliveryState.WAITINGCRAFTSMAN))
-                .ToListAsync();
-            PaypalBill paypalBill = new();
-            PaypalBill.PurchaseUnitElem tmpPUE = new();
-            double tot = 0;
-
-            foreach (Basket basketElem in basket)
-            {
-                var product = await _db.Products!.SingleAsync(product => product.Id == basketElem.ProductId);
-                if (product == null)
-                    return BadRequest("Product id not found: " + basketElem.ProductId);
-                basketElem.Product = product;
-                tmpPUE.Items!.Add(new(basketElem.Product.Name!, basketElem.Product.Description, basketElem.Quantity,
-                    "EUR", (double)basketElem.Product.Price!));
-                tot += (double)basketElem.Product.Price! * basketElem.Quantity;
-            }
-
-            tmpPUE.Amount = new("EUR", tot);
-            paypalBill.PurchaseUnits.Add(tmpPUE);
-            return Ok(paypalBill);
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
+            // List<Basket> basket = await _db.Baskets!.Where(basket =>
+            //         basket.AccountId == account.Id && (basket.CurrentState == DeliveryState.WAITINGCONSUMER ||
+            //                                            basket.CurrentState == DeliveryState.WAITINGCRAFTSMAN))
+            //     .ToListAsync();
+            // PaypalBill paypalBill = new();
+            // PaypalBill.PurchaseUnitElem tmpPUE = new();
+            // double tot = 0;
+            //
+            // foreach (Basket basketElem in basket)
+            // {
+            //     var product = await _db.Products!.SingleAsync(product => product.Id == basketElem.ProductId);
+            //     if (product == null)
+            //         return BadRequest("Product id not found: " + basketElem.ProductId);
+            //     basketElem.Product = product;
+            //     tmpPUE.Items!.Add(new(basketElem.Product.Name!, basketElem.Product.Description, basketElem.Quantity,
+            //         "EUR", (double)basketElem.Product.Price!));
+            //     tot += (double)basketElem.Product.Price! * basketElem.Quantity;
+            // }
+            //
+            // tmpPUE.Amount = new("EUR", tot);
+            // paypalBill.PurchaseUnits.Add(tmpPUE);
+            // return Ok(paypalBill);
+            
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {
@@ -81,53 +83,56 @@ public class BillController : ControllerBase
     {
         try
         {
-            Account account = await _utils.GetFromCookie(Request, _db);
+            // Account account = await _randomUtils.GetFromCookie(Request, _db);
 
-            List<Basket> basket = await _db.Baskets!.Include("Product.Craftsman").Where(basket =>
-                basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER).ToListAsync();
-            List<string> craftsmanIDs = new();
-            List<Bill> bills = new();
-            foreach (Basket item in basket)
-            {
-                Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == item.Product!.CraftsmanId!);
-                if (craftsman == null)
-                    return BadRequest("Craftsman not found, id: " + item.Product!.CraftsmanId);
-                Bill tmp = new(craftsman.Firstname + " " + craftsman.Lastname,
-                    account.Firstname + " " + account.Lastname,
-                    item.Product!.Name!,
-                    item.Quantity,
-                    (double)item.Product.Price! * item.Quantity);
-                bills.Add(tmp);
-                await _db.Bills!.AddAsync(tmp);
-                item.Product.Quantity += 0 - item.Quantity;
-                item.CurrentState = DeliveryState.VALIDATED;
-                _db.Update(item);
-                if (!craftsmanIDs.Contains(item.Product.CraftsmanId!))
-                    craftsmanIDs.Add(item.Product.CraftsmanId!);
-            }
+            // List<Basket> basket = await _db.Baskets!.Include("Product.Craftsman").Where(basket =>
+            //     basket.AccountId == account.Id && basket.CurrentState == DeliveryState.WAITINGCONSUMER).ToListAsync();
+            // List<string> craftsmanIDs = new();
+            // List<Bill> bills = new();
+            // foreach (Basket item in basket)
+            // {
+            //     Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == item.Product!.CraftsmanId!);
+            //     if (craftsman == null)
+            //         return BadRequest("Craftsman not found, id: " + item.Product!.CraftsmanId);
+            //     Bill tmp = new(craftsman.Firstname + " " + craftsman.Lastname,
+            //         account.Firstname + " " + account.Lastname,
+            //         item.Product!.Name!,
+            //         item.Quantity,
+            //         (double)item.Product.Price! * item.Quantity);
+            //     bills.Add(tmp);
+            //     await _db.Bills!.AddAsync(tmp);
+            //     item.Product.Quantity += 0 - item.Quantity;
+            //     item.CurrentState = DeliveryState.VALIDATED;
+            //     _db.Update(item);
+            //     if (!craftsmanIDs.Contains(item.Product.CraftsmanId!))
+            //         craftsmanIDs.Add(item.Product.CraftsmanId!);
+            // }
 
-            try
-            {
-                foreach (string craftsmanID in craftsmanIDs)
-                {
-                    Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == craftsmanID);
-                    if (craftsman == null)
-                        return BadRequest("Craftsman account not found, id: " + craftsmanID);
-                    List<Basket> tmpBasket = basket.FindAll(x => x.Product.CraftsmanId == craftsmanID);
-                    _mailService.SendMail(craftsman.Email, "Artisashop - You have sold an item",
-                        MailTemplates.ItemSold(account, tmpBasket));
-                }
+            // try
+            // {
+            //     foreach (string craftsmanID in craftsmanIDs)
+            //     {
+            //         Account? craftsman = await _db.Users!.SingleAsync(account => account.Id == craftsmanID);
+            //         if (craftsman == null)
+            //             return BadRequest("Craftsman account not found, id: " + craftsmanID);
+            //         List<Basket> tmpBasket = basket.FindAll(x => x.Product.CraftsmanId == craftsmanID);
+            //         _mailService.SendMail(craftsman.Email, "Artisashop - You have sold an item",
+            //             MailTemplates.ItemSold(account, tmpBasket));
+            //     }
+            //
+            //     _mailService.SendMail(account.Email, "Artisashop - You have bought an item",
+            //         MailTemplates.ItemBought(bills));
+            // }
+            // catch (Exception)
+            // {
+            //     Debug.WriteLine("BasketSold - email not send");
+            // }
+            //
+            // await _db.SaveChangesAsync();
+            // return Ok(bills);
 
-                _mailService.SendMail(account.Email, "Artisashop - You have bought an item",
-                    MailTemplates.ItemBought(bills));
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("BasketSold - email not send");
-            }
-
-            await _db.SaveChangesAsync();
-            return Ok(bills);
+            // TODO: FIX
+            throw new NotImplementedException();
         }
         catch (Exception e)
         {

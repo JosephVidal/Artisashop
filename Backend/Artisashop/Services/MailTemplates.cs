@@ -6,8 +6,6 @@ using Helpers;
 
 public struct MailTemplates
 {
-    private readonly static Utils _utils = new();
-
     public static string AccountCreated(string url)
     {
         return @"<html lang='en'>
@@ -928,7 +926,7 @@ public struct MailTemplates
                         <div class='card p-sm-2 dark m-auto mt-3'>
                             <div class='card-body'>
                                 <h1 class='card-title text-center mb-0 mt-1'>Password Recovery</h1>
-                                Here is a new password for your account :\n" + _utils.RandomCode(10) + @"
+                                Here is a new password for your account :\n" + RandomUtils.RandomCode(10) + @"
                             </div>
                         </div>
                     </div>

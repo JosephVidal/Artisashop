@@ -21,7 +21,6 @@ namespace Artisashop.Controllers
     public class ProductController : ControllerBase
     {
         private readonly StoreDbContext _db;
-        private readonly Utils _utils = new();
 
         public ProductController(StoreDbContext db)
         {
@@ -96,35 +95,38 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Account? account = await _utils.GetFromCookie(Request, _db);
-                if (account == null)
-                {
-                    return Unauthorized("You are not logged in");
-                }
+                // Account? account = await _randomUtils.GetFromCookie(Request, _db);
+                // if (account == null)
+                // {
+                //     return Unauthorized("You are not logged in");
+                // }
+                //
+                //
+                // Product product = new Product
+                // {
+                //     Name = model.Name,
+                //     Description = model.Description,
+                //     Price = model.Price,
+                //     Craftsman = account,
+                //     CraftsmanId = account.Id,
+                //     Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList(),
+                // };
+                //
+                // var success = await _db.Products!.AddAsync(product);
+                // if (success == null)
+                //     return BadRequest("Creation failed");
+                //
+                // await _db.SaveChangesAsync();
+                //
+                // var ret = _db.Products
+                //     .Include(x => x.Images)
+                //     .Include(x => x.Styles)!
+                //     .ThenInclude(x => x.Style)
+                //     .FirstOrDefault(x => x.Id == product.Id);
+                // return Ok(success.Entity);
 
-
-                Product product = new Product
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    Price = model.Price,
-                    Craftsman = account,
-                    CraftsmanId = account.Id,
-                    Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList(),
-                };
-
-                var success = await _db.Products!.AddAsync(product);
-                if (success == null)
-                    return BadRequest("Creation failed");
-
-                await _db.SaveChangesAsync();
-
-                var ret = _db.Products
-                    .Include(x => x.Images)
-                    .Include(x => x.Styles)!
-                    .ThenInclude(x => x.Style)
-                    .FirstOrDefault(x => x.Id == product.Id);
-                return Ok(success.Entity);
+                // TODO: FIX
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
@@ -146,22 +148,25 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Product? product = await _db.Products!.FirstOrDefaultAsync(product => product.Id == productId);
-                if (product == null)
-                    return NotFound("Product with id " + productId + " not found");
-                _utils.UpdateObject(product, model);
-                product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+                // Product? product = await _db.Products!.FirstOrDefaultAsync(product => product.Id == productId);
+                // if (product == null)
+                //     return NotFound("Product with id " + productId + " not found");
+                // _randomUtils.UpdateObject(product, model);
+                // product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+                //
+                // var styles = await CreateStyles(model.Styles);
+                // product.Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList();
+                //
+                // product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+                //
+                // var success = _db.Products!.Update(product);
+                // if (success == null)
+                //     return BadRequest("Update failed");
+                // await _db.SaveChangesAsync();
+                // return Ok(product);
 
-                var styles = await CreateStyles(model.Styles);
-                product.Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList();
-
-                product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
-
-                var success = _db.Products!.Update(product);
-                if (success == null)
-                    return BadRequest("Update failed");
-                await _db.SaveChangesAsync();
-                return Ok(product);
+                // TODO : FIX
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
