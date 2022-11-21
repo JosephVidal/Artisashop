@@ -1,10 +1,9 @@
-﻿namespace Artisashop.Interfaces.IService
+﻿namespace Artisashop.Interfaces.IService;
+
+/// <summary>
+/// Interface for cookie service
+/// </summary>
+public interface IMailService
 {
-    /// <summary>
-    /// Interface for cookie service
-    /// </summary>
-    public interface IMailService
-    {
-        public bool SendMail(string to, string subject, string bodyText);
-    }
+    public bool SendMail(string to, string subject, string bodyText);
 }

@@ -1,3 +1,5 @@
+using Artisashop.Models.ViewModel;
+
 namespace Artisashop.Models;
 
 public class AccountToken

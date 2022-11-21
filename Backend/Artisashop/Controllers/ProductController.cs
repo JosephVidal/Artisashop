@@ -119,7 +119,7 @@ namespace Artisashop.Controllers
 
                 var ret = _db.Products
                     .Include(x => x.Images)
-                    .Include(x => x.Styles)
+                    .Include(x => x.Styles)!
                     .ThenInclude(x => x.Style)
                     .FirstOrDefault(x => x.Id == product.Id);
                 return Ok(success.Entity);

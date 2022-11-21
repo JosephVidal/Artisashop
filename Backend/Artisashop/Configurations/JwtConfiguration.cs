@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Artisashop.Configurations;
 
 using System.Text.Json.Serialization;

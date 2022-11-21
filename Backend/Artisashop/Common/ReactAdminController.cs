@@ -1,9 +1,7 @@
 ﻿using System.Linq.Dynamic.Core;
-using System.Net.Http.Headers;
 
 namespace Artisashop.Common;
 
-using Artisashop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

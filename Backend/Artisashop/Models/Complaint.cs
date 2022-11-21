@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Artisashop.Models.Interface;
+﻿namespace Artisashop.Models;
 
-namespace Artisashop.Models;
+using System.ComponentModel.DataAnnotations;
+using Artisashop.Models.Interface;
 
 public class Complaint : IIdentifiable, ICreatedAt, IUpdatedAt
 {
@@ -9,13 +9,10 @@ public class Complaint : IIdentifiable, ICreatedAt, IUpdatedAt
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    [Required]
-    public string? Title { get; set; }
-    [Required]
-    public string? Description { get; set; }
+    [Required] public string? Title { get; set; }
+    [Required] public string? Description { get; set; }
 
-    [Required]
-    public string UserId { get; set; } = null!;
+    [Required] public string UserId { get; set; } = null!;
     public virtual Account? User { get; set; }
 
     public int? ProductId { get; set; }

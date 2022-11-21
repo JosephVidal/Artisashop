@@ -1,7 +1,6 @@
-﻿using Artisashop.Models.ViewModel.Accounts;
+﻿namespace Artisashop.Controllers;
 
-namespace Artisashop.Controllers;
-
+using Artisashop.Models.ViewModel.Accounts;
 using Artisashop.Configurations;
 using Artisashop.Helpers;
 using System.IdentityModel.Tokens.Jwt;
@@ -277,81 +276,6 @@ public class AccountController : ControllerBase
         }
     }
 
-    //
-    // POST: /Account/ExternalLogin
-    [HttpPost("external-login")]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public IActionResult ExternalLogin(string provider, string? returnUrl = null)
-    {
-        // Request a redirect to the external login provider.
-        var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        return new ChallengeResult(provider, properties);
-    }
-
-    //
-    // GET: /Account/ExternalLoginCallback
-    [HttpGet("external-login-callback")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(ExternalLoginConfirmationViewModel), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null)
-    {
-        var info = await _signInManager.GetExternalLoginInfoAsync();
-        if (info == null)
-        {
-            return RedirectToAction(nameof(Login));
-        }
-
-        // acr_values are mapped to this authnclassreference claim by .NET
-        string? acrValues = info.Principal?.FindFirst("http://schemas.microsoft.com/claims/authnclassreference")?.Value;
-        if (!Validation.IsEIdasLevelMet(acrValues!, _franceConnectConfiguration.EIdasLevel))
-        {
-            // TODO: Figure that out
-            // await HttpContext.SignOutAsync(FranceConnectConfiguration.ProviderScheme, new AuthenticationProperties { RedirectUri = Url.Action(nameof(Login), null, null, Request.Scheme) });
-            throw new UnauthorizedAccessException("Requested EIdas level not met");
-        }
-
-        // Sign in the user with this external login provider if the user already has a login.
-        var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-        if (user != null)
-        {
-            if (await _userManager.IsLockedOutAsync(user))
-            {
-                // TODO: replace
-                // return View("Lockout");
-                return Ok();
-            }
-
-            await _signInManager.SignInAsync(user, info.AuthenticationProperties, info.LoginProvider);
-            _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-            // TODO: replace
-            // return RedirectToLocal(returnUrl ?? Url.Action(nameof(ManageController.PivotIdentity), "Manage"));
-            return Ok(returnUrl ?? Url.Action(nameof(ManageController.PivotIdentity), "Manage"));
-        }
-        else
-        {
-            // TODO: replace
-            // If the user does not have an account, then ask the user to create an account.
-            // ViewData["ReturnUrl"] = returnUrl;
-            // ViewData["LoginProvider"] = info.ProviderDisplayName;
-
-            DateTime.TryParseExact(info.Principal.FindFirstValue("birthdate"), "yyyy-MM-dd", new CultureInfo("fr-FR"),
-                DateTimeStyles.AssumeUniversal, out DateTime parsedBirthDate);
-            ExternalLoginConfirmationViewModel model = new()
-            {
-                Email = info.Principal.FindFirstValue("email"),
-                Gender = info.Principal.FindFirstValue("gender"),
-                Birthdate = parsedBirthDate,
-                PreferredName = info.Principal.FindFirstValue("preferred_username"),
-                GivenName = info.Principal.FindFirstValue("given_name"),
-                FamilyName = info.Principal.FindFirstValue("family_name")
-            };
-            // return View("ExternalLoginConfirmation", model);
-            return Ok(model);
-        }
-    }
-
     private Task<string> GenerateJwtToken(Account user)
     {
         var roles = _userManager.GetRolesAsync(user).Result;
@@ -400,6 +324,7 @@ public class AccountController : ControllerBase
         }
     }*/
 
+    // TODO: Put this into a Helper class
     private async Task<GPSCoord> AddressToGPSCoord(string address)
     {
         string GoogleKey = "acdfe36c88484444850da3d8adb97890";
@@ -417,9 +342,11 @@ public class AccountController : ControllerBase
         return (ret != null) ? ret : new GPSCoord();
     }
 
+    // TODO: Put this into a Helper class
     private string FormatErrorMessages(IEnumerable<IdentityError> errors)
         => ConcatErrorMessages(errors.Select(x => $"{x.Code} - {x.Description}"));
 
+    // TODO: Put this into a Helper class
     private string ConcatErrorMessages(IEnumerable<string> messages)
         => string.Join(", ", messages);
 }

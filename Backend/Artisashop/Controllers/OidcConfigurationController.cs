@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace Artisashop.Controllers;
 
-namespace Artisashop.Controllers;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Mvc;
 
 public class OidcConfigurationController : Controller
 {

@@ -35,13 +35,13 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
     public GPSCoord? AddressGPS { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public List<Basket>? Baskets { get; set; }
-    public List<Bill>? Bills { get; set; }
+    public List<Basket>? Baskets { get; set; } = new ();
+    public List<Bill>? Bills { get; set; } = new ();
     [Required] public bool? Suspended { get; set; }
 
     #region Seller
 
-    public List<Product>? Products { get; set; }
+    public List<Product>? Products { get; set; } = new ();
     [Required] public bool? Validation { get; set; }
 
     #endregion

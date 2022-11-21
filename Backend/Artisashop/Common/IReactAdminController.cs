@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace Artisashop.Common;
 
-namespace Artisashop.Common;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// React Admin の バックエンド用インターフェースです。

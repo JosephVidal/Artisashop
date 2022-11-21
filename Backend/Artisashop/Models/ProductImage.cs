@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Artisashop.Models.Interface;
+﻿namespace Artisashop.Models;
 
-namespace Artisashop.Models;
+using System.ComponentModel.DataAnnotations;
+using Artisashop.Models.Interface;
 
 public class ProductImage : IIdentifiable, ICreatedAt
 {

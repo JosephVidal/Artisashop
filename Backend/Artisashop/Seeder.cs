@@ -1,11 +1,11 @@
-﻿using Artisashop.Models;
+﻿namespace Artisashop;
+
+using Artisashop.Models;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-namespace Artisashop;
 
 public static class Seeder
 {

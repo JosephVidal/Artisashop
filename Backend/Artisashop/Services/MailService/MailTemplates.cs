@@ -1,14 +1,15 @@
+namespace Artisashop.Services.MailService;
+
 using Artisashop.Models;
+using Artisashop.Models.Enum;
 
-namespace Artisashop.Services.MailService
+public struct MailTemplates
 {
-    public struct MailTemplates
-    {
-        private readonly static Utils _utils = new();
+    private readonly static Utils _utils = new();
 
-        public static string AccountCreated(string url)
-        {
-            return @"<html lang='en'>
+    public static string AccountCreated(string url)
+    {
+        return @"<html lang='en'>
         <head>
             <meta charset='utf-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -903,16 +904,16 @@ namespace Artisashop.Services.MailService
             </div>
         </body>
         </html>";
-        }
+    }
 
-        public static string ConfirmEmail(string url)
-        {
-            return "Welcome,\n" +
-                    "Here is the confirmation link for your email: " +
-                    url + ".\n";
-        }
+    public static string ConfirmEmail(string url)
+    {
+        return "Welcome,\n" +
+               "Here is the confirmation link for your email: " +
+               url + ".\n";
+    }
 
-        public static readonly string RetrievePassword = @"<html lang='en'>
+    public static readonly string RetrievePassword = @"<html lang='en'>
                 <head>
                     <meta charset='utf-8' />
                     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -933,9 +934,9 @@ namespace Artisashop.Services.MailService
                 </body>
                 </html>";
 
-        public static string CertificateWaitingValidationCraftsman()
-        {
-            return @"<html lang='en'>
+    public static string CertificateWaitingValidationCraftsman()
+    {
+        return @"<html lang='en'>
                 <head>
                     <meta charset='utf-8' />
                     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -955,11 +956,11 @@ namespace Artisashop.Services.MailService
                     </div>
                 </body>
             </html>";
-        }
+    }
 
-        public static string CertificateWaitingValidationAdmin(string username)
-        {
-            return @"<html lang='en'>
+    public static string CertificateWaitingValidationAdmin(string username)
+    {
+        return @"<html lang='en'>
                 <head>
                     <meta charset='utf-8' />
                     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -979,11 +980,11 @@ namespace Artisashop.Services.MailService
                     </div>
                 </body>
             </html>";
-        }
+    }
 
-        public static string CertificateValidatedCraftsman()
-        {
-            return @"<html lang='en'>
+    public static string CertificateValidatedCraftsman()
+    {
+        return @"<html lang='en'>
                 <head>
                     <meta charset='utf-8' />
                     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -1003,27 +1004,29 @@ namespace Artisashop.Services.MailService
                     </div>
                 </body>
             </html>";
+    }
+
+    public static string ItemSold(Account buyer, List<Basket> basket)
+    {
+        string rtn = "Buyer name: " + buyer.Firstname + " " + buyer.Lastname + "\r\n";
+        foreach (Basket item in basket)
+            rtn += "\t- " + item.Product!.Name + " * " + item.Quantity + " - " +
+                   (DeliveryOption.DELIVERY == item.DeliveryOpt ? "delivery" : "take out") + "\r\n";
+        return rtn;
+    }
+
+    public static string ItemBought(List<Bill> bills)
+    {
+        string rtn = "Your basket: \r\n";
+        double tot = 0;
+        foreach (Bill bill in bills)
+        {
+            rtn += "\t- " + bill.ProductName + " * " + bill.Quantity + " - " + bill.CraftsmanName + " - " +
+                   bill.PriceTot + "\r\n";
+            tot += bill.PriceTot;
         }
 
-        public static string ItemSold(Account buyer, List<Basket> basket)
-        {
-            string rtn = "Buyer name: " + buyer.Firstname + " " + buyer.Lastname + "\r\n";
-            foreach (Basket item in basket)
-                rtn += "\t- " + item.Product!.Name + " * " + item.Quantity + " - " + (Basket.DeliveryOption.DELIVERY == item.DeliveryOpt ? "delivery" : "take out") + "\r\n";
-            return rtn;
-        }
-
-        public static string ItemBought(List<Bill> bills)
-        {
-            string rtn = "Your basket: \r\n";
-            double tot = 0;
-            foreach (Bill bill in bills)
-            {
-                rtn += "\t- " + bill.ProductName + " * " + bill.Quantity + " - " + bill.CraftsmanName + " - " + bill.PriceTot + "\r\n";
-                tot += bill.PriceTot;
-            }
-            rtn += "Total: " + tot;
-            return rtn;
-        }
+        rtn += "Total: " + tot;
+        return rtn;
     }
 }

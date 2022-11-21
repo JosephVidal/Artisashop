@@ -8,6 +8,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Artisashop.Models.Enum;
 using static Artisashop.Models.Basket;
 
 namespace Artisashop.Tests.Backend

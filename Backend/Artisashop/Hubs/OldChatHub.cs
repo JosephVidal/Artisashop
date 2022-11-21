@@ -1,7 +1,7 @@
+namespace Artisashop.Hubs;
+
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.SignalR;
-
-namespace Artisashop.Hubs;
 
 public class OldChatHub : Hub
 {

@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Artisashop.Models;
+using Artisashop.Models.Enum;
 using static Artisashop.Models.Basket;
 using Artisashop.Models.ViewModel;
 
@@ -56,8 +57,8 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(3)]
-        [TestCase(1, 2, DeliveryOption.DELIVERY, State.ONGOING)]
-        public async Task Update(int id, int quantity, DeliveryOption deliveryOpt, State currentState)
+        [TestCase(1, 2, DeliveryOption.DELIVERY, DeliveryState.ONGOING)]
+        public async Task Update(int id, int quantity, DeliveryOption deliveryOpt, DeliveryState currentState)
         {
             UpdateBasket basket = new()
             {

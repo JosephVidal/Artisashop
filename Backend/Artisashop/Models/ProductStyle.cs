@@ -1,6 +1,6 @@
-﻿using Artisashop.Models.Interface;
+﻿namespace Artisashop.Models;
 
-namespace Artisashop.Models;
+using Artisashop.Models.Interface;
 
 public class ProductStyle : IIdentifiable
 {

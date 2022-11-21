@@ -1,9 +1,9 @@
-﻿using Artisashop.Models;
+﻿namespace Artisashop.Controllers;
+
+using Artisashop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-namespace Artisashop.Controllers;
 
 [Authorize]
 [ApiController]
@@ -30,12 +30,16 @@ public class ComplaintController : ControllerBase
     public async Task<IEnumerable<Complaint>> Get(string? userId = null, int? productId = null)
     {
         IQueryable<Complaint> query = _storeDbContext.Complaints;
-        if (userId != null) {
+        if (userId != null)
+        {
             query = query.Where(x => x.UserId == userId);
         }
-        if (productId != null) {
+
+        if (productId != null)
+        {
             query = query.Where(x => x.ProductId == productId);
         }
+
         return await query.ToListAsync();
     }
 
