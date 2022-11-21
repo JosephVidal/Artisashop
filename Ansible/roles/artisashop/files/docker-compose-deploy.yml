@@ -20,9 +20,13 @@ services:
       - mail-tier
     labels:
       - "traefik.enable=true"
-      - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.rule=Host(`api.${ARTISASHOP_HOST}`)"
-      - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.entrypoints=websecure"
-      - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.priority=820"
+      # - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.rule=Host(`api.${ARTISASHOP_HOST}`)"
+      # - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.entrypoints=websecure"
+      # - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.priority=820"
+      # - "traefik.http.services.${COMPOSE_PROJECT_NAME}-backend.loadbalancer.server.port=80"
+
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-backend.rule=Host(`${ARTISASHOP_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-backend.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-backend.loadbalancer.server.port=80"
 
   frontend:
@@ -33,11 +37,11 @@ services:
       - 80
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.rule=Host(`${ARTISASHOP_HOST}`)"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.entrypoints=websecure"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
-      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_HOST}/?(.*)"
-      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_HOST}/$${3}"
+      # - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.rule=Host(`${ARTISASHOP_HOST}`)"
+      # - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.entrypoints=websecure"
+      # - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
+      # - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_HOST}/?(.*)"
+      # - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_HOST}/$${3}"
 
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-frontend.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-frontend.entrypoints=websecure"
