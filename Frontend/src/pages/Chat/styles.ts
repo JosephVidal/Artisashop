@@ -160,21 +160,25 @@ export const ChatInputWrapper = styled.div<ChatInputProps>`
   }
 `;
 
-export const FileWrapper = styled.div`
-  width: 120px;
-  height: 100px;
+interface FileWrapperProps {
+  isMessage?: boolean
+}
+
+export const FileWrapper = styled.div<FileWrapperProps>`
+  width: ${(props) => props.isMessage ? "90%" : "120px"};
+  height: ${(props) => props.isMessage ? "200px" : "100px"};
   background: ${colors.darkRed};
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: start;
-  margin: 0 0 10px 10px;
+  justify-content: ${(props) => props.isMessage ? "center" : "start"};
+  margin: ${(props) => props.isMessage ? "10px 0 10px 10px" : "0 0 10px 10px"};
   
   & img {
     margin: 0 5px 0 5px;
-    max-width: 90px;
-    max-height: 90px;
+    max-width: ${(props) => props.isMessage ? "100%" : "90px"};
+    max-height: ${(props) => props.isMessage ? "100%" : "90px"};
   }
 
   & svg {
