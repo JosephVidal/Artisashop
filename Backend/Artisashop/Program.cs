@@ -208,6 +208,14 @@ if (app.Environment.IsDevelopment())
 }
 else // Production
 {
+    app.UseCors(builder =>
+    {
+        builder.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .WithExposedHeaders("Content-Range");
+    });
+
     using (var scope = app.Services.CreateScope())
     {
         using var context = scope.ServiceProvider.GetService<StoreDbContext>();
