@@ -25,7 +25,7 @@ services:
       # - "traefik.http.${COMPOSE_PROJECT_NAME}-artisaback.priority=820"
       # - "traefik.http.services.${COMPOSE_PROJECT_NAME}-backend.loadbalancer.server.port=80"
 
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-backend.rule=Host(`${ARTISASHOP_HOST}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-backend.rule=Host(`api.${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-backend.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-backend.loadbalancer.server.port=80"
 
