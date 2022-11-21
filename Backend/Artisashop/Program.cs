@@ -208,12 +208,22 @@ if (app.Environment.IsDevelopment())
 }
 else // Production
 {
+    app.UseCors(builder =>
+    {
+        builder.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .WithExposedHeaders("Content-Range");
+    });
+
     using (var scope = app.Services.CreateScope())
     {
-        using var context = scope.ServiceProvider.GetService<StoreDbContext>();
-        context?.Database.Migrate();
+        // Create Roles
+        using (var storeDbContext = scope.ServiceProvider.GetService<StoreDbContext>())
+        {
+            storeDbContext?.Database.Migrate();
+        }
     }
-
 
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
