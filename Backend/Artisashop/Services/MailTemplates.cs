@@ -1,7 +1,7 @@
 namespace Artisashop.Services;
 
 using Artisashop.Models;
-using Artisashop.Models.Enum;
+using Models.Enums;
 using Helpers;
 
 public struct MailTemplates
@@ -1005,10 +1005,10 @@ public struct MailTemplates
             </html>";
     }
 
-    public static string ItemSold(Account buyer, List<Basket> basket)
+    public static string ItemSold(Account buyer, List<BasketItem> basket)
     {
         string rtn = "Buyer name: " + buyer.Firstname + " " + buyer.Lastname + "\r\n";
-        foreach (Basket item in basket)
+        foreach (BasketItem item in basket)
             rtn += "\t- " + item.Product!.Name + " * " + item.Quantity + " - " +
                    (DeliveryOption.DELIVERY == item.DeliveryOpt ? "delivery" : "take out") + "\r\n";
         return rtn;

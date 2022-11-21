@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-namespace Artisashop.Models;
+namespace Artisashop.Models.ViewModel;
 
 using System;
 

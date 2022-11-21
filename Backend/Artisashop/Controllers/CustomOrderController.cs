@@ -3,13 +3,13 @@
 using System.Net;
 using Artisashop.Helpers;
 using Artisashop.Models;
-using Artisashop.Models.Enum;
+using Models.Enums;
 using Artisashop.Models.ViewModel;
 using Artisashop.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Artisashop.Models.Basket;
+using static Artisashop.Models.BasketItem;
 
 [ApiController]
 [Produces("application/json")]
@@ -87,7 +87,7 @@ public class CustomOrderController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BasketItem), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Create(CreateCustomOrder order)
     {
         try
@@ -144,12 +144,12 @@ public class CustomOrderController : ControllerBase
     /// <returns>Update command page on success, redirect AccountController::Login if not logged in or BadRequest</returns>
     [HttpGet("update/{basketId}")]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BasketItem), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetUpdate(int basketId)
     {
         try
         {
-            Basket? basket = await _db.Baskets!.Include("Product.Craftsman")
+            BasketItem? basket = await _db.Baskets!.Include("Product.Craftsman")
                 .SingleOrDefaultAsync(basket => basket.Id == basketId);
 
             if (basket == null)
@@ -170,12 +170,12 @@ public class CustomOrderController : ControllerBase
     [HttpPatch]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BasketItem), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Update([FromBody] UpdateCustomOrder model)
     {
         try
         {
-            Basket? basket = await _db.Baskets!.Include("Product")
+            BasketItem? basket = await _db.Baskets!.Include("Product")
                 .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
             if (basket == null)
@@ -211,7 +211,7 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            Basket? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+            BasketItem? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
             basket.CurrentState = state;
             _db.Baskets!.Update(basket);
             await _db.SaveChangesAsync();

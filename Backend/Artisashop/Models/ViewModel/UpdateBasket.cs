@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Artisashop.Models.Enum;
-using static Artisashop.Models.Basket;
+using Artisashop.Models.Enums;
+using static Artisashop.Models.BasketItem;
 
 namespace Artisashop.Models.ViewModel
 {

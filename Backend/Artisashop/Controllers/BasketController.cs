@@ -3,13 +3,13 @@
 using System.Net;
 using Artisashop.Helpers;
 using Artisashop.Models;
-using Artisashop.Models.Enum;
+using Models.Enums;
 using Artisashop.Models.ViewModel;
 using Artisashop.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Artisashop.Models.Basket;
+using static Artisashop.Models.BasketItem;
 
 /// <summary>
 /// This function handles basket actions and custom commands
@@ -33,7 +33,7 @@ public class BasketController : ControllerBase
     /// <returns>Basket page, redirect to AccountController::Account or BadRequest</returns>
     [HttpGet]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(List<Basket>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(List<BasketItem>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Index()
     {
         try
@@ -74,7 +74,7 @@ public class BasketController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.Redirect)]
-    [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BasketItem), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Add([FromQuery] int productID, [FromQuery] int quantityModifier)
     {
         try
@@ -130,12 +130,12 @@ public class BasketController : ControllerBase
     [HttpPatch]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BasketItem), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Update([FromBody] UpdateBasket model)
     {
         try
         {
-            Basket? basket = await _db.Baskets!.Include("Product")
+            BasketItem? basket = await _db.Baskets!.Include("Product")
                 .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
             if (basket == null)
@@ -171,7 +171,7 @@ public class BasketController : ControllerBase
     {
         try
         {
-            Basket? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+            BasketItem? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
 
             if (basket == null)
                 return NotFound("Basket item with id " + basketId + " not found");
@@ -193,7 +193,7 @@ public class BasketController : ControllerBase
     [HttpGet("pay")]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof((List<Basket>, string, double)), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof((List<BasketItem>, string, double)), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Payment([FromBody] string address)
     {
         try

@@ -1,6 +1,6 @@
 ﻿namespace Artisashop.Helpers;
 
-using Artisashop.Models.Enum;
+using Models.Enums;
 
 public static class NextDeliveryStates
 {

@@ -1,6 +1,9 @@
 namespace Artisashop.Models.Interface;
 
-public interface IIdentifiable
+using System;
+
+public interface IIdentifiable<TKey>
+where TKey : IEquatable<TKey>
 {
-    public int Id { get; set; }
+    public TKey Id { get; set; }
 }

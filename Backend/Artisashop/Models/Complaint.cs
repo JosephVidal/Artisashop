@@ -2,8 +2,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using Artisashop.Models.Interface;
+using Enums;
 
-public class Complaint : IIdentifiable, ICreatedAt, IUpdatedAt
+public class Complaint : IIdentifiable<int>, ICreatedAt, IUpdatedAt
 {
     public int Id { get; set; }
     public DateTime? CreatedAt { get; set; }

@@ -3,7 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 using Artisashop.Models.Interface;
 
-public class ChatMessage : IIdentifiable, ICreatedAt
+public class ChatMessage : IIdentifiable<int>, ICreatedAt
 {
     public int Id { get; set; }
 

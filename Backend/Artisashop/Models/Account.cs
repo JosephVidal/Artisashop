@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Artisashop.Models;
 
-public class Account : IdentityUser, ICreatedAt, IUpdatedAt
+public class Account : IdentityUser, IIdentifiable<string>, ICreatedAt, IUpdatedAt, ISoftDelete
 {
     public Account()
     {
@@ -21,7 +21,7 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Firstname = model.Firstname;
         Job = model.Job;
         Bills = new List<Bill>();
-        Baskets = new List<Basket>();
+        Baskets = new List<BasketItem>();
         Address = model.Address;
     }
 
@@ -35,7 +35,7 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
     public GPSCoord? AddressGPS { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public List<Basket>? Baskets { get; set; } = new ();
+    public List<BasketItem>? Baskets { get; set; } = new ();
     public List<Bill>? Bills { get; set; } = new ();
     [Required] public bool? Suspended { get; set; }
 
@@ -45,4 +45,7 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
     [Required] public bool? Validation { get; set; }
 
     #endregion
+
+    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

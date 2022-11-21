@@ -5,7 +5,7 @@ namespace Artisashop.Models;
 
 using Artisashop.Models.Interface;
 
-public class Bill : ICreatedAt
+public class Bill : IIdentifiable<int>, ICreatedAt
 {
     public Bill(string craftsmanName, string consumerName, string productName, int quantity, double priceTot)
     {

@@ -7,8 +7,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Artisashop.Models;
-using Artisashop.Models.Enum;
-using static Artisashop.Models.Basket;
+using Artisashop.Models.Enums;
+using static Artisashop.Models.BasketItem;
 using Artisashop.Models.ViewModel;
 
 namespace Artisashop.Tests.Backend
@@ -36,7 +36,7 @@ namespace Artisashop.Tests.Backend
             var response = await _client.SendAsync(postRequest);
             response.EnsureSuccessStatusCode();
 
-            List<Basket>? result = await response.Content.ReadFromJsonAsync<List<Basket>>();
+            List<BasketItem>? result = await response.Content.ReadFromJsonAsync<List<BasketItem>>();
             Assert.NotNull(result);
             Assert.AreNotEqual(0, result!.Count);
         }
@@ -52,7 +52,7 @@ namespace Artisashop.Tests.Backend
             var response = await _client.SendAsync(postRequest);
             response.EnsureSuccessStatusCode();
 
-            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+            BasketItem? result = await response.Content.ReadFromJsonAsync<BasketItem>();
             Assert.NotNull(result);
         }
 
@@ -75,7 +75,7 @@ namespace Artisashop.Tests.Backend
             var response = await _client.SendAsync(postRequest);
             response.EnsureSuccessStatusCode();
 
-            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+            BasketItem? result = await response.Content.ReadFromJsonAsync<BasketItem>();
             Assert.NotNull(result);
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Artisashop.Models.Enum;
+﻿namespace Artisashop.Models.Enums;
 
 public enum DeliveryOption
 {

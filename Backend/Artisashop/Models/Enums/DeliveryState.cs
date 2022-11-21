@@ -1,4 +1,4 @@
-﻿namespace Artisashop.Models.Enum;
+﻿namespace Artisashop.Models.Enums;
 
 using System.ComponentModel;
 

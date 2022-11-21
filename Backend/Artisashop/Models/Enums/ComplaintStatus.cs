@@ -1,4 +1,4 @@
-﻿namespace Artisashop.Models;
+﻿namespace Artisashop.Models.Enums;
 
 public enum ComplaintStatus
 {

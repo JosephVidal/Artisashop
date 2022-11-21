@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using Artisashop.Models.ViewModel;
+using Interface;
 
-public class Product
+public class Product : IIdentifiable<int>, ICreatedAt, IUpdatedAt
 {
     [Key] [Required] public int Id { get; set; }
     [Required] public string? Name { get; set; }
@@ -18,4 +19,10 @@ public class Product
     public virtual List<ProductImage>? Images { get; set; } = new List<ProductImage>();
 
     public virtual List<ProductStyle>? Styles { get; set; } = new List<ProductStyle>();
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime? CreatedAt { get; set; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime? UpdatedAt { get; set; }
 }

@@ -3,7 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 using Artisashop.Models.Interface;
 
-public class Style : IIdentifiable, ICreatedAt
+public class Style : IIdentifiable<int>, ICreatedAt
 {
     public Style()
     {

@@ -2,7 +2,7 @@
 
 using Artisashop.Models.Interface;
 
-public class ProductStyle : IIdentifiable
+public class ProductStyle : IIdentifiable<int>
 {
     public int Id { get; set; }
 

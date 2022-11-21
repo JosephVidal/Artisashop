@@ -3,7 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 using Artisashop.Models.Interface;
 
-public class ProductImage : IIdentifiable, ICreatedAt
+public class ProductImage : IIdentifiable<int>, ICreatedAt
 {
     public int Id { get; set; }
 
