@@ -37,7 +37,8 @@ namespace Artisashop.Controllers
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
 
-                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman").Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
+                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman")
+                    .Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
                 var cmdList = new List<OrderList>();
                 foreach (Basket item in tmpList)
                     cmdList.Add(new OrderList(item, GenPossibleState(item.CurrentState, item.DeliveryOpt)));
@@ -93,8 +94,21 @@ namespace Artisashop.Controllers
                 if (craftsman == null)
                     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
 
-                Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
-                Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
+                var styles = await CreateStyles(order.Styles);
+
+                Product product =
+                    new Product()
+                    {
+                        Name = order.Name,
+                        Description = order.Description,
+                        Price = order.Price,
+                        Quantity = order.Quantity,
+                        CraftsmanId = order.CraftsmanId,
+                        Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList(),
+                    };
+
+                Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN,
+                    GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
                 await _db.SaveChangesAsync();
                 return Ok(basket);
@@ -117,7 +131,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product.Craftsman").SingleOrDefaultAsync(basket => basket.Id == basketId);
+                Basket? basket = await _db.Baskets!.Include("Product.Craftsman")
+                    .SingleOrDefaultAsync(basket => basket.Id == basketId);
 
                 if (basket == null)
                     return NotFound("Basket item with id " + basketId + " not found");
@@ -142,7 +157,8 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product").FirstOrDefaultAsync(basket => basket.Id == model.Id);
+                Basket? basket = await _db.Baskets!.Include("Product")
+                    .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
                 if (basket == null)
                     return NotFound("Basket with id " + model.Id + " not found");
@@ -150,7 +166,8 @@ namespace Artisashop.Controllers
                 basket.Quantity = model.Quantity == null ? basket.Quantity : (int)model.Quantity;
                 basket.DeliveryOpt = model.DeliveryOpt == null ? basket.DeliveryOpt : (DeliveryOption)model.DeliveryOpt;
                 basket.Product!.Name = model.Name == null ? basket.Product.Name : model.Name;
-                basket.Product!.Description = model.Description == null ? basket.Product.Description : model.Description;
+                basket.Product!.Description =
+                    model.Description == null ? basket.Product.Description : model.Description;
                 basket.Product!.Price = model.Price == null ? basket.Product.Price : model.Price;
                 basket.Product!.Quantity = model.Quantity == null ? basket.Product.Quantity : (int)model.Quantity;
                 _db.Baskets!.Update(basket);
@@ -196,28 +213,36 @@ namespace Artisashop.Controllers
         /// <returns>List of state possible</returns>
         private static List<State> GenPossibleState(State state, DeliveryOption delOpt)
         {
-            switch (state)
+            return (state, delOpt) switch
             {
-                case State.WAITINGCRAFTSMAN:
-                    return new List<State> { State.REFUSED/*, State.WAITINGCONSUMER*/ };
-                case State.VALIDATED:
-                    if (DeliveryOption.TAKEOUT == delOpt)
-                        return new List<State> { State.ONGOING, State.DELIVERY, State.END };
-                    else
-                        return new List<State> { State.ONGOING, State.END };
-                case State.ONGOING:
-                    if (DeliveryOption.TAKEOUT == delOpt)
-                        return new List<State> { State.DELIVERY, State.END };
-                    else
-                        return new List<State> { State.END };
-                case State.DELIVERY:
-                    return new List<State> { State.END };
-                case State.WAITINGCONSUMER:
-                case State.REFUSED:
-                case State.END:
-                default:
-                    return new List<State>();
-            }
+                (State.WAITINGCRAFTSMAN, _) => new() { State.REFUSED },
+                (State.VALIDATED, DeliveryOption.TAKEOUT) => new() { State.ONGOING, State.DELIVERY, State.END },
+                (State.VALIDATED, DeliveryOption.DELIVERY) => new() { State.ONGOING, State.END },
+                (State.ONGOING, DeliveryOption.TAKEOUT) => new() { State.DELIVERY, State.END },
+                (State.ONGOING, DeliveryOption.DELIVERY) => new() { State.END },
+                (State.DELIVERY, _) => new() { State.END },
+                (State.WAITINGCONSUMER, _) => new() { },
+                (State.REFUSED, _) => new() { },
+                (State.END, _) => new() { },
+                _ => new() { }
+            };
+        }
+
+        /// <summary>
+        /// Creates styles if they don't exist, and returns the entire list.
+        /// TODO: regroup duplicate code
+        /// </summary>
+        /// <param name="styles"></param>
+        /// <returns></returns>
+        private async Task<List<Style>> CreateStyles(List<string> styles)
+        {
+            var oldStyles = _db.Styles.Where(s => styles.Contains(s.Name));
+            var newStyles = styles.Where(s => !oldStyles.Any(st => st.Name == s))
+                .Select(s => new Style() { Name = s }).ToList();
+            await _db.Styles.AddRangeAsync(newStyles);
+            await _db.SaveChangesAsync();
+
+            return await _db.Styles.Where(s => styles.Contains(s.Name)).ToListAsync();
         }
     }
 }

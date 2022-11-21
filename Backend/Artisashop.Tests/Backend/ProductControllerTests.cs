@@ -2,6 +2,7 @@
 using Artisashop.Models.ViewModel;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -80,8 +81,8 @@ namespace Artisashop.Tests.Backend
             Assert.AreEqual(description, result!.Description);
             Assert.AreEqual(price, result!.Price);
             Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ImagesList);
-            Assert.AreEqual(styles, result!.StylesList);
+            Assert.AreEqual(images, result!.Images?.Select(x => x.Content).ToString());
+            Assert.AreEqual(styles, result!.Styles?.Select(x => x.Style?.Name).ToString());
         }
 
         [Order(3)]
@@ -109,10 +110,10 @@ namespace Artisashop.Tests.Backend
             Assert.NotNull(result);
             Assert.AreEqual(name, result!.Name);
             Assert.AreEqual(description, result!.Description);
-            Assert.AreEqual(price, result!.Price);
-            Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ImagesList);
-            Assert.AreEqual(styles, result!.StylesList);
+            Assert.AreEqual(price, result.Price);
+            Assert.AreEqual(quantity, result.Quantity);
+            Assert.AreEqual(images, result.Images?.Select(x => x.Content).ToString());
+            Assert.AreEqual(styles, result.Styles?.Select(x => x.Style.Name).ToString());
         }
 
         [Order(4)]

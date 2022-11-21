@@ -60,7 +60,14 @@ namespace Artisashop.Tests.Backend
         [TestCase("Ma Table", "Ma très jolie table", 3)]
         public async Task Create(string name, string desc, int quantity)
         {
-            CreateCustomOrder order = new(_ids[1], name, desc, quantity);
+            CreateCustomOrder order = new()
+            {
+                CraftsmanId = _ids[1],
+                Name = name,
+                Description = desc,
+                Quantity = quantity,
+            };
+            // CreateCustomOrder order = new(_ids[1], name, desc, quantity);
 
             var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/custom-order");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenConsumer);

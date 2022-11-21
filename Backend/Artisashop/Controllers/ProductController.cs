@@ -94,14 +94,13 @@ namespace Artisashop.Controllers
         {
             try
             {
-                
                 Account? account = await _utils.GetFromCookie(Request, _db);
                 if (account == null)
                 {
                     return Unauthorized("You are not logged in");
                 }
-                
-                
+
+
                 Product product = new Product
                 {
                     Name = model.Name,
@@ -115,8 +114,15 @@ namespace Artisashop.Controllers
                 var success = await _db.Products!.AddAsync(product);
                 if (success == null)
                     return BadRequest("Creation failed");
+
                 await _db.SaveChangesAsync();
-                return Ok(product);
+
+                var ret = _db.Products
+                    .Include(x => x.Images)
+                    .Include(x => x.Styles)
+                    .ThenInclude(x => x.Style)
+                    .FirstOrDefault(x => x.Id == product.Id);
+                return Ok(success.Entity);
             }
             catch (Exception e)
             {
@@ -125,7 +131,8 @@ namespace Artisashop.Controllers
         }
 
         /// <summary>
-        /// Updates a product
+        /// Updates a product.
+        /// TODO: Change the viewModel to UpdateProduct
         /// </summary>
         /// <param name="productId">The id of the product to update</param>
         /// <returns>Update page on success, NotFound, Unauthorized if not craftsman, AccountController::Login if not logged in or BadRequest</returns>
@@ -141,16 +148,13 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.Images= model.Images.Select(i => new ProductImage() { Content = i }).ToList();
-                
-                var styles = await _db.Styles.Where(s => s.Name != null && model.Styles.Contains(s.Name)).ToListAsync();
-                var newStyles = model.Styles.Where(s => !styles.Any(st => st.Name == s)).Select(s => new Style() { Name = s }).ToList();
-                await _db.Styles.AddRangeAsync(newStyles);
-                await _db.SaveChangesAsync();
-                await _db.Styles.Where();
-                
-                product.images = JsonSerializer.Serialize(model.Images);
-                product.StylesList = JsonSerializer.Serialize(model.Styles);
+                product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+
+                var styles = await CreateStyles(model.Styles);
+                product.Styles = styles.Select(s => new ProductStyle() { Style = s }).ToList();
+
+                product.Images = model.Images.Select(i => new ProductImage() { Content = i }).ToList();
+
                 var success = _db.Products!.Update(product);
                 if (success == null)
                     return BadRequest("Update failed");
@@ -189,6 +193,22 @@ namespace Artisashop.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        /// <summary>
+        /// Creates styles if they don't exist, and returns the entire list.
+        /// </summary>
+        /// <param name="styles"></param>
+        /// <returns></returns>
+        private async Task<List<Style>> CreateStyles(List<string> styles)
+        {
+            var oldStyles = _db.Styles.Where(s => styles.Contains(s.Name));
+            var newStyles = styles.Where(s => !oldStyles.Any(st => st.Name == s))
+                .Select(s => new Style() { Name = s }).ToList();
+            await _db.Styles.AddRangeAsync(newStyles);
+            await _db.SaveChangesAsync();
+
+            return await _db.Styles.Where(s => styles.Contains(s.Name)).ToListAsync();
         }
     }
 }
