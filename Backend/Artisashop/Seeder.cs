@@ -69,36 +69,48 @@ public static class Seeder
                 Email = "thomas@artisashop.fr",
                 Firstname = "Thomas",
                 Lastname = "Colonna",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "helena@artisashop.fr",
                 Firstname = "Helena",
                 Lastname = "Ganeman-Valot",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "joseph@artisashop.fr",
                 Firstname = "Joseph",
                 Lastname = "Vidal",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "jean@artisashop.fr",
                 Firstname = "Jean",
                 Lastname = "Epp",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "guillaume@artisashop.fr",
                 Firstname = "Guillaume",
                 Lastname = "Fischer",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "yann@artisashop.fr",
                 Firstname = "Yann",
                 Lastname = "Osmont",
+                Suspended = false,
+                Validation = false
             },
         };
 
@@ -111,7 +123,7 @@ public static class Seeder
 
             var userStore = new UserStore<Account>(dbContext);
             await userStore.CreateAsync(account);
-            await AssignRoles(serviceProvider, account.Id, new[] { Roles.Admin, Roles.User });
+            await AssignRoles(serviceProvider, account.Id, new[] { Roles.Admin });
             await dbContext.SaveChangesAsync();
         }
     }
@@ -167,6 +179,8 @@ public static class Seeder
             .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
             .RuleFor(o => o.Job, f => f.Name.JobTitle())
             .RuleFor(o => o.EmailConfirmed, true)
+            .RuleFor(o => o.Validation, false)
+            .RuleFor(o => o.Suspended, false)
             .RuleFor(o => o.PhoneNumberConfirmed, true)
             .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
         var users = userFaker.Generate(100);

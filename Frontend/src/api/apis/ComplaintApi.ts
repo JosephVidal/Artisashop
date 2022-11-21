@@ -22,6 +22,11 @@ import {
     ComplaintToJSON,
 } from '../models';
 
+export interface ApiComplaintGetRequest {
+    userId?: string;
+    productId?: number;
+}
+
 export interface ApiComplaintIdGetRequest {
     id: number;
 }
@@ -37,8 +42,16 @@ export class ComplaintApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiComplaintGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Complaint>>> {
+    async apiComplaintGetRaw(requestParameters: ApiComplaintGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Complaint>>> {
         const queryParameters: any = {};
+
+        if (requestParameters.userId !== undefined) {
+            queryParameters['userId'] = requestParameters.userId;
+        }
+
+        if (requestParameters.productId !== undefined) {
+            queryParameters['productId'] = requestParameters.productId;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -58,8 +71,8 @@ export class ComplaintApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiComplaintGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Complaint>> {
-        const response = await this.apiComplaintGetRaw(initOverrides);
+    async apiComplaintGet(requestParameters: ApiComplaintGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Complaint>> {
+        const response = await this.apiComplaintGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

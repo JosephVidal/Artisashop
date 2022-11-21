@@ -118,6 +118,7 @@ namespace Artisashop.Controllers
                     return NotFound("Receiver with id " + message!.ToUserID + " not found");
                 ChatMessage dbMsg = new ChatMessage
                 {
+                    CreatedAt = DateTime.Now,
                     Sender = sender,
                     Receiver = receiver,
                     Content = message.Content,

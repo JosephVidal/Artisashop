@@ -35,13 +35,18 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> ProductList()
+        public async Task<IActionResult> ProductList(string? sellerId = null)
         {
             try
             {
-                List<Product> products = await _db.Products!.ToListAsync();
-                if (products == null)
-                    return NotFound("Product list is null");
+                IQueryable<Product> query = _db.Products;
+                if (sellerId != null)
+                {
+                    query = query.Where(p => p.CraftsmanId == sellerId);
+                }
+                List<Product> products = await query.ToListAsync();
+                if (!products.Any())
+                    return NotFound("Didn't find any products");
                 return Ok(products);
             }
             catch (Exception e)
