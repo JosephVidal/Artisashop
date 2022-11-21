@@ -4,8 +4,8 @@ import { Product } from "api/models/Product";
 import { SetState } from "globals/state";
 import QuantityInput from "components/QuantityInuput";
 import { BasketApi } from "api";
-import { ProductApi } from "../../api";
 import useApi from "hooks/useApi";
+import { ProductApi } from "../../api";
 import { Wrapper, Craftsman, Tag } from "./styles";
 
 const ProductView = () => {
@@ -20,13 +20,13 @@ const ProductView = () => {
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
   useEffect(() => {
-    const getProducts = async () => {
+    const getProduct = async () => {
       if (id) {
-        const result = await productApi.apiProductInfoProductIdGet({productId: id});
+        const result = await productApi.apiProductInfoProductIdGet({productId: +id});
         setProduct(result ?? null);
       }
     }
-    getProducts();
+    getProduct();
   }, [id]);
 
   return (
@@ -49,8 +49,8 @@ const ProductView = () => {
           </div>
           <p id="description">{product?.description}</p>
           <p id="stock">{productStock}</p>
-          <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product.quantity)} />
-          <button className={buttonClass} onClick={() => addToBasket(basketApi, product.id, quantity)} type="submit">Ajouter au panier</button>
+          <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product?.quantity ?? 0)} />
+          <button className={buttonClass} onClick={() => addToBasket(basketApi, product?.id ?? 0, quantity)} type="submit">Ajouter au panier</button>
         </div>
       </div>
     </Wrapper>
