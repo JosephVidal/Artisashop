@@ -37,7 +37,6 @@
     </ItemGroup>
     <ItemGroup>
       <Compile Remove="ClientApp\**" />
-      <Compile Remove="Models\Interface\IRelationUser.cs" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Remove="ClientApp\**" />

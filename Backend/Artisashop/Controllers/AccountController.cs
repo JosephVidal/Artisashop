@@ -1,23 +1,21 @@
 ﻿namespace Artisashop.Controllers;
 
-using Artisashop.Models.ViewModel.Accounts;
-using Artisashop.Configurations;
-using Artisashop.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using Artisashop.Models;
-using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using Artisashop.Models.ViewModel.Accounts;
+using Artisashop.Configurations;
+using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 
 [ApiController]
 [Produces("application/json")]

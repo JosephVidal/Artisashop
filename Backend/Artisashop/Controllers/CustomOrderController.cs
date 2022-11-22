@@ -149,7 +149,7 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            BasketItem? basket = await _db.Baskets!.Include("Product.Craftsman")
+            BasketItem? basket = await _db.BasketItems!.Include("Product.Craftsman")
                 .SingleOrDefaultAsync(basket => basket.Id == basketId);
 
             if (basket == null)
@@ -175,7 +175,7 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            BasketItem? basket = await _db.Baskets!.Include("Product")
+            BasketItem? basket = await _db.BasketItems!.Include("Product")
                 .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
             if (basket == null)
@@ -188,7 +188,7 @@ public class CustomOrderController : ControllerBase
                 model.Description == null ? basket.Product.Description : model.Description;
             basket.Product!.Price = model.Price == null ? basket.Product.Price : model.Price;
             basket.Product!.Quantity = model.Quantity == null ? basket.Product.Quantity : (int)model.Quantity;
-            _db.Baskets!.Update(basket);
+            _db.BasketItems!.Update(basket);
             await _db.SaveChangesAsync();
             return Ok(basket);
         }
@@ -211,9 +211,9 @@ public class CustomOrderController : ControllerBase
     {
         try
         {
-            BasketItem? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+            BasketItem? basket = await _db.BasketItems!.FirstAsync(basket => basket.Id == basketId);
             basket.CurrentState = state;
-            _db.Baskets!.Update(basket);
+            _db.BasketItems!.Update(basket);
             await _db.SaveChangesAsync();
             return Ok(state);
         }

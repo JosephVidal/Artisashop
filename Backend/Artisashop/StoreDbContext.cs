@@ -15,14 +15,14 @@ public class StoreDbContext : IdentityDbContext<Account>
     {
     }
 
-    public virtual DbSet<Product> Products { get; set; } = null!;
-    public virtual DbSet<BasketItem> Baskets { get; set; } = null!;
+    public virtual DbSet<BasketItem> BasketItems { get; set; } = null!;
     public virtual DbSet<Bill> Bills { get; set; } = null!;
     public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
-    public virtual DbSet<Style> Styles { get; set; } = null!;
     public virtual DbSet<Complaint> Complaints { get; set; } = null!;
-    public virtual DbSet<ProductStyle> ProductStyles { get; set; } = null!;
+    public virtual DbSet<Product> Products { get; set; } = null!;
     public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
+    public virtual DbSet<ProductStyle> ProductStyles { get; set; } = null!;
+    public virtual DbSet<Style> Styles { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

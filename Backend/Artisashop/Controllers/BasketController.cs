@@ -135,7 +135,7 @@ public class BasketController : ControllerBase
     {
         try
         {
-            BasketItem? basket = await _db.Baskets!.Include("Product")
+            BasketItem? basket = await _db.BasketItems!.Include("Product")
                 .FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
             if (basket == null)
@@ -146,9 +146,9 @@ public class BasketController : ControllerBase
             basket.CurrentState = model.CurrentState != null ? (DeliveryState)model.CurrentState : basket.CurrentState;
             basket.DeliveryOpt = model.DeliveryOpt != null ? (DeliveryOption)model.DeliveryOpt : basket.DeliveryOpt;
             if (basket.Quantity > 0)
-                _db.Baskets!.Update(basket);
+                _db.BasketItems!.Update(basket);
             else
-                _db.Baskets!.Remove(basket);
+                _db.BasketItems!.Remove(basket);
             await _db.SaveChangesAsync();
             return Ok(basket);
         }
@@ -171,11 +171,11 @@ public class BasketController : ControllerBase
     {
         try
         {
-            BasketItem? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+            BasketItem? basket = await _db.BasketItems!.FirstAsync(basket => basket.Id == basketId);
 
             if (basket == null)
                 return NotFound("Basket item with id " + basketId + " not found");
-            _db.Baskets!.Remove(basket);
+            _db.BasketItems!.Remove(basket);
             await _db.SaveChangesAsync();
             return Ok("Basket item with id " + basketId + " not found");
         }
