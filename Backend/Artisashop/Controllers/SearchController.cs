@@ -46,8 +46,8 @@ public class SearchController : ControllerBase
 
             if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
                 query = query.Where(item =>
-                    item.Craftsman != null && item.Craftsman.AddressGPS != null &&
-                    Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance);
+                    item.Craftsman != null && item.Craftsman.AddressGps != null &&
+                    Haversine(search.UserGPSCoord, item.Craftsman.AddressGps) <= search.Distance);
             return Ok(await query.ToListAsync());
         }
         catch (Exception e)
@@ -79,7 +79,7 @@ public class SearchController : ControllerBase
                 query = query.Where(item => item!.Job == search.Job);
             if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
                 query = query.Where(item =>
-                    item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance);
+                    item.AddressGps != null && Haversine(search.UserGPSCoord, item.AddressGps) <= search.Distance);
             return Ok(await query.ToListAsync());
         }
         catch (Exception e)

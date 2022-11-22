@@ -9,19 +9,19 @@ public class BasketItem : IIdentifiable<int>, ICreatedAt
 {
     [Key] public int Id { get; set; }
 
-    [Required] public string? AccountId { get; set; }
+    public required string? AccountId { get; set; }
 
-    [Required] public Account? Account { get; set; }
+    public required Account? Account { get; set; }
 
-    [Required] public int ProductId { get; set; }
+    public required int ProductId { get; set; }
 
-    [Required] public Product? Product { get; set; }
+    public required Product? Product { get; set; }
 
-    [Required] public int Quantity { get; set; }
+    public required int Quantity { get; set; }
 
-    [Required] public DeliveryOption DeliveryOpt { get; set; }
+    public required DeliveryOption DeliveryOpt { get; set; }
 
-    [Required] public DeliveryState CurrentState { get; set; }
+    public required DeliveryState CurrentState { get; set; }
 
     public virtual List<BasketPossibleState>? PossibleStates { get; set; }
 

@@ -16,6 +16,9 @@ using Artisashop.Models.ViewModel.Accounts;
 using Artisashop.Configurations;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
+using Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Services;
 
 [ApiController]
 [Produces("application/json")]
@@ -24,6 +27,7 @@ using Artisashop.Models.ViewModel;
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<Account> _signInManager;
+    private readonly IAccountService<Account> _accountService;
     private readonly UserManager<Account> _userManager;
     private readonly IConfiguration _configuration;
     private readonly StoreDbContext _db;
@@ -32,6 +36,7 @@ public class AccountController : ControllerBase
     private readonly HttpClient _opencageDataClient = new HttpClient();
 
     public AccountController(
+        IAccountService<Account> accountService,
         UserManager<Account> userManager,
         SignInManager<Account> signInManager,
         IConfiguration configuration,
@@ -39,6 +44,8 @@ public class AccountController : ControllerBase
         IOptions<FranceConnectConfiguration> franceConnectConfiguration,
         ILoggerFactory loggerFactory)
     {
+        _accountService = accountService;
+
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
@@ -53,17 +60,26 @@ public class AccountController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(AccountToken), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Login([FromBody] Login model)
+    public async Task<Results<BadRequest<string>, Ok<AccountToken>>> Login([FromBody] Login model)
     {
         try
         {
+            var user = await _userManager.FindByEmailAsync(model.Email!);
+            if (user == null)
+            {
+                throw new ArtisashopException("Invalid login attempt.");
+            }
+            
+            var roles = await _userManager.GetRolesAsync(user);
+            
+            
+
+            
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
             if (result.Succeeded)
             {
-                var user = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-                var roles = await _userManager.GetRolesAsync(user);
+                // var user = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
+                // var roles = await _userManager.GetRolesAsync(user);
                 var viewModel = new AccountViewModel
                 {
                     Id = user.Id,
@@ -74,31 +90,38 @@ public class AccountController : ControllerBase
                     Roles = roles?.ToList() ?? new List<string>(),
                 };
                 var token = new AccountToken(viewModel, await GenerateJwtToken(user));
-                return Ok(token);
+                return TypedResults.Ok(token);
             }
 
-            return BadRequest("Login failed");
+            return TypedResults.BadRequest("Login failed");
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return TypedResults.BadRequest(ex.Message);
         }
     }
 
     [HttpPost]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(AccountToken), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Register([FromBody] Register model)
+    public async Task<Results<Ok<AccountToken>, BadRequest<string>>> Register([FromBody] Register model)
     {
         try
         {
-            var user = await CreateUser(model, new[] { Roles.User });
-            await _signInManager.SignInAsync(user, false);
-            var roles = await _userManager.GetRolesAsync(user);
+            var account = new Account
+            {
+                Email = model.Email,
+                Firstname = model.Firstname,
+                Lastname = model.Lastname,
+            };
+            await _accountService.RegisterAsync(account, model.Password!);
+            var user = await _accountService.GetFromEmailAsync(model.Email!);
+            await _accountService.AddToRoleAsync(user!, Roles.User);
+            await _signInManager.SignInAsync(user!, false);
+            
+            var roles = await _userManager.GetRolesAsync(user!);
             var viewModel = new AccountViewModel
             {
-                Id = user.Id,
+                Id = user!.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 EmailConfirmed = user.EmailConfirmed,
@@ -106,34 +129,12 @@ public class AccountController : ControllerBase
                 Roles = roles?.ToList() ?? new List<string>(),
             };
             var token = new AccountToken(viewModel, await GenerateJwtToken(user));
-            return Ok(token);
+            return TypedResults.Ok(token);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return TypedResults.BadRequest(ex.Message);
         }
-    }
-
-    private async Task<Account> CreateUser(Register model, string[]? roles = null)
-    {
-        roles ??= new string[] { Roles.User };
-
-        var account = new Account(model);
-
-        if (account.Address != null)
-            account.AddressGPS = await AddressToGPSCoord(account.Address);
-
-
-        var result = await _userManager.CreateAsync(account, model.Password);
-        // TODO: Create exception types
-        if (!result.Succeeded)
-            throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
-        account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-
-        var roleResult = await _userManager.AddToRolesAsync(account, roles);
-        if (!roleResult.Succeeded)
-            throw new Exception(roleResult.Errors.ToString());
-        return account;
     }
 
     // private async Task SignInAccount(Account account, bool isPersistent = false)
@@ -267,7 +268,7 @@ public class AccountController : ControllerBase
             // await _userManager.DeleteAsync(account);
             // await _db.SaveChangesAsync();
             // return Ok("User with id " + account.UserName + " successfully deleted");
-            
+
             // TODO: FIX
             throw new NotImplementedException();
         }
@@ -311,43 +312,4 @@ public class AccountController : ControllerBase
 
         return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
     }
-
-    /*[HttpGet("GetTestAddressToGPSCoord")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GPSCoord), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetTestAddressToGPSCoord([FromQuery] string address)
-    {
-        try {
-            return Ok(await AddressToGPSCoord(address));
-        } catch (Exception ex) {
-            return BadRequest(ex.Message);
-        }
-    }*/
-
-    // TODO: Put this into a Helper class
-    private async Task<GPSCoord> AddressToGPSCoord(string address)
-    {
-        string GoogleKey = "acdfe36c88484444850da3d8adb97890";
-        GPSCoord? ret = null;
-        OpencageDataGeocode tmp;
-        HttpResponseMessage response =
-            await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
-        if (response.IsSuccessStatusCode)
-        {
-            tmp = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
-            if (tmp.Results != null)
-                ret = tmp.Results[0].Geometry;
-        }
-
-        return (ret != null) ? ret : new GPSCoord();
-    }
-
-    // TODO: Put this into a Helper class
-    private string FormatErrorMessages(IEnumerable<IdentityError> errors)
-        => ConcatErrorMessages(errors.Select(x => $"{x.Code} - {x.Description}"));
-
-    // TODO: Put this into a Helper class
-    private string ConcatErrorMessages(IEnumerable<string> messages)
-        => string.Join(", ", messages);
 }
