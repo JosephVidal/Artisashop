@@ -4,15 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace Artisashop.Models.ViewModel
 {
-    public class GPSCoord
+    public class GpsCoordinates
     {
-        public GPSCoord()
+        public GpsCoordinates()
         {
             Longitude = 0;
             Latitude = 0;
         }
 
-        public GPSCoord(double longitude, double latitude)
+        public GpsCoordinates(double longitude, double latitude)
         {
             Longitude = longitude;
             Latitude = latitude;

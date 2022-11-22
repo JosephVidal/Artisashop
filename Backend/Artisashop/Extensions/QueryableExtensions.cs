@@ -31,7 +31,7 @@ public static class QueryableExtensions
             || (p.Description != null && p.Description.Contains(search))
             || (p.Styles != null &&
                 p.Styles.Any(x => x.Style != null && x.Style.Name != null && x.Style.Name.Contains(search)))
-            || (p.Craftsman != null && p.Craftsman.Firstname != null && p.Craftsman.Firstname.Contains(search)));
+            || (p.Craftsman != null && p.Craftsman.FirstName != null && p.Craftsman.FirstName.Contains(search)));
     }
 
     public static IQueryable<Account> Search(this IQueryable<Account> query, string search)
@@ -42,8 +42,8 @@ public static class QueryableExtensions
         }
 
         return query.Where(p =>
-            (p.Firstname != null && p.Firstname.Contains(search))
-            || (p.Lastname != null && p.Lastname.Contains(search))
+            (p.FirstName != null && p.FirstName.Contains(search))
+            || (p.LastName != null && p.LastName.Contains(search))
             || (p.Job != null && p.Job.Contains(search)));
     }
 }

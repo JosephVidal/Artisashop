@@ -30,15 +30,15 @@ public abstract class BaseReadOnlyRepository<TEntity, TKey> : BaseEntityReposito
         return await this.DbSet.Where(predicate).ToListAsync();
     }
 
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, TKey>> orderBy, bool ascending = true)
+    public virtual async Task<List<TEntity>> GetListAsync<TOrderBy>(Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, TOrderBy>> orderBy, bool ascending = true)
     {
         return ascending
             ? await this.DbSet.Where(predicate).OrderBy(orderBy).ToListAsync()
             : await this.DbSet.Where(predicate).OrderByDescending(orderBy).ToListAsync();
     }
 
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, TKey>> orderBy,
+    public virtual async Task<List<TEntity>> GetListAsync<TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy,
         bool ascending = true)
     {
         return ascending

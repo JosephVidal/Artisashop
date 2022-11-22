@@ -14,8 +14,20 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Artisashop.Configurations;
 using Artisashop.Helpers;
+using Artisashop.Models.MappingProfiles;
 using Artisashop.Services;
 using Artisashop.Services.Interface;
+using AutoMapper;
+
+var mapperConfiguration = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<AccountMappingProfile>();
+});
+
+#if DEBUG
+// Asserts that the mapper configuration is valid
+mapperConfiguration.AssertConfigurationIsValid();
+#endif
 
 // Add services to DI container
 var builder = WebApplication.CreateBuilder(args);

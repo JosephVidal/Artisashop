@@ -72,9 +72,9 @@ public class SearchController : ControllerBase
                     (user, userRole) => new { user, userRole }).Where(x => x.userRole.RoleId == sellerRole.Id)
                 .Select(x => x.user).AsQueryable();
             if (search.FirstName != null && search.FirstName != "")
-                query = query.Where(item => item.Firstname == search.FirstName);
+                query = query.Where(item => item.FirstName == search.FirstName);
             if (search.LastName != null && search.LastName != "")
-                query = query.Where(item => item.Lastname == search.LastName);
+                query = query.Where(item => item.LastName == search.LastName);
             if (search.Job != null && search.Job != "")
                 query = query.Where(item => item!.Job == search.Job);
             if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
@@ -88,12 +88,12 @@ public class SearchController : ControllerBase
         }
     }
 
-    private double Haversine(GPSCoord a, GPSCoord b)
+    private double Haversine(GpsCoordinates a, GpsCoordinates b)
     {
         return Haversine(a, b, 6371000); // Call Haversine Formula W/ the earth radius in meter
     }
 
-    private double Haversine(GPSCoord a, GPSCoord b, double radius)
+    private double Haversine(GpsCoordinates a, GpsCoordinates b, double radius)
     {
         double radFact = Math.PI / 180;
         double phiA = radFact * a.Latitude;

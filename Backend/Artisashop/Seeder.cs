@@ -67,48 +67,48 @@ public static class Seeder
             new()
             {
                 Email = "thomas@artisashop.fr",
-                Firstname = "Thomas",
-                Lastname = "Colonna",
+                FirstName = "Thomas",
+                LastName = "Colonna",
                 Suspended = false,
                 Validation = false
             },
             new()
             {
                 Email = "helena@artisashop.fr",
-                Firstname = "Helena",
-                Lastname = "Ganeman-Valot",
+                FirstName = "Helena",
+                LastName = "Ganeman-Valot",
                 Suspended = false,
                 Validation = false
             },
             new()
             {
                 Email = "joseph@artisashop.fr",
-                Firstname = "Joseph",
-                Lastname = "Vidal",
+                FirstName = "Joseph",
+                LastName = "Vidal",
                 Suspended = false,
                 Validation = false
             },
             new()
             {
                 Email = "jean@artisashop.fr",
-                Firstname = "Jean",
-                Lastname = "Epp",
+                FirstName = "Jean",
+                LastName = "Epp",
                 Suspended = false,
                 Validation = false
             },
             new()
             {
                 Email = "guillaume@artisashop.fr",
-                Firstname = "Guillaume",
-                Lastname = "Fischer",
+                FirstName = "Guillaume",
+                LastName = "Fischer",
                 Suspended = false,
                 Validation = false
             },
             new()
             {
                 Email = "yann@artisashop.fr",
-                Firstname = "Yann",
-                Lastname = "Osmont",
+                FirstName = "Yann",
+                LastName = "Osmont",
                 Suspended = false,
                 Validation = false
             },
@@ -172,8 +172,8 @@ public static class Seeder
             .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
             .RuleFor(o => o.UserName, f => f.Internet.Email())
             .RuleFor(o => o.Email, (f, o) => o.UserName)
-            .RuleFor(o => o.Firstname, f => f.Name.FirstName())
-            .RuleFor(o => o.Lastname, f => f.Name.LastName())
+            .RuleFor(o => o.FirstName, f => f.Name.FirstName())
+            .RuleFor(o => o.LastName, f => f.Name.LastName())
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
             .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
             .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())

@@ -1007,7 +1007,7 @@ public struct MailTemplates
 
     public static string ItemSold(Account buyer, List<BasketItem> basket)
     {
-        string rtn = "Buyer name: " + buyer.Firstname + " " + buyer.Lastname + "\r\n";
+        string rtn = "Buyer name: " + buyer.FirstName + " " + buyer.LastName + "\r\n";
         foreach (BasketItem item in basket)
             rtn += "\t- " + item.Product!.Name + " * " + item.Quantity + " - " +
                    (DeliveryOption.DELIVERY == item.DeliveryOpt ? "delivery" : "take out") + "\r\n";

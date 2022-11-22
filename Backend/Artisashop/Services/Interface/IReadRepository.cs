@@ -13,8 +13,8 @@ public interface IReadRepository<TEntity, TKey>
 
     Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
 
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, TKey>> orderBy, bool ascending = true);
+    Task<List<TEntity>> GetListAsync<TOrderBy>(Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, TOrderBy>> orderBy, bool ascending = true);
 
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, TKey>> orderBy, bool ascending = true);
+    Task<List<TEntity>> GetListAsync<TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy, bool ascending = true);
 }

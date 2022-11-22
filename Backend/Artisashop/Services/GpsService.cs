@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 public interface IGpsService
 {
-    Task<GPSCoord?> GetGPSFromAddressAsync(string address);
+    Task<GpsCoordinates?> GetGPSFromAddressAsync(string address);
 }
 
 public class GpsService : IGpsService
@@ -25,11 +25,11 @@ public class GpsService : IGpsService
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
     
-    public async Task<GPSCoord?> GetGPSFromAddressAsync(string address)
+    public async Task<GpsCoordinates?> GetGPSFromAddressAsync(string address)
     {
         var response = await _httpClient.GetAsync($"geocode/v1/json?q={address}&key={_googleGeocodingConfigration.ApiKey}");
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<GPSCoord>(content);
+        return JsonConvert.DeserializeObject<GpsCoordinates>(content);
     }
 
 }

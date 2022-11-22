@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Helpers;
+using Models.ViewModel.Chat;
 
 /// <summary>
 /// This controller handles chat actions as message and document exchange

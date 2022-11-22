@@ -9,9 +9,11 @@ namespace Artisashop.Models;
 
 public class Account : IdentityUser, IIdentifiable<string>, ICreatedAt, IUpdatedAt, ISoftDelete
 {
-    public required string? Lastname { get; set; }
+    public required string? LastName { get; set; }
 
-    public required string? Firstname { get; set; }
+    public required string? FirstName { get; set; }
+    
+    public string? PreferredName { get; set; }
 
     // TODO: make it more elegant
     public string? ProfilePicture { get; set; }
@@ -22,7 +24,7 @@ public class Account : IdentityUser, IIdentifiable<string>, ICreatedAt, IUpdated
 
     public string? Address { get; set; }
 
-    public GPSCoord? AddressGps { get; set; }
+    public GpsCoordinates? AddressGps { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -36,7 +38,7 @@ public class Account : IdentityUser, IIdentifiable<string>, ICreatedAt, IUpdated
 
     public virtual List<Product>? Products { get; set; }
 
-    public required bool? Validation { get; set; }
+    public bool? Validation { get; set; }
 
     public bool IsDeleted { get; set; }
 

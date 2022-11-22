@@ -65,11 +65,11 @@ namespace Artisashop.Models.ViewModel
 
                 [JsonProperty("northeast")]
                 [JsonPropertyName("northeast")]
-                public GPSCoord? Northeast { get; set; }
+                public GpsCoordinates? Northeast { get; set; }
 
                 [JsonProperty("southwest")]
                 [JsonPropertyName("southwest")]
-                public GPSCoord? Southwest { get; set; }
+                public GpsCoordinates? Southwest { get; set; }
             }
 
             public class ComponentsInfo
@@ -379,7 +379,7 @@ namespace Artisashop.Models.ViewModel
 
             [JsonProperty("geometry")]
             [JsonPropertyName("geometry")]
-            public GPSCoord? Geometry { get; set; }
+            public GpsCoordinates? Geometry { get; set; }
 
             [JsonProperty("formatted")]
             [JsonPropertyName("formatted")]

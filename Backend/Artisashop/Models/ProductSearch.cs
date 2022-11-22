@@ -10,7 +10,7 @@
 
         public List<int>? StyleIds { get; set; }
 
-        public GPSCoord? UserGPSCoord { get; set; }
+        public GpsCoordinates? UserGPSCoord { get; set; }
 
         public double? Distance { get; set; }
     }

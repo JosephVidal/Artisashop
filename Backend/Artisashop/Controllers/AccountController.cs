@@ -26,36 +26,20 @@ using Services;
 [Authorize]
 public class AccountController : ControllerBase
 {
-    private readonly SignInManager<Account> _signInManager;
     private readonly IAccountService<Account> _accountService;
-    private readonly UserManager<Account> _userManager;
-    private readonly IConfiguration _configuration;
-    private readonly StoreDbContext _db;
-    private readonly FranceConnectConfiguration _franceConnectConfiguration;
-    private readonly ILogger<AccountController> _logger;
-    private readonly HttpClient _opencageDataClient = new HttpClient();
 
-    public AccountController(
-        IAccountService<Account> accountService,
-        UserManager<Account> userManager,
-        SignInManager<Account> signInManager,
-        IConfiguration configuration,
-        StoreDbContext db,
-        IOptions<FranceConnectConfiguration> franceConnectConfiguration,
-        ILoggerFactory loggerFactory)
+    private readonly ILogger<AccountController> _logger;
+    // private readonly SignInManager<Account> _signInManager;
+    // private readonly UserManager<Account> _userManager;
+    // private readonly IConfiguration _configuration;
+    // private readonly StoreDbContext _db;
+    // private readonly FranceConnectConfiguration _franceConnectConfiguration;
+    // private readonly HttpClient _opencageDataClient = new HttpClient();
+
+    public AccountController(IAccountService<Account> accountService, ILoggerFactory loggerFactory)
     {
         _accountService = accountService;
-
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _configuration = configuration;
-        _db = db;
-        _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
-
-        _opencageDataClient.BaseAddress = new Uri("https://api.opencagedata.com/");
-        _opencageDataClient.DefaultRequestHeaders.Accept.Clear();
-        _opencageDataClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     [HttpPost("login")]
@@ -64,18 +48,19 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var user = await _userManager.FindByEmailAsync(model.Email!);
+            var user = await _accountService.GetFromEmailAsync(model.Email);
             if (user == null)
             {
                 throw new ArtisashopException("Invalid login attempt.");
             }
-            
-            var roles = await _userManager.GetRolesAsync(user);
-            
-            
 
-            
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var result = await _accountService.SignInWithPasswordAsync(user, model.Password, false);
+            if (!result.Succeeded)
+            {
+                throw new ArtisashopException("Invalid login attempt.");
+            }
+
+            var roles = await _accountService.GetRolesAsync(user);
             if (result.Succeeded)
             {
                 // var user = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
@@ -86,7 +71,6 @@ public class AccountController : ControllerBase
                     Username = user.UserName,
                     Email = user.Email,
                     EmailConfirmed = user.EmailConfirmed,
-                    TwoFactorEnabled = user.TwoFactorEnabled,
                     Roles = roles?.ToList() ?? new List<string>(),
                 };
                 var token = new AccountToken(viewModel, await GenerateJwtToken(user));
@@ -110,14 +94,14 @@ public class AccountController : ControllerBase
             var account = new Account
             {
                 Email = model.Email,
-                Firstname = model.Firstname,
-                Lastname = model.Lastname,
+                FirstName = model.Firstname,
+                LastName = model.Lastname,
             };
             await _accountService.RegisterAsync(account, model.Password!);
             var user = await _accountService.GetFromEmailAsync(model.Email!);
             await _accountService.AddToRoleAsync(user!, Roles.User);
             await _signInManager.SignInAsync(user!, false);
-            
+
             var roles = await _userManager.GetRolesAsync(user!);
             var viewModel = new AccountViewModel
             {
