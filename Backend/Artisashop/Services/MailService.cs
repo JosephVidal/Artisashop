@@ -1,7 +1,11 @@
 ﻿namespace Artisashop.Services;
 
 using System.Net.Mail;
-using Interface;
+
+public interface IMailService
+{
+    public bool SendMail(string to, string subject, string bodyText);
+}
 
 public class MailService : IMailService
 {

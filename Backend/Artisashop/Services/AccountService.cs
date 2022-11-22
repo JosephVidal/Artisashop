@@ -28,8 +28,11 @@ public interface IAccountService<TUser> : IReadRepository<TUser, string>, ISoftD
 
 public class AccountService : BaseReadOnlyRepository<Account, string>, IAccountService<Account>
 {
-    public AccountService(StoreDbContext dbContext) : base(dbContext, dbContext.Users)
+    private readonly UserManager<Account> _userManager;
+
+    public AccountService(StoreDbContext dbContext, UserManager<Account> userManager) : base(dbContext, dbContext.Users)
     {
+        _userManager = userManager;
     }
 
     public async Task<List<Account>> GetListAsync<TKey1>(Expression<Func<Account, bool>> predicate,
@@ -67,6 +70,37 @@ public class AccountService : BaseReadOnlyRepository<Account, string>, IAccountS
     }
 
     public async Task SoftDeleteRangeAsync(IEnumerable<Account> entities)
+    {
+        var ids = entities.Select(x => x.Id).ToList();
+        var accounts = await this.DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+        foreach (var account in accounts)
+        {
+            account.IsDeleted = true;
+            account.DeletedAt = DateTime.Now;
+        }
+        throw new NotImplementedException();
+    }
+
+    public async Task RestoreDeletedAsync(Account entity)
+    {
+        var elem = this.DbSet.Attach(entity);
+        var entry = elem.Entity;
+        entry.IsDeleted = false;
+        entry.DeletedAt = null;
+        this.DbSet.Update(entity);
+        await this.DbContext.SaveChangesAsync();
+    }
+
+    public async Task RestoreDeletedAsync(string id)
+    {
+        var elem = this.DbSet.FirstOrDefault(x => x.Id == id);
+        if (elem == null)
+        {
+            throw new ArtisashopException("Cannot find the user.");
+        }
+    }
+
+    public async Task RestoreDeletedRangeAsync(IEnumerable<Account> entities)
     {
         throw new NotImplementedException();
     }

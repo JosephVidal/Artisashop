@@ -5,7 +5,7 @@ public interface ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public bool Delete()
+    public bool SoftDelete()
     {
         if (IsDeleted) return false;
 
@@ -15,7 +15,7 @@ public interface ISoftDelete
         return true;
     }
 
-    public bool Restore()
+    public bool RestoreSoftDelete()
     {
         if (!IsDeleted) return false;
 

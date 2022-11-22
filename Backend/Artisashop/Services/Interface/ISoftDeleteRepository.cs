@@ -9,4 +9,7 @@ public interface ISoftDeleteRepository<TEntity, TKey>
     public Task SoftDeleteAsync(TEntity entity);
     public Task SoftDeleteAsync(TKey id);
     public Task SoftDeleteRangeAsync(IEnumerable<TEntity> entities);
+    public Task RestoreDeletedAsync(TEntity entity);
+    public Task RestoreDeletedAsync(TKey id);
+    public Task RestoreDeletedRangeAsync(IEnumerable<TEntity> entities);
 }
