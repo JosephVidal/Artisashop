@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const CraftsmanCardWrapper = styled.div`
+    a {
+        text-decoration: none;
+        color: var(--artshp-dark-blue);
+    }
+
     #card {
         background-color: white;
         border-radius: var(--elem-radius);
