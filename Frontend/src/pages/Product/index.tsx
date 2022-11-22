@@ -15,7 +15,7 @@ const ProductView = () => {
   const productApi = useApi(ProductApi);
   const [product, setProduct] = useState<Product | null>(null);
   const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
-  const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.png", [product]);
+  const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.svg", [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
@@ -40,7 +40,7 @@ const ProductView = () => {
         <div id="product-info">
           <h1>{product?.name}</h1>
           <Craftsman>
-            <img className="craftsman-img" src="img/craftsman/Joseph.jpg" alt="test" />
+            <img className="craftsman-img" src={product?.craftsman.profilePicture ?? "/img/craftsman/default.svg"} alt="test" />
             <a href={productLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">

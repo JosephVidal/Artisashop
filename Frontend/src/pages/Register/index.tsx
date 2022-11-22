@@ -14,7 +14,7 @@ const Register = () => {
     <Wrapper>
       <div className="register-card">
         <h1>Artisashop</h1>
-        <h2>Créer un compte <span id="account-type">client</span></h2>
+        <h2>Créer un compte</h2>
         <Formik
           initialValues={{
             firstname: '',

@@ -13,7 +13,7 @@ const CraftsmanView = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
   const accountApi = useApi(AccountApi);
   const productApi = useApi(ProductApi);
-  const craftsmantImg = useMemo(() => account?.profilePicture ? `/img/craftsman/${account?.profilePicture}` : "/img/craftsman/default.png", [account]);
+  const craftsmantImg = useMemo(() => account?.profilePicture ? `/img/craftsman/${account?.profilePicture}` : "/img/craftsman/default.svg", [account]);
   const craftsmanFirstname = useMemo(() => account?.firstname, [account]);
   const craftsmanLastname = useMemo(() => account?.lastname, [account]);
   const craftsmanJob = useMemo(() => account?.job, [account]);

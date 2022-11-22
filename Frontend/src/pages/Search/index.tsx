@@ -29,7 +29,7 @@ const Search: React.FunctionComponent<Props> = () => {
     ?.filter(s => s === f.name))),
     [productResult, stylesFilters]);
   const filteredCraftsman = useMemo(() => accountResult
-    ?.filter(value => jobFilters?.filter(f => value?.job)),
+    ?.filter(value => jobFilters?.filter(f => f.name === value?.job)),
     [accountResult, jobFilters]);
   // const filteredCraftsman = useMemo(() => accountResult?.filter(value => jobFilters?.filter(f => value?.job === f)),
   //   [accountResult, jobFilters]);
@@ -130,15 +130,15 @@ const Search: React.FunctionComponent<Props> = () => {
             <h2>Résultats pour : {searchParams.get("q")}</h2>
             <div id="result-list">
               {filteredProducts?.map(elem => <ProductCard styles={elem?.stylesList ?? ""} img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
-              {filteredCraftsman?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.png"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
+              {filteredCraftsman?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.svg"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
             </div>
           </section>
         </div>
         <div id="suggestions">
           <h2>Pour vous :</h2>
           <div id="suggestions-wrapper">
-            <ProductCard styles="LouisXV" img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
-            <ProductCard styles="LouisXV" img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
+            <ProductCard styles="Gallé" img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
+            <ProductCard styles="Gallé" img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test"/>
           </div>
         </div>
       </div>
