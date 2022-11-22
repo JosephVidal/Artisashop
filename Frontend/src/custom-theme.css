@@ -184,7 +184,7 @@ li {list-style: none;}
   right: 0;
   bottom: 0;
   padding: 0 10px;
-  background-color: #ccc;
+  background-color: var(--artshp-dark-blue);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -198,7 +198,7 @@ li {list-style: none;}
   right: 0;
   bottom: 0;
   padding: 0 10px;
-  background-color: #ccc;
+  background-color: var(--artshp-dark-blue);
   -webkit-transition: .4s;
   transition: .4s;
 }
