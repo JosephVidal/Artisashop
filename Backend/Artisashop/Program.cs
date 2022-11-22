@@ -16,7 +16,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Artisashop.Configurations;
+using Duende.IdentityServer.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+
+const string myAllowSpecificOrigins = "MyAllowSpecificOrigins";
+
 
 // Add services to DI container
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +41,36 @@ builder.Services.AddControllers()
         // serialize enums as strings in api responses (e.g. Role)
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: myAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins(
+                    "http://localhost:43117",
+                    "https://localhost:7095",
+                    "http://localhost:5206",
+                    "https://localhost:44474");
+            });
+    });
+}
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: myAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins(
+                    "https://artisashop.fr",
+                    "https://api.artisashop.fr",
+                    "https://www.artisashop.fr");
+            });
+    });
+}
 
 builder.Services.AddSignalR();
 
@@ -184,9 +219,9 @@ app.UseRouting();
 // Setup environment specific pipelines
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors(builder =>
+    app.UseCors(policyBuilder =>
     {
-        builder.AllowAnyHeader()
+        policyBuilder
             .AllowAnyMethod()
             .AllowAnyOrigin()
             .WithExposedHeaders("Content-Range")
@@ -211,7 +246,7 @@ else // Production
 {
     app.UseCors(builder =>
     {
-        builder.AllowAnyHeader()
+        builder
             .AllowAnyMethod()
             .AllowAnyOrigin()
             .WithExposedHeaders("Content-Range")
