@@ -150,10 +150,10 @@ namespace Artisashop.Controllers
                 List<ChatUserDetail> fromUserList =
                     ChatHub.connectedUsers.Where(x => x.UserID == message.FromUserId).ToList();
                 foreach (ChatUserDetail elem in toUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.Filename,
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.FromUserId!, message.Filename,
                         message.Content, DateTime.Now, message.Joined, dbMsg.Id);
                 foreach (ChatUserDetail elem in fromUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.Filename,
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.ToUserID!, message.Filename,
                         message.Content, DateTime.Now, message.Joined, dbMsg.Id);
 
                 return Ok(result.Entity);

@@ -22,7 +22,7 @@ namespace Artisashop.Hubs
                 //await Clients.AllExcept(id).SendAsync("UserConnection", userID);
                 connectedUsers.Add(new ChatUserDetail(id, userID, username));
             }
-            await Clients.Caller.OnConnected(userID, "Connected as " + username + " (" + userID + ")");
+            await Clients.Caller.OnConnected(userID);
             //await Clients.Caller.SendAsync("OnConnected", userID, "Connected as " + username + " (" + userID + ")");
         }
 
