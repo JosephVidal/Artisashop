@@ -8,6 +8,14 @@ margin-bottom: 50px;
 padding: 0 10px;
 color: black;
 
+.text {
+    text-align: center;
+}
+
+.spacing {
+    margin: 30px 0;
+}
+
 @media only screen and (max-width:880px) {
     width: 90%;
 }

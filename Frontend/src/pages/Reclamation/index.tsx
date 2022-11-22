@@ -1,19 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Field, Form, Formik } from "formik";
+import useApi from "hooks/useApi";
+import useAsync from "hooks/useAsync";
+import { ComplaintApi } from "api";
 import { Wrapper } from "./styles";
 
-const ReclamationView = () => (
-  <Wrapper>
-    <div className="reclamation-card">
-      <h1>Artisashop</h1>
-      <h2>Réclamation</h2>
-      <form action="submit">
-        <input type="text" placeholder="Nom du produit" />
-        <input className="text-longer" type="text" placeholder="Cause de la réclamation" />
-        <input id="image-file" type="file" name="Image" />
-        <button type="submit" id="contact-button" className="red-button">Terminé</button>
-      </form>
-    </div>
-  </Wrapper>
-);
+const ReclamationView = () => {
+  const ComplainttApi = useApi(ComplaintApi)
+
+  const { value, status, error, execute } = useAsync(() => ComplainttApi.apiComplaintPost({}), false);
+
+  useEffect(() => { if (!null) { execute(); } }, []);
+
+  return (
+    <Wrapper>
+      <div className="reclamation-card">
+        <h1>Artisashop</h1>
+        <h2>Réclamation</h2>
+        <Formik
+          initialValues={{
+            email: '',
+            subject: '',
+            content: '',
+            receiver: '',
+          }}
+
+          onSubmit={async values => { }}
+
+          validate={values => { }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+          <Field id="name" name="name" type="text" placeholder="Nom du produit" />
+          <Field as="textarea" id="description" name="description" className="message" rows={5} cols={33} placeholder="Cause de la réclamation" />
+              <button type="submit" id="contact-button" className="red-button" disabled={isSubmitting}>Terminé</button>
+        </Form>
+          )}
+      </Formik>
+      </div>
+    </Wrapper>
+  );
+}
 
 export default ReclamationView;

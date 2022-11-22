@@ -44,8 +44,14 @@ export const Wrapper = styled.div`
             margin-left: -5px;
         }
 
-        .text-longer {
-            height: 30px;
+        .message {
+            border-radius: var(--elem-radius);
+            background-color: var(--bs-light);
+            margin: 10px 0;
+            padding-left: 7px;
+            padding-top: 5px;
+            font-size: 1.2em;
+            color: black;
         }
 }
 `;
