@@ -25,8 +25,9 @@ import {InputText} from "primereact/inputtext";
 import {Maybe, None, Some} from "monet";
 import useApi from "hooks/useApi";
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
+import RealTimeChat from "pages/Chat/RealTimeChat";
 
-interface Conversation {
+export interface Conversation {
   history: ChatMessage[],
   interlocutor?: Account
 }
@@ -46,6 +47,11 @@ const Chat: FC = () => {
   reader.onloadend = () => {
     setFileData(Some(reader.result as string));
   }
+
+  file.cata(
+    () => null,
+    (f) => console.log(URL.createObjectURL(f))
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -115,6 +121,7 @@ const Chat: FC = () => {
       <ContactList>
         {contactList.map(renderContact)}
       </ContactList>
+      <RealTimeChat setContactList={setContactList} setConversation={setConversation} contactList={contactList} conversation={conversation} />
       <ConversationWrapper>
         <ConversationTitle>
           {conversation.history.length !== 0 && (
