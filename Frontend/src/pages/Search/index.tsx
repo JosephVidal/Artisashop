@@ -85,7 +85,7 @@ const Search: React.FunctionComponent<Props> = () => {
                 <span className="round search-slider" />
               </label>
               <label className="wordCarousel" htmlFor="SearchType">
-                <span className="search-type-text">{type}</span>
+                <p className="search-type-text">{type}</p>
               </label>
             </div>
           </Form>

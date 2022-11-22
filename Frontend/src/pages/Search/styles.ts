@@ -38,7 +38,6 @@ export const SearchFilters = styled.aside`
     color: var(--bs-dark);
     width: 15vw;
     padding: 20px;
-    width: 20vw;
 
     .filter {
         &:not(:last-child) {padding-bottom: 20px;}
