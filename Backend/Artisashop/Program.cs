@@ -189,7 +189,8 @@ if (app.Environment.IsDevelopment())
         builder.AllowAnyHeader()
             .AllowAnyMethod()
             .AllowAnyOrigin()
-            .WithExposedHeaders("Content-Range");
+            .WithExposedHeaders("Content-Range")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
     });
     // Cleans up the database on each run
     using (var scope = app.Services.CreateScope())
@@ -213,7 +214,8 @@ else // Production
         builder.AllowAnyHeader()
             .AllowAnyMethod()
             .AllowAnyOrigin()
-            .WithExposedHeaders("Content-Range");
+            .WithExposedHeaders("Content-Range")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
     });
 
     using (var scope = app.Services.CreateScope())
