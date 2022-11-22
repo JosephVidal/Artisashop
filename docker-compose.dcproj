@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <ProjectGuid>5d5a904b-3a13-49bb-97e4-7f696000161a</ProjectGuid>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
+    <DockerServiceName>artisashop</DockerServiceName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="Ansible\id_ed25519.pub" />
+    <None Include="Ansible\inventory.yml" />
+    <None Include="Ansible\playbook-dev.yml" />
+    <None Include="Ansible\playbook-prod.yml" />
+    <None Include="Ansible\README.md" />
+    <None Include="Ansible\roles\artisashop\defaults\.gitkeep" />
+    <None Include="Ansible\roles\artisashop\files\docker-compose-deploy.yml" />
+    <None Include="Ansible\roles\artisashop\handlers\.gitkeep" />
+    <None Include="Ansible\roles\artisashop\meta\.gitkeep" />
+    <None Include="Ansible\roles\artisashop\tasks\main.yml" />
+    <None Include="Ansible\roles\artisashop\templates\.gitkeep" />
+    <None Include="Ansible\roles\artisashop\vars\.gitkeep" />
+    <None Include="Ansible\roles\deploy\defaults\.gitkeep" />
+    <None Include="Ansible\roles\deploy\files\.gitkeep" />
+    <None Include="Ansible\roles\deploy\handlers\.gitkeep" />
+    <None Include="Ansible\roles\deploy\meta\.gitkeep" />
+    <None Include="Ansible\roles\deploy\tasks\main.yml" />
+    <None Include="Ansible\roles\deploy\templates\.gitkeep" />
+    <None Include="Ansible\roles\deploy\vars\.gitkeep" />
+    <None Include="Ansible\roles\new_user\defaults\.gitkeep" />
+    <None Include="Ansible\roles\new_user\files\.gitkeep" />
+    <None Include="Ansible\roles\new_user\handlers\.gitkeep" />
+    <None Include="Ansible\roles\new_user\meta\.gitkeep" />
+    <None Include="Ansible\roles\new_user\tasks\main.yml" />
+    <None Include="Ansible\roles\new_user\templates\.gitkeep" />
+    <None Include="Ansible\roles\new_user\vars\.gitkeep" />
+    <None Include="Ansible\roles\requirements\defaults\.gitkeep" />
+    <None Include="Ansible\roles\requirements\files\.gitkeep" />
+    <None Include="Ansible\roles\requirements\handlers\main.yml" />
+    <None Include="Ansible\roles\requirements\meta\.gitkeep" />
+    <None Include="Ansible\roles\requirements\tasks\main.yml" />
+    <None Include="Ansible\roles\requirements\templates\.gitkeep" />
+    <None Include="Ansible\roles\requirements\vars\.gitkeep" />
+    <None Include="Ansible\roles\secret\defaults\.gitkeep" />
+    <None Include="Ansible\roles\secret\files\.gitkeep" />
+    <None Include="Ansible\roles\secret\handlers\.gitkeep" />
+    <None Include="Ansible\roles\secret\meta\.gitkeep" />
+    <None Include="Ansible\roles\secret\tasks\main.yml" />
+    <None Include="Ansible\roles\secret\templates\.gitkeep" />
+    <None Include="Ansible\roles\secret\vars\.gitkeep" />
+    <None Include="Ansible\roles\traefik\defaults\.gitkeep" />
+    <None Include="Ansible\roles\traefik\files\docker-compose.yml" />
+    <None Include="Ansible\roles\traefik\handlers\.gitkeep" />
+    <None Include="Ansible\roles\traefik\meta\.gitkeep" />
+    <None Include="Ansible\roles\traefik\tasks\main.yml" />
+    <None Include="Ansible\roles\traefik\templates\.gitkeep" />
+    <None Include="Ansible\roles\traefik\vars\.gitkeep" />
+    <None Include="courgette.log" />
+    <None Include="development.env" />
+    <None Include="docker-compose.override.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.yml" />
+    <None Include=".dockerignore" />
+    <None Include="Docs\Resources\Screenshots\Chat.png" />
+    <None Include="Docs\Resources\Screenshots\Contact.png" />
+    <None Include="Docs\Resources\Screenshots\Home Page.png" />
+    <None Include="Docs\Resources\Screenshots\Login.png" />
+    <None Include="Docs\Resources\Screenshots\Mon Panier.png" />
+    <None Include="Docs\Resources\Screenshots\Politique De Confidentialite.png" />
+    <None Include="Docs\Resources\Screenshots\Register.png" />
+    <None Include="Docs\Resources\Screenshots\Search.png" />
+    <None Include="README.md" />
+  </ItemGroup>
+</Project>

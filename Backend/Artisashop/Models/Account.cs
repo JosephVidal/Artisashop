@@ -23,6 +23,8 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Bills = new List<Bill>();
         Baskets = new List<Basket>();
         Address = model.Address;
+        Suspended = false;
+        Validation = false;
     }
 
     [Required] public string? Lastname { get; set; }

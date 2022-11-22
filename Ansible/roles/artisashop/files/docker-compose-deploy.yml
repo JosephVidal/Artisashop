@@ -1,6 +1,5 @@
-version: "3.9"
+version: '3.8'
 services:
-
   backend:
     restart: always
     environment:
@@ -42,13 +41,30 @@ services:
       # - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-artisafront.middlewares=${COMPOSE_PROJECT_NAME}-redirect-shop"
       # - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.regex=(http(s*)://)?${ARTISASHOP_HOST}/?(.*)"
       # - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME}-redirect-shop.redirectregex.replacement=https://${ARTISASHOP_HOST}/$${3}"
-
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-frontend.rule=Host(`${ARTISASHOP_HOST}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-frontend.entrypoints=websecure"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-frontend.loadbalancer.server.port=80"
-
     networks:
       - traefik-tier
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgresUser
+      - POSTGRES_PASSWORD=postgresPW
+      - POSTGRES_DB=postgresDB
+    expose:
+      - 5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./dbsrcipts/seed.sql :/docker-entrypoint-initdb.d/seed.sql
+    networks:
+      - traefik-tier
+      - db-tier
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
 
 # db:
 #   image: mysql
@@ -66,41 +82,6 @@ services:
 #     - db-tier
 #   labels:
 #     - "traefik.enable=true"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.rule=Host(`${ARTISASHOP_HOST}`) && (Path(`/dashboard/mongo`) || PathPrefix(`/dashboard/mongo`))"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.entrypoints=websecure"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.priority=820"
-#     - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
-
-# adminer:
-#   image: adminer
-#   restart: always
-#   ports:
-#     - 8080:8080
-#   depends_on:
-#     - db
-
-# mongo-express:
-#   image: mongo-express
-#   restart: always
-#   expose:
-#     - "8081"
-#   depends_on:
-#     - mongo
-#   networks:
-#     - traefik-tier
-#     - db-tier
-#   environment:
-#     - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-#     - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
-#     - ME_CONFIG_MONGODB_SERVER=mongo
-#     - ME_CONFIG_SITE_BASEURL=/dashboard/mongo/
-#     - ME_CONFIG_BASICAUTH_USERNAME=CraftmanInception
-#     - ME_CONFIG_BASICAUTH_PASSWORD=h4rd2fyndeuh
-#   labels:
-#     - "traefik.enable=true"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.rule=Host(`${ARTISASHOP_HOST}`) && (Path(`/dashboard/mongo`) || PathPrefix(`/dashboard/mongo`))"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.entrypoints=websecure"
-#     - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-mongo-express-dashboard.priority=820"
 #     - "traefik.http.services.mongo-express.loadbalancer.server.port=8081"
 
 # smtp-server:
