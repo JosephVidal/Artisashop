@@ -23,6 +23,7 @@ import UpdateProductView from "pages/UpdateProduct";
 import ReclamationView from "pages/Reclamation";
 import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
+import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
 const AdminDashboard = React.lazy(() => import("pages/Admin"));
 
@@ -63,6 +64,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
             <Route path="reclamation" element={<ReclamationView />} />
             <Route path="about/craftsmans" element={<CraftsmanPres />} />
             <Route path="about/products" element={<ProductPres />} />
+            <Route path="dashboard" element={<CraftsmanDashboard />}/>
           </Route>
           <Route path="admin/*" element={<AdminDashboard/>}/>
         </Route>
