@@ -10,7 +10,6 @@ import { Wrapper } from "./styles";
 interface Props { }
 
 const Home: React.FunctionComponent<Props> = () => {
-  useFormattedDocumentTitle("Artisashop");
 
   const navigate = useNavigate();
   const type = "Par produit";
