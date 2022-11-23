@@ -30,9 +30,7 @@ const TopMenu: React.FunctionComponent<Props> = () => {
     <TopMenuWrapper>
       <MenuItem>
         <Link to="/app/dashboard">
-          <BaseText>
-            {t("menu.dashboard")}
-          </BaseText>
+          {t("menu.dashboard")}
         </Link>
       </MenuItem>
       <MenuItem>
