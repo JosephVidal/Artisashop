@@ -28,20 +28,10 @@ import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import RealTimeChat from "pages/Chat/RealTimeChat";
 import {useSearchParams} from "react-router-dom";
-import {useNavigate} from "react-router";
 
 export interface Conversation {
   history: ChatMessage[],
   interlocutor?: Account
-}
-
-const Joseph: Account = {
-  id: "14d8b8f2-9446-4485-95f7-bb657de7c54e",
-  lastname: "Osmont",
-  firstname: "Yann",
-  suspended: false,
-  validation: false,
-  userName: "yann@artisashop.fr"
 }
 
 const Chat: FC = () => {
@@ -55,7 +45,6 @@ const Chat: FC = () => {
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
   const [user, setUser] = useState<Account>();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const newMessage: boolean = useMemo(() => searchParams.get("new") === "true" || false, [searchParams]);
   const to: Account | null = useMemo(() => {
@@ -152,12 +141,6 @@ const Chat: FC = () => {
 
   return (
     <Wrapper>
-      <BsPencil size="5%" onClick={() => {
-        navigate({
-          pathname: '/app/chat',
-          search: `?new=true&to=${JSON.stringify(Joseph)}`,
-        })
-      }} />
       <ContactList>
         {(newMessage && contactList.find((preview) =>
           preview.lastMsg?.senderId === (to )?.id ||
