@@ -38,15 +38,15 @@ namespace Artisashop.Controllers
                     .Include(item => item.Craftsman!.AddressGPS)
                     .Include(item => item.ProductImages)
                     .Include(item => item.ProductStyles);
-                if (!string.IsNullOrEmpty(search.Name))
-                    query = query.Where(item => item.Name.Contains(search.Name, StringComparison.OrdinalIgnoreCase));
-                if (!string.IsNullOrEmpty(search.Job))
-                    query = query.Where(item => item.Craftsman != null && item.Craftsman.Job == search.Job);
                 if (search.Styles != null)
                     foreach (string searchStyle in search.Styles.Select(ProductStyle.GetNormalizedName))
                         query = query.Where(item =>
                             item.ProductStyles != null && item.ProductStyles.Any(x => x.NormalizedName == searchStyle));
                 var res = await query.ToListAsync();
+                if (!string.IsNullOrEmpty(search.Name))
+                    res = res.Where(item => item.Name!.Contains(search.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (!string.IsNullOrEmpty(search.Job))
+                    res = res.Where(item => item.Craftsman!.Job!.Contains(search.Job, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
                     res = res.Where(item =>
                         item.Craftsman != null && item.Craftsman.AddressGPS != null &&
@@ -74,13 +74,13 @@ namespace Artisashop.Controllers
                         userRole => userRole.UserId,
                         (user, userRole) => new { user, userRole }).Where(x => x.userRole.RoleId == sellerRole.Id)
                     .Select(x => x.user).AsQueryable().Include(item => item.AddressGPS);
-                if (search.FirstName != null && search.FirstName != "")
-                    query = query.Where(item => item.Firstname == search.FirstName);
-                if (search.LastName != null && search.LastName != "")
-                    query = query.Where(item => item.Lastname == search.LastName);
-                if (search.Job != null && search.Job != "")
-                    query = query.Where(item => item!.Job == search.Job);
                 var res = await query.ToListAsync();
+                if (!string.IsNullOrEmpty(search.FirstName))
+                    res = res.Where(item => item.Firstname!.Contains(search.FirstName, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (!string.IsNullOrEmpty(search.LastName))
+                    res = res.Where(item => item.Lastname!.Contains(search.LastName, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (!string.IsNullOrEmpty(search.Job))
+                    res = res.Where(item => item.Job!.Contains(search.Job, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
                     res = res.Where(item =>
                         item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance).ToList();
