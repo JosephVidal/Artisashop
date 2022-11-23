@@ -17,6 +17,23 @@ export const Craftsman = styled.div`
         margin: auto 30px auto 0;
         height: 120px;
     }
+
+    .chat-button {
+        background-color: var(--artshp-blue);
+        border: 0px;
+        border-radius: 50%;
+        font-size: 1em;
+        margin: auto;
+        margin-left: 5px;
+        padding: 5px 7px;
+
+        :hover {background-color: var(--artshp-orange);}
+    }
+
+    #craftsman-name-section {
+        display: flex;
+        flex-direction: row;
+    }
 `;
 
 export const Wrapper = styled.div`

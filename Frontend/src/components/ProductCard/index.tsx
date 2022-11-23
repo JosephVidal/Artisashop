@@ -6,7 +6,7 @@ import { ProductCardWrapper } from "./styles";
 interface Props {
   name: string
   img: string
-  serie: string
+  serie?: string
   price: number
   href: string
   productStyles?: ProductStyle[] | null
@@ -23,23 +23,26 @@ const ProductCard: React.FunctionComponent<Props> = ({
   href,
   productStyles,
 }) => (
-      <ProductCardWrapper>
-        <Link id="product-card" to={href}>
-          <img src={img} alt="" />
-          <div>
-            <p id="product-name">{name}</p>
-            <p id="product-serie">{serie}</p>
-            <p id="product-price">{priceFormatter.format(price)}</p>
-
-            {productStyles &&
-              <ul>
-                {productStyles.map((style) => (
-                  <li key={style.normalizedName}>{style.displayName}</li>
-                ))}
-              </ul>}
-          </div>
-        </Link>
-      </ProductCardWrapper>
-    );
+  <ProductCardWrapper>
+    <Link id="product-card" to={href}>
+      <img src={img} alt="" />
+      <div>
+        <div id="line">
+          <p id="product-name">{name}</p>
+          {/* {
+              productStyles?.map((style) => (
+                <span key={style.normalizedName} className="tag">{style.displayName}</span>
+              ))
+          } */}
+          <span className="tag">{productStyles?.at(0)?.displayName}</span>
+        </div>
+        {serie &&
+          <p id="product-serie">{serie}</p>
+        }
+        <p id="product-price">{priceFormatter.format(price)}</p>
+      </div>
+    </Link>
+  </ProductCardWrapper>
+);
 
 export default ProductCard;

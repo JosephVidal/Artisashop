@@ -14,19 +14,6 @@ section {
 
 .search-input {width: 20vw;}
 
-/* .search-button {
-    border: 0;
-    color: var(--artshp-white);
-    border-radius: var(--elem-radius);
-    background-color: var(--artshp-blue);
-    transition: 0.3s;
-
-    &:hover {
-        background-color: var(--bs-light);
-        color: var(--bs-dark);
-    }
-} */
-
 #search-section {
     display: flex;
     align-items: center;

@@ -28,4 +28,20 @@ export const ProductCardWrapper = styled.div`
     #product-name, #product-price {font-size: 1.5em;}
 
     #product-serie {font-weight: lighter}
+
+    #line {
+        display: flex;
+        flex-direction: row;
+
+        span {margin: auto 5px;}
+    }
+
+    @media (max-width: 930px) {
+        #product-card {
+            img {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    }
 `;
