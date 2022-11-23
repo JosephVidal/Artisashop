@@ -20,7 +20,7 @@ export const SearchHeader = styled.div`
         :not(:first-child) {margin-left: 15px;}
     }
 
-    ul {margin: 0;}
+    ul {padding: 0;}
 
     label {margin: auto 0;}
 
@@ -38,7 +38,6 @@ export const SearchFilters = styled.aside`
     color: var(--bs-dark);
     width: 15vw;
     padding: 20px;
-    width: 20vw;
 
     .filter {
         &:not(:last-child) {padding-bottom: 20px;}
@@ -76,18 +75,6 @@ export const SearchFilters = styled.aside`
             font-size: 20px;
             font-weight: bold;
         }
-    }
-`;
-
-export const SearchBar = styled.div`
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    margin: auto 0;
-
-    #searchType {
-        display: flex;
-        height: auto;
     }
 `;
 
@@ -175,7 +162,7 @@ export const Wrapper = styled.div`
     }
 
 
-    #search-block {
+    #search-result-block {
         padding: 20px;
         border-left: solid 2px var(--bs-dark);
     }
@@ -217,6 +204,14 @@ export const Wrapper = styled.div`
 
                 &:hover {color: var(--bs-secondary);}
             }
+        }
+    }
+
+    @media (max-width: 930px) {
+        .category {
+            flex-direction: column;
+            justify-content: right;
+            width: auto;
         }
     }
 `;

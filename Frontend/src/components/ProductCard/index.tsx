@@ -7,6 +7,8 @@ interface Props {
     img: string;
     serie: string;
     price: number;
+    href: string,
+    styles: string,
 }
 
 const ProductCard: React.FunctionComponent<Props> = ({
@@ -14,15 +16,17 @@ const ProductCard: React.FunctionComponent<Props> = ({
     img,
     serie,
     price,
+    href,
+    styles,
 }) => (
   <ProductCardWrapper>
-    <Link id="product-card" to="/app/product/test">
-        <img src={img} alt="" />
-        <div>
-            <p id="product-name">{name}</p>
-            <p id="product-serie">{serie}</p>
-            <p id="product-price">{price}€</p>
-        </div>
+    <Link id="product-card" to={href} className={styles}>
+      <img src={img} alt="" />
+      <div>
+        <p id="product-name">{name}</p>
+        <p id="product-serie">{serie}</p>
+        <p id="product-price">{price}€</p>
+      </div>
     </Link>
   </ProductCardWrapper>
 );

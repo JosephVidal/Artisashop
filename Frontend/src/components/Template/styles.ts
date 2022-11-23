@@ -21,5 +21,5 @@ export const ContentWrapper = styled.div<ContentWrapperProps>`
 `;
 
 export const ChildrenWrapper = styled.div`
-  margin-top: 60px;
+  margin-top: 48px;
 `;
