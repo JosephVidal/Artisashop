@@ -186,7 +186,7 @@ const Search: React.FunctionComponent<Props> = () => {
           <section id="search-result-block">
             <h2>Résultats pour : {searchParams.get("q")}</h2>
             <div id="result-list">
-              {filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={elem.productImages?.at(0)?.imagePath ?? "/img/product/default.png"} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
+              {filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)}
               {filteredCraftsman?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.svg"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)}
             </div>
           </section>
