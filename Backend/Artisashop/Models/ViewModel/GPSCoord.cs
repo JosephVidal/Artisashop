@@ -12,7 +12,7 @@ namespace Artisashop.Models.ViewModel
             Latitude = 0;
         }
 
-        public GPSCoord(double longitude, double latitude)
+        public GPSCoord(double latitude, double longitude)
         {
             Longitude = longitude;
             Latitude = latitude;
