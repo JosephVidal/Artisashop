@@ -15,7 +15,6 @@ namespace Artisashop.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [Authorize(Roles = Roles.Admin)]
     [Authorize(Roles = Roles.Seller)]
     public class ProductController : ControllerBase
     {
