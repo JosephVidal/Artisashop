@@ -23,7 +23,9 @@ const Jojo: Account = {
   userName: "Jojo",
   email: "jojo@jojo.jojo",
   lastname: "Vidol",
-  firstname: "Jojo"
+  firstname: "Jojo",
+  suspended: false,
+  validation: true
 }
 
 const Juju: Account = {
@@ -31,7 +33,9 @@ const Juju: Account = {
   userName: "Juju",
   email: "juju@juju.juju",
   lastname: "Vidul",
-  firstname: "Juju"
+  firstname: "Juju",
+  suspended: false,
+  validation: true
 }
 
 const Jaja: Account = {
@@ -39,7 +43,9 @@ const Jaja: Account = {
   userName: "Jaja",
   email: "jaja@jaja.jaja",
   lastname: "Vidal",
-  firstname: "Jaja"
+  firstname: "Jaja",
+  suspended: false,
+  validation: true
 }
 
 const Chaise: Product = {
@@ -50,7 +56,14 @@ const Chaise: Product = {
   quantity: 10,
   craftsmanId: "1",
   craftsman: Jojo,
-  images: ["https://d2ans0z9s1x1c.cloudfront.net/produits/chaise-design-bois-de-teck-606e3eaa401bf.jpg"]
+  productImages: [
+    {
+      id: 1,
+      content: "https://d2ans0z9s1x1c.cloudfront.net/produits/chaise-design-bois-de-teck-606e3eaa401bf.jpg",
+      name: 'Cat',
+      productId: 1
+    }
+  ]
 }
 
 const list: OrderList[] = [
@@ -118,7 +131,7 @@ const CraftsmanDashboard: FC = () => {
   const displayOrder = (basketItem: Basket) => (
     <ProductWrapper key={basketItem.id}>
       <ImageWrapper>
-        {(basketItem.product.images && basketItem.product.images?.length !== 0) && <img src={basketItem.product.images[0]} alt=""/>}
+        {(basketItem.product.productImages && basketItem.product.productImages?.length !== 0) && <img src={basketItem.product.productImages[0].content!} alt=""/>}
       </ImageWrapper>
       <ProductDetails>
         <div>{basketItem.product.name}</div>
