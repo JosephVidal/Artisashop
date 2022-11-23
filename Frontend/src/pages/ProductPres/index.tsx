@@ -12,7 +12,7 @@ const ProductPres: React.FunctionComponent<Props> = () =>
       </div>
       <div id="img-part">
         <div id="img-group">
-          <img src="/img/product/table à thé.jpg" alt="" />
+          <img src="/img/product/ballerines-en-papier-2.JPG" alt="" />
           <img src="/img/product/Applique papier.jpg" alt="" />
         </div>
         <img id="img-solo" src="/img/product/Oeuf de paques.jpg" alt="" />
