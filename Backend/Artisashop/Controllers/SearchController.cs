@@ -35,6 +35,7 @@ namespace Artisashop.Controllers
             {
                 IQueryable<Product> query = _db.Products
                     .Include(item => item.Craftsman)
+                    .Include(item => item.Craftsman!.AddressGPS)
                     .Include(item => item.ProductImages)
                     .Include(item => item.ProductStyles);
                 if (!string.IsNullOrEmpty(search.Name))
@@ -45,11 +46,12 @@ namespace Artisashop.Controllers
                     foreach (string searchStyle in search.Styles.Select(ProductStyle.GetNormalizedName))
                         query = query.Where(item =>
                             item.ProductStyles != null && item.ProductStyles.Any(x => x.NormalizedName == searchStyle));
+                var res = await query.ToListAsync();
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
-                    query = query.Where(item =>
+                    res = res.Where(item =>
                         item.Craftsman != null && item.Craftsman.AddressGPS != null &&
-                        Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance);
-                return Ok(await query.ToListAsync());
+                        Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance).ToList();
+                return Ok(res);
             }
             catch (Exception e)
             {
@@ -71,17 +73,18 @@ namespace Artisashop.Controllers
                         user => user.Id,
                         userRole => userRole.UserId,
                         (user, userRole) => new { user, userRole }).Where(x => x.userRole.RoleId == sellerRole.Id)
-                    .Select(x => x.user).AsQueryable();
+                    .Select(x => x.user).AsQueryable().Include(item => item.AddressGPS);
                 if (search.FirstName != null && search.FirstName != "")
                     query = query.Where(item => item.Firstname == search.FirstName);
                 if (search.LastName != null && search.LastName != "")
                     query = query.Where(item => item.Lastname == search.LastName);
                 if (search.Job != null && search.Job != "")
                     query = query.Where(item => item!.Job == search.Job);
+                var res = await query.ToListAsync();
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
-                    query = query.Where(item =>
-                        item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance);
-                return Ok(await query.ToListAsync());
+                    res = res.Where(item =>
+                        item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance).ToList();
+                return Ok(res);
             }
             catch (Exception e)
             {
