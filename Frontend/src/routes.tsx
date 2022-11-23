@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes as Wrapper,
-  Route, Navigate, ScrollRestoration,
+  Route, Navigate, useLocation,
 } from "react-router-dom";
 import {ToastHandler} from "components/Toaster";
 import {colors} from "globals/styles";
@@ -28,10 +28,19 @@ interface Props {
   toastHandler: ToastHandler;
 }
 
+const ScrollToTop = () => {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location]);
+
+  return (null)
+}
+
 const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
   (
     <Router>
-      <ScrollRestoration />
+      <ScrollToTop />
       <Wrapper>
         <Route path="/app">
           <Route element={<Template toastHandler={toastHandler} background={colors.darkBlue}/>}/>
