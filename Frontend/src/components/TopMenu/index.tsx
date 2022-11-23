@@ -7,6 +7,7 @@ import { BsCart, BsChat, BsPerson } from "react-icons/bs";
 
 import Logo from "assets/LogoOvale.png";
 import userAtom from "states/atoms/user";
+import { BaseText } from "globals/styles";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
 interface Props { }
