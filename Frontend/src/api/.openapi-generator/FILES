@@ -43,6 +43,7 @@ models/PaypalBill.ts
 models/ProblemDetails.ts
 models/Product.ts
 models/ProductImage.ts
+models/ProductStyle.ts
 models/PurchaseUnitElem.ts
 models/Register.ts
 models/State.ts

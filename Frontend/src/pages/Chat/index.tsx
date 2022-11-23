@@ -35,6 +35,8 @@ const Joseph: Account = {
   email: "",
   lastname: "Vidal",
   firstname: "Joseph",
+  suspended: false,
+  validation: false,
 }
 
 type MaybeString = string | null | undefined;

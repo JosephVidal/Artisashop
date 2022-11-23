@@ -25,6 +25,12 @@ import {
     ProductImageFromJSONTyped,
     ProductImageToJSON,
 } from './ProductImage';
+import type { ProductStyle } from './ProductStyle';
+import {
+    ProductStyleFromJSON,
+    ProductStyleFromJSONTyped,
+    ProductStyleToJSON,
+} from './ProductStyle';
 
 /**
  * 
@@ -82,16 +88,10 @@ export interface Product {
     productImages?: Array<ProductImage> | null;
     /**
      * 
-     * @type {string}
+     * @type {Array<ProductStyle>}
      * @memberof Product
      */
-    stylesList?: string | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Product
-     */
-    styles?: Array<string> | null;
+    productStyles?: Array<ProductStyle> | null;
 }
 
 /**
@@ -127,8 +127,7 @@ export function ProductFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'craftsmanId': json['craftsmanId'],
         'craftsman': AccountFromJSON(json['craftsman']),
         'productImages': !exists(json, 'productImages') ? undefined : (json['productImages'] === null ? null : (json['productImages'] as Array<any>).map(ProductImageFromJSON)),
-        'stylesList': !exists(json, 'stylesList') ? undefined : json['stylesList'],
-        'styles': !exists(json, 'styles') ? undefined : json['styles'],
+        'productStyles': !exists(json, 'productStyles') ? undefined : (json['productStyles'] === null ? null : (json['productStyles'] as Array<any>).map(ProductStyleFromJSON)),
     };
 }
 
@@ -149,8 +148,7 @@ export function ProductToJSON(value?: Product | null): any {
         'craftsmanId': value.craftsmanId,
         'craftsman': AccountToJSON(value.craftsman),
         'productImages': value.productImages === undefined ? undefined : (value.productImages === null ? null : (value.productImages as Array<any>).map(ProductImageToJSON)),
-        'stylesList': value.stylesList,
-        'styles': value.styles,
+        'productStyles': value.productStyles === undefined ? undefined : (value.productStyles === null ? null : (value.productStyles as Array<any>).map(ProductStyleToJSON)),
     };
 }
 

@@ -54,11 +54,12 @@ const CraftsmanView = () => {
       <ProductsList>
         {craftsmanProducts?.map(elem => (
           <ProductCard
-            img={elem.images?.length ? elem.images[0] : "/img/product/default.png"} serie="Petite série"
+            // TODO: Use image.content instead of image.imagePath
+            img={elem.productImages?.at(0)?.imagePath || "/img/product/default.png"} serie="Petite série"
             name={elem.name}
             price={elem.price}
             href={`/app/product/${elem?.id}`}
-            styles={elem?.stylesList ?? ""}
+            productStyles={elem?.productStyles}
           />
         ))}
       </ProductsList>

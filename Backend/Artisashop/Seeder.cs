@@ -134,29 +134,29 @@ public static class Seeder
     /// <param name="serviceProvider"></param>
     public static async Task SeedDemoDataAsync(IServiceProvider serviceProvider)
     {
-        await SeedDemoStyles(serviceProvider);
+        // await SeedDemoStyles(serviceProvider);
         await SeedDemoUsers(serviceProvider);
         await SeedDemoSellers(serviceProvider);
         await SeedDemoProducts(serviceProvider);
     }
 
-    /// <summary>
-    /// Seeds the style entities.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-
-        // Create styles for products
-        var stylesFaker = new Faker<Style>()
-            .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
-            .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
-        var styles = stylesFaker.Generate(50);
-        dbContext.Styles.AddRange(styles);
-        await dbContext.SaveChangesAsync();
-    }
+    // /// <summary>
+    // /// Seeds the style entities.
+    // /// </summary>
+    // /// <param name="serviceProvider"></param>
+    // public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
+    // {
+    //     using var scope = serviceProvider.CreateScope();
+    //     using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+    //
+    //     // Create styles for products
+    //     var stylesFaker = new Faker<Style>()
+    //         .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
+    //         .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
+    //     var styles = stylesFaker.Generate(50);
+    //     dbContext.Styles.AddRange(styles);
+    //     await dbContext.SaveChangesAsync();
+    // }
 
     /// <summary>
     /// Seeds the user entities.
@@ -235,8 +235,7 @@ public static class Seeder
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
-            .RuleFor(o => o.StylesList,
-                f => JsonSerializer.Serialize(f.PickRandom(dbContext.Styles.ToList(), 3).Select(x => x.Id)));
+            .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())));
         var products = productsFaker.Generate(100);
         dbContext.Products.AddRange(products);
         await dbContext.SaveChangesAsync();

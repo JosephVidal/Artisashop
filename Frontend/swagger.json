@@ -3684,14 +3684,10 @@
             },
             "nullable": true
           },
-          "stylesList": {
-            "type": "string",
-            "nullable": true
-          },
-          "styles": {
+          "productStyles": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ProductStyle"
             },
             "nullable": true
           }
@@ -3724,6 +3720,31 @@
             "nullable": true
           },
           "imagePath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductStyle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "normalizedName": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
             "type": "string",
             "nullable": true
           }

@@ -15,7 +15,8 @@ const ProductView = () => {
   const productApi = useApi(ProductApi);
   const [product, setProduct] = useState<Product | null>(null);
   const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
-  const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.svg", [product]);
+  // TODO: Use image.content instead of image.imagePath
+  const productImg = useMemo(() => `/img/product/${product?.productImages?.at(0)?.imagePath || 'default.svg'}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
@@ -45,7 +46,7 @@ const ProductView = () => {
           </Craftsman>
           <div id="tags">
             <p id="price">{product?.price}€</p>
-            {product?.styles?.map(elem => <Tag>{elem}</Tag>)}
+            {product?.productStyles?.map(elem => <Tag>{elem.displayName || elem.normalizedName}</Tag>)}
           </div>
           <p id="description">{product?.description}</p>
           <p id="stock">{productStock}</p>

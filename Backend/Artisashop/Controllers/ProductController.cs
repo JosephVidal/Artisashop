@@ -40,7 +40,10 @@ namespace Artisashop.Controllers
         {
             try
             {
-                IQueryable<Product> query = _db.Products;
+                IQueryable<Product> query = _db.Products
+                    .Include(x => x.ProductStyles)
+                    .Include(x => x.ProductImages)
+                    ;
                 if (sellerId != null)
                 {
                     query = query.Where(p => p.CraftsmanId == sellerId);
@@ -70,7 +73,11 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Product product = await _db.Products!.Include("Craftsman").FirstAsync(product => product.Id == productId);
+                Product product = await _db.Products
+                    .Include(p => p.ProductStyles)
+                    .Include(p => p.ProductImages)
+                    .Include(p => p.Craftsman)
+                    .FirstAsync(product => product.Id == productId);
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 return Ok(product);
@@ -104,8 +111,7 @@ namespace Artisashop.Controllers
                         Price = model.Price,
                         Quantity = model.Quantity,
                         ProductImages = model.Images.Select(i => new ProductImage { Content = i}).ToList(),
-                        Styles = model.Styles,
-                        
+                        ProductStyles = model.Styles.Select(name => new ProductStyle(name)).ToList(),
                     };
                     // new(model, account);
 
@@ -139,7 +145,7 @@ namespace Artisashop.Controllers
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
                 product.ProductImages = model.Images.Select(x => new ProductImage() { Content = x }).ToList();
-                product.StylesList = JsonSerializer.Serialize(model.Styles);
+                product.ProductStyles = model.Styles.Select(x => new ProductStyle(x)).ToList();
                 var success = _db.Products!.Update(product);
                 if (success == null)
                     return BadRequest("Update failed");

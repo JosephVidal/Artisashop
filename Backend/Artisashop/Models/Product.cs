@@ -11,8 +11,8 @@ namespace Artisashop.Models
         {
             // ImagesList = "[]";
             // Images = new List<string>();
-            StylesList = "[]";
-            Styles = new List<string>();
+            // StylesList = "[]";
+            // Styles = new List<string>();
         }
 
         // public Product(string name, Account craftsman, decimal? price = null, string? description = null, int quantity = 1, List<string>? images = null, List<string>? style = null)
@@ -42,18 +42,26 @@ namespace Artisashop.Models
         [Key]
         [Required]
         public int Id { get; set; }
+
         [Required]
         public string? Name { get; set; }
+
         [Required]
         public decimal? Price { get; set; }
+
         public string? Description { get; set; }
+
         [Required]
         public int Quantity { get; set; }
+
         [Required]
         public string? CraftsmanId { get; set; }
+
         [Required]
         public Account? Craftsman { get; set; }
+
         public virtual List<ProductImage>? ProductImages { get; set; }
+
         // public string ImagesList { get; set; }
         // [NotMapped]
         // public List<string>? Images
@@ -61,12 +69,14 @@ namespace Artisashop.Models
         //     get => ImagesList == null ? new List<string> { } : JsonSerializer.Deserialize<List<string>>(ImagesList);
         //     set => ImagesList = JsonSerializer.Serialize(Images);
         // }
-        public string StylesList { get; set; }
-        [NotMapped]
-        public List<string>? Styles
-        {
-            get => StylesList == null ? new List<string> { } : JsonSerializer.Deserialize<List<string>>(StylesList);
-            set => StylesList = JsonSerializer.Serialize(Styles);
-        }
+        public virtual List<ProductStyle>? ProductStyles { get; set; }
+        // public string StylesList { get; set; }
+        //
+        // [NotMapped]
+        // public List<string>? Styles
+        // {
+        //     get => StylesList == null ? new List<string> { } : JsonSerializer.Deserialize<List<string>>(StylesList);
+        //     set => StylesList = JsonSerializer.Serialize(Styles);
+        // }
     }
 }

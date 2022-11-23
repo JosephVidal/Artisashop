@@ -33,16 +33,22 @@ namespace Artisashop.Controllers
         {
             try
             {
-                IQueryable<Product> query = _db.Products!.Include(item => item.Craftsman).AsQueryable();
-                if (search.Name != null && search.Name != "")
+                IQueryable<Product> query = _db.Products
+                    .Include(item => item.Craftsman)
+                    .Include(item => item.ProductImages)
+                    .Include(item => item.ProductStyles);
+                if (!string.IsNullOrEmpty(search.Name))
                     query = query.Where(item => item.Name.Contains(search.Name));
-                if (search.Job != null && search.Job != "")
+                if (!string.IsNullOrEmpty(search.Job))
                     query = query.Where(item => item.Craftsman != null && item.Craftsman.Job == search.Job);
                 if (search.Styles != null)
-                    foreach (string style in search.Styles)
-                        query = query.Where(item => item.StylesList != null && item.StylesList.Contains(style));
+                    foreach (string searchStyle in search.Styles.Select(ProductStyle.GetNormalizedName))
+                        query = query.Where(item =>
+                            item.ProductStyles != null && item.ProductStyles.Any(x => x.NormalizedName == searchStyle));
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
-                    query = query.Where(item => item.Craftsman != null && item.Craftsman.AddressGPS != null && Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance);
+                    query = query.Where(item =>
+                        item.Craftsman != null && item.Craftsman.AddressGPS != null &&
+                        Haversine(search.UserGPSCoord, item.Craftsman.AddressGPS) <= search.Distance);
                 return Ok(await query.ToListAsync());
             }
             catch (Exception e)
@@ -61,7 +67,7 @@ namespace Artisashop.Controllers
             try
             {
                 IQueryable<Account> query = _db.Users
-                    .Join(_db.UserRoles, 
+                    .Join(_db.UserRoles,
                         user => user.Id,
                         userRole => userRole.UserId,
                         (user, userRole) => new { user, userRole }).Where(x => x.userRole.RoleId == sellerRole.Id)
@@ -73,7 +79,8 @@ namespace Artisashop.Controllers
                 if (search.Job != null && search.Job != "")
                     query = query.Where(item => item!.Job == search.Job);
                 if (search.UserGPSCoord != null && search.Distance != null && search.Distance != 0)
-                    query = query.Where(item => item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance);
+                    query = query.Where(item =>
+                        item.AddressGPS != null && Haversine(search.UserGPSCoord, item.AddressGPS) <= search.Distance);
                 return Ok(await query.ToListAsync());
             }
             catch (Exception e)
@@ -94,11 +101,11 @@ namespace Artisashop.Controllers
             double phiB = radFact * b.Latitude;
             double deltaPhi = radFact * (b.Latitude - a.Latitude);
             double deltaLambda = radFact * (a.Longitude - b.Longitude);
-            double A = Math.Pow(Math.Sin(deltaPhi / 2), 2) + (Math.Cos(phiA) * Math.Cos(phiB) * Math.Pow(Math.Sin(deltaLambda), 2));
+            double A = Math.Pow(Math.Sin(deltaPhi / 2), 2) +
+                       (Math.Cos(phiA) * Math.Cos(phiB) * Math.Pow(Math.Sin(deltaLambda), 2));
             double C = 2 * Math.Atan2(Math.Sqrt(A), Math.Sqrt(1 - A));
             double D = radius * C;
             return D;
         }
-
     }
 }

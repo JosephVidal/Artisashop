@@ -27,6 +27,7 @@ export * from './PaypalBill';
 export * from './ProblemDetails';
 export * from './Product';
 export * from './ProductImage';
+export * from './ProductStyle';
 export * from './PurchaseUnitElem';
 export * from './Register';
 export * from './State';
