@@ -27,7 +27,13 @@ const TopMenu: React.FunctionComponent<Props> = () => {
 
   return (
     <TopMenuWrapper>
-      <Quarter />
+      <MenuItem>
+        <Link to="/app/dashboard">
+          <BaseText>
+            {t("menu.dashboard")}
+          </BaseText>
+        </Link>
+      </MenuItem>
       <MenuItem>
         <Link to="/app/about/craftsmans">
           Les artisans
