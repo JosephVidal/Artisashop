@@ -6,6 +6,7 @@ import ProductCard from "components/ProductCard";
 import CraftsmanresultCard from "components/CraftsmanresultCard";
 import { useSearchParams } from "react-router-dom";
 import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Account, Product, ProductStyle, SearchApi } from "../../api";
 import { Wrapper, SearchHeader, SearchFilters } from "./styles";
 
@@ -23,20 +24,43 @@ interface JobFilter {
 const Search: React.FunctionComponent<Props> = () => {
   const [searchType, setType] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [productResult, setProductresult] = useState<Product[] | null>(null);
   const [accountResult, setAccountresult] = useState<Account[] | null>(null);
+
   const [stylesFilters, setStylesfilters] = useState<StyleFilter[] | null>(null);
   const [jobFilters, setjobfilters] = useState<JobFilter[] | null>(null);
+
   const api = useApi(SearchApi);
-  const type = searchType ? "Par produit" : "Par métier";
+
+  const termSearchParam = useMemo(() => searchParams.get("q") || "", [searchParams]);
+  const typeSearchParam = useMemo(() => searchParams.get("t") || "false", [searchParams]);
+
+  const searchTypeLabel = useMemo(() => searchType ? "Par produit" : "Par métier", [searchType]);
+
+  const titleText = useMemo(() =>
+    termSearchParam
+      ? `Résultats des ${typeSearchParam === "true" ? "produits" : "artisans"} pour "${termSearchParam}"`
+      : `Explorer les ${typeSearchParam === "true" ? "produits" : "artisans"}`,
+    [termSearchParam, typeSearchParam]);
+
+  useFormattedDocumentTitle(titleText);
+
   const filteredProducts = useMemo(
-    () => productResult?.filter((elem) => elem.productStyles?.some((style) => stylesFilters?.find((filter) => filter.normalizedName === style.normalizedName)?.checked)),
+    () => _.some(stylesFilters, f => f.checked)
+    ? productResult?.filter((elem) => elem.productStyles?.some((style) => stylesFilters?.find((filter) => filter.normalizedName === style.normalizedName)?.checked))
+    : productResult,
     [productResult, stylesFilters]
   );
+
   const filteredCraftsman = useMemo(
-    () => accountResult?.filter((elem) => jobFilters?.find((filter) => filter.job === elem.job)?.checked),
+    () => _.some(jobFilters, f => f.checked)
+      ? accountResult?.filter((elem) => jobFilters?.find((filter) => filter.job === elem.job)?.checked)
+      : accountResult
+    ,
     [productResult, jobFilters]
   );
+
   // const filteredCraftsman = useMemo(
   //   () => accountResult?.filter(value =>
   //     jobFilters?.filter(f => f.job === value?.job))
@@ -45,6 +69,22 @@ const Search: React.FunctionComponent<Props> = () => {
   // );
   // const filteredCraftsman = useMemo(() => accountResult?.filter(value => jobFilters?.filter(f => value?.job === f)),
   //   [accountResult, jobFilters]);
+
+  // Triggered when search changes
+  useEffect(() => { }, [searchParams]);
+
+  // Triggered when style filters change
+  // useEffect(() => {
+  //   if (_.some(stylesFilters, { checked: true })) {
+  //     // setProductresult()
+  //   } else {
+  //   }
+  // }, [stylesFilters]);
+
+  // Triggered when job filters change
+  useEffect(() => {
+
+  }, [jobFilters]);
 
   useEffect(
     () => {
@@ -82,8 +122,8 @@ const Search: React.FunctionComponent<Props> = () => {
         <SearchHeader>
           <Formik
             initialValues={{
-              searchStr: "",
-              searchType: false,
+              searchStr: termSearchParam,
+              searchType: typeSearchParam,
             }}
             onSubmit={async values => {
               setSearchParams({ "q": values.searchStr, "t": values.searchType.toString() });
@@ -102,7 +142,7 @@ const Search: React.FunctionComponent<Props> = () => {
                   <span className="round search-slider" />
                 </label>
                 <label className="wordCarousel" htmlFor="SearchType">
-                  <p className="search-type-text">{type}</p>
+                  <p className="search-type-text">{searchTypeLabel}</p>
                 </label>
               </div>
             </Form>
@@ -154,8 +194,8 @@ const Search: React.FunctionComponent<Props> = () => {
         <div id="suggestions">
           <h2>Pour vous :</h2>
           <div id="suggestions-wrapper">
-            <ProductCard productStyles={[{displayName: "Gallé", normalizedName: "Gallé"}]} img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test" />
-            <ProductCard productStyles={[{displayName: "Gallé", normalizedName: "Gallé"}]} img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test" />
+            <ProductCard productStyles={[{ displayName: "Gallé", normalizedName: "Gallé" }]} img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test" />
+            <ProductCard productStyles={[{ displayName: "Gallé", normalizedName: "Gallé" }]} img="/img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test" />
           </div>
         </div>
       </div>

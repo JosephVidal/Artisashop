@@ -1,14 +1,17 @@
 import React from "react";
-import CraftsmanCard from "components/CraftsmanCard";
-import ProductCard from "components/ProductCard";
 import { Link } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import CraftsmanCard from "components/CraftsmanCard";
+import ProductCard from "components/ProductCard";
 import { Wrapper } from "./styles";
 
 interface Props { }
 
 const Home: React.FunctionComponent<Props> = () => {
+  useFormattedDocumentTitle("Artisashop");
+
   const navigate = useNavigate();
   const type = "Par produit";
 

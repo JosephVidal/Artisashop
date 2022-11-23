@@ -9,6 +9,7 @@ import {
 import { Divider } from "primereact/divider";
 import CheckoutButtons from "components/CheckoutButtons";
 import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { REACT_APP_PAYPAL_CLIENT } from "conf";
 import QuantityInput from "components/QuantityInuput";
 import {
@@ -34,6 +35,8 @@ const BasketView: FC = () => {
   const [hasDelivery, setHasDelivery] = useState<boolean>(false);
   const [deliveryCost, setDeliveryCost] = useState<number>(0);
   const basketAPI: BasketApi = useApi(BasketApi);
+
+  useFormattedDocumentTitle("Panier");
 
   useEffect(() => {
     basketAPI.apiBasketGet().then((list) => setBasket(list.filter((item) => item.currentState === "WAITINGCONSUMER")))

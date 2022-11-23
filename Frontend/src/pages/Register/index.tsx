@@ -3,12 +3,16 @@ import { useNavigate } from "react-router";
 import { Formik, Field, Form } from "formik";
 import { Link } from "react-router-dom";
 
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import useAuth from "states/auth";
 import { Wrapper } from "./styles";
 
 const Register = () => {
   const auth = useAuth()
   const navigate = useNavigate()
+
+  useFormattedDocumentTitle("S'enregister");
+
 
   return (
     <Wrapper>

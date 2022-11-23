@@ -2,12 +2,14 @@ import React from "react";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import useAuth from "../../states/auth";
 import { Wrapper } from "./styles";
 
 const Login = () => {
   const auth = useAuth()
   const navigate = useNavigate()
+  useFormattedDocumentTitle("Se connecter");
 
   return (
     <Wrapper>

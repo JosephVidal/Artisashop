@@ -1,8 +1,11 @@
 import React from "react";
 import { CreateProduct } from "api/models/CreateProduct";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
 const CreateProductView = () => {
+  useFormattedDocumentTitle("Créer un produit");
+
   const product: CreateProduct =
   {
     name: "Product 1",
