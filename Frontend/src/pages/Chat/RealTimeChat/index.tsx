@@ -32,7 +32,7 @@ const RealTimeChat: VFC<Props> = ({
     if (connection) {
       connection.start()
         .then(() => connection.invoke("Connect", "", "test")
-          .then(() => connection.on("OnConnected", (userID) => {
+          .then(() => connection.on("OnConnected", (userID: string) => {
             connection.on('PrivateMessage', (isSendByMe: boolean, otherUserID: string, filename: string | null, message: string | null, date: Date, file: string | null, msgId: number) => {
               console.log(message);
             })

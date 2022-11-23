@@ -26,13 +26,19 @@ import {Maybe, None, Some} from "monet";
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import RealTimeChat from "pages/Chat/RealTimeChat";
 
 export interface Conversation {
   history: ChatMessage[],
   interlocutor?: Account
 }
 
-const Chat: FC = () => {
+interface Props {
+  newMessage?: boolean,
+  to?: Account
+}
+
+const Chat: FC<Props> = ({newMessage, to}) => {
   const [contactList, setContactList] = useState<ChatPreview[]>([]);
   const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
@@ -48,11 +54,6 @@ const Chat: FC = () => {
     setFileData(Some(reader.result as string));
   }
 
-  file.cata(
-    () => null,
-    (f) => console.log(URL.createObjectURL(f))
-  );
-
   useFormattedDocumentTitle("Chat");
 
   useEffect(() => {
@@ -62,25 +63,41 @@ const Chat: FC = () => {
     useChat.apiChatListGet().then((r) => {
       setContactList(r);
     });
+    if (newMessage && contactList.find((preview) =>
+      preview.lastMsg?.senderId === to?.id ||
+      preview.lastMsg?.receiverId === to?.id) === undefined)
+      setConversation({history: [], interlocutor: to});
   }, [])
 
   const renderContact = (contact: ChatPreview) => {
-    const interlocutor: string = contact.receive ? contact.lastMsg!.sender!.userName! : contact.lastMsg!.receiver!.userName!;
+    const getInterlocutor = (): string => {
+      if (!contact.lastMsg)
+        return to!.userName!;
+      return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
+    }
+
+    const interlocutor: string = getInterlocutor();
 
     return (
       <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
-        getConversation(useChat, setConversation, user!.id!, contact.lastMsg!.sender!, contact.lastMsg!.receiver!);
-        setInput("");
-        setEdit(None());
-        setFile(None());
+        if (contact.lastMsg) {
+          getConversation(useChat, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
+        } else {
+          setConversation({history: [], interlocutor: to})
+        }
+          setInput("");
+          setEdit(None());
+          setFile(None());
       }}>
         {interlocutor}
-        <ContactPreview>
-          <MessagePreview>
-            {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
-          </MessagePreview>
-          {contact.lastMsg!.createdAt ? timeIndicator(contact.lastMsg!.createdAt) : null}
-        </ContactPreview>
+        {contact.lastMsg &&
+          <ContactPreview>
+            <MessagePreview>
+              {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
+            </MessagePreview>
+            {contact.lastMsg.createdAt ? timeIndicator(contact.lastMsg.createdAt) : null}
+          </ContactPreview>
+        }
       </ContactWrapper>
     )
   };
@@ -121,6 +138,10 @@ const Chat: FC = () => {
   return (
     <Wrapper>
       <ContactList>
+        {(newMessage && contactList.find((preview) =>
+          preview.lastMsg?.senderId === to?.id ||
+          preview.lastMsg?.receiverId === to?.id) === undefined) &&
+          renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
       <RealTimeChat setContactList={setContactList} setConversation={setConversation} contactList={contactList} conversation={conversation} />
@@ -131,6 +152,11 @@ const Chat: FC = () => {
               Conversation avec {conversation.history[0].sender!.id !== user!.id ?
                 conversation.history[0].sender!.userName! :
                 conversation.history[0].receiver!.userName!}
+            </div>
+          )}
+          {(conversation.history.length === 0 && newMessage) && (
+            <div>
+              Conversation avec {to?.userName}
             </div>
           )}
         </ConversationTitle>
@@ -163,7 +189,7 @@ const Chat: FC = () => {
                     if (edit.isSome())
                       editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input)
                     else
-                      sendMessage(useChat, setInput, setFile, setFileData, setConversation, user!, conversation.interlocutor!, input, fileData)
+                      sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
                   }
                 }}/>
               <label htmlFor="file-upload">
@@ -174,7 +200,7 @@ const Chat: FC = () => {
               <FaPaperPlane size="100%" onClick={() =>
                 edit.isSome() ?
                   editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input) :
-                  sendMessage(useChat, setInput, setFile, setFileData, setConversation, user!, conversation.interlocutor!, input, fileData)
+                  sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
               }/>
             </ChatInputWrapper>
           }
@@ -247,7 +273,7 @@ const editMessage = (chatApi: ChatApi, setInput: SetState<string>, setEdit: SetS
   )
 }
 
-const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, user: Account, to: Account, message: string, file: Maybe<string>) => {
+const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, setContactList: SetState<ChatPreview[]>, user: Account, to: Account, message: string, file: Maybe<string>) => {
   chatApi.apiChatPost({
     createChatMessage: {
       fromUserId: user.id!,
@@ -264,6 +290,17 @@ const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetS
       setInput("");
       setFile(None());
       setFileData(None());
+      // setContactList((prevState) =>
+      //   prevState.map((contact) => {
+      //     const interlocutor = contact.receive ? contact.lastMsg!.sender!.userName! : contact.lastMsg.receiver!.userName!;
+      //     if (interlocutor === conversation.interlocutor?.userName) {
+      //       return {
+      //         ...contact,
+      //         lastMsg: m
+      //       }
+      //     }
+      //     return contact;
+      //   }))
     }
   })
 }
