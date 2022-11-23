@@ -94,7 +94,20 @@ namespace Artisashop.Controllers
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
-                Product product = new(model, account);
+                Product product =
+                    new Product
+                    {
+                        Craftsman = account,
+                        CraftsmanId = account.Id,
+                        Name = model.Name,
+                        Description = model.Description,
+                        Price = model.Price,
+                        Quantity = model.Quantity,
+                        ProductImages = model.Images.Select(i => new ProductImage { Content = i}).ToList(),
+                        Styles = model.Styles,
+                        
+                    };
+                    // new(model, account);
 
                 var success = await _db.Products!.AddAsync(product);
                 if (success == null)
@@ -125,7 +138,7 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.ImagesList = JsonSerializer.Serialize(model.Images);
+                product.ProductImages = model.Images.Select(x => new ProductImage() { Content = x }).ToList();
                 product.StylesList = JsonSerializer.Serialize(model.Styles);
                 var success = _db.Products!.Update(product);
                 if (success == null)

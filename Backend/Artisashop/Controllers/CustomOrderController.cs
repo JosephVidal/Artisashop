@@ -93,7 +93,15 @@ namespace Artisashop.Controllers
                 if (craftsman == null)
                     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
 
-                Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
+                // Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
+                Product product = new Product
+                {
+                    Name = order.Name,
+                    Craftsman = craftsman,
+                    Description = order.Desc,
+                    Quantity = order.Quantity,
+                    ProductImages = new () {},
+                };
                 Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
                 await _db.SaveChangesAsync();
