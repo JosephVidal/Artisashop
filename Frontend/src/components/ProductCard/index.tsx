@@ -12,6 +12,9 @@ interface Props {
   productStyles?: ProductStyle[] | null
 }
 
+// TODO: Handle internationalization here
+const priceFormatter = new Intl.NumberFormat('fr-FR', { style: 'currency',currency: 'EUR',});
+
 const ProductCard: React.FunctionComponent<Props> = ({
   name,
   img,
@@ -20,24 +23,23 @@ const ProductCard: React.FunctionComponent<Props> = ({
   href,
   productStyles,
 }) => (
-  <ProductCardWrapper>
-    <Link id="product-card" to={href}>
-      <img src={img} alt="" />
-      <div>
-        <p id="product-name">{name}</p>
-        <p id="product-serie">{serie}</p>
-        <p id="product-price">{price}€</p>
+      <ProductCardWrapper>
+        <Link id="product-card" to={href}>
+          <img src={img} alt="" />
+          <div>
+            <p id="product-name">{name}</p>
+            <p id="product-serie">{serie}</p>
+            <p id="product-price">{priceFormatter.format(price)}</p>
 
-        {productStyles &&
-          <ul>
-            {productStyles.map((style) => (
-              <li key={style.normalizedName}>{style.displayName}</li>
-            ))}
-          </ul>
-        }
-      </div>
-    </Link>
-  </ProductCardWrapper>
-);
+            {productStyles &&
+              <ul>
+                {productStyles.map((style) => (
+                  <li key={style.normalizedName}>{style.displayName}</li>
+                ))}
+              </ul>}
+          </div>
+        </Link>
+      </ProductCardWrapper>
+    );
 
 export default ProductCard;

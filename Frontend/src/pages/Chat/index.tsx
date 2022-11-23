@@ -24,8 +24,11 @@ import { generate } from "shortid";
 import {InputText} from "primereact/inputtext";
 import { random } from "lodash";
 import {Maybe, None, Some} from "monet";
-import useApi from "hooks/useApi";
+
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
+import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+
 
 const ref = new Date();
 
@@ -56,6 +59,8 @@ const Chat: FC = () => {
   const [file, setFile] = useState<Maybe<File>>(None());
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
+
+  useFormattedDocumentTitle("Chat");
 
   useEffect(() => {
     useChat.apiChatListGet().then((r) => {

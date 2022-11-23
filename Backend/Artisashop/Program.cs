@@ -241,11 +241,12 @@ using (var scope = app.Services.CreateScope())
 {
     await Seeder.SeedRoles(scope.ServiceProvider);
 
-    if (app.Environment.IsDevelopment())
-    {
+    // Keep this in here
+    // if (app.Environment.IsDevelopment())
+    // {
         await Seeder.SeedDemoAdminUsersAsync(scope.ServiceProvider);
         await Seeder.SeedDemoDataAsync(scope.ServiceProvider);
-    }
+    // }
 }
 
 app.UseAuthentication();

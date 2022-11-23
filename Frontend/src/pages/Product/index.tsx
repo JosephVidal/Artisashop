@@ -5,6 +5,7 @@ import { SetState } from "globals/state";
 import QuantityInput from "components/QuantityInuput";
 import { BasketApi } from "api";
 import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { ProductApi } from "../../api";
 import { Wrapper, Craftsman, Tag } from "./styles";
 
@@ -19,6 +20,8 @@ const ProductView = () => {
   const productImg = useMemo(() => `/img/product/${product?.productImages?.at(0)?.imagePath || 'default.svg'}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
+
+  useFormattedDocumentTitle(product?.name ?? "Produit");
 
   useEffect(() => {
     const getProduct = async () => {

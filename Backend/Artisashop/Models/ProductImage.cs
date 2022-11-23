@@ -9,7 +9,10 @@ public class ProductImage
     public int ProductId { get; set; }
     public virtual Product? Product { get; set; }
 
-    [Required]
+    /// <summary>
+    /// The bytes of the image.
+    /// TODO: Use minio or something else to store the image.
+    /// </summary>
     public string? Content { get; set; }
 
     /// <summary>

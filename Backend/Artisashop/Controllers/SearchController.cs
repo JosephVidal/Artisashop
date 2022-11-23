@@ -39,7 +39,7 @@ namespace Artisashop.Controllers
                     .Include(item => item.ProductImages)
                     .Include(item => item.ProductStyles);
                 if (!string.IsNullOrEmpty(search.Name))
-                    query = query.Where(item => item.Name.Contains(search.Name));
+                    query = query.Where(item => item.Name.Contains(search.Name, StringComparison.OrdinalIgnoreCase));
                 if (!string.IsNullOrEmpty(search.Job))
                     query = query.Where(item => item.Craftsman != null && item.Craftsman.Job == search.Job);
                 if (search.Styles != null)

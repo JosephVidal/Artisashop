@@ -49,7 +49,7 @@ export interface ProductImage {
      * @type {string}
      * @memberof ProductImage
      */
-    content: string;
+    content?: string | null;
     /**
      * 
      * @type {string}
@@ -69,7 +69,6 @@ export interface ProductImage {
  */
 export function instanceOfProductImage(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "content" in value;
 
     return isInstance;
 }
@@ -87,7 +86,7 @@ export function ProductImageFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'id': !exists(json, 'id') ? undefined : json['id'],
         'productId': !exists(json, 'productId') ? undefined : json['productId'],
         'product': !exists(json, 'product') ? undefined : ProductFromJSON(json['product']),
-        'content': json['content'],
+        'content': !exists(json, 'content') ? undefined : json['content'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
     };
