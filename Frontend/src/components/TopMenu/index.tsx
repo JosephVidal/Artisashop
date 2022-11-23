@@ -6,21 +6,10 @@ import { useTranslation } from "react-i18next";
 import { BsCart, BsChat, BsPerson } from "react-icons/bs";
 
 import Logo from "assets/LogoOvale.png";
-import { BaseText } from "globals/styles";
 import userAtom from "states/atoms/user";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
 interface Props { }
-//
-// const MenuItemCornerRight = styled(MenuItem)`
-//   position: absolute;
-//   right: 0;
-// `;
-//
-// const MenuItemCornerLeft = styled(MenuItem)`
-//   position: absolute;
-//   left: 50px;
-// `;
 
 const TopMenu: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation();
