@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { BsCart, BsChat, BsPerson } from "react-icons/bs";
 
 import Logo from "assets/LogoOvale.png";
-import { BaseText } from "globals/styles";
 import userAtom from "states/atoms/user";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
@@ -30,14 +29,14 @@ const TopMenu: React.FunctionComponent<Props> = () => {
     <TopMenuWrapper>
       <Quarter />
       <MenuItem>
-        <Link to="/app/search">
-          {t("menu.search")}
+        <Link to="/app/about/craftsmans">
+          Les artisans
         </Link>
       </MenuItem>
       <Link to="/"><Image src={Logo} width="50px" /></Link>
       <MenuItem>
-        <Link to="/app/contact">
-          {t("menu.contact")}
+        <Link to="/app/about/products">
+          Les créations
         </Link>
       </MenuItem>
       <RightIcons>
