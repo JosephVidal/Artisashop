@@ -25,16 +25,16 @@ const CraftsmanDashboard: FC = () => {
   const customOrderApi: CustomOrderApi = useApi(CustomOrderApi);
 
   useEffect(() => {
-    customOrderApi.apiCustomOrderListGet().then(setOrderList)
-    const temp: Account[] = [];
-    orderList.forEach((order) => {
-      if (!temp.includes(order.item!.account))
-        temp.push(order.item!.account)
-    });
-    setClientList(temp)
+    customOrderApi.apiCustomOrderListGet().then((list) => {
+      setOrderList(list);
+      const temp: Account[] = [];
+      list.forEach((order) => {
+        if (!temp.includes(order.item!.account))
+          temp.push(order.item!.account)
+      });
+      setClientList(temp);
+    })
   }, []);
-
-  console.log(orderList)
 
   const accordionHeader = (name: string, total: number, percentage: number) => (
     <HeaderWrapper>
