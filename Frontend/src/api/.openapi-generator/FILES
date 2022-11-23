@@ -14,7 +14,6 @@ apis/HomeApi.ts
 apis/OidcConfigurationApi.ts
 apis/ProductApi.ts
 apis/SearchApi.ts
-apis/WeatherForecastApi.ts
 apis/index.ts
 index.ts
 models/Account.ts
@@ -43,6 +42,7 @@ models/OrderList.ts
 models/PaypalBill.ts
 models/ProblemDetails.ts
 models/Product.ts
+models/ProductImage.ts
 models/PurchaseUnitElem.ts
 models/Register.ts
 models/State.ts
@@ -50,6 +50,5 @@ models/UnitAmount.ts
 models/UpdateAccount.ts
 models/UpdateBasket.ts
 models/UpdateCustomOrder.ts
-models/WeatherForecast.ts
 models/index.ts
 runtime.ts

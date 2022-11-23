@@ -1118,6 +1118,16 @@
           "Backoffice"
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -1150,6 +1160,16 @@
           "Backoffice"
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -1207,6 +1227,78 @@
           }
         },
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/backoffice/setAccountParam": {
+      "patch": {
+        "tags": [
+          "Backoffice"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -2782,44 +2874,6 @@
           }
         }
       }
-    },
-    "/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -2827,7 +2881,9 @@
       "Account": {
         "required": [
           "firstname",
-          "lastname"
+          "lastname",
+          "suspended",
+          "validation"
         ],
         "type": "object",
         "properties": {
@@ -2939,12 +2995,18 @@
             },
             "nullable": true
           },
+          "suspended": {
+            "type": "boolean"
+          },
           "products": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Product"
             },
             "nullable": true
+          },
+          "validation": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3469,6 +3531,10 @@
           "inscrit": {
             "type": "integer",
             "format": "int32"
+          },
+          "sales": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -3611,14 +3677,10 @@
           "craftsman": {
             "$ref": "#/components/schemas/Account"
           },
-          "imagesList": {
-            "type": "string",
-            "nullable": true
-          },
-          "images": {
+          "productImages": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ProductImage"
             },
             "nullable": true
           },
@@ -3631,6 +3693,38 @@
             "items": {
               "type": "string"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductImage": {
+        "required": [
+          "content"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "content": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "imagePath": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -3803,29 +3897,6 @@
             "format": "double"
           },
           "description": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
             "type": "string",
             "nullable": true
           }

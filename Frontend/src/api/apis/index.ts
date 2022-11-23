@@ -15,4 +15,3 @@ export * from './HomeApi';
 export * from './OidcConfigurationApi';
 export * from './ProductApi';
 export * from './SearchApi';
-export * from './WeatherForecastApi';

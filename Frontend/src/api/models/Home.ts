@@ -62,6 +62,12 @@ export interface Home {
      * @memberof Home
      */
     inscrit?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Home
+     */
+    sales?: number;
 }
 
 /**
@@ -88,6 +94,7 @@ export function HomeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Home
         'craftsmanSample': !exists(json, 'craftsmanSample') ? undefined : (json['craftsmanSample'] === null ? null : (json['craftsmanSample'] as Array<any>).map(AccountFromJSON)),
         'productSample': !exists(json, 'productSample') ? undefined : (json['productSample'] === null ? null : (json['productSample'] as Array<any>).map(ProductFromJSON)),
         'inscrit': !exists(json, 'inscrit') ? undefined : json['inscrit'],
+        'sales': !exists(json, 'sales') ? undefined : json['sales'],
     };
 }
 
@@ -105,6 +112,7 @@ export function HomeToJSON(value?: Home | null): any {
         'craftsmanSample': value.craftsmanSample === undefined ? undefined : (value.craftsmanSample === null ? null : (value.craftsmanSample as Array<any>).map(AccountToJSON)),
         'productSample': value.productSample === undefined ? undefined : (value.productSample === null ? null : (value.productSample as Array<any>).map(ProductToJSON)),
         'inscrit': value.inscrit,
+        'sales': value.sales,
     };
 }
 

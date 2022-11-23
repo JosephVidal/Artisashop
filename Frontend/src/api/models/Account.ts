@@ -202,10 +202,22 @@ export interface Account {
     bills?: Array<Bill> | null;
     /**
      * 
+     * @type {boolean}
+     * @memberof Account
+     */
+    suspended: boolean;
+    /**
+     * 
      * @type {Array<Product>}
      * @memberof Account
      */
     products?: Array<Product> | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Account
+     */
+    validation: boolean;
 }
 
 /**
@@ -215,6 +227,8 @@ export function instanceOfAccount(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "lastname" in value;
     isInstance = isInstance && "firstname" in value;
+    isInstance = isInstance && "suspended" in value;
+    isInstance = isInstance && "validation" in value;
 
     return isInstance;
 }
@@ -255,7 +269,9 @@ export function AccountFromJSONTyped(json: any, ignoreDiscriminator: boolean): A
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (json['updatedAt'] === null ? null : new Date(json['updatedAt'])),
         'baskets': !exists(json, 'baskets') ? undefined : (json['baskets'] === null ? null : (json['baskets'] as Array<any>).map(BasketFromJSON)),
         'bills': !exists(json, 'bills') ? undefined : (json['bills'] === null ? null : (json['bills'] as Array<any>).map(BillFromJSON)),
+        'suspended': json['suspended'],
         'products': !exists(json, 'products') ? undefined : (json['products'] === null ? null : (json['products'] as Array<any>).map(ProductFromJSON)),
+        'validation': json['validation'],
     };
 }
 
@@ -294,7 +310,9 @@ export function AccountToJSON(value?: Account | null): any {
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt === null ? null : value.updatedAt.toISOString()),
         'baskets': value.baskets === undefined ? undefined : (value.baskets === null ? null : (value.baskets as Array<any>).map(BasketToJSON)),
         'bills': value.bills === undefined ? undefined : (value.bills === null ? null : (value.bills as Array<any>).map(BillToJSON)),
+        'suspended': value.suspended,
         'products': value.products === undefined ? undefined : (value.products === null ? null : (value.products as Array<any>).map(ProductToJSON)),
+        'validation': value.validation,
     };
 }
 
