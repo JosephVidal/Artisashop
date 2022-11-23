@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Home } from "api/models/Home";
 import { BackofficeApi } from "api";
 import useApi from "hooks/useApi";
@@ -14,10 +14,9 @@ interface Props {}
 
 const HomeView: React.FunctionComponent<Props> = () => {
   const [searchType, setType] = useState(false);
-<<<<<<< HEAD
   const navigate = useNavigate();
   const type = "Par produit";
-=======
+
   const backOfficeApi = useApi(BackofficeApi);
   const [home, setHome] = useState<Home | null> (null);
 
@@ -26,7 +25,6 @@ const HomeView: React.FunctionComponent<Props> = () => {
   };
 
   useEffect(() => { fetchData() }, []);
->>>>>>> Guillaume2
 
   return (
     <Wrapper>
