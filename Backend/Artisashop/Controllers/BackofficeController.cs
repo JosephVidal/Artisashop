@@ -14,7 +14,7 @@ namespace Artisashop.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/backoffice/")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
     public class BackofficeController : ControllerBase
     {

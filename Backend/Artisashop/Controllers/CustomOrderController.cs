@@ -28,7 +28,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Craftsman commands page</returns>
         [HttpGet("list")]
-        [Authorize(Roles = "CRAFTSMAN")]
+        [Authorize(Roles = Roles.Seller)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<OrderList>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> OrderList()
