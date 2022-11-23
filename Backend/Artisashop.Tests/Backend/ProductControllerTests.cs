@@ -80,8 +80,8 @@ namespace Artisashop.Tests.Backend
             Assert.AreEqual(description, result!.Description);
             Assert.AreEqual(price, result!.Price);
             Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ImagesList);
-            Assert.AreEqual(styles, result!.StylesList);
+            Assert.AreEqual(images, result!.ProductImages);
+            Assert.AreEqual(styles, result!.ProductStyles);
         }
 
         [Order(3)]
@@ -111,8 +111,8 @@ namespace Artisashop.Tests.Backend
             Assert.AreEqual(description, result!.Description);
             Assert.AreEqual(price, result!.Price);
             Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ImagesList);
-            Assert.AreEqual(styles, result!.StylesList);
+            Assert.AreEqual(images, result!.ProductImages);
+            Assert.AreEqual(styles, result!.ProductStyles);
         }
 
         [Order(4)]

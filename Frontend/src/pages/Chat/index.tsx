@@ -23,9 +23,9 @@ import { SetState } from "globals/state";
 import { generate } from "shortid";
 import {InputText} from "primereact/inputtext";
 import {Maybe, None, Some} from "monet";
-import useApi from "hooks/useApi";
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
-import RealTimeChat from "pages/Chat/RealTimeChat";
+import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 
 export interface Conversation {
   history: ChatMessage[],
@@ -52,6 +52,8 @@ const Chat: FC = () => {
     () => null,
     (f) => console.log(URL.createObjectURL(f))
   );
+
+  useFormattedDocumentTitle("Chat");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");

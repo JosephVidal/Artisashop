@@ -3,7 +3,11 @@
 export * from './AccountApi';
 export * from './AdminComplaintApi';
 export * from './AdminProductApi';
+export * from './AdminProductImageApi';
+export * from './AdminProductStyleApi';
+export * from './AdminRoleApi';
 export * from './AdminUserApi';
+export * from './AdminUserRoleApi';
 export * from './BackofficeApi';
 export * from './BasketApi';
 export * from './BillApi';
@@ -15,4 +19,3 @@ export * from './HomeApi';
 export * from './OidcConfigurationApi';
 export * from './ProductApi';
 export * from './SearchApi';
-export * from './WeatherForecastApi';

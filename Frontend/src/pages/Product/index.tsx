@@ -5,42 +5,32 @@ import { SetState } from "globals/state";
 import QuantityInput from "components/QuantityInuput";
 import { BasketApi } from "api/apis";
 import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import { ProductApi } from "../../api";
 import { Wrapper, Craftsman, Tag } from "./styles";
 
 const ProductView = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState<number>(1);
   const basketApi = useApi(BasketApi);
-  const product: Product =
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description 1",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 2,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    }
-  // const [product, setProduct] = useState<Product | null>(null);
+  const productApi = useApi(ProductApi);
+  const [product, setProduct] = useState<Product | null>(null);
   const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
-  const productImg = useMemo(() => product?.images ? `/img/product/${product?.images[0]}` : "/img/product/default.png", [product]);
+  // TODO: Use image.content instead of image.imagePath
+  const productImg = useMemo(() => `/img/product/${product?.productImages?.at(0)?.imagePath || 'default.svg'}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
+  useFormattedDocumentTitle(product?.name ?? "Produit");
+
   useEffect(() => {
-    if (id) {
-      fetch(`/api/product/info/${id}`)
-      .then(response => response.json())
-      // .then(data => setProduct(data as Product));
+    const getProduct = async () => {
+      if (id) {
+        const result = await productApi.apiProductInfoProductIdGet({productId: +id});
+        setProduct(result ?? null);
+      }
     }
+    getProduct();
   }, [id]);
 
   return (
@@ -54,17 +44,17 @@ const ProductView = () => {
         <div id="product-info">
           <h1>{product?.name}</h1>
           <Craftsman>
-            <img className="craftsman-img" src="img/craftsman/Joseph.jpg" alt="test" />
+            <img className="craftsman-img" src={product?.craftsman.profilePicture ?? "/img/craftsman/default.svg"} alt="test" />
             <a href={productLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">
             <p id="price">{product?.price}€</p>
-            {product?.styles?.map(elem => <Tag>{elem}</Tag>)}
+            {product?.productStyles?.map(elem => <Tag>{elem.displayName || elem.normalizedName}</Tag>)}
           </div>
           <p id="description">{product?.description}</p>
           <p id="stock">{productStock}</p>
-          <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product.quantity)} />
-          <button className={buttonClass} onClick={() => addToBasket(basketApi, product.id, quantity)} type="submit">Ajouter au panier</button>
+          <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product?.quantity ?? 0)} />
+          <button className={buttonClass} onClick={() => addToBasket(basketApi, product?.id ?? 0, quantity)} type="submit">Ajouter au panier</button>
         </div>
       </div>
     </Wrapper>

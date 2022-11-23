@@ -19,6 +19,18 @@ import {
     AccountFromJSONTyped,
     AccountToJSON,
 } from './Account';
+import type { ProductImage } from './ProductImage';
+import {
+    ProductImageFromJSON,
+    ProductImageFromJSONTyped,
+    ProductImageToJSON,
+} from './ProductImage';
+import type { ProductStyle } from './ProductStyle';
+import {
+    ProductStyleFromJSON,
+    ProductStyleFromJSONTyped,
+    ProductStyleToJSON,
+} from './ProductStyle';
 
 /**
  * 
@@ -70,28 +82,16 @@ export interface Product {
     craftsman: Account;
     /**
      * 
-     * @type {string}
+     * @type {Array<ProductImage>}
      * @memberof Product
      */
-    imagesList?: string | null;
+    productImages?: Array<ProductImage> | null;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<ProductStyle>}
      * @memberof Product
      */
-    images?: Array<string> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Product
-     */
-    stylesList?: string | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Product
-     */
-    styles?: Array<string> | null;
+    productStyles?: Array<ProductStyle> | null;
 }
 
 /**
@@ -126,10 +126,8 @@ export function ProductFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'quantity': json['quantity'],
         'craftsmanId': json['craftsmanId'],
         'craftsman': AccountFromJSON(json['craftsman']),
-        'imagesList': !exists(json, 'imagesList') ? undefined : json['imagesList'],
-        'images': !exists(json, 'images') ? undefined : json['images'],
-        'stylesList': !exists(json, 'stylesList') ? undefined : json['stylesList'],
-        'styles': !exists(json, 'styles') ? undefined : json['styles'],
+        'productImages': !exists(json, 'productImages') ? undefined : (json['productImages'] === null ? null : (json['productImages'] as Array<any>).map(ProductImageFromJSON)),
+        'productStyles': !exists(json, 'productStyles') ? undefined : (json['productStyles'] === null ? null : (json['productStyles'] as Array<any>).map(ProductStyleFromJSON)),
     };
 }
 
@@ -149,10 +147,8 @@ export function ProductToJSON(value?: Product | null): any {
         'quantity': value.quantity,
         'craftsmanId': value.craftsmanId,
         'craftsman': AccountToJSON(value.craftsman),
-        'imagesList': value.imagesList,
-        'images': value.images,
-        'stylesList': value.stylesList,
-        'styles': value.styles,
+        'productImages': value.productImages === undefined ? undefined : (value.productImages === null ? null : (value.productImages as Array<any>).map(ProductImageToJSON)),
+        'productStyles': value.productStyles === undefined ? undefined : (value.productStyles === null ? null : (value.productStyles as Array<any>).map(ProductStyleToJSON)),
     };
 }
 

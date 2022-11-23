@@ -29,6 +29,12 @@ export interface ApiBackofficeChangeValidationStatusPatchRequest {
     requestBody?: { [key: string]: string; };
 }
 
+export interface ApiBackofficeSetAccountParamPatchRequest {
+    userId?: string;
+    propertyName?: string;
+    value?: boolean;
+}
+
 /**
  * 
  */
@@ -90,6 +96,46 @@ export class BackofficeApi extends runtime.BaseAPI {
      */
     async apiBackofficeGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
         const response = await this.apiBackofficeGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiBackofficeSetAccountParamPatchRaw(requestParameters: ApiBackofficeSetAccountParamPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.userId !== undefined) {
+            queryParameters['userId'] = requestParameters.userId;
+        }
+
+        if (requestParameters.propertyName !== undefined) {
+            queryParameters['propertyName'] = requestParameters.propertyName;
+        }
+
+        if (requestParameters.value !== undefined) {
+            queryParameters['value'] = requestParameters.value;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/backoffice/setAccountParam`,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.TextApiResponse(response) as any;
+    }
+
+    /**
+     */
+    async apiBackofficeSetAccountParamPatch(requestParameters: ApiBackofficeSetAccountParamPatchRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.apiBackofficeSetAccountParamPatchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

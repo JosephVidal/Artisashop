@@ -134,29 +134,29 @@ public static class Seeder
     /// <param name="serviceProvider"></param>
     public static async Task SeedDemoDataAsync(IServiceProvider serviceProvider)
     {
-        await SeedDemoStyles(serviceProvider);
+        // await SeedDemoStyles(serviceProvider);
         await SeedDemoUsers(serviceProvider);
         await SeedDemoSellers(serviceProvider);
         await SeedDemoProducts(serviceProvider);
     }
 
-    /// <summary>
-    /// Seeds the style entities.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-
-        // Create styles for products
-        var stylesFaker = new Faker<Style>()
-            .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
-            .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
-        var styles = stylesFaker.Generate(50);
-        dbContext.Styles.AddRange(styles);
-        await dbContext.SaveChangesAsync();
-    }
+    // /// <summary>
+    // /// Seeds the style entities.
+    // /// </summary>
+    // /// <param name="serviceProvider"></param>
+    // public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
+    // {
+    //     using var scope = serviceProvider.CreateScope();
+    //     using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+    //
+    //     // Create styles for products
+    //     var stylesFaker = new Faker<Style>()
+    //         .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
+    //         .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
+    //     var styles = stylesFaker.Generate(50);
+    //     dbContext.Styles.AddRange(styles);
+    //     await dbContext.SaveChangesAsync();
+    // }
 
     /// <summary>
     /// Seeds the user entities.
@@ -235,10 +235,27 @@ public static class Seeder
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
-            .RuleFor(o => o.StylesList,
-                f => JsonSerializer.Serialize(f.PickRandom(dbContext.Styles.ToList(), 3).Select(x => x.Id)));
-        var products = productsFaker.Generate(100);
-        dbContext.Products.AddRange(products);
+            .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())))
+            ;
+
+        var demoProducts = Seeder.DemoProductNames
+            .Select(pair =>
+            {
+                var product = productsFaker.Generate();
+                product.Name = pair.Key;
+                product.ProductImages = new List<ProductImage>()
+                {
+                    new ProductImage
+                    {
+                        Name = pair.Key,
+                        ImagePath = pair.Value,
+                        Content = null,
+                    },
+                };
+                return product;
+            });
+
+        dbContext.Products.AddRange(demoProducts);
         await dbContext.SaveChangesAsync();
     }
 
@@ -258,38 +275,34 @@ public static class Seeder
         return result;
     }
 
-    /// <summary>
-    /// Seeds some messages for the application.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    /// <exception cref="Exception"></exception>
-    public static async Task SeedMessages(IServiceProvider serviceProvider)
+    public static readonly KeyValuePair<string, string>[] DemoProductNames =
     {
-        using var scope = serviceProvider.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-
-        var sender = dbContext.Users.FirstOrDefault(i => i.Email == "joseph@artisashop.fr");
-        var receiver = dbContext.Users.FirstOrDefault(i => i.Email == "helena@artisashop.fr");
-
-        Console.WriteLine("Hello outside");
-        if (sender != null && receiver != null)
-        {
-            Console.WriteLine("Hello");
-            var Messages = new List<ChatMessage>()
-            {
-                new()
-                {
-                    SenderId = sender.Id,
-                    ReceiverId = receiver.Id,
-                    Content = "Carré"
-                },
-            };
-
-            foreach (var message in Messages)
-            {
-                dbContext.ChatMessages.Add(message);
-                await dbContext.SaveChangesAsync();
-            } 
-        }
-    }
+        new("Acanthes", "acanthes.JPG"),
+        new("Applique en papier", "applique-en-papier.png"),
+        new("Applique en papiper contrepartie", "applique-en-papiper-contrepartie.JPG"),
+        new("Appliques", "appliques.JPG"),
+        new("Ballerines en papier 2", "ballerines-en-papier-2.JPG"),
+        new("Ballerines en papier", "ballerines-en-papier.JPG"),
+        new("Bonheur du jour", "bonheur-du-jour.jpeg"),
+        new("Buffet", "buffet.jpeg"),
+        new("Buste romain", "buste-romain.JPG"),
+        new("Buste siamois", "buste-siamois.png"),
+        new("Chandelier en bol", "chandelier-en-bol.JPG"),
+        new("Chandelier en fer", "chandelier-en-fer.jpg"),
+        new("Chandelier", "chandelier.jpg"),
+        new("Chapiteau corinthien", "chapiteau-corinthien.JPG"),
+        new("Echassier fantastique", "echassier-fantastique.JPG"),
+        new("Echassier", "echassier.JPG"),
+        new("Maquette d'église", "maquette-d-eglise.jpeg"),
+        new("Médaillon", "medaillon.JPG"),
+        new("Natalité AU JAPON", "natalite-jp.JPG"),
+        new("Oeuf d'extérieur", "oeuf-d-exterieur.png"),
+        new("Oeuf d'intérieur", "oeuf-d-interieur.jpg"),
+        new("Support de pierre", "support-de-pierre.jpeg"),
+        new("Table à thé", "table à thé.jpg"),
+        new("Table a jeux", "table-a-jeux.jpeg"),
+        new("Tableau natalité", "tableau-natalite.jpg"),
+        new("Tableau raiponse", "tableau-raiponse.jpg"),
+        new("Tabouret de piano", "tabouret-de-piano.jpeg"),
+    };
 }

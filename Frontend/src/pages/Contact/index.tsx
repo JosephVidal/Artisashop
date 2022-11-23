@@ -1,8 +1,11 @@
 import React from "react";
 import { Contact } from "api/models/Contact";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
 const ContactView = () => {
+  useFormattedDocumentTitle("Nous contacter");
+
   const contact: Contact =
   {
     subject: "",

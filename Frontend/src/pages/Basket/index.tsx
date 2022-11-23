@@ -9,6 +9,7 @@ import {
 import { Divider } from "primereact/divider";
 import CheckoutButtons from "components/CheckoutButtons";
 import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { REACT_APP_PAYPAL_CLIENT } from "conf";
 import QuantityInput from "components/QuantityInuput";
 import {
@@ -35,19 +36,24 @@ const BasketView: FC = () => {
   const [deliveryCost, setDeliveryCost] = useState<number>(0);
   const basketAPI: BasketApi = useApi(BasketApi);
 
+  useFormattedDocumentTitle("Panier");
+
   useEffect(() => {
     basketAPI.apiBasketGet().then((list) => setBasket(list.filter((item) => item.currentState === "WAITINGCONSUMER")))
   }, []);
 
   useEffect(() => {
-      setHasDelivery(basket.find((product) => product.deliveryOpt === DeliveryOption.Delivery) !== undefined);
-      setDeliveryCost(basket.filter((product) => product.deliveryOpt === "DELIVERY").length * 50)
-    }, [basket]);
+    setHasDelivery(basket.find((product) => product.deliveryOpt === DeliveryOption.Delivery) !== undefined);
+    setDeliveryCost(basket.filter((product) => product.deliveryOpt === "DELIVERY").length * 50)
+  }, [basket]);
 
   const displayProduct = (basketItem: Basket) => (
     <ProductWrapper key={basketItem.id}>
       <ImageWrapper>
-        {(basketItem.product.images && basketItem.product.images?.length !== 0) && <img src={basketItem.product.images[0]} alt=""/>}
+        {basketItem.product.productImages?.map((image) => (
+          // TODO: Use image.content instead of image.imagePath
+          <img src={image.imagePath ?? '/img/product/default.svg'} alt={image.name ?? "Image du produit"} />
+        ))}
       </ImageWrapper>
       <ProductDetails>
         <div>{basketItem.product.name}</div>
@@ -92,7 +98,7 @@ const BasketView: FC = () => {
             <CardTitle>Livraison</CardTitle>
             <CardBody>
               Adresse de livraison (numéro, rue, code postal, ville, pays):
-              <AddressInput onChange={(e) => setAddress(e.target.value)}/>
+              <AddressInput onChange={(e) => setAddress(e.target.value)} />
             </CardBody>
           </Card>
         )}
@@ -106,19 +112,19 @@ const BasketView: FC = () => {
               <div>Adresse de livraison:</div>
               <TextRight>{address}</TextRight>
             </BillElement>
-            )}
+          )}
           <BillElement>
             <div>Produits:</div>
             {basket.map(displayProductBill)}
           </BillElement>
           {hasDelivery && (
-              <BillElement>
-                <div>Frais de livraison:</div>
-                <ProductBill>
-                  <div>{basket.filter((product) => product.deliveryOpt === "DELIVERY").length} x 50</div>
-                  <div>{deliveryCost} €</div>
-                </ProductBill>
-              </BillElement>
+            <BillElement>
+              <div>Frais de livraison:</div>
+              <ProductBill>
+                <div>{basket.filter((product) => product.deliveryOpt === "DELIVERY").length} x 50</div>
+                <div>{deliveryCost} €</div>
+              </ProductBill>
+            </BillElement>
           )}
           <BillElement>
             <div>Total:</div>
@@ -144,31 +150,31 @@ const BasketView: FC = () => {
 };
 
 const changeDelivery = (basketApi: BasketApi, setProducts: SetState<Basket[]>, id: number, delivery: DeliveryOption) => {
-    setProducts((prevState) =>
-      prevState.map((product) => {
-        if (product.id === id) {
-          basketApi.apiBasketPatch({
-            updateBasket: {
-              id: product.id,
-              quantity: product.quantity,
-              deliveryOpt: delivery,
-              currentState: product.currentState
-            }
-          })
-          return {
-              ...product,
-              deliveryOpt: delivery
-            }
+  setProducts((prevState) =>
+    prevState.map((product) => {
+      if (product.id === id) {
+        basketApi.apiBasketPatch({
+          updateBasket: {
+            id: product.id,
+            quantity: product.quantity,
+            deliveryOpt: delivery,
+            currentState: product.currentState
+          }
+        })
+        return {
+          ...product,
+          deliveryOpt: delivery
         }
-        return product;
-        }
-      )
-    );
+      }
+      return product;
+    }
+    )
+  );
 }
 
 const changeQuantity = (basketApi: BasketApi, setProducts: SetState<Basket[]>, id: number) => (quantity: number | null) => {
   if (quantity === null || quantity === 0) {
-    basketApi.apiBasketBasketIdDelete({basketId: id})
+    basketApi.apiBasketBasketIdDelete({ basketId: id })
       .then(() => setProducts((prevState) => prevState.filter((product) => product.id !== id)))
 
   }
@@ -190,7 +196,7 @@ const changeQuantity = (basketApi: BasketApi, setProducts: SetState<Basket[]>, i
           }
         }
         return product;
-        }
+      }
       )
     );
 }

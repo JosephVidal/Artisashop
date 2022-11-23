@@ -7,6 +7,18 @@ export const ProductsList = styled.section`
     grid-auto-rows: minmax(100px, auto);
 `;
 
+export const Craftsman = styled.div`
+    display: flex;
+    flex-direction: row;
+
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+        margin: auto 30px auto 0;
+        height: 120px;
+    }
+`;
+
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;

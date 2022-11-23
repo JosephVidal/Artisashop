@@ -1,5 +1,5 @@
-﻿FROM node:18 as build
-RUN ["yarn", "--verions"]
+FROM node:18 as build
+RUN ["yarn", "--version"]
 RUN ["corepack", "enable"]
 RUN ["yarn", "set", "version", "stable"]
 WORKDIR /usr/src/app
@@ -9,7 +9,7 @@ RUN ["ls"]
 COPY . ./
 RUN yarn build
 
-FROM nginx:1.15
+FROM nginx:1.15 as prod
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

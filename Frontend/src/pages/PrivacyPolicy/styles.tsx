@@ -6,6 +6,7 @@ margin-left: auto;
 margin-right: auto;
 margin-bottom: 50px;
 padding: 0 10px;
+color: black;
 
 @media only screen and (max-width:880px) {
     width: 90%;

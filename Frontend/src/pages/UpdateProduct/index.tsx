@@ -1,8 +1,12 @@
 import React from "react";
+
 import { CreateProduct } from "api/models/CreateProduct";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
 const UpdateProductView = () => {
+  useFormattedDocumentTitle("Panier");
+
   const product: CreateProduct =
   {
     name: "Product 1",
