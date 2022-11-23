@@ -188,7 +188,7 @@ if (app.Environment.IsDevelopment())
         policyBuilder
             .WithOrigins("http://localhost:43117",
                     "https://localhost:7095",
-                    "http://localhost:3000",
+                    "https://localhost:3000",
                     "https://localhost:44474")
             .AllowAnyMethod()
             .AllowAnyHeader()
