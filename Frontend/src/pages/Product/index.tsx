@@ -48,7 +48,7 @@ const ProductView = () => {
             <a href={productLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">
-            <p id="price">{product?.price}€</p>
+            <p id="price">{product?.price.toFixed(2)}€</p>
             {product?.productStyles?.map(elem => <Tag>{elem.displayName || elem.normalizedName}</Tag>)}
           </div>
           <p id="description">{product?.description}</p>
