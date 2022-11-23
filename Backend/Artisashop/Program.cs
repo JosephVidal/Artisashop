@@ -215,10 +215,9 @@ else // Production
     app.UseCors(builder =>
     {
         builder
-            .WithOrigins("http://localhost:43117",
-                    "https://localhost:7095",
-                    "http://localhost:3000",
-                    "https://localhost:44474")
+            .WithOrigins("https://artisashop.fr",
+                    "https://api.artisashop.fr",
+                    "https://www.artisashop.fr")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .WithExposedHeaders("Content-Range")
