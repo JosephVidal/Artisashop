@@ -178,7 +178,7 @@ public static class Seeder
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
             .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
             .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
-            .RuleFor(o => o.Job, f => f.Name.JobTitle())
+            .RuleFor(o => o.Job, f => DemoJob[f.Random.Int(0, DemoJob.Length - 1)])
             .RuleFor(o => o.EmailConfirmed, true)
             .RuleFor(o => o.Validation, false)
             .RuleFor(o => o.Suspended, false)
@@ -324,5 +324,23 @@ public static class Seeder
         new("4 Rue Vauban, 68600 Neuf-Brisach, France", new(48.017651, 7.5304749)),
         new("4 Rue Vauban, 68600 Dessenheim, France", new(47.980451, 7.485044)),
         new("4 Rue Vauban, 68320 Muntzenheim, France", new(48.1024371, 7.4695845))
+    };
+
+    public static readonly string[] DemoJob =
+    {
+        new("Ebeniste"),
+        new("Sculpteur"),
+        new("Tourneur"),
+        new("Marqueteur"),
+        new("Verrier"),
+        new("Souffleur de verre"),
+        new("Forgeron"),
+        new("Ferronnier"),
+        new("Remouleur"),
+        new("Menuisier"),
+        new("Tapissier"),
+        new("Couturier"),
+        new("Tailleur"),
+        new("Tailleur de pierre")
     };
 }
