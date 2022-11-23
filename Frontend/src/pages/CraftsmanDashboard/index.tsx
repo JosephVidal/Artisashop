@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
-import {Account, Basket, CustomOrderApi, OrderList, Product, State} from "api";
+import {Account, Basket, CustomOrderApi, OrderList, State} from "api";
 import { SetState } from "globals/state";
 import useApi from "hooks/useApi";
 import {AccordionTab} from "primereact/accordion";
 import Select from "components/Select";
 import Option from "components/Select/Option";
+import {priceFormatter} from "components/ProductCard";
 import {
   Wrapper,
   CustomAccordion,
@@ -18,100 +19,13 @@ import {
   PriceWrapper,
 } from "./styles";
 
-const Jojo: Account = {
-  id: "1",
-  userName: "Jojo",
-  email: "jojo@jojo.jojo",
-  lastname: "Vidol",
-  firstname: "Jojo",
-  suspended: false,
-  validation: true
-}
-
-const Juju: Account = {
-  id: "2",
-  userName: "Juju",
-  email: "juju@juju.juju",
-  lastname: "Vidul",
-  firstname: "Juju",
-  suspended: false,
-  validation: true
-}
-
-const Jaja: Account = {
-  id: "3",
-  userName: "Jaja",
-  email: "jaja@jaja.jaja",
-  lastname: "Vidal",
-  firstname: "Jaja",
-  suspended: false,
-  validation: true
-}
-
-const Chaise: Product = {
-  id: 1,
-  name: "Chaise",
-  description: "Jolie",
-  price: 100,
-  quantity: 10,
-  craftsmanId: "1",
-  craftsman: Jojo,
-  productImages: [
-    {
-      id: 1,
-      content: "https://d2ans0z9s1x1c.cloudfront.net/produits/chaise-design-bois-de-teck-606e3eaa401bf.jpg",
-      name: 'Cat',
-      productId: 1
-    }
-  ]
-}
-
-const list: OrderList[] = [
-  {
-    item: {
-      id: 1,
-      accountId: "2",
-      account: Juju,
-      productId: 1,
-      product: Chaise,
-      quantity: 1,
-      deliveryOpt: "TAKEOUT",
-      currentState: "ONGOING"
-    }
-  },
-  {
-    item: {
-      id: 2,
-      accountId: "2",
-      account: Juju,
-      productId: 1,
-      product: Chaise,
-      quantity: 1,
-      deliveryOpt: "TAKEOUT",
-      currentState: "ONGOING"
-    }
-  },
-  {
-    item: {
-      id: 3,
-      accountId: "3",
-      account: Jaja,
-      productId: 1,
-      product: Chaise,
-      quantity: 2,
-      deliveryOpt: "DELIVERY",
-      currentState: "ONGOING"
-    }
-  }
-]
-
 const CraftsmanDashboard: FC = () => {
-  const [orderList, setOrderList] = useState<OrderList[]>(list);
+  const [orderList, setOrderList] = useState<OrderList[]>([]);
   const [clientList, setClientList] = useState<Account[]>([]);
   const customOrderApi: CustomOrderApi = useApi(CustomOrderApi);
 
   useEffect(() => {
-    // customOrderApi.apiCustomOrderListGet().then(setOrderList)
+    customOrderApi.apiCustomOrderListGet().then(setOrderList)
     const temp: Account[] = [];
     orderList.forEach((order) => {
       if (!temp.includes(order.item!.account))
@@ -120,10 +34,12 @@ const CraftsmanDashboard: FC = () => {
     setClientList(temp)
   }, []);
 
+  console.log(orderList)
+
   const accordionHeader = (name: string, total: number, percentage: number) => (
     <HeaderWrapper>
       <ClientName>{name}</ClientName>
-      <HeaderRight>Total: {total} €</HeaderRight>
+      <HeaderRight>Total: {priceFormatter.format(total)}</HeaderRight>
       <LeftWrapper>Complétion: {percentage} %</LeftWrapper>
     </HeaderWrapper>
   )
@@ -139,7 +55,7 @@ const CraftsmanDashboard: FC = () => {
           Quantité: {basketItem.quantity}
         </div>
         <PriceWrapper>
-          {`${basketItem.product.price * basketItem.quantity} €`}
+          {priceFormatter.format(basketItem.product.price * basketItem.quantity)}
         </PriceWrapper>
         <LeftWrapper>
           Livraison: {basketItem.deliveryOpt}
@@ -161,7 +77,6 @@ const CraftsmanDashboard: FC = () => {
   );
 
   const displayClientOrders = (client: Account, orders: OrderList[]) => (
-    // eslint-disable-next-line react/jsx-no-undef
     <AccordionTab header={accordionHeader(client.userName!, calculateTotal(orders), calculateCompletion(orders))} key={client.id}>
       {orders.map((order) => displayOrder(order.item!))}
     </AccordionTab>
@@ -176,6 +91,7 @@ const CraftsmanDashboard: FC = () => {
   )
 };
 
+
 const changeState = (customOrderApi: CustomOrderApi, setOrderList: SetState<OrderList[]>, id: number, state: State) => {
   setOrderList((prevState) =>
     prevState.map((orders) => {
@@ -186,8 +102,11 @@ const changeState = (customOrderApi: CustomOrderApi, setOrderList: SetState<Orde
           })
           return {
             ...orders,
-            "item.currentState": state
-          }
+            item: {
+              ...orders.item,
+              currentState: state
+            }
+          } as OrderList
         }
         return orders;
       }
@@ -201,6 +120,6 @@ const calculateTotal = (orders: OrderList[]) => {
 }
 
 const calculateCompletion = (orders: OrderList[]) =>
-  orders.filter((order) => order.item!.currentState === "END").length
+  Math.floor(orders.filter((order) => order.item!.currentState === "END").length * 100 / orders.length)
 
 export default CraftsmanDashboard;

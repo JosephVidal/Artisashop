@@ -13,7 +13,7 @@ interface Props {
 }
 
 // TODO: Handle internationalization here
-const priceFormatter = new Intl.NumberFormat('fr-FR', { style: 'currency',currency: 'EUR',});
+export const priceFormatter = new Intl.NumberFormat('fr-FR', { style: 'currency',currency: 'EUR',});
 
 const ProductCard: React.FunctionComponent<Props> = ({
   name,
