@@ -37,7 +37,7 @@ namespace Artisashop.Controllers
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
 
-                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman").Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
+                List<Basket> tmpList = await _db.Baskets!.Include(item => item.Product).Include(item => item.Product!.Craftsman).Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
                 var cmdList = new List<OrderList>();
                 foreach (Basket item in tmpList)
                     cmdList.Add(new OrderList(item, GenPossibleState(item.CurrentState, item.DeliveryOpt)));
