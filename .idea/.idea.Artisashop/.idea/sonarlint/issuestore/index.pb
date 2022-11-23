@@ -1,16 +1,10 @@
 
-o
-?Backend/Artisashop/Configurations/FranceConnectConfiguration.cs,5\8\589701b072bb7ae6c9c1d868783f2e1ef112027e
 e
 5Backend/Artisashop/Configurations/JwtConfiguration.cs,7\5\757b5bb9ed97d8d2da42383097a8d577f6e0fe32
 B
 Backend/Dockerfile,c\b\cb4be36eed51e75adb18dd1c6ecebf1c09791f15
-j
-:Backend/Artisashop/Configurations/ConfigurationSections.cs,2\f\2f9fccc2a4dcb600776e9960d6a83bc14ede9a99
 S
 #Backend/Artisashop/appsettings.json,f\2\f2942c9c86da21ddfb4c280509f4242f2a200f29
-a
-1Backend/Artisashop/Properties/launchSettings.json,1\8\18b9fa707049bcd4bd7e252423f53ad262909b29
 ±
 €Backend/Libs/Entreprises/src/EntreprisesApi.Test/Model/V3EuropeanCommissionUnitesLegalesSirenNumeroTvaGet200ResponseDataTests.cs,4\e\4e286e2e910337b5c93cbf4f1a63d49f8f259f4c
 V
@@ -19,5 +13,3 @@ R
 "Backend/Artisashop/Hubs/ChatHub.cs,a\8\a8da41cba478a677d18dc2639dba0b0315373d1c
 H
 Frontend/.env.production,3\e\3ec6e4a03ac659eb43e2c3fd8b9c339eabd7fc64
-M
-Backend/Artisashop/Program.cs,c\3\c3e1aa6982f69a67c4417998d760a275aab92d71
