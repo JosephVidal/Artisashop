@@ -12,7 +12,6 @@ interface Props { }
 const Home: React.FunctionComponent<Props> = () => {
 
   const navigate = useNavigate();
-  const type = "Par produit";
 
   return (
     <Wrapper>
@@ -21,7 +20,7 @@ const Home: React.FunctionComponent<Props> = () => {
         <Formik
           initialValues={{
             searchStr: "",
-            searchType: false,
+            searchType: true,
           }}
           onSubmit={async values => {
             navigate({
@@ -30,23 +29,25 @@ const Home: React.FunctionComponent<Props> = () => {
             })
           }}
         >
-          <Form id="search-block">
-            <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
-            <label htmlFor="SearchStr">
-              <button type="submit" id="sendButton" className="search-button">
-                <i className="fas fa-search" />
-              </button>
-            </label>
-            <div id="searchType">
-              <label className="switch">
-                <Field type="checkbox" name="searchType" />
-                <span className="slider round" />
+          {({ values }) => (
+            <Form id="search-block">
+              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
+              <label htmlFor="SearchStr">
+                <button type="submit" id="sendButton" className="search-button">
+                  <i className="fas fa-search" />
+                </button>
               </label>
-              <label className="wordCarousel" htmlFor="SearchType">
-                <p className="search-type-text">{type}</p>
-              </label>
-            </div>
-          </Form>
+              <div id="searchType">
+                <label className="switch">
+                  <Field type="checkbox" name="searchType" />
+                  <span className="slider round" />
+                </label>
+                <label className="wordCarousel" htmlFor="SearchType">
+                  <p className="search-type-text">{values.searchType ? "Par produit" : "Par artisan"}</p>
+                </label>
+              </div>
+            </Form>
+          )}
         </Formik>
       </section>
       <section id="product-section">
