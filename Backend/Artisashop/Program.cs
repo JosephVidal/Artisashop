@@ -219,6 +219,7 @@ else // Production
                     "https://localhost:7095",
                     "http://localhost:3000",
                     "https://localhost:44474")
+            .AllowAnyMethod()
             .AllowAnyHeader()
             .WithExposedHeaders("Content-Range")
             .SetIsOriginAllowedToAllowWildcardSubdomains();
