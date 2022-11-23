@@ -21,18 +21,8 @@ import ContactView from "pages/Contact";
 import CreateProductView from "pages/CreateProduct";
 import UpdateProductView from "pages/UpdateProduct";
 import ReclamationView from "pages/Reclamation";
-import { Account } from "api";
 
 const AdminDashboard = React.lazy(() => import("pages/Admin"));
-
-const Joseph: Account = {
-  id: "14d8b8f2-9446-4485-95f7-bb657de7c54e",
-  lastname: "Osmont",
-  firstname: "Yann",
-  suspended: false,
-  validation: false,
-  userName: "yann@artisashop.fr"
-}
 
 interface Props {
   toastHandler: ToastHandler;
@@ -53,7 +43,7 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
             <Route path="mon-panier" element={<Basket />}/>
             <Route path="craftsman/:id" element={<CraftsmanView/>}/>
             <Route path="politique-de-confidentialite" element={<PrivacyPolicy/>}/>
-            <Route path="chat" element={<Chat newMessage to={Joseph}/>}/>
+            <Route path="chat" element={<Chat/>}/>
             <Route path="profile" element={<ProfilePage />}/>
             <Route path="contact" element={<ContactView />} />
             <Route path="create-product" element={<CreateProductView />} />

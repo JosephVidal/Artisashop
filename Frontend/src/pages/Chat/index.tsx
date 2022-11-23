@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useMemo, useState} from "react";
 import {
   MessageBubble,
   ChatWrapper,
@@ -27,18 +27,24 @@ import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} fr
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import RealTimeChat from "pages/Chat/RealTimeChat";
+import {useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router";
 
 export interface Conversation {
   history: ChatMessage[],
   interlocutor?: Account
 }
 
-interface Props {
-  newMessage?: boolean,
-  to?: Account
+const Joseph: Account = {
+  id: "14d8b8f2-9446-4485-95f7-bb657de7c54e",
+  lastname: "Osmont",
+  firstname: "Yann",
+  suspended: false,
+  validation: false,
+  userName: "yann@artisashop.fr"
 }
 
-const Chat: FC<Props> = ({newMessage, to}) => {
+const Chat: FC = () => {
   const [contactList, setContactList] = useState<ChatPreview[]>([]);
   const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
@@ -49,6 +55,15 @@ const Chat: FC<Props> = ({newMessage, to}) => {
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
   const [user, setUser] = useState<Account>();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const newMessage: boolean = useMemo(() => searchParams.get("new") === "true" || false, [searchParams]);
+  const to: Account | null = useMemo(() => {
+    const get = searchParams.get("to");
+    if (get !== null)
+      return JSON.parse(get) as Account
+    return null;
+  }, [searchParams]);
 
   reader.onloadend = () => {
     setFileData(Some(reader.result as string));
@@ -64,15 +79,15 @@ const Chat: FC<Props> = ({newMessage, to}) => {
       setContactList(r);
     });
     if (newMessage && contactList.find((preview) =>
-      preview.lastMsg?.senderId === to?.id ||
-      preview.lastMsg?.receiverId === to?.id) === undefined)
-      setConversation({history: [], interlocutor: to});
+      preview.lastMsg?.senderId === (to )?.id ||
+      preview.lastMsg?.receiverId === (to )?.id) === undefined)
+      setConversation({history: [], interlocutor: (to!)});
   }, [])
 
   const renderContact = (contact: ChatPreview) => {
     const getInterlocutor = (): string => {
       if (!contact.lastMsg)
-        return to!.userName!;
+        return (to )!.userName!;
       return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
     }
 
@@ -83,7 +98,7 @@ const Chat: FC<Props> = ({newMessage, to}) => {
         if (contact.lastMsg) {
           getConversation(useChat, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
         } else {
-          setConversation({history: [], interlocutor: to})
+          setConversation({history: [], interlocutor: to!})
         }
           setInput("");
           setEdit(None());
@@ -137,10 +152,16 @@ const Chat: FC<Props> = ({newMessage, to}) => {
 
   return (
     <Wrapper>
+      <BsPencil size="5%" onClick={() => {
+        navigate({
+          pathname: '/app/chat',
+          search: `?new=true&to=${JSON.stringify(Joseph)}`,
+        })
+      }} />
       <ContactList>
         {(newMessage && contactList.find((preview) =>
-          preview.lastMsg?.senderId === to?.id ||
-          preview.lastMsg?.receiverId === to?.id) === undefined) &&
+          preview.lastMsg?.senderId === (to )?.id ||
+          preview.lastMsg?.receiverId === (to )?.id) === undefined) &&
           renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
@@ -156,7 +177,7 @@ const Chat: FC<Props> = ({newMessage, to}) => {
           )}
           {(conversation.history.length === 0 && newMessage) && (
             <div>
-              Conversation avec {to?.userName}
+              Conversation avec {(to )?.userName}
             </div>
           )}
         </ConversationTitle>
