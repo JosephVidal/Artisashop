@@ -21,6 +21,7 @@ namespace Artisashop.Models
         // public virtual DbSet<Style> Styles { get; set; } = null!;
         public virtual DbSet<Complaint> Complaints { get; set; } = null!;
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
+        public DbSet<ProductStyle> ProductStyles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

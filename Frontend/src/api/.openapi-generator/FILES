@@ -2,7 +2,11 @@
 apis/AccountApi.ts
 apis/AdminComplaintApi.ts
 apis/AdminProductApi.ts
+apis/AdminProductImageApi.ts
+apis/AdminProductStyleApi.ts
+apis/AdminRoleApi.ts
 apis/AdminUserApi.ts
+apis/AdminUserRoleApi.ts
 apis/BackofficeApi.ts
 apis/BasketApi.ts
 apis/BillApi.ts
@@ -36,6 +40,7 @@ models/ExternalLoginConfirmationViewModel.ts
 models/GPSCoord.ts
 models/GetAccountResult.ts
 models/Home.ts
+models/IdentityRole.ts
 models/ItemElem.ts
 models/Login.ts
 models/OrderList.ts
@@ -47,6 +52,7 @@ models/ProductStyle.ts
 models/PurchaseUnitElem.ts
 models/Register.ts
 models/State.ts
+models/StringIdentityUserRole.ts
 models/UnitAmount.ts
 models/UpdateAccount.ts
 models/UpdateBasket.ts

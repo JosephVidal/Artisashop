@@ -311,7 +311,6 @@ namespace Artisashop.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")
@@ -351,7 +350,7 @@ namespace Artisashop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductStyle");
+                    b.ToTable("ProductStyles");
                 });
 
             modelBuilder.Entity("Artisashop.Models.ViewModel.GPSCoord", b =>

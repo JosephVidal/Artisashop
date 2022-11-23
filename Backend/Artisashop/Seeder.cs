@@ -235,9 +235,27 @@ public static class Seeder
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
-            .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())));
-        var products = productsFaker.Generate(100);
-        dbContext.Products.AddRange(products);
+            .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())))
+            ;
+
+        var demoProducts = Seeder.DemoProductNames
+            .Select(pair =>
+            {
+                var product = productsFaker.Generate();
+                product.Name = pair.Key;
+                product.ProductImages = new List<ProductImage>()
+                {
+                    new ProductImage
+                    {
+                        Name = pair.Key,
+                        ImagePath = pair.Value,
+                        Content = null,
+                    },
+                };
+                return product;
+            });
+
+        dbContext.Products.AddRange(demoProducts);
         await dbContext.SaveChangesAsync();
     }
 
@@ -256,4 +274,35 @@ public static class Seeder
 
         return result;
     }
+    
+    public static readonly KeyValuePair<string, string>[] DemoProductNames =
+    {
+        new("Acanthes", "acanthes.JPG"),
+        new("Applique en papier", "applique-en-papier.png"),
+        new("Applique en papiper contrepartie", "applique-en-papiper-contrepartie.JPG"),
+        new("Appliques", "appliques.JPG"),
+        new("Ballerines en papier 2", "ballerines-en-papier-2.JPG"),
+        new("Ballerines en papier", "ballerines-en-papier.JPG"),
+        new("Bonheur du jour", "bonheur-du-jour.jpeg"),
+        new("Buffet", "buffet.jpeg"),
+        new("Buste romain", "buste-romain.JPG"),
+        new("Buste siamois", "buste-siamois.png"),
+        new("Chandelier en bol", "chandelier-en-bol.JPG"),
+        new("Chandelier en fer", "chandelier-en-fer.jpg"),
+        new("Chandelier", "chandelier.jpg"),
+        new("Chapiteau corinthien", "chapiteau-corinthien.JPG"),
+        new("Echassier fantastique", "echassier-fantastique.JPG"),
+        new("Echassier", "echassier.JPG"),
+        new("Maquette d'église", "maquette-d-eglise.jpeg"),
+        new("Médaillon", "medaillon.JPG"),
+        new("Natalité AU JAPON", "natalite-jp.JPG"),
+        new("Oeuf d'extérieur", "oeuf-d-exterieur.png"),
+        new("Oeuf d'intérieur", "oeuf-d-interieur.jpg"),
+        new("Support de pierre", "support-de-pierre.jpeg"),
+        new("Table à thé", "table à thé.jpg"),
+        new("Table a jeux", "table-a-jeux.jpeg"),
+        new("Tableau natalité", "tableau-natalite.jpg"),
+        new("Tableau raiponse", "tableau-raiponse.jpg"),
+        new("Tabouret de piano", "tabouret-de-piano.jpeg"),
+    };
 }

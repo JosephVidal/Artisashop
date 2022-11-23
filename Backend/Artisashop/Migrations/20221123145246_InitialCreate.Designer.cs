@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Artisashop.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221123094258_UpdateProductStylesModel")]
-    partial class UpdateProductStylesModel
+    [Migration("20221123145246_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -313,7 +313,6 @@ namespace Artisashop.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")
@@ -353,7 +352,7 @@ namespace Artisashop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductStyle");
+                    b.ToTable("ProductStyles");
                 });
 
             modelBuilder.Entity("Artisashop.Models.ViewModel.GPSCoord", b =>
