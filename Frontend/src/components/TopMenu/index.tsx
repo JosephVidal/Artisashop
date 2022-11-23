@@ -30,15 +30,15 @@ const TopMenu: React.FunctionComponent<Props> = () => {
     <TopMenuWrapper>
       <Quarter />
       <MenuItem>
-        <BaseText onClick={() => console.log("Recherche")}>
+        <Link to="/app/search">
           {t("menu.search")}
-        </BaseText>
+        </Link>
       </MenuItem>
       <Link to="/"><Image src={Logo} width="50px" /></Link>
       <MenuItem>
-        <BaseText onClick={() => console.log("Contact")}>
+        <Link to="/app/contact">
           {t("menu.contact")}
-        </BaseText>
+        </Link>
       </MenuItem>
       <RightIcons>
         {user
