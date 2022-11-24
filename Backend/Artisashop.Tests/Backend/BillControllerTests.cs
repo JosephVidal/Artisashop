@@ -17,12 +17,12 @@ namespace Artisashop.Tests.Backend
         [OneTimeSetUp]
         public async Task SetUp()
         {
-            await AccountControllerTest.Login("jane.consumer@epitech.eu", "Password_1234");
+            await AccountControllerTest.Login("jane.consumer@artisashop.fr", "Artisashop@2022");
             _token = AccountControllerTest.token;
         }
 
         [Order(1)]
-        [Test]
+        [TestCase(TestName = "Show final bill", Category = "BasketToPaypalBill Success")]
         public async Task BasketToPaypalBill()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/bill");
@@ -36,7 +36,7 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(2)]
-        [Test]
+        [TestCase(TestName = "Paying success", Category = "Basket Success")]
         public async Task BasketSold()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/bill");

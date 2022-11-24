@@ -40,7 +40,7 @@ namespace Artisashop.Controllers
         {
             try
             {
-                var users = _userManager.GetUsersInRoleAsync(Roles.Seller);
+                var users = await _userManager.GetUsersInRoleAsync(Roles.Seller);
                 return Ok(users);
             }
             catch (Exception e)
@@ -112,9 +112,9 @@ namespace Artisashop.Controllers
         /// <summary>
         /// This changes a boolean parameter
         /// </summary>
-        /// <param name="userName">Name of the user to update</param>
+        /// <param name="userId">Id of the user to update</param>
         /// <param name="propertyName">The parameter to change in the account</param>
-        /// <param name="value">The changed value</param>
+        /// <param name="value">True or false</param>
         /// <returns></returns>
         [HttpPatch("setAccountParam")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]

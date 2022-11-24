@@ -100,7 +100,8 @@ namespace Artisashop.Controllers
                     Craftsman = craftsman,
                     Description = order.Desc,
                     Quantity = order.Quantity,
-                    ProductImages = new () {},
+                    Price = 0,
+                    ProductImages = new () {}
                 };
                 Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
@@ -184,7 +185,11 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+                Basket? basket = await _db.Baskets!.FirstOrDefaultAsync(basket => basket.Id == basketId);
+
+                if (basket == null)
+                    return NotFound("Basket with id " + basketId + " not found");
+
                 basket.CurrentState = state;
                 _db.Baskets!.Update(basket);
                 await _db.SaveChangesAsync();

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Artisashop.Models.Interface;
 using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ namespace Artisashop.Models;
 
 public class Account : IdentityUser, ICreatedAt, IUpdatedAt
 {
+    [JsonConstructor]
     public Account()
     {
     }

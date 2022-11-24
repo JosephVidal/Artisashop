@@ -109,7 +109,7 @@ namespace Artisashop.Controllers
                         Description = model.Description,
                         Price = model.Price,
                         Quantity = model.Quantity,
-                        ProductImages = model.Images.Select(i => new ProductImage { Content = i}).ToList(),
+                        ProductImages = model.Images.Select(i => new ProductImage { Content = i }).ToList(),
                         ProductStyles = model.Styles.Select(name => new ProductStyle(name)).ToList(),
                     };
                     // new(model, account);
@@ -170,7 +170,7 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Product product = await _db.Products!.FirstAsync(product => product.Id == productId);
+                Product? product = await _db.Products!.FirstOrDefaultAsync(product => product.Id == productId);
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 var success = _db.Products!.Remove(product);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace Artisashop;
 
@@ -168,7 +169,7 @@ public static class Seeder
         using var scope = serviceProvider.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
 
-        // Create users
+        // Create user
         var userFaker = new Faker<Account>()
             .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
             .RuleFor(o => o.UserName, f => f.Internet.Email())
@@ -184,7 +185,39 @@ public static class Seeder
             .RuleFor(o => o.Suspended, false)
             .RuleFor(o => o.PhoneNumberConfirmed, true)
             .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
-        var users = userFaker.Generate(100);
+        var users = userFaker.Generate(99);
+        var consumerFaker = new Faker<Account>()
+            .RuleFor(o => o.Id, f => "2")
+            .RuleFor(o => o.UserName, f => "jane.consumer@artisashop.fr")
+            .RuleFor(o => o.Email, (f, o) => o.UserName)
+            .RuleFor(o => o.Firstname, f => "john")
+            .RuleFor(o => o.Lastname, f => "artisan")
+            .RuleFor(o => o.Address, f => f.Address.FullAddress())
+            .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
+            .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
+            .RuleFor(o => o.Job, f => f.Name.JobTitle())
+            .RuleFor(o => o.EmailConfirmed, true)
+            .RuleFor(o => o.Validation, false)
+            .RuleFor(o => o.Suspended, false)
+            .RuleFor(o => o.PhoneNumberConfirmed, true)
+            .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
+        users.Add(consumerFaker.Generate(1).First());
+        var sellerFaker = new Faker<Account>()
+            .RuleFor(o => o.Id, f => "1")
+            .RuleFor(o => o.UserName, f => "john.artisan@artisashop.fr")
+            .RuleFor(o => o.Email, (f, o) => o.UserName)
+            .RuleFor(o => o.Firstname, f => "john")
+            .RuleFor(o => o.Lastname, f => "artisan")
+            .RuleFor(o => o.Address, f => f.Address.FullAddress())
+            .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
+            .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
+            .RuleFor(o => o.Job, f => f.Name.JobTitle())
+            .RuleFor(o => o.EmailConfirmed, true)
+            .RuleFor(o => o.Validation, false)
+            .RuleFor(o => o.Suspended, false)
+            .RuleFor(o => o.PhoneNumberConfirmed, true)
+            .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
+        users.Add(sellerFaker.Generate(1).First());
 
         // Formats the account's data and adds it to the database
         foreach (var account in users)
@@ -195,7 +228,8 @@ public static class Seeder
 
             var userStore = new UserStore<Account>(dbContext);
             await userStore.CreateAsync(account);
-            await AssignRoles(scope.ServiceProvider, account.Id, new[] { Roles.User });
+            if (account.UserName != "john.artisan@artisashop.fr")
+                await AssignRoles(scope.ServiceProvider, account.Id, new[] { Roles.User });
 
             await dbContext.SaveChangesAsync();
         }
@@ -210,7 +244,10 @@ public static class Seeder
         using var scope = serviceProvider.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
 
-        var sellers = dbContext.Users.Take(10).ToList();
+        var sellers = dbContext.Users.Where(user => user.Email != "jane.consumer@artisashop.fr" &&
+            user.Email != "john.artisan@artisashop.fr").Take(9).ToList();
+
+        sellers.Add(dbContext.Users.First(user => user.Email == "john.artisan@artisashop.fr"));
         int i = 0;
         foreach (var account in sellers)
         {

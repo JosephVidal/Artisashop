@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Artisashop.Models
 {
@@ -34,8 +35,10 @@ namespace Artisashop.Models
         [Required]
         public int Quantity { get; set; }
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public DeliveryOption DeliveryOpt { get; set; }
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public State CurrentState { get; set; }
         [NotMapped]
         public List<State>? PossibleState { get; set; }
@@ -54,6 +57,7 @@ namespace Artisashop.Models
                 _ => "N/A",
             };
         }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum State
         {
             WAITINGCRAFTSMAN = 0,
@@ -64,6 +68,7 @@ namespace Artisashop.Models
             DELIVERY = 5,
             END = 6
         }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum DeliveryOption
         {
             DELIVERY = 0,
