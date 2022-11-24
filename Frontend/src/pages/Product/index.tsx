@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Product } from "api/models/Product";
 import { SetState } from "globals/state";
 import QuantityInput from "components/QuantityInuput";
-import { BasketApi } from "api";
+import { BasketApi } from "api/apis";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { ProductApi } from "../../api";
@@ -68,8 +68,11 @@ const changeQuantity = (setQuantity: SetState<number>, max: number) => (value: n
 
 const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
   basketApi.apiBasketPost({
-    productID: id,
-    quantityModifier: quantity
+    createBasket: {
+      productId: id,
+      quantity,
+      currentState: "VALIDATED"
+    }
   })
 
 export default ProductView;

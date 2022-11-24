@@ -32,6 +32,7 @@ models/ChatPreview.ts
 models/Complaint.ts
 models/ComplaintStatus.ts
 models/Contact.ts
+models/CreateBasket.ts
 models/CreateChatMessage.ts
 models/CreateCustomOrder.ts
 models/CreateProduct.ts

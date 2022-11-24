@@ -11,16 +11,6 @@ import { BaseText } from "globals/styles";
 import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
 interface Props { }
-//
-// const MenuItemCornerRight = styled(MenuItem)`
-//   position: absolute;
-//   right: 0;
-// `;
-//
-// const MenuItemCornerLeft = styled(MenuItem)`
-//   position: absolute;
-//   left: 50px;
-// `;
 
 const TopMenu: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation();

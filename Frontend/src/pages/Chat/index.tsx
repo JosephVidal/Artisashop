@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useMemo, useState} from "react";
 import {
   MessageBubble,
   ChatWrapper,
@@ -22,31 +22,14 @@ import { ImAttachment } from "react-icons/im";
 import { SetState } from "globals/state";
 import { generate } from "shortid";
 import {InputText} from "primereact/inputtext";
-import { random } from "lodash";
 import {Maybe, None, Some} from "monet";
-
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import RealTimeChat from "pages/Chat/RealTimeChat";
+import {useSearchParams} from "react-router-dom";
 
-
-const ref = new Date();
-
-const Joseph: Account = {
-  id: "1",
-  userName: "Joseph",
-  email: "",
-  lastname: "Vidal",
-  firstname: "Joseph",
-  suspended: false,
-  validation: false,
-}
-
-type MaybeString = string | null | undefined;
-
-type MaybeAccount = Account | undefined;
-
-interface Conversation {
+export interface Conversation {
   history: ChatMessage[],
   interlocutor?: Account
 }
@@ -57,41 +40,74 @@ const Chat: FC = () => {
   const [hover, setHover] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [file, setFile] = useState<Maybe<File>>(None());
+  const [fileData, setFileData] = useState<Maybe<string>>(None());
+  const reader = new FileReader();
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
+  const [user, setUser] = useState<Account>();
+  const [searchParams] = useSearchParams();
+  const newMessage: boolean = useMemo(() => searchParams.get("new") === "true" || false, [searchParams]);
+  const to: Account | null = useMemo(() => {
+    const get = searchParams.get("to");
+    if (get !== null)
+      return JSON.parse(get) as Account
+    return null;
+  }, [searchParams]);
+
+  reader.onloadend = () => {
+    setFileData(Some(reader.result as string));
+  }
 
   useFormattedDocumentTitle("Chat");
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser)
+      setUser(JSON.parse(storedUser) as Account);
     useChat.apiChatListGet().then((r) => {
       setContactList(r);
-      console.log(r);
     });
+    if (newMessage && contactList.find((preview) =>
+      preview.lastMsg?.senderId === (to )?.id ||
+      preview.lastMsg?.receiverId === (to )?.id) === undefined)
+      setConversation({history: [], interlocutor: (to!)});
   }, [])
 
   const renderContact = (contact: ChatPreview) => {
-    const interlocutor: string = contact.receive ? contact.lastMsg!.sender!.userName! : contact.lastMsg!.receiver!.userName!;
+    const getInterlocutor = (): string => {
+      if (!contact.lastMsg)
+        return (to )!.userName!;
+      return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
+    }
+
+    const interlocutor: string = getInterlocutor();
 
     return (
       <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
-        getConversation(useChat, setConversation, contact.lastMsg!.sender!, contact.lastMsg!.receiver!);
-        setInput("");
-        setEdit(None());
-        setFile(None());
+        if (contact.lastMsg) {
+          getConversation(useChat, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
+        } else {
+          setConversation({history: [], interlocutor: to!})
+        }
+          setInput("");
+          setEdit(None());
+          setFile(None());
       }}>
         {interlocutor}
-        <ContactPreview>
-          <MessagePreview>
-            {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
-          </MessagePreview>
-          {timeIndicator(contact.lastMsg!.createdAt!)}
-        </ContactPreview>
+        {contact.lastMsg &&
+          <ContactPreview>
+            <MessagePreview>
+              {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
+            </MessagePreview>
+            {contact.lastMsg.createdAt ? timeIndicator(contact.lastMsg.createdAt) : null}
+          </ContactPreview>
+        }
       </ContactWrapper>
     )
   };
 
   const renderMessage = (message: ChatMessage) => {
-    const self = message.sender!.userName! === "Joseph";
+    const self = message.sender!.id! === user?.id;
 
     return (
       <MessageTooltipWrapper key={message.id} self={self} onMouseOver={() => setHover(message.id!)} onMouseOut={() => setHover(0)}>
@@ -101,7 +117,7 @@ const Chat: FC = () => {
               setEdit(Some(message.id!));
               setInput(message.content!);
             }} />
-            <BsTrash size="100%" onClick={() => removeMessage(setConversation, message.id!)} />
+            <BsTrash size="100%" onClick={() => removeMessage(useChat, setConversation, message.id!)} />
           </>
           )
         }
@@ -109,6 +125,11 @@ const Chat: FC = () => {
           {message.sender!.userName!}
           <MessageBubble self={self}>
             {message.content!}
+            {message.filename !== undefined && message.filename !== null && message.filename !== "" && (
+              <FileWrapper isMessage>
+                <img src={message.filename} alt="" />
+              </FileWrapper>
+            )}
           </MessageBubble>
           <MessageDate>
             {hover === message.id! && timeIndicator(message.createdAt!)}
@@ -121,13 +142,27 @@ const Chat: FC = () => {
   return (
     <Wrapper>
       <ContactList>
+        {(newMessage && contactList.find((preview) =>
+          preview.lastMsg?.senderId === (to )?.id ||
+          preview.lastMsg?.receiverId === (to )?.id) === undefined) &&
+          renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
+      <RealTimeChat setContactList={setContactList} setConversation={setConversation} contactList={contactList} conversation={conversation} />
       <ConversationWrapper>
-        <ConversationTitle>Conversation avec
-          {conversation.history[0].sender!.userName !== "Joseph" ?
-            conversation.history[0].sender!.userName! :
-            conversation.history[0].receiver!.userName!}
+        <ConversationTitle>
+          {conversation.history.length !== 0 && (
+            <div>
+              Conversation avec {conversation.history[0].sender!.id !== user!.id ?
+                conversation.history[0].sender!.userName! :
+                conversation.history[0].receiver!.userName!}
+            </div>
+          )}
+          {(conversation.history.length === 0 && newMessage) && (
+            <div>
+              Conversation avec {(to )?.userName}
+            </div>
+          )}
         </ConversationTitle>
         <ChatWrapper>
           {conversation.history.map(renderMessage)}
@@ -140,33 +175,39 @@ const Chat: FC = () => {
                 {f.type.startsWith("image") && <img src={URL.createObjectURL(f)} alt="" />}
                 {f.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <BsFileEarmarkWord size={90} />}
                 {f.type === "application/pdf" && <BsFileEarmarkPdf size={90} />}
-                <BsXLg onClick={() => setFile(None())}/>
+                <BsXLg onClick={() => {
+                  setFile(None())
+                  setFileData(None())
+                }}/>
               </FileWrapper>
             )
           )}
-          <ChatInputWrapper focus={edit.isSome()}>
-            <InputText
-              placeholder="Ecrivez un message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.code === "Enter") {
-                  if (edit.isSome())
-                    editMessage(setInput, setEdit, setConversation, conversation, edit, input)
-                  else
-                    sendMessage(setInput, setConversation, Joseph, conversation.interlocutor, input, file)
-                }
-              }} />
-            <label htmlFor="file-upload">
-              <input id="file-upload" type="file" style={{display: "none"}} onChange={(data) => onChangeFile(setFile, Maybe.fromNull(data.target.files))} multiple={false} />
-              <ImAttachment size="100%" onClick={() => console.log("File")} />
-            </label>
-            <FaPaperPlane size="100%" onClick={() =>
-              edit.isSome() ?
-                editMessage(setInput, setEdit, setConversation, conversation, edit, input) :
-                sendMessage(setInput, setConversation, Joseph, conversation.interlocutor, input, file)
-            }/>
-          </ChatInputWrapper>
+          {conversation.interlocutor &&
+            <ChatInputWrapper focus={edit.isSome()}>
+              <InputText
+                placeholder="Ecrivez un message..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    if (edit.isSome())
+                      editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input)
+                    else
+                      sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+                  }
+                }}/>
+              <label htmlFor="file-upload">
+                <input id="file-upload" type="file" style={{display: "none"}}
+                       onChange={(data) => onChangeFile(reader, setFile, Maybe.fromNull(data.target.files))} multiple={false}/>
+                <ImAttachment size="100%"/>
+              </label>
+              <FaPaperPlane size="100%" onClick={() =>
+                edit.isSome() ?
+                  editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input) :
+                  sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+              }/>
+            </ChatInputWrapper>
+          }
         </ChatBottomWrapper>
       </ConversationWrapper>
     </Wrapper>
@@ -188,70 +229,106 @@ const timeIndicator = (date: Date): string => {
   return `${Math.floor(diff / 86400000)  } j`;
 }
 
-const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, accountOne: Account, accountTwo: Account) => {
+const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, self: string, accountOne: Account, accountTwo: Account) => {
   const request: ApiChatHistoryGetRequest = {
     users: [accountOne.id!, accountTwo.id!]
   };
 
+
   chatApi.apiChatHistoryGet(request).then((h: ChatMessage[]) => {
-    if (accountOne.id! !== Joseph.id!) {
-      setConversation({history: h, interlocutor: accountOne})
+    h.sort((first, second) => first.createdAt!.getTime() > second.createdAt!.getTime() ? 1 : -1);
+    if (accountOne.id! !== self) {
+      setConversation({history: h, interlocutor: accountOne});
+      return;
     }
     setConversation({history: h, interlocutor: accountTwo})
   }
 );
 }
 
-const editMessage = (setInput: SetState<string>, setEdit: SetState<Maybe<number>>, setConversation: SetState<Conversation>, conversation: Conversation, messageId: Maybe<number>, message: string) => {
+const editMessage = (chatApi: ChatApi, setInput: SetState<string>, setEdit: SetState<Maybe<number>>, setConversation: SetState<Conversation>, conversation: Conversation, messageId: Maybe<number>, message: string) => {
   messageId.cata(
     () => null,
     (id) => {
-      const toEdit = conversation.history.find((m) => m.id === id);
-      if (!toEdit)
-        return;
-      setConversation((prevState) => ({
-        ...prevState,
-        history: prevState.history.filter((m) => m.id !== id)
-      }));
-      setConversation((prevState) => ({
-        ...prevState,
-        history: prevState.history.concat({
-          ...toEdit,
-          content: message
-        })
-      }));
-      setInput("");
-      setEdit(None());
+      chatApi.apiChatPatch({
+        msgId: id,
+        content: message
+      }).then((mess) => {
+        if (mess != null) {
+          const toEdit = conversation.history.find((m) => m.id === id);
+          if (!toEdit)
+            return;
+          setConversation((prevState) => ({
+            ...prevState,
+            history: prevState.history.filter((m) => m.id !== id)
+          }));
+          setConversation((prevState) => ({
+            ...prevState,
+            history: prevState.history.concat({
+              ...toEdit,
+              content: message
+            })
+          }));
+          setInput("");
+          setEdit(None());
+        }
+      })
     }
   )
 }
 
-const sendMessage = (setInput: SetState<string>, setConversation: SetState<Conversation>, user: Account, to: MaybeAccount, message: string, file: Maybe<File>) => {
-  const newMessage: ChatMessage = {
-    id: random(0, 1000),
-    sender: user,
-    receiver: to,
-    content: message
-  };
-  setConversation((prevState) => ({
-    ...prevState,
-    history: prevState.history.concat(newMessage)
-  }))
-  setInput("");
+const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, setContactList: SetState<ChatPreview[]>, user: Account, to: Account, message: string, file: Maybe<string>) => {
+  chatApi.apiChatPost({
+    createChatMessage: {
+      fromUserId: user.id!,
+      toUserID: to.id!,
+      content: message,
+      filename: file.orSome("")
+    }
+  }).then((m) => {
+    if (m !== null) {
+      setConversation((prevState) => ({
+        ...prevState,
+        history: prevState.history.concat(m)
+      }))
+      setInput("");
+      setFile(None());
+      setFileData(None());
+      // setContactList((prevState) =>
+      //   prevState.map((contact) => {
+      //     const interlocutor = contact.receive ? contact.lastMsg!.sender!.userName! : contact.lastMsg.receiver!.userName!;
+      //     if (interlocutor === conversation.interlocutor?.userName) {
+      //       return {
+      //         ...contact,
+      //         lastMsg: m
+      //       }
+      //     }
+      //     return contact;
+      //   }))
+    }
+  })
 }
 
-const removeMessage = (setConversation: SetState<Conversation>, id: number) => {
-  setConversation((prevState) => ({
-    ...prevState,
+const removeMessage = (chatApi: ChatApi, setConversation: SetState<Conversation>, id: number) => {
+  chatApi.apiChatMsgIdDelete({
+    msgId: id
+  }).then(() => {
+    setConversation((prevState) => ({
+      ...prevState,
       history: prevState.history.filter((message) => message.id !== id)
-  }))
+    }))
+  })
 }
 
-const onChangeFile = (setFile: SetState<Maybe<File>>, fileList: Maybe<FileList>) => {
+const onChangeFile = (reader: FileReader, setFile: SetState<Maybe<File>>, fileList: Maybe<FileList>) => {
   fileList.cata(
     () => null,
-    (files) => setFile(Some(files[0]))
-  )
+    (files) => {
+      if ((files[0].size / 1024 / 1024) <= 200) {
+        setFile(Some(files[0]));
+        reader.readAsDataURL(files[0]);
+      }
+    })
 }
 
 export default Chat;
