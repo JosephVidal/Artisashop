@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Formik, Field, Form } from "formik";
 import { Link } from "react-router-dom";
 
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import useAuth from "states/auth";
 import { Wrapper } from "./styles";
 
@@ -10,11 +11,14 @@ const Register = () => {
   const auth = useAuth()
   const navigate = useNavigate()
 
+  useFormattedDocumentTitle("S'enregister");
+
+
   return (
     <Wrapper>
       <div className="register-card">
         <h1>Artisashop</h1>
-        <h2>Créer un compte <span id="account-type">client</span></h2>
+        <h2>Créer un compte</h2>
         <Formik
           initialValues={{
             firstname: '',

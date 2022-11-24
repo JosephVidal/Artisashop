@@ -28,7 +28,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <returns>Craftsman commands page</returns>
         [HttpGet("list")]
-        [Authorize(Roles = "CRAFTSMAN")]
+        [Authorize(Roles = Roles.Seller)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<OrderList>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> OrderList()
@@ -37,7 +37,7 @@ namespace Artisashop.Controllers
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
 
-                List<Basket> tmpList = await _db.Baskets!.Include("Product.Craftsman").Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
+                List<Basket> tmpList = await _db.Baskets!.Include(item => item.Product).Include(item => item.Product!.Craftsman).Include(item => item.Account).Where(basket => basket.Product!.Craftsman!.Id == account.Id).ToListAsync();
                 var cmdList = new List<OrderList>();
                 foreach (Basket item in tmpList)
                     cmdList.Add(new OrderList(item, GenPossibleState(item.CurrentState, item.DeliveryOpt)));
@@ -93,7 +93,15 @@ namespace Artisashop.Controllers
                 if (craftsman == null)
                     return NotFound("Craftsman with id " + order.CraftsmanId + " not found");
 
-                Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
+                // Product product = new(order.Name, craftsman, 0, order.Desc, order.Quantity, new List<string> { "/img/Product/default.png" });
+                Product product = new Product
+                {
+                    Name = order.Name,
+                    Craftsman = craftsman,
+                    Description = order.Desc,
+                    Quantity = order.Quantity,
+                    ProductImages = new () {},
+                };
                 Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
                 await _db.SaveChangesAsync();

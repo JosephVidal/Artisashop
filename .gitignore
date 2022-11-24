@@ -255,3 +255,5 @@ Ansible/id_*
 
 client_secret*
 Artisashop/app.db
+
+.venv

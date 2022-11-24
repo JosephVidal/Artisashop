@@ -33,6 +33,10 @@ export interface ApiProductDeleteProductIdDeleteRequest {
     productId: number;
 }
 
+export interface ApiProductGetRequest {
+    sellerId?: string;
+}
+
 export interface ApiProductInfoProductIdGetRequest {
     productId: number;
 }
@@ -112,8 +116,12 @@ export class ProductApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProductGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Product>>> {
+    async apiProductGetRaw(requestParameters: ApiProductGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Product>>> {
         const queryParameters: any = {};
+
+        if (requestParameters.sellerId !== undefined) {
+            queryParameters['sellerId'] = requestParameters.sellerId;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -133,8 +141,8 @@ export class ProductApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProductGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Product>> {
-        const response = await this.apiProductGetRaw(initOverrides);
+    async apiProductGet(requestParameters: ApiProductGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Product>> {
+        const response = await this.apiProductGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

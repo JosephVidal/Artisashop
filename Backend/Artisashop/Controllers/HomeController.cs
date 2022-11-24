@@ -56,6 +56,7 @@ namespace Artisashop.Controllers
                 int userCount = users.Count;
                 List<Product> items = _db.Products!.Include(item => item.Craftsman).ToList();
                 int productCount = items.Count;
+                int sales = _db.Bills!.Count();
 
                 Home viewModel = new Home()
                 {
@@ -64,6 +65,7 @@ namespace Artisashop.Controllers
                     CraftsmanSample = SelectRandom(sellers, 5),
                     ProductSample = SelectRandom(items, 5),
                     Inscrit = userCount,
+                    Sales = sales
                 };
                 return Ok(viewModel);
             }

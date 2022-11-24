@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Artisashop.Configurations;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 // Add services to DI container
 var builder = WebApplication.CreateBuilder(args);
@@ -184,12 +183,17 @@ app.UseRouting();
 // Setup environment specific pipelines
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors(builder =>
+    app.UseCors(policyBuilder =>
     {
-        builder.AllowAnyHeader()
+        policyBuilder
+            .WithOrigins("http://localhost:43117",
+                    "https://localhost:7095",
+                    "https://localhost:3000",
+                    "https://localhost:44474")
             .AllowAnyMethod()
-            .AllowAnyOrigin()
-            .WithExposedHeaders("Content-Range");
+            .AllowAnyHeader()
+            .WithExposedHeaders("Content-Range")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
     });
     // Cleans up the database on each run
     using (var scope = app.Services.CreateScope())
@@ -208,26 +212,43 @@ if (app.Environment.IsDevelopment())
 }
 else // Production
 {
+    app.UseCors(builder =>
+    {
+        builder
+            .WithOrigins("https://artisashop.fr",
+                    "https://api.artisashop.fr",
+                    "https://www.artisashop.fr")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("Content-Range")
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
+    });
+
     using (var scope = app.Services.CreateScope())
     {
-        using var context = scope.ServiceProvider.GetService<StoreDbContext>();
-        context?.Database.Migrate();
+        // Create Roles
+        using (var storeDbContext = scope.ServiceProvider.GetService<StoreDbContext>())
+        {
+            storeDbContext?.Database.Migrate();
+        }
     }
-
 
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 using (var scope = app.Services.CreateScope())
 {
     await Seeder.SeedRoles(scope.ServiceProvider);
 
-    if (app.Environment.IsDevelopment())
-    {
-        await Seeder.SeedDemoAdminUsersAsync(scope.ServiceProvider);
+    // Keep this in here
+    // if (app.Environment.IsDevelopment())
+    // {
         await Seeder.SeedDemoDataAsync(scope.ServiceProvider);
-    }
+        await Seeder.SeedDemoAdminUsersAsync(scope.ServiceProvider);
+    // }
 }
 
 app.UseAuthentication();

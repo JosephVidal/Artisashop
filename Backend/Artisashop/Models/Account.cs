@@ -23,6 +23,8 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
         Bills = new List<Bill>();
         Baskets = new List<Basket>();
         Address = model.Address;
+        Suspended = false;
+        Validation = false;
     }
 
     [Required] public string? Lastname { get; set; }
@@ -33,16 +35,16 @@ public class Account : IdentityUser, ICreatedAt, IUpdatedAt
     public string? Biography { get; set; }
     public string? Address { get; set; }
     public GPSCoord? AddressGPS { get; set; }
-
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-
     public List<Basket>? Baskets { get; set; }
     public List<Bill>? Bills { get; set; }
+    [Required] public bool? Suspended { get; set; }
 
     #region Seller
 
     public List<Product>? Products { get; set; }
+    [Required] public bool? Validation { get; set; }
 
     #endregion
 }

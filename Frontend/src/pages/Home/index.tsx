@@ -8,14 +8,14 @@ import ProductCard from "components/ProductCard";
 import { Link } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
-interface Props {}
+interface Props { }
 
-const HomeView: React.FunctionComponent<Props> = () => {
-  const [searchType, setType] = useState(false);
+const Home: React.FunctionComponent<Props> = () => {
+
   const navigate = useNavigate();
-  const type = "Par produit";
 
   const backOfficeApi = useApi(BackofficeApi);
   const [home, setHome] = useState<Home | null> (null);
@@ -33,7 +33,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
         <Formik
           initialValues={{
             searchStr: "",
-            searchType: false,
+            searchType: true,
           }}
           onSubmit={async values => {
             navigate({
@@ -42,19 +42,21 @@ const HomeView: React.FunctionComponent<Props> = () => {
             })
           }}
         >
-          {({ isSubmitting }) => (
+          {({ values }) => (
             <Form id="search-block">
-              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..."/>
+              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
               <label htmlFor="SearchStr">
                 <button type="submit" id="sendButton" className="search-button">
-                  <i className="fas fa-search"/>
+                  <i className="fas fa-search" />
                 </button>
               </label>
               <div id="searchType">
-                <Field type="checkbox" name="searchType"/>
-                <InputSwitch checked={searchType} onChange={(e) => setType(e.value)} />
+                <label className="switch">
+                  <Field type="checkbox" name="searchType" />
+                  <span className="slider round" />
+                </label>
                 <label className="wordCarousel" htmlFor="SearchType">
-                  <span className="search-type-text">{type}</span>
+                  <p className="search-type-text">{values.searchType ? "Par produit" : "Par artisan"}</p>
                 </label>
               </div>
             </Form>
@@ -64,17 +66,17 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500}/>
-          <ProductCard img="img/product/table à thé.jpg" serie="Pièce unique" name="table chouette et pas cher" price={30}/>
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="tabouret" price={200}/>
+          <ProductCard img="img/product/Applique papier.jpg" name="Applique en papier" price={297.92} href="/app/product/2" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
+          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf d'extérieur" price={473.81} href="/app/product/20" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
+          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/app/product/9" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>
       <section id="craftsman-section">
         <h2>Artisans de la semaine</h2>
         <div className="section-body">
-          <CraftsmanCard name="Jean Epp" job="Facteur de colliers de pâtes" img="img/craftsman/Joseph.jpg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
-          <CraftsmanCard name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!"/>
+          <CraftsmanCard href="/app/craftsman/test" name="Jean du Pont" job="Joalier" img="img/craftsman/Jean.jpeg" description="Joalier à Saint-Sulpice-la-Pointe, je suis spécialisé dans la gravure héraldique." />
+          <CraftsmanCard href="/app/craftsman/test" name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Après des études d'ébénisterie à Revel, je me suis reconverti dans l'informatique en entrant à epitech Toulouse. Aujourd'hui je fabrique des meubles et des objets d'influence Japonaise." />
         </div>
       </section>
       <section id="register-section">
@@ -86,7 +88,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
         <div id="register-light">
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
-          <Link className="red-button" to="/register">Créer un compte client</Link>
+          <Link className="red-button" to="/app/register">Créer un compte client</Link>
         </div>
       </section>
       <section id="craftsman-section">
@@ -141,4 +143,4 @@ const HomeView: React.FunctionComponent<Props> = () => {
   );
 }
 
-export default HomeView;
+export default Home;

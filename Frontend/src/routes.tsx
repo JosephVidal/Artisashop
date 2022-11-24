@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes as Wrapper,
-  Route, Navigate,
+  Route, Navigate, useLocation,
 } from "react-router-dom";
 import {ToastHandler} from "components/Toaster";
 import {colors} from "globals/styles";
@@ -22,6 +22,9 @@ import CreateProductView from "pages/CreateProduct";
 import UpdateProductView from "pages/UpdateProduct";
 import ReclamationView from "pages/Reclamation";
 import NewsletterPage from "pages/Newsletter";
+import CraftsmanPres from "pages/CraftsmanPres";
+import ProductPres from "pages/ProductPres";
+import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
 const AdminDashboard = React.lazy(() => import("pages/Admin"));
 
@@ -29,9 +32,19 @@ interface Props {
   toastHandler: ToastHandler;
 }
 
+const ScrollToTop = () => {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location]);
+
+  return (null)
+}
+
 const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
   (
     <Router>
+      <ScrollToTop />
       <Wrapper>
         <Route path="/app">
           <Route element={<Template toastHandler={toastHandler} background={colors.darkBlue}/>}/>
@@ -51,6 +64,9 @@ const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
             <Route path="update-product" element={<UpdateProductView />} />
             <Route path="reclamation" element={<ReclamationView />} />
             <Route path="newsletter" element={<NewsletterPage />} />
+            <Route path="about/craftsmans" element={<CraftsmanPres />} />
+            <Route path="about/products" element={<ProductPres />} />
+            <Route path="dashboard" element={<CraftsmanDashboard />}/>
           </Route>
           <Route path="admin/*" element={<AdminDashboard/>}/>
         </Route>

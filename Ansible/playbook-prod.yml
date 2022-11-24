@@ -19,24 +19,24 @@
   tags:
     - requirements
 
-- name: Create traefik and artisashop user, with current ssh key added
-  hosts: instances
-  remote_user: ubuntu
-  become: yes
-  roles:
-    - new_user
-  vars:
-    users:
-      - { 
-        username: traefik, 
-        groups : docker
-        }
-      - { 
-        username: artisashop, 
-        groups : docker
-        }
-  tags:
-    - requirements
+#- name: Create traefik and artisashop user, with current ssh key added
+#  hosts: instances
+#  remote_user: ubuntu
+#  become: yes
+#  roles:
+#    - new_user
+#  vars:
+#    users:
+#      - { 
+#        username: traefik, 
+#        groups : docker
+#        }
+#      - { 
+#        username: artisashop, 
+#        groups : docker
+#        }
+#  tags:
+#    - requirements
 
 - name: Launch traefik container separately
   hosts: instances

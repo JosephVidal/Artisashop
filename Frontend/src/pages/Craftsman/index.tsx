@@ -1,130 +1,77 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {Account} from "api/models/Account";
+import {Product} from "api/models/Product";
 import ProductCard from "components/ProductCard";
-import {Wrapper, ProductsList} from "./styles";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import {Wrapper, ProductsList, Craftsman} from "./styles";
 import useApi from "../../hooks/useApi";
-import {Product} from "../../api";
+import {AccountApi, ProductApi} from "../../api";
 
 const CraftsmanView = () => {
-  // const { id } = useParams();
-  // const [account, setProduct] = useState<Account | null>(null);
-  // // const craftsmantImg = useMemo(() => account?.images ? `/img/product/${account?.images[0]}` : "/img/product/default.png", [account]);
-  // const craftsmanLastname = useMemo(() => account?.lastname, [account]);
-  // const craftsmanJob = useMemo(() => account?.job, [account]);
-  // // const craftsmanDescription = useMemo(() => account?.description, [account]);
-  // // const craftsmanAddress = useMemo(() => account?.adress, [account]);
-  // const craftsmanProducts = useMemo(() => account?.products, [account]);
+  const { id } = useParams();
+  const [account, setAccount] = useState<Account | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(null);
+  const accountApi = useApi(AccountApi);
+  const productApi = useApi(ProductApi);
+  const navigate = useNavigate();
+  const craftsmantImg = useMemo(() => account?.profilePicture ? `/img/craftsman/${account?.profilePicture}` : "/img/craftsman/default.svg", [account]);
+  const craftsmanFirstname = useMemo(() => account?.firstname, [account]);
+  const craftsmanLastname = useMemo(() => account?.lastname, [account]);
+  const craftsmanJob = useMemo(() => account?.job, [account]);
+  const craftsmanDescription = useMemo(() => account?.biography, [account]);
+  const craftsmanAddress = useMemo(() => account?.address, [account]);
+  const craftsmanProducts = useMemo(() => products, [products]);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetch(`/api/account/${id}`)
-  //     .then(response => response.json())
-  //     .then(data => setProduct(data as Account));
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    const update = async () => {
+      if (id) {
+        const result = await accountApi.apiAccountIdGet({id});
+        setAccount(result.account ?? null);
+      }
+    }
+    const getProducts = async () => {
+      if (id) {
+        const result = await productApi.apiProductGet({sellerId: id});
+        setProducts(result ?? null);
+      }
+    }
+    update();
+    getProducts();
+  }, [id]);
 
-  const craftsman: Account = {
-    id: "fakeId",
-    firstname: "Jean",
-    lastname: "Dupont",
-    address: "1 rue de la paix",
-    biography: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In, fugiat eaque, veniam doloremque suscipit\n" +
-      "            velit nihil ducimus assumenda obcaecati consequatur vero quas id pariatur officiis dignissimos eos,\n" +
-      "            reiciendis accusantium rem!",
-    job: "Artisan",
-    email: "JeanDupont@gmail.com",
-  };
-  const craftsmanProducts: Product[] = [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description 1",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 10,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Description 2",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 10,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "Description 3",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 10,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      description: "Description 4",
-      price: 10,
-      images: ["table à thé.jpg"],
-      craftsmanId: "fakeID",
-      quantity: 10,
-      craftsman: {
-        id: "fakeID",
-        firstname: "John",
-        lastname: "Doe",
-        job: "Fake job",
-        biography: "Fake description",
-        address: "Fake address",
-      }
-    },
-  ];
+  useFormattedDocumentTitle((craftsmanFirstname && craftsmanLastname) ? `${craftsmanFirstname} ${craftsmanLastname}`  : "Artisan");
 
   return (
     <Wrapper>
       <section>
-        <div>
-          <img src="img/craftsman/Joseph.jpg" alt=""/>
+        <Craftsman>
+          <img src={craftsmantImg} alt=""/>
           <div id="craftsman">
-            <h1>{craftsman.firstname} {craftsman.lastname}</h1>
-            <p id="job">{craftsman.job}</p>
+            <div id="craftsman-name-section">
+              <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
+              <button className="chat-button" type="button" onClick={() =>
+                navigate({
+                  pathname: "/app/chat",
+                  search: `?new=true&to=${JSON.stringify(account)}`,
+                })
+              }>💬</button>
+            </div>
+            <p id="job">{craftsmanJob}</p>
+            <p>{craftsmanAddress}</p>
           </div>
-          <span className="tag">Test</span>
-          <p id="bio">{craftsman.biography}</p>
-        </div>
+        </Craftsman>
+        <p id="bio">{craftsmanDescription}</p>
       </section>
       <ProductsList>
         {craftsmanProducts?.map(elem => (
           <ProductCard
-            img="img/product/table à thé.jpg" serie="Petite série"
+            // TODO: Use image.content instead of image.imagePath
+            img={`/img/product/${elem.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série"
             name={elem.name}
             price={elem.price}
+            href={`/app/product/${elem?.id}`}
+            productStyles={elem?.productStyles}
           />
         ))}
       </ProductsList>

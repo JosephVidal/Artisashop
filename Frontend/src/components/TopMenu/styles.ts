@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "globals/styles";
 
-export const TopMenuWrapper = styled.div`
+export const TopMenuWrapper = styled.header`
   background-color: ${colors.darkBlue};
   box-shadow: 0 10px 20px 0 black;
   position: fixed;
@@ -30,13 +30,12 @@ export const MenuItem = styled(Quarter)`
   font-family: "Raleway-Black", sans-serif;
   padding: 0.5rem 1rem;
 
-  & text {
-    cursor: pointer;
-  }
+  a {text-decoration: none;}
 
-  & text:hover {
-    color: ${colors.orange};
-  }
+  & text {cursor: pointer;}
+
+  & text:hover {color: ${colors.orange};
+}
 `;
 
 export const RightIcons = styled(Quarter)`

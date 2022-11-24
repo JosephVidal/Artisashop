@@ -3,9 +3,11 @@ import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
 import { ContactApi } from "api";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
 const ContactView = () => {
+  useFormattedDocumentTitle("Nous contacter");
   const ContacttApi = useApi(ContactApi)
 
   const { value, status, error, execute } = useAsync(() => ContacttApi.apiContactPost({}), false);

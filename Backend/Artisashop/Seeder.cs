@@ -1,4 +1,5 @@
 ﻿using Artisashop.Models;
+using Artisashop.Models.ViewModel;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
@@ -69,36 +70,48 @@ public static class Seeder
                 Email = "thomas@artisashop.fr",
                 Firstname = "Thomas",
                 Lastname = "Colonna",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "helena@artisashop.fr",
                 Firstname = "Helena",
                 Lastname = "Ganeman-Valot",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "joseph@artisashop.fr",
                 Firstname = "Joseph",
                 Lastname = "Vidal",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "jean@artisashop.fr",
                 Firstname = "Jean",
                 Lastname = "Epp",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "guillaume@artisashop.fr",
                 Firstname = "Guillaume",
                 Lastname = "Fischer",
+                Suspended = false,
+                Validation = false
             },
             new()
             {
                 Email = "yann@artisashop.fr",
                 Firstname = "Yann",
                 Lastname = "Osmont",
+                Suspended = false,
+                Validation = false
             },
         };
 
@@ -111,7 +124,7 @@ public static class Seeder
 
             var userStore = new UserStore<Account>(dbContext);
             await userStore.CreateAsync(account);
-            await AssignRoles(serviceProvider, account.Id, new[] { Roles.Admin, Roles.User });
+            await AssignRoles(serviceProvider, account.Id, new[] { Roles.Admin });
             await dbContext.SaveChangesAsync();
         }
     }
@@ -122,29 +135,29 @@ public static class Seeder
     /// <param name="serviceProvider"></param>
     public static async Task SeedDemoDataAsync(IServiceProvider serviceProvider)
     {
-        await SeedDemoStyles(serviceProvider);
+        // await SeedDemoStyles(serviceProvider);
         await SeedDemoUsers(serviceProvider);
         await SeedDemoSellers(serviceProvider);
         await SeedDemoProducts(serviceProvider);
     }
 
-    /// <summary>
-    /// Seeds the style entities.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-
-        // Create styles for products
-        var stylesFaker = new Faker<Style>()
-            .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
-            .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
-        var styles = stylesFaker.Generate(50);
-        dbContext.Styles.AddRange(styles);
-        await dbContext.SaveChangesAsync();
-    }
+    // /// <summary>
+    // /// Seeds the style entities.
+    // /// </summary>
+    // /// <param name="serviceProvider"></param>
+    // public static async Task SeedDemoStyles(IServiceProvider serviceProvider)
+    // {
+    //     using var scope = serviceProvider.CreateScope();
+    //     using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+    //
+    //     // Create styles for products
+    //     var stylesFaker = new Faker<Style>()
+    //         .RuleFor(o => o.Name, f => f.Commerce.ProductMaterial())
+    //         .RuleFor(o => o.Description, f => f.Commerce.ProductDescription());
+    //     var styles = stylesFaker.Generate(50);
+    //     dbContext.Styles.AddRange(styles);
+    //     await dbContext.SaveChangesAsync();
+    // }
 
     /// <summary>
     /// Seeds the user entities.
@@ -165,8 +178,10 @@ public static class Seeder
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
             .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
             .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
-            .RuleFor(o => o.Job, f => f.Name.JobTitle())
+            .RuleFor(o => o.Job, f => DemoJob[f.Random.Int(0, DemoJob.Length - 1)])
             .RuleFor(o => o.EmailConfirmed, true)
+            .RuleFor(o => o.Validation, false)
+            .RuleFor(o => o.Suspended, false)
             .RuleFor(o => o.PhoneNumberConfirmed, true)
             .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
         var users = userFaker.Generate(100);
@@ -196,9 +211,14 @@ public static class Seeder
         using var dbContext = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
 
         var sellers = dbContext.Users.Take(10).ToList();
+        int i = 0;
         foreach (var account in sellers)
         {
             await AssignRoles(scope.ServiceProvider, account.Id, new[] { Roles.Seller });
+            account.Address = DemoAddress[i].Key;
+            account.AddressGPS = DemoAddress[i].Value;
+            ++i;
+            dbContext.Users.Update(account);
         }
     }
 
@@ -221,10 +241,27 @@ public static class Seeder
             .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
-            .RuleFor(o => o.StylesList,
-                f => JsonSerializer.Serialize(f.PickRandom(dbContext.Styles.ToList(), 3).Select(x => x.Id)));
-        var products = productsFaker.Generate(100);
-        dbContext.Products.AddRange(products);
+            .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())))
+            ;
+
+        var demoProducts = Seeder.DemoProductNames
+            .Select(pair =>
+            {
+                var product = productsFaker.Generate();
+                product.Name = pair.Key;
+                product.ProductImages = new List<ProductImage>()
+                {
+                    new ProductImage
+                    {
+                        Name = pair.Key,
+                        ImagePath = pair.Value,
+                        Content = null,
+                    },
+                };
+                return product;
+            });
+
+        dbContext.Products.AddRange(demoProducts);
         await dbContext.SaveChangesAsync();
     }
 
@@ -243,4 +280,67 @@ public static class Seeder
 
         return result;
     }
+
+    public static readonly KeyValuePair<string, string>[] DemoProductNames =
+    {
+        new("Acanthes", "acanthes.JPG"),
+        new("Applique en papier", "applique-en-papier.png"),
+        new("Applique en papiper", "applique-en-papiper-contrepartie.JPG"),
+        new("Appliques", "appliques.JPG"),
+        new("Ballerines en papier 2", "ballerines-en-papier-2.JPG"),
+        new("Ballerines en papier", "ballerines-en-papier.JPG"),
+        new("Bonheur du jour", "bonheur-du-jour.jpeg"),
+        new("Buffet", "buffet.jpeg"),
+        new("Buste romain", "buste-romain.JPG"),
+        new("Buste siamois", "buste-siamois.png"),
+        new("Chandelier en bol", "chandelier-en-bol.JPG"),
+        new("Chandelier en fer", "chandelier-en-fer.jpg"),
+        new("Chandelier", "chandelier.jpg"),
+        new("Chapiteau corinthien", "chapiteau-corinthien.JPG"),
+        new("Echassier fantastique", "echassier-fantastique.JPG"),
+        new("Echassier", "echassier.JPG"),
+        new("Maquette d'église", "maquette-d-eglise.jpeg"),
+        new("Médaillon", "medaillon.JPG"),
+        new("Natalité AU JAPON", "natalite-jp.JPG"),
+        new("Oeuf d'extérieur", "oeuf-d-exterieur.png"),
+        new("Oeuf d'intérieur", "oeuf-d-interieur.jpg"),
+        new("Support de pierre", "support-de-pierre.jpeg"),
+        new("Table à thé", "table à thé.jpg"),
+        new("Table a jeux", "table-a-jeux.jpeg"),
+        new("Tableau natalité", "tableau-natalite.jpg"),
+        new("Tableau raiponse", "tableau-raiponse.jpg"),
+        new("Tabouret de piano", "tabouret-de-piano.jpeg"),
+    };
+
+    public static readonly KeyValuePair<string, GPSCoord>[] DemoAddress =
+    {
+        new("48 rue de la course, 67000 Strasbourg", new(48.5827813, 7.7338364)),
+        new("41B Rue d'Ostheim, 68320 Jebsheim, France", new(48.1289355, 7.4728017)),
+        new("13 Rue d'Oslo, 67210 Obernai, France", new(48.4645601, 7.4693943)),
+        new("4Eiffel Tower, 5 Avenue Anatole France, 75007 Paris, France", new(48.8582602, 2.2944991)),
+        new("Le Jules Verne, Avenue Gustave Eiffel, 75007 Paris, France", new(48.8581328, 2.2944968)),
+        new("Tour Eiffel, Quai Jacques Chirac, 75007 Paris, France", new(48.8592402, 2.2939419)),
+        new("4 Rue Vauban, 68000 Colmar, France", new(48.07792, 7.3610782)),
+        new("4 Rue Vauban, 68600 Neuf-Brisach, France", new(48.017651, 7.5304749)),
+        new("4 Rue Vauban, 68600 Dessenheim, France", new(47.980451, 7.485044)),
+        new("4 Rue Vauban, 68320 Muntzenheim, France", new(48.1024371, 7.4695845))
+    };
+
+    public static readonly string[] DemoJob =
+    {
+        new("Ebeniste"),
+        new("Sculpteur"),
+        new("Tourneur"),
+        new("Marqueteur"),
+        new("Verrier"),
+        new("Souffleur de verre"),
+        new("Forgeron"),
+        new("Ferronnier"),
+        new("Remouleur"),
+        new("Menuisier"),
+        new("Tapissier"),
+        new("Couturier"),
+        new("Tailleur"),
+        new("Tailleur de pierre")
+    };
 }

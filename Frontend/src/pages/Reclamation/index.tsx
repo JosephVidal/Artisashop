@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
@@ -7,6 +8,7 @@ import { Wrapper } from "./styles";
 
 const ReclamationView = () => {
   const ComplainttApi = useApi(ComplaintApi)
+  useFormattedDocumentTitle("Réclamation");
 
   const { value, status, error, execute } = useAsync(() => ComplainttApi.apiComplaintPost({}), false);
 

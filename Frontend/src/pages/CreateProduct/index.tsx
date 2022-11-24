@@ -3,9 +3,11 @@ import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
 import { ProductApi } from "api";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from "./styles";
 
 const CreateProductView = () => {
+  useFormattedDocumentTitle("Créer un produit");
   const ProducttApi = useApi(ProductApi)
 
   const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({}), false);

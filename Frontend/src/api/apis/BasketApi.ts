@@ -16,11 +16,14 @@
 import * as runtime from '../runtime';
 import type {
   Basket,
+  CreateBasket,
   UpdateBasket,
 } from '../models';
 import {
     BasketFromJSON,
     BasketToJSON,
+    CreateBasketFromJSON,
+    CreateBasketToJSON,
     UpdateBasketFromJSON,
     UpdateBasketToJSON,
 } from '../models';
@@ -38,8 +41,7 @@ export interface ApiBasketPayGetRequest {
 }
 
 export interface ApiBasketPostRequest {
-    productID?: number;
-    quantityModifier?: number;
+    createBasket?: CreateBasket;
 }
 
 /**
@@ -174,15 +176,9 @@ export class BasketApi extends runtime.BaseAPI {
     async apiBasketPostRaw(requestParameters: ApiBasketPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Basket>> {
         const queryParameters: any = {};
 
-        if (requestParameters.productID !== undefined) {
-            queryParameters['productID'] = requestParameters.productID;
-        }
-
-        if (requestParameters.quantityModifier !== undefined) {
-            queryParameters['quantityModifier'] = requestParameters.quantityModifier;
-        }
-
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
@@ -193,6 +189,7 @@ export class BasketApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CreateBasketToJSON(requestParameters.createBasket),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BasketFromJSON(jsonValue));

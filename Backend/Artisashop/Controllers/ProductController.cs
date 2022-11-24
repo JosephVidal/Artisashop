@@ -15,7 +15,8 @@ namespace Artisashop.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [Authorize(Roles = "CRAFTSMAN, ADMIN")]
+    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Seller)]
     public class ProductController : ControllerBase
     {
         private readonly StoreDbContext _db;
@@ -35,13 +36,21 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> ProductList()
+        public async Task<IActionResult> ProductList(string? sellerId = null)
         {
             try
             {
-                List<Product> products = await _db.Products!.ToListAsync();
-                if (products == null)
-                    return NotFound("Product list is null");
+                IQueryable<Product> query = _db.Products
+                    .Include(x => x.ProductStyles)
+                    .Include(x => x.ProductImages)
+                    ;
+                if (sellerId != null)
+                {
+                    query = query.Where(p => p.CraftsmanId == sellerId);
+                }
+                List<Product> products = await query.ToListAsync();
+                if (!products.Any())
+                    return NotFound("Didn't find any products");
                 return Ok(products);
             }
             catch (Exception e)
@@ -64,7 +73,11 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Product product = await _db.Products!.Include("Craftsman").FirstAsync(product => product.Id == productId);
+                Product product = await _db.Products
+                    .Include(p => p.ProductStyles)
+                    .Include(p => p.ProductImages)
+                    .Include(p => p.Craftsman)
+                    .FirstAsync(product => product.Id == productId);
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 return Ok(product);
@@ -88,7 +101,19 @@ namespace Artisashop.Controllers
             try
             {
                 Account account = await _utils.GetFromCookie(Request, _db);
-                Product product = new(model, account);
+                Product product =
+                    new Product
+                    {
+                        Craftsman = account,
+                        CraftsmanId = account.Id,
+                        Name = model.Name,
+                        Description = model.Description,
+                        Price = model.Price,
+                        Quantity = model.Quantity,
+                        ProductImages = model.Images.Select(i => new ProductImage { Content = i}).ToList(),
+                        ProductStyles = model.Styles.Select(name => new ProductStyle(name)).ToList(),
+                    };
+                    // new(model, account);
 
                 var success = await _db.Products!.AddAsync(product);
                 if (success == null)
@@ -119,8 +144,8 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.ImagesList = JsonSerializer.Serialize(model.Images);
-                product.StylesList = JsonSerializer.Serialize(model.Styles);
+                product.ProductImages = model.Images.Select(x => new ProductImage() { Content = x }).ToList();
+                product.ProductStyles = model.Styles.Select(x => new ProductStyle(x)).ToList();
                 var success = _db.Products!.Update(product);
                 if (success == null)
                     return BadRequest("Update failed");

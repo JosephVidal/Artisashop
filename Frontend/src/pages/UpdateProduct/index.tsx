@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
@@ -6,6 +7,7 @@ import { ProductApi } from "api";
 import { Wrapper } from "./styles";
 
 const UpdateProductView = () => {
+  useFormattedDocumentTitle("Panier");
   const ProducttApi = useApi(ProductApi)
 
   const { value : update, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({}), false);
@@ -24,8 +26,8 @@ const UpdateProductView = () => {
             price: update?.price ?? '',
             quantity: update?.quantity ?? '',
             description: update?.description ?? '',
-            images: update?.images ?? '',
-            styles: update?.styles ?? '',
+            images: update?.productImages ?? '',
+            styles: update?.productImages ?? '',
           }}
 
           onSubmit={async values => { }}

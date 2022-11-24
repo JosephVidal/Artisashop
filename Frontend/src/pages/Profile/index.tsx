@@ -6,12 +6,16 @@ import { AccountApi } from "api";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
 import userAtom from "states/atoms/user";
-
+import useAuth from "states/auth";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Wrapper } from './styles';
 
 const ProfilePage = () => {
+  useFormattedDocumentTitle("Votre Profil");
+
   const accounApi = useApi(AccountApi)
   const [user] = useAtom(userAtom)
+  const auth = useAuth()
 
   const { value: profile, status, error, execute } = useAsync(() => accounApi.apiAccountIdGet({ id: user?.id ?? '' }), false);
   // Executes only if user is defined
@@ -68,8 +72,12 @@ const ProfilePage = () => {
               <h3>{value}</h3>
               <button type="button" className="red-button">Ajouter</button>
             </div>
-
           ))}
+        </section>
+
+        <section>
+          <h3>Se déconnecter</h3>
+          <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
         </section>
       </div>
     </Wrapper>

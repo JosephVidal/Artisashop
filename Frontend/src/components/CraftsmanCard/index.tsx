@@ -2,29 +2,33 @@ import React from "react";
 import { CraftsmanCardWrapper } from "./styles";
 
 interface Props {
-    name: string;
-    job: string;
-    img: string;
-    description: string;
+  name: string;
+  job: string;
+  img: string;
+  description: string;
+  href: string;
 }
 
 const CraftsmanCard: React.FunctionComponent<Props> = ({
-    name,
-    job,
-    img,
-    description,
+  name,
+  job,
+  img,
+  description,
+  href,
 }) => (
   <CraftsmanCardWrapper>
-    <div id="card">
+    <a href={href}>
+      <div id="card">
         <div id="card-header">
-            <img src={img} alt="" />
-            <div>
-                <p id="craftsman-name">{name}</p>
-                <p id="craftsman-job">{job}</p>
-            </div>
+          <img src={img} alt="" />
+          <div>
+            <p id="craftsman-name">{name}</p>
+            <p id="craftsman-job">{job}</p>
+          </div>
         </div>
         <p id="craftsman-description">{description}</p>
-    </div>
+      </div>
+    </a>
   </CraftsmanCardWrapper>
 );
 

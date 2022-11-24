@@ -5,8 +5,6 @@ using Artisashop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static Artisashop.Models.Account;
 
 namespace Artisashop.Controllers
 {
@@ -15,8 +13,9 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/backoffice")]
-    [Authorize(Roles = "ADMIN")]
+    [Route("api/backoffice/")]
+    [Authorize(Roles = Roles.Admin)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
     public class BackofficeController : ControllerBase
     {
         private readonly IMailService _mailService;
@@ -65,12 +64,14 @@ namespace Artisashop.Controllers
                 var sellerCount = _userManager.GetUsersInRoleAsync(Roles.Seller).Result.Count;
                 var productCount = _db.Products.Count();
                 var userCount = _userManager.GetUsersInRoleAsync(Roles.User).Result.Count;
+                int sales = _db.Bills.Count();
 
                 Home viewModel = new Home()
                 {
                     CraftsmanNumber = sellerCount,
                     ProductNumber = productCount,
                     Inscrit = userCount,
+                    Sales = sales
                 };
 
                 return Ok(viewModel);
@@ -105,6 +106,39 @@ namespace Artisashop.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// This changes a boolean parameter
+        /// </summary>
+        /// <param name="userName">Name of the user to update</param>
+        /// <param name="propertyName">The parameter to change in the account</param>
+        /// <param name="value">The changed value</param>
+        /// <returns></returns>
+        [HttpPatch("setAccountParam")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> SetAccountParam(string userId, string propertyName, bool value)
+        {
+            try
+            {
+                Account user = await _userManager.FindByIdAsync(userId);
+                var propety = user.GetType().GetProperty(propertyName);
+                if (propety != null) {
+                    propety.SetValue(user, value);
+                    _db.Update(user);
+                    _db.SaveChanges();
+
+                    return Ok("Property " + propertyName + " set with value " + value);
+                } else
+                {
+                    return NotFound("Property " + propertyName + " not found");
+                }
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }

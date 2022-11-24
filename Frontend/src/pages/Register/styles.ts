@@ -4,8 +4,9 @@ export const Wrapper = styled.div`
     .register-card {
         display: flex;
         flex-direction: column;
+        flex-wrap: wrap;
+        width: 550px;
         text-align: center;
-        width: 40vw;
         border-radius: var(--elem-radius);
         background-color: var(--artshp-dark-blue);
         padding: 40px;
@@ -25,6 +26,7 @@ export const Wrapper = styled.div`
         form {
             display: flex;
             flex-direction: column;
+            flex-wrap: wrap;
         }
 
         input {margin: 10px 0}
