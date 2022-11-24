@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Home } from "api/models/Home";
+import { BackofficeApi } from "api";
+import useApi from "hooks/useApi";
+import { InputSwitch } from 'primereact/inputswitch';
+import CraftsmanCard from "components/CraftsmanCard";
+import ProductCard from "components/ProductCard";
 import { Link } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import CraftsmanCard from "components/CraftsmanCard";
-import ProductCard from "components/ProductCard";
 import { Wrapper } from "./styles";
 
 interface Props { }
@@ -12,6 +16,15 @@ interface Props { }
 const Home: React.FunctionComponent<Props> = () => {
 
   const navigate = useNavigate();
+
+  const backOfficeApi = useApi(BackofficeApi);
+  const [home, setHome] = useState<Home | null> (null);
+
+  const fetchData = async () => {
+    setHome(await backOfficeApi.apiBackofficeStatsGet());
+  };
+
+  useEffect(() => { fetchData() }, []);
 
   return (
     <Wrapper>
@@ -76,6 +89,54 @@ const Home: React.FunctionComponent<Props> = () => {
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
           <Link className="red-button" to="/app/register">Créer un compte client</Link>
+        </div>
+      </section>
+      <section id="craftsman-section">
+        <h2>Statistiques du site</h2>
+        <div className="section-body">
+          <div className="surface-ground px-4 py-5 md:px-6 lg:px-8">
+            <div className="grid">
+              <div className="col-12 md:col-6 lg:col-3">
+                <div className="surface-card shadow-2 p-3 border-round">
+                  <div className="flex justify-content-between mb-3">
+                    <div>
+                      <span className="block text-500 font-medium mb-3">Artisans</span>
+                      <div className="text-900 font-medium text-xl">{home?.craftsmanNumber}</div>
+                    </div>
+                    <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }} />
+                  </div>
+                  <span className="text-green-500 font-medium">{home?.craftsmanNumber}</span>
+                  <span className="text-500"> récemment</span>
+                </div>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <div className="surface-card shadow-2 p-3 border-round">
+                  <div className="flex justify-content-between mb-3">
+                    <div>
+                      <span className="block text-500 font-medium mb-3">Inscrits</span>
+                      <div className="text-900 font-medium text-xl">{home?.inscrit}</div>
+                    </div>
+                    <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }} />
+                  </div>
+                  <span className="text-green-500 font-medium">{home?.inscrit}</span>
+                  <span className="text-500"> ce mois-ci</span>
+                </div>
+              </div>
+              <div className="col-12 md:col-6 lg:col-3">
+                <div className="surface-card shadow-2 p-3 border-round">
+                  <div className="flex justify-content-between mb-3">
+                    <div>
+                      <span className="block text-500 font-medium mb-3">Ventes</span>
+                      <div className="text-900 font-medium text-xl">{home?.productNumber}</div>
+                    </div>
+                    <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }} />
+                  </div>
+                  <span className="text-green-500 font-medium">{home?.productNumber}</span>
+                  <span className="text-500"> ce mois-ci</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </Wrapper>
