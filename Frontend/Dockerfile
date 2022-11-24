@@ -1,11 +1,9 @@
 FROM node:18 as build
-RUN ["yarn", "--version"]
 RUN ["corepack", "enable"]
 RUN ["yarn", "set", "version", "stable"]
 WORKDIR /usr/src/app
 COPY package.json yarn.lock .yarn .yarnrc.yml ./
 RUN yarn install
-RUN ["ls"]
 COPY . ./
 RUN yarn build
 
