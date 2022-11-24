@@ -13,7 +13,7 @@ import { Wrapper } from "./styles";
 
 interface Props { }
 
-const Home: React.FunctionComponent<Props> = () => {
+const HomeView: React.FunctionComponent<Props> = () => {
 
   const navigate = useNavigate();
 
@@ -143,4 +143,4 @@ const Home: React.FunctionComponent<Props> = () => {
   );
 }
 
-export default Home;
+export default HomeView;
