@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {Account} from "api/models/Account";
 import {Product} from "api/models/Product";
 import ProductCard from "components/ProductCard";
@@ -14,6 +14,7 @@ const CraftsmanView = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
   const accountApi = useApi(AccountApi);
   const productApi = useApi(ProductApi);
+  const navigate = useNavigate();
   const craftsmantImg = useMemo(() => account?.profilePicture ? `/img/craftsman/${account?.profilePicture}` : "/img/craftsman/default.svg", [account]);
   const craftsmanFirstname = useMemo(() => account?.firstname, [account]);
   const craftsmanLastname = useMemo(() => account?.lastname, [account]);
@@ -47,7 +48,15 @@ const CraftsmanView = () => {
         <Craftsman>
           <img src={craftsmantImg} alt=""/>
           <div id="craftsman">
-            <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
+            <div id="craftsman-name-section">
+              <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
+              <button className="chat-button" type="button" onClick={() =>
+                navigate({
+                  pathname: "/app/chat",
+                  search: `?new=true&to=${JSON.stringify(account)}`,
+                })
+              }>💬</button>
+            </div>
             <p id="job">{craftsmanJob}</p>
             <p>{craftsmanAddress}</p>
           </div>
@@ -58,7 +67,7 @@ const CraftsmanView = () => {
         {craftsmanProducts?.map(elem => (
           <ProductCard
             // TODO: Use image.content instead of image.imagePath
-            img={elem.productImages?.at(0)?.imagePath || "/img/product/default.png"} serie="Petite série"
+            img={`/img/product/${elem.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série"
             name={elem.name}
             price={elem.price}
             href={`/app/product/${elem?.id}`}

@@ -52,7 +52,7 @@ const BasketView: FC = () => {
       <ImageWrapper>
         {basketItem.product.productImages?.map((image) => (
           // TODO: Use image.content instead of image.imagePath
-          <img src={image.imagePath ?? '/img/product/default.svg'} alt={image.name ?? "Image du produit"} />
+          <img src={`/img/product/${image.imagePath ?? "default.svg"}`} alt={image.name ?? "Image du produit"} />
         ))}
       </ImageWrapper>
       <ProductDetails>

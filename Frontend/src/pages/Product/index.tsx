@@ -15,7 +15,7 @@ const ProductView = () => {
   const basketApi = useApi(BasketApi);
   const productApi = useApi(ProductApi);
   const [product, setProduct] = useState<Product | null>(null);
-  const productLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
+  const craftsmanLink = useMemo(() => product?.craftsmanId ? `/app/craftsman/${product?.craftsmanId}` : "#", [product]);
   // TODO: Use image.content instead of image.imagePath
   const productImg = useMemo(() => `/img/product/${product?.productImages?.at(0)?.imagePath || 'default.svg'}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
@@ -45,10 +45,10 @@ const ProductView = () => {
           <h1>{product?.name}</h1>
           <Craftsman>
             <img className="craftsman-img" src={product?.craftsman.profilePicture ?? "/img/craftsman/default.svg"} alt="test" />
-            <a href={productLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
+            <a href={craftsmanLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">
-            <p id="price">{product?.price}€</p>
+            <p id="price">{product?.price.toFixed(2)}€</p>
             {product?.productStyles?.map(elem => <Tag>{elem.displayName || elem.normalizedName}</Tag>)}
           </div>
           <p id="description">{product?.description}</p>

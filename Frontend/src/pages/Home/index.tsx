@@ -10,10 +10,8 @@ import { Wrapper } from "./styles";
 interface Props { }
 
 const Home: React.FunctionComponent<Props> = () => {
-  useFormattedDocumentTitle("Artisashop");
 
   const navigate = useNavigate();
-  const type = "Par produit";
 
   return (
     <Wrapper>
@@ -22,7 +20,7 @@ const Home: React.FunctionComponent<Props> = () => {
         <Formik
           initialValues={{
             searchStr: "",
-            searchType: false,
+            searchType: true,
           }}
           onSubmit={async values => {
             navigate({
@@ -31,39 +29,41 @@ const Home: React.FunctionComponent<Props> = () => {
             })
           }}
         >
-          <Form id="search-block">
-            <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
-            <label htmlFor="SearchStr">
-              <button type="submit" id="sendButton" className="search-button">
-                <i className="fas fa-search" />
-              </button>
-            </label>
-            <div id="searchType">
-              <label className="switch">
-                <Field type="checkbox" name="searchType" />
-                <span className="slider round" />
+          {({ values }) => (
+            <Form id="search-block">
+              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
+              <label htmlFor="SearchStr">
+                <button type="submit" id="sendButton" className="search-button">
+                  <i className="fas fa-search" />
+                </button>
               </label>
-              <label className="wordCarousel" htmlFor="SearchType">
-                <p className="search-type-text">{type}</p>
-              </label>
-            </div>
-          </Form>
+              <div id="searchType">
+                <label className="switch">
+                  <Field type="checkbox" name="searchType" />
+                  <span className="slider round" />
+                </label>
+                <label className="wordCarousel" htmlFor="SearchType">
+                  <p className="search-type-text">{values.searchType ? "Par produit" : "Par artisan"}</p>
+                </label>
+              </div>
+            </Form>
+          )}
         </Formik>
       </section>
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="table trop bien" price={1500} href="/app/product/test" productStyles={[{ displayName: "LouisXV", normalizedName: "LouisXV" }]} />
-          <ProductCard img="img/product/table à thé.jpg" serie="Pièce unique" name="table chouette et pas cher" price={30} href="/app/product/test" productStyles={[{ displayName: "LouisXV", normalizedName: "LouisXV" }]} />
-          <ProductCard img="img/product/table à thé.jpg" serie="Petite série" name="tabouret" price={200} href="/app/product/test" productStyles={[{ displayName: "LouisXV", normalizedName: "LouisXV" }]} />
+          <ProductCard img="img/product/Applique papier.jpg" name="Applique en papier" price={297.92} href="/app/product/2" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
+          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf d'extérieur" price={473.81} href="/app/product/20" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
+          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/app/product/9" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>
       <section id="craftsman-section">
         <h2>Artisans de la semaine</h2>
         <div className="section-body">
-          <CraftsmanCard href="/app/craftsman/test" name="Jean Epp" job="Facteur de colliers de pâtes" img="img/craftsman/default.svg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!" />
-          <CraftsmanCard href="/app/craftsman/test" name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum autem ullam ab aliquid optio. Delectus consectetur sunt repellendus vero! Doloribus fugiat rerum consequuntur beatae natus architecto nostrum amet odit ducimus!" />
+          <CraftsmanCard href="/app/craftsman/test" name="Jean du Pont" job="Joalier" img="img/craftsman/Jean.jpeg" description="Joalier à Saint-Sulpice-la-Pointe, je suis spécialisé dans la gravure héraldique." />
+          <CraftsmanCard href="/app/craftsman/test" name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Après des études d'ébénisterie à Revel, je me suis reconverti dans l'informatique en entrant à epitech Toulouse. Aujourd'hui je fabrique des meubles et des objets d'influence Japonaise." />
         </div>
       </section>
       <section id="register-section">
