@@ -275,7 +275,7 @@ public static class Seeder
         var productsFaker = new Faker<Product>()
             .RuleFor(o => o.Name, f => f.Commerce.ProductName())
             .RuleFor(o => o.Description, f => f.Commerce.ProductDescription())
-            .RuleFor(o => o.Price, f => f.Random.Decimal(0, 1000))
+            .RuleFor(o => o.Price, f => f.Finance.Amount(1, 1000))
             .RuleFor(o => o.Quantity, f => f.Random.Int(0, 1000))
             .RuleFor(o => o.Craftsman, f => f.PickRandom(sellers))
             .RuleFor(o => o.ProductStyles, f => f.Make(3, () => new ProductStyle(f.Commerce.ProductAdjective())))
