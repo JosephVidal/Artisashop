@@ -52,7 +52,7 @@ namespace Artisashop.Controllers
                         return BadRequest("Product id not found: " + basketElem.ProductId);
                     basketElem.Product = product;
                     tmpPUE.Items!.Add(new(basketElem.Product.Name!, basketElem.Product.Description, basketElem.Quantity, "EUR", (double)basketElem.Product.Price!));
-                    tot += (double)basketElem.Product.Price! * basketElem.Quantity;
+                    tot += Math.Round((double)basketElem.Product.Price! * basketElem.Quantity, 2, MidpointRounding.ToNegativeInfinity);
                 }
                 tmpPUE.Amount = new("EUR", tot);
                 paypalBill.PurchaseUnits.Add(tmpPUE);
