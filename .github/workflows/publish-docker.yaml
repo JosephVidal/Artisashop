@@ -46,7 +46,7 @@ jobs:
         with:
           context: ./Backend
           push: true
-          tags: ${{ steps.meta.outputs.tags }}:backend
+          tags: tclna/artisashop:backend
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build frontend and push Docker image
@@ -54,5 +54,5 @@ jobs:
         with:
           context: ./Frontend
           push: true
-          tags: ${{ steps.meta.outputs.tags }}:frontend
+          tags: tclna/artisashop:frontend
           labels: ${{ steps.meta.outputs.labels }}
