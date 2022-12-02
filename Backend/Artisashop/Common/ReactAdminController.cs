@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 /// is an abstract implementation class of <see cref="IReactAdminController{T}"/>.
 /// </summary>
 /// <typeparam name="T">対象となるモデルの型. Target model type</typeparam>
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public abstract class ReactAdminController<T> : ControllerBase, IReactAdminController<T> where T : class, new()
 {
@@ -31,8 +31,9 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
         _context = context;
     }
 
+
     /// <inheritdoc />
-    [HttpDelete("{id:int}")]
+    [HttpDelete, Route("[controller]/{id:int}")]
     public async Task<ActionResult<T>> Delete(int id)
     {
         var entity = await _table.FindAsync(id);
@@ -48,7 +49,7 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
     }
 
     /// <inheritdoc />
-    [HttpGet]
+    [HttpGet, Route("[controller]")]
     public async Task<ActionResult<IEnumerable<T>>> Get(string filter = "", string range = "", string sort = "")
     {
         var entityQuery = _table.AsQueryable();
@@ -107,7 +108,7 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
     }
 
     /// <inheritdoc />
-    [HttpGet("{id:int}")]
+    [HttpGet, Route("[controller]/{id:int}")]
     public async Task<ActionResult<T>> Get(int id)
     {
         var entity = await _table.FindAsync(id);
@@ -121,7 +122,7 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
     }
 
     /// <inheritdoc />
-    [HttpPost]
+    [HttpPost, Route("[controller]")]
     public async Task<ActionResult<T>> Post(T entity)
     {
         var entry = _table.Add(entity);
@@ -132,7 +133,7 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
     }
 
     /// <inheritdoc />
-    [HttpPut("{id:int}")]
+    [HttpPut, Route("[controller]/{id:int}")]
     public async Task<ActionResult<T>> Put(int id, T entity)
     {
         var entityId = (int?)typeof(T).GetProperty("Id")?.GetValue(entity);
@@ -161,6 +162,7 @@ public abstract class ReactAdminController<T> : ControllerBase, IReactAdminContr
 
         return Ok(await _table.FindAsync(entityId));
     }
+
 
     /// <summary>
     /// 対象モデルの存在をチェックします。

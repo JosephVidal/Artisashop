@@ -7,7 +7,7 @@ namespace Artisashop.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class ComplaintController : ControllerBase
 {
     private readonly StoreDbContext _storeDbContext;
@@ -18,7 +18,7 @@ public class ComplaintController : ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost, Route("[controller]", Name = "CreateComplaint")]
     public async Task<Complaint> Post(Complaint complaint)
     {
         var elem = await _storeDbContext.Complaints.AddAsync(complaint);
@@ -26,7 +26,7 @@ public class ComplaintController : ControllerBase
         return elem.Entity;
     }
 
-    [HttpGet]
+    [HttpGet, Route("[controller]", Name = "GetAllComplaints")]
     public async Task<IEnumerable<Complaint>> Get(string? userId = null, int? productId = null)
     {
         IQueryable<Complaint> query = _storeDbContext.Complaints;
@@ -39,7 +39,7 @@ public class ComplaintController : ControllerBase
         return await query.ToListAsync();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet, Route("[controller]/{id}", Name = "GetComplaint")]
     public async Task<Complaint?> Get(int id)
     {
         return await _storeDbContext.Complaints.FirstOrDefaultAsync(x => x.Id == id);

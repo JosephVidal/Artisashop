@@ -16,7 +16,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/chat")]
+    [Route("chat")]
     [Authorize]
     public class ChatController : ControllerBase
     {
@@ -24,17 +24,19 @@ namespace Artisashop.Controllers
         private readonly Utils _utils = new();
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;
 
+
         public ChatController(StoreDbContext db, IHubContext<ChatHub, IChatClient> chathub)
         {
             _db = db;
             _chatHub = chathub;
         }
 
+
         /// <summary>
         /// Display the list of openned chats
         /// </summary>
         /// <returns>Chat list page on success, redirect to AccountController::Login or BadRequest</returns>
-        [HttpGet("list")]
+        [HttpGet, Route("[controller]/list", Name = "GetAllChats")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<ChatPreview>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Index()
@@ -47,24 +49,31 @@ namespace Artisashop.Controllers
                 List<ChatPreview> chatPreview = new();
                 var groupsReceiver = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Sender!.Id == account.Id).AsEnumerable().GroupBy(d => d.Receiver);
                 var groupsSender = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Receiver!.Id == account.Id).AsEnumerable().GroupBy(d => d.Sender);
-                foreach (var group in groupsReceiver) {
+                foreach (var group in groupsReceiver)
+                {
                     ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
                     chatPreviewReceiver.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
                 }
-                foreach (var group in groupsSender) {
+                foreach (var group in groupsSender)
+                {
                     ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
                     chatPreviewSender.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
                 }
-                foreach (ChatPreview CPR in chatPreviewReceiver) {
+                foreach (ChatPreview CPR in chatPreviewReceiver)
+                {
                     List<ChatPreview> CPS = chatPreviewSender.Where(x => x.LastMsg!.Sender!.Id == CPR.LastMsg!.Receiver!.Id).ToList();
-                    if (CPS.Count() != 0) {
+                    if (CPS.Count() != 0)
+                    {
                         chatPreview.Add((CPR.LastMsg.CreatedAt > CPS[0].LastMsg.CreatedAt) ? CPR : CPS[0]);
                         chatPreviewSender.Remove(CPS[0]);
-                    } else {
+                    }
+                    else
+                    {
                         chatPreview.Add(CPR);
                     }
                 }
-                foreach (ChatPreview CPS in chatPreviewSender) {
+                foreach (ChatPreview CPS in chatPreviewSender)
+                {
                     chatPreview.Add(CPS);
                 }
 
@@ -85,7 +94,7 @@ namespace Artisashop.Controllers
         /// <param name="content">Message content</param>
         /// <param name="joined">Attached file content</param>
         /// <returns>A disctionnary with success or error</returns>
-        [HttpPost]
+        [HttpPost, Route("[controller]", Name = "CreateChatMessage")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ChatMessage), (int)HttpStatusCode.OK)]
@@ -169,7 +178,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>A list of message from a chat</returns>
-        [HttpGet("history")]
+        [HttpGet, Route("[controller]/history", Name = "GetConversationHistory")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<ChatMessage>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetConversationHistory([FromQuery] string[] users)
@@ -202,7 +211,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="msgID">The id of the message to get</param>
         /// <returns>ChatMessage on sucess or null</returns>
-        [HttpGet("{msgId:int}")]
+        [HttpGet, Route("[controller]/{msgId:int}", Name = "GetChatMessage")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ChatMessage), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetMsg(int msgId)
@@ -227,7 +236,7 @@ namespace Artisashop.Controllers
         /// <param name="msgId">The id of the message to update</param>
         /// <param name="content">New content of the message</param>
         /// <returns>Dictionnary with success message or error</returns>
-        [HttpPatch]
+        [HttpPatch, Route("[controller]/{msgId:int}", Name = "UpdateChatMessage")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ChatMessage), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateMsg(int msgId, string content)
@@ -259,21 +268,21 @@ namespace Artisashop.Controllers
         /// <summary>
         /// Delete a message from a chat
         /// </summary>
-        /// <param name="msgId">The id of the message to delete</param>
+        /// <param name="messageId">The id of the message to delete</param>
         /// <returns>Dictionnary with success message or error</returns>
-        [HttpDelete("{msgId:int}")]
+        [HttpDelete, Route("[controller]/{messageId:int}", Name = "DeleteChatMessage")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteMsg(int msgId)
+        public async Task<IActionResult> DeleteMessage(int messageId)
         {
             try
             {
                 //db:
-                var message = await _db.ChatMessages!.FirstOrDefaultAsync(message => message.Id == msgId);
+                var message = await _db.ChatMessages!.FirstOrDefaultAsync(message => message.Id == messageId);
 
                 if (message == null)
-                    return NotFound("Message with id " + msgId + " not found");
+                    return NotFound("Message with id " + messageId + " not found");
 
                 _db.ChatMessages!.Remove(message);
                 await _db.SaveChangesAsync();
@@ -281,9 +290,9 @@ namespace Artisashop.Controllers
                 List<ChatUserDetail> userList = ChatHub.connectedUsers
                     .Where(x => x.UserID == message.Sender?.Id || x.UserID == message.Receiver?.Id).ToList();
                 foreach (ChatUserDetail elem in userList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).DeleteMsg(msgId);
+                    await _chatHub.Clients.Client(elem.ConnectionId).DeleteMsg(messageId);
 
-                return Ok("Message with id " + msgId + " deleted");
+                return Ok("Message with id " + messageId + " deleted");
             }
             catch (Exception e)
             {

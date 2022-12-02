@@ -1,7 +1,6 @@
-﻿using Artisashop.Models.ViewModel.Accounts;
+﻿namespace Artisashop.Controllers;
 
-namespace Artisashop.Controllers;
-
+using Artisashop.Models.ViewModel.Accounts;
 using Artisashop.Configurations;
 using Artisashop.Helpers;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,7 +22,7 @@ using System.Net.Http;
 
 [ApiController]
 [Produces("application/json")]
-[Route("api/account/")]
+[Route("[controller]")]
 [Authorize]
 public class AccountController : ControllerBase
 {
@@ -58,7 +57,8 @@ public class AccountController : ControllerBase
         _opencageDataClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
-    [HttpPost("login")]
+
+    [HttpPost, Route("[controller]/login", Name = "Login")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(AccountToken), (int)HttpStatusCode.OK)]
@@ -92,7 +92,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost, Route("[controller]/register", Name = "Register")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(AccountToken), (int)HttpStatusCode.OK)]
@@ -121,36 +121,11 @@ public class AccountController : ControllerBase
         }
     }
 
-    private async Task<Account> CreateUser(Register model, string[]? roles = null)
-    {
-        roles ??= new string[] { Roles.User };
-
-        var account = new Account(model);
-
-        if (account.Address != null)
-            account.AddressGPS = await AddressToGPSCoord(account.Address);
-
-
-        var result = await _userManager.CreateAsync(account, model.Password);
-        // TODO: Create exception types
-        if (!result.Succeeded)
-            throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
-        account = await _userManager.Users.SingleAsync(r => r.UserName == model.Email);
-
-        var roleResult = await _userManager.AddToRolesAsync(account, roles);
-        if (!roleResult.Succeeded)
-            throw new Exception(roleResult.Errors.ToString());
-        return account;
-    }
-
-    // private async Task SignInAccount(Account account, bool isPersistent = false)
-    //     => await _signInManager.SignInAsync(account, isPersistent);
-
-    [HttpGet]
+    [HttpGet, Route("[controller]", Name = "GetAccountFromSession")]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetAccount()
+    public async Task<IActionResult> GetAccountFromSession()
     {
         try
         {
@@ -164,7 +139,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet, Route("[controller]/{id}", Name = "GetAccountFromId")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
@@ -187,6 +162,29 @@ public class AccountController : ControllerBase
         }
     }
 
+    [HttpGet, Route("[controller]/fromEmail/{email}", Name = "GetAccountFromEmail")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(GetAccountResult), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetAccountFromEmail(string email)
+    {
+        try
+        {
+            Account? account = await _db.Users!.SingleOrDefaultAsync(craftsman => craftsman.Email == email);
+            if (account == null)
+                return NotFound($"Craftsman with id {email} not found");
+            IList<string>? roles = await _userManager.GetRolesAsync(account);
+            if (roles == null)
+                return BadRequest($"Impossible to get roles for user {email}");
+            return Ok(new GetAccountResult(account, roles));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     /// <summary>
     /// Assigns or removes a role to a user.
     /// Available roles are found in <see cref="Roles"/>
@@ -195,7 +193,7 @@ public class AccountController : ControllerBase
     /// <param name="role">Name of the role</param>
     /// <param name="isDeleted">Is the role added or deleted</param>
     /// <returns></returns>
-    [HttpPost("{id}/role/{role}")]
+    [HttpPost, Route("[controller]/{id}/role/{role}", Name = "UpdateAccountRole")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
@@ -238,7 +236,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPatch, Route("[controller]", Name = "UpdateCurrentAccount")]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccount model)
@@ -258,7 +256,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete, Route("[controller]", Name = "DeleteCurrentAccount")]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> DeleteAccount()
@@ -279,7 +277,7 @@ public class AccountController : ControllerBase
 
     //
     // POST: /Account/ExternalLogin
-    [HttpPost("external-login")]
+    [HttpPost, Route("[controller]/external-login", Name = "ExternalLogin")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public IActionResult ExternalLogin(string provider, string? returnUrl = null)
@@ -292,7 +290,7 @@ public class AccountController : ControllerBase
 
     //
     // GET: /Account/ExternalLoginCallback
-    [HttpGet("external-login-callback")]
+    [HttpGet, Route("[controller]/external-login-callback", Name = "ExternalLoginCallback")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(ExternalLoginConfirmationViewModel), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null)
@@ -351,6 +349,39 @@ public class AccountController : ControllerBase
             return Ok(model);
         }
     }
+
+
+    private async Task<Account> CreateUser(Register model, string[]? roles = null)
+    {
+        roles ??= new string[] { Roles.User };
+
+        var account = new Account
+        {
+            Email = model.Email,
+            Lastname = model.Lastname,
+            Firstname = model.Firstname,
+            Job = model.Job,
+            Address = model.Address,
+        };
+
+        if (account.Address != null)
+            account.AddressGPS = await AddressToGPSCoord(account.Address);
+
+
+        var result = await _userManager.CreateAsync(account, model.Password);
+        // TODO: Create exception types
+        if (!result.Succeeded)
+            throw new Exception(string.Join("\n", result.Errors.Select(e => $"Error: {e.Code} - {e.Description}")));
+        account = await _userManager.Users.SingleAsync(r => r.Email == model.Email);
+
+        var roleResult = await _userManager.AddToRolesAsync(account, roles);
+        if (!roleResult.Succeeded)
+            throw new Exception(roleResult.Errors.ToString());
+        return account;
+    }
+
+    // private async Task SignInAccount(Account account, bool isPersistent = false)
+    //     => await _signInManager.SignInAsync(account, isPersistent);
 
     private Task<string> GenerateJwtToken(Account user)
     {

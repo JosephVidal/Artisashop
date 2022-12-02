@@ -13,7 +13,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/home")]
+    [Route("home")]
     [AllowAnonymous]
     public class HomeController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace Artisashop.Controllers
         /// Displays home page with stats, random craftsman and product
         /// </summary>
         /// <returns>Home page with data or BadRequest</returns>
-        [HttpGet]
+        [HttpGet, Route("[controller]", Name = "GetHome")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Index()
@@ -74,6 +74,7 @@ namespace Artisashop.Controllers
                 return BadRequest(e.Message);
             }
         }
+
 
         /// <summary>
         /// This function randomize a list

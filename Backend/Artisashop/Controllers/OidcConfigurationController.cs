@@ -7,6 +7,9 @@ public class OidcConfigurationController : Controller
 {
     private readonly ILogger<OidcConfigurationController> _logger;
 
+    public IClientRequestParametersProvider ClientRequestParametersProvider { get; }
+
+
     public OidcConfigurationController(
         IClientRequestParametersProvider clientRequestParametersProvider,
         ILogger<OidcConfigurationController> logger)
@@ -15,9 +18,8 @@ public class OidcConfigurationController : Controller
         _logger = logger;
     }
 
-    public IClientRequestParametersProvider ClientRequestParametersProvider { get; }
 
-    [HttpGet("_configuration/{clientId}")]
+    [HttpGet, Route("_configuration/{clientId}", Name = "OidcConfiguration")]
     public IActionResult GetClientRequestParameters([FromRoute] string clientId)
     {
         var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);

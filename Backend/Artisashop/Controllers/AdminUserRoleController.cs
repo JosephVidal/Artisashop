@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("/api/admin/userRole")]
+[Route("/admin/userRole")]
 public class AdminUserRoleController : ReactAdminController<IdentityUserRole<string>>
 {
     public AdminUserRoleController(StoreDbContext context) : base(context)

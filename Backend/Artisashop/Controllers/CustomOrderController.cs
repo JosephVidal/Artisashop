@@ -11,23 +11,25 @@ namespace Artisashop.Controllers
 {
     [ApiController]
     [Produces("application/json")]
-    [Route("api/custom-order/")]
+    [Route("custom-order/")]
     [Authorize]
     public class CustomOrderController : ControllerBase
     {
         private readonly StoreDbContext _db;
         private readonly Utils _utils = new();
 
+
         public CustomOrderController(StoreDbContext db)
         {
             _db = db;
         }
 
+
         /// <summary>
         /// Displays the product list with their actual state
         /// </summary>
         /// <returns>Craftsman commands page</returns>
-        [HttpGet("list")]
+        [HttpGet, Route("[controller]/list", Name = "GetAllCustomOrders")]
         [Authorize(Roles = Roles.Seller)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<OrderList>), (int)HttpStatusCode.OK)]
@@ -54,7 +56,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="craftsmanId">Id of the craftsman to link with the command</param>
         /// <returns>Custom command page on success, redirect to AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet("{craftsmanId}")]
+        [HttpGet, Route("[controller]/{craftsmanId}", Name = "GetCustomOrder")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
@@ -79,7 +81,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="order">Model containing craftsman id and command info</param>
         /// <returns>Redirect to ChatController::Chat on success, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpPost]
+        [HttpPost, Route("[controller]", Name = "CreateCustomOrder")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
@@ -101,7 +103,7 @@ namespace Artisashop.Controllers
                     Description = order.Desc,
                     Quantity = order.Quantity,
                     Price = 0,
-                    ProductImages = new () {}
+                    ProductImages = new() { }
                 };
                 Basket basket = new(account, product, order.Quantity, DeliveryOption.DELIVERY, State.WAITINGCRAFTSMAN, GenPossibleState(State.WAITINGCRAFTSMAN, DeliveryOption.DELIVERY));
                 await _db.Baskets!.AddAsync(basket);
@@ -119,14 +121,14 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="basketId">BasketId of the command to update</param>
         /// <returns>Update command page on success, redirect AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet("update/{basketId}")]
+        [HttpGet, Route("[controller]/update/{basketId}", Name = "GetCustomOrderUpdate")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetUpdate(int basketId)
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product.Craftsman").SingleOrDefaultAsync(basket => basket.Id == basketId);
+                Basket? basket = await _db.Baskets!.Include(product => product.Account).SingleOrDefaultAsync(basket => basket.Id == basketId);
 
                 if (basket == null)
                     return NotFound("Basket item with id " + basketId + " not found");
@@ -143,7 +145,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="model">Updated fields for command update</param>
         /// <returns>Redirect to ChatController::Chat on success, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpPatch]
+        [HttpPatch, Route("[controller]", Name = "UpdateCustomOrder")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
@@ -151,7 +153,7 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.Include("Product").FirstOrDefaultAsync(basket => basket.Id == model.Id);
+                Basket? basket = await _db.Baskets!.Include(basket => basket.Product).FirstOrDefaultAsync(basket => basket.Id == model.Id);
 
                 if (basket == null)
                     return NotFound("Basket with id " + model.Id + " not found");
@@ -178,7 +180,7 @@ namespace Artisashop.Controllers
         /// <param name="basketId">Basket of the user link to the command</param>
         /// <param name="state">State to apply</param>
         /// <returns>200 on success, 403 on fail</returns>
-        [HttpPatch("{basketId}/changeStatus")]
+        [HttpPatch, Route("[controller]/{basketId}/changeStatus", Name = "ChangeCustomOrderStatus")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(State), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateStatus(int basketId, State state)
@@ -201,36 +203,25 @@ namespace Artisashop.Controllers
             }
         }
 
+
         /// <summary>
         /// Generating possible command state regading its actual state
         /// </summary>
-        /// <param name="state">The actual command state</param>
-        /// <param name="delOpt">Delivery option choosen</param>
+        /// <param name="deliveryState">The actual command state</param>
+        /// <param name="deliveryOption">Delivery option choosen</param>
         /// <returns>List of state possible</returns>
-        private static List<State> GenPossibleState(State state, DeliveryOption delOpt)
+        private static List<State> GenPossibleState(State deliveryState, DeliveryOption deliveryOption)
         {
-            switch (state)
+            return (deliveryState, deliveryOption) switch
             {
-                case State.WAITINGCRAFTSMAN:
-                    return new List<State> { State.REFUSED/*, State.WAITINGCONSUMER*/ };
-                case State.VALIDATED:
-                    if (DeliveryOption.TAKEOUT == delOpt)
-                        return new List<State> { State.ONGOING, State.DELIVERY, State.END };
-                    else
-                        return new List<State> { State.ONGOING, State.END };
-                case State.ONGOING:
-                    if (DeliveryOption.TAKEOUT == delOpt)
-                        return new List<State> { State.DELIVERY, State.END };
-                    else
-                        return new List<State> { State.END };
-                case State.DELIVERY:
-                    return new List<State> { State.END };
-                case State.WAITINGCONSUMER:
-                case State.REFUSED:
-                case State.END:
-                default:
-                    return new List<State>();
-            }
+                (State.WAITINGCRAFTSMAN, _) => new() { State.REFUSED },
+                (State.VALIDATED, DeliveryOption.TAKEOUT) => new() { State.ONGOING, State.DELIVERY, State.END },
+                (State.VALIDATED, DeliveryOption.DELIVERY) => new() { State.ONGOING, State.END },
+                (State.ONGOING, DeliveryOption.TAKEOUT) => new() { State.DELIVERY, State.END },
+                (State.ONGOING, DeliveryOption.DELIVERY) => new() { State.END },
+                (State.DELIVERY, _) => new() { State.END },
+                _ => new() { }
+            };
         }
     }
 }

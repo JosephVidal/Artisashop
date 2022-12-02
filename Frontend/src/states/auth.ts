@@ -23,7 +23,7 @@ const useAuth: () => IProvideAuth = () => {
     basePath: REACT_APP_API_URL,
   }));
 
-  const signin = (email: string, password: string) => api.apiAccountLoginPost({
+  const signin = (email: string, password: string) => api.login({
       login: {email, password},
     }).then(res => {
       setUser(res.user ?? null)
@@ -31,7 +31,7 @@ const useAuth: () => IProvideAuth = () => {
       return res
     });
 
-  const signup = (register: Register) => api.apiAccountPost({
+  const signup = (register: Register) => api.register({
       register
     }).then(res => {
       setUser(res.user ?? null)

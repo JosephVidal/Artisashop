@@ -13,7 +13,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/search/")]
+    [Route("search/")]
     [AllowAnonymous]
     public class SearchController : ControllerBase
     {
@@ -26,7 +26,8 @@ namespace Artisashop.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("product")]
+
+        [HttpGet, Route("[controller]/product", Name = "SearchProduct")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ProductSearch([FromQuery] ProductSearch search)
@@ -59,7 +60,7 @@ namespace Artisashop.Controllers
             }
         }
 
-        [HttpGet("craftsman")]
+        [HttpGet, Route("[controller]/craftsman", Name = "SearchCraftsman")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CraftsmanSearch([FromQuery] CraftsmanSearch search)
@@ -91,6 +92,7 @@ namespace Artisashop.Controllers
                 return BadRequest(e.Message);
             }
         }
+
 
         private double Haversine(GPSCoord a, GPSCoord b)
         {

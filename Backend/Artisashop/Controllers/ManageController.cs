@@ -27,6 +27,7 @@ public class ManageController : Controller
     private readonly IMailService _emailSender;
     private readonly ILogger _logger;
 
+
     public ManageController(
     UserManager<Account> userManager,
     SignInManager<Account> signInManager,
@@ -39,9 +40,10 @@ public class ManageController : Controller
         _logger = loggerFactory.CreateLogger<ManageController>();
     }
 
+
     //
     // GET: /Manage/Index
-    [HttpGet]
+    [HttpGet, Route("[controller]", Name = "ManageIndex")]
     public async Task<IActionResult> Index(ManageMessageId? message = null)
     {
         ViewData["StatusMessage"] =
@@ -63,7 +65,7 @@ public class ManageController : Controller
 
     //
     // POST: /Manage/RemoveLogin
-    [HttpPost]
+    [HttpPost, Route("[controller]/RemoveLogin", Name = "RemoveLogin")]
     [ValidateAntiForgeryToken]
     public async Task RemoveLogin(RemoveLoginViewModel account)
     {
@@ -98,7 +100,7 @@ public class ManageController : Controller
     // }
 
     // POST: /Manage/ChangePassword
-    [HttpPost]
+    [HttpPost, Route("[controller]/ChangePassword", Name = "ChangePassword")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
     {
@@ -129,7 +131,7 @@ public class ManageController : Controller
 
     //
     // POST: /Manage/SetPassword
-    [HttpPost]
+    [HttpPost, Route("[controller]/SetPassword", Name = "SetPassword")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
     {
@@ -148,7 +150,7 @@ public class ManageController : Controller
     }
 
     //GET: /Manage/ManageLogins
-    [HttpGet]
+    [HttpGet, Route("[controller]/ManageLogins", Name = "ManageLogins")]
     public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
     {
         ViewData["StatusMessage"] =
@@ -175,7 +177,7 @@ public class ManageController : Controller
 
     //
     // POST: /Manage/LinkLogin
-    [HttpPost]
+    [HttpPost, Route("[controller]/LinkLogin", Name = "LinkLogin")]
     [ValidateAntiForgeryToken]
     public IActionResult LinkLogin(string provider)
     {
@@ -187,7 +189,7 @@ public class ManageController : Controller
 
     //
     // GET: /Manage/LinkLoginCallback
-    [HttpGet]
+    [HttpGet, Route("[controller]/LinkLoginCallback", Name = "LinkLoginCallback")]
     public async Task<ActionResult> LinkLoginCallback()
     {
         var user = await GetCurrentUserAsync();
@@ -216,7 +218,7 @@ public class ManageController : Controller
 
     //
     // GET: /Manage/PivotIdentity
-    [HttpGet]
+    [HttpGet, Route("[controller]/PivotIdentity", Name = "GetPivotIdentity")]
     public async Task<IActionResult> PivotIdentity()
     {
         var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -238,6 +240,7 @@ public class ManageController : Controller
         };
         return Ok(pivotIdentity);
     }
+
 
     #region Helpers
 

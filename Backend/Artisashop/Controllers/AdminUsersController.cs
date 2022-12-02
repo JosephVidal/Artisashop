@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 /// </summary>
 /// <typeparam name="T">対象となるモデルの型</typeparam>
 [ApiController]
-[Route("api/admin/user")]
+[Route("admin/user")]
 public class AdminUserController : ControllerBase
 {
     protected readonly StoreDbContext _context;
@@ -29,8 +29,9 @@ public class AdminUserController : ControllerBase
         _table = _context.Users;
     }
 
+
     /// <inheritdoc />
-    [HttpDelete("{id}")]
+    [HttpDelete, Route("[controller]/{id}")]
     public async Task<ActionResult<Account>> Delete(string id)
     {
         var entity = await _table.FindAsync(id);
@@ -46,7 +47,7 @@ public class AdminUserController : ControllerBase
     }
 
     /// <inheritdoc />
-    [HttpGet]
+    [HttpGet, Route("[controller]")]
     public async Task<ActionResult<IEnumerable<Account>>> Get(string filter = "", string range = "", string sort = "")
     {
         var entityQuery = _table.AsQueryable() as IQueryable;
@@ -100,7 +101,7 @@ public class AdminUserController : ControllerBase
     }
 
     /// <inheritdoc />
-    [HttpGet("{id}")]
+    [HttpGet, Route("[controller]/{id}")]
     public async Task<ActionResult<Account>> Get(string id)
     {
         var entity = await _table.FindAsync(id);
@@ -114,7 +115,7 @@ public class AdminUserController : ControllerBase
     }
 
     /// <inheritdoc />
-    [HttpPost]
+    [HttpPost, Route("[controller]")]
     public async Task<ActionResult<Account>> Post(Account entity)
     {
         var entry = _table.Add(entity);
@@ -125,7 +126,7 @@ public class AdminUserController : ControllerBase
     }
 
     /// <inheritdoc />
-    [HttpPut("{id}")]
+    [HttpPut, Route("[controller]/{id}")]
     public async Task<ActionResult<Account>> Put(string id, Account entity)
     {
         var entityId = (string?)typeof(Account).GetProperty("Id")?.GetValue(entity);
@@ -155,6 +156,7 @@ public class AdminUserController : ControllerBase
         return Ok(await _table.FindAsync(entityId));
     }
 
+
     /// <summary>
     /// 対象モデルの存在をチェックします。
     /// </summary>
@@ -162,6 +164,6 @@ public class AdminUserController : ControllerBase
     /// <returns>存在する場合: true</returns>
     private bool EntityExists(string id)
     {
-        return _table.Any(e => (string)typeof(Account).GetProperty("Id").GetValue(e) == id);
+        return _table.Any(e => (string)typeof(Account).GetProperty("Id")!.GetValue(e)! == id);
     }
 }

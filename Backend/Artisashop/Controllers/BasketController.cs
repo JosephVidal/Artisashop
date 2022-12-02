@@ -14,7 +14,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/basket/")]
+    [Route("basket/")]
     [Authorize]
     public class BasketController : ControllerBase
     {
@@ -26,14 +26,15 @@ namespace Artisashop.Controllers
             _db = db;
         }
 
+
         /// <summary>
         /// Display the basket for consumers
         /// </summary>
         /// <returns>Basket page, redirect to AccountController::Account or BadRequest</returns>
-        [HttpGet]
+        [HttpGet, Route("[controller]", Name = "GetAllBaskets")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Basket>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
@@ -61,7 +62,7 @@ namespace Artisashop.Controllers
         /// <param name="productID">Id of the product in the basket</param>
         /// <param name="quantityModifier">Quantity modified</param>
         /// <returns>Content updated in page or error 403</returns>
-        [HttpPost]
+        [HttpPost, Route("[controller]", Name = "CreateBasket")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Redirect)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
@@ -98,7 +99,7 @@ namespace Artisashop.Controllers
         /// <param name="productID">Id of the product in the basket</param>
         /// <param name="quantityModifier">Quantity modified</param>
         /// <returns>Content updated in page or error 403</returns>
-        [HttpPatch]
+        [HttpPatch, Route("[controller]", Name = "UpdateBasket")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Basket), (int)HttpStatusCode.OK)]
@@ -131,7 +132,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="basketId">Id of the product in the basket</param>
         /// <returns>Nothing on success or error 403</returns>
-        [HttpDelete("{basketId}")]
+        [HttpDelete, Route("[controller]/{basketId}", Name = "DeleteBasket")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
@@ -158,7 +159,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="address">Adress where to send the products</param>
         /// <returns>Payement page, CustomError page on empty address, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet("pay")]
+        [HttpGet, Route("[controller]/pay", Name = "Pay")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof((List<Basket>, string, double)), (int)HttpStatusCode.OK)]

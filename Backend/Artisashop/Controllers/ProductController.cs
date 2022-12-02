@@ -14,7 +14,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(Roles = Roles.Seller)]
     public class ProductController : ControllerBase
     {
@@ -26,11 +26,12 @@ namespace Artisashop.Controllers
             _db = db;
         }
 
+
         /// <summary>
         /// Displays a craftsman product list
         /// </summary>
         /// <returns>Product Index page on success, Unauthorized if not craftsmann, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet]
+        [HttpGet, Route("[controller]", Name = "GetProductList")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
@@ -63,7 +64,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="productId">The id of the product to display</param>
         /// <returns>Product page on success, or BadRequest</returns>
-        [HttpGet("info/{productId}")]
+        [HttpGet, Route("[controller]/{productId}", Name = "GetProduct")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
@@ -92,7 +93,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="model">Model containing new product information</param>
         /// <returns>Update page on success, Unauthorized if not craftsman, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpPost("create")]
+        [HttpPost, Route("[controller]", Name = "CreateProduct")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create([FromBody] CreateProduct model)
@@ -131,7 +132,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="productId">The id of the product to update</param>
         /// <returns>Update page on success, NotFound, Unauthorized if not craftsman, AccountController::Login if not logged in or BadRequest</returns>
-        [HttpPatch("update/{productId}")]
+        [HttpPatch, Route("[controller]/{productId}", Name = "UpdateProduct")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
@@ -162,7 +163,7 @@ namespace Artisashop.Controllers
         /// </summary>
         /// <param name="productId">The id of the product to delete</param>
         /// <returns>Index page on success, Unauthorized if not craftsman, AccountController::Login if not logged in ot BadRequest</returns>
-        [HttpDelete("delete/{productId}")]
+        [HttpDelete, Route("[controller]/{productId}", Name = "DeleteProduct")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]

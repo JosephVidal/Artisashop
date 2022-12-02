@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo, useState} from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import {
   MessageBubble,
   ChatWrapper,
@@ -15,19 +15,19 @@ import {
   MessageDate,
   FileWrapper,
   ChatBottomWrapper
-} from "pages/Chat/styles";
+} from "pages/chat/styles";
 import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { SetState } from "globals/state";
 import { generate } from "shortid";
-import {InputText} from "primereact/inputtext";
-import {Maybe, None, Some} from "monet";
-import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
+import { InputText } from "primereact/inputtext";
+import { Maybe, None, Some } from "monet";
+import { Account, ChatApi, ChatMessage, ChatPreview } from "api";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import RealTimeChat from "pages/Chat/RealTimeChat";
-import {useSearchParams} from "react-router-dom";
+import RealTimeChat from "pages/chat/RealTimeChat";
+import { useSearchParams } from "react-router-dom";
 
 export interface Conversation {
   history: ChatMessage[],
@@ -43,7 +43,7 @@ const Chat: FC = () => {
   const [fileData, setFileData] = useState<Maybe<string>>(None());
   const reader = new FileReader();
   const [edit, setEdit] = useState<Maybe<number>>(None());
-  const useChat = useApi(ChatApi);
+  const chatApi = useApi(ChatApi);
   const [user, setUser] = useState<Account>();
   const [searchParams] = useSearchParams();
   const newMessage: boolean = useMemo(() => searchParams.get("new") === "true" || false, [searchParams]);
@@ -64,19 +64,19 @@ const Chat: FC = () => {
     const storedUser = localStorage.getItem("user");
     if (storedUser)
       setUser(JSON.parse(storedUser) as Account);
-    useChat.apiChatListGet().then((r) => {
+    chatApi.getAllChats().then((r) => {
       setContactList(r);
     });
     if (newMessage && contactList.find((preview) =>
-      preview.lastMsg?.senderId === (to )?.id ||
-      preview.lastMsg?.receiverId === (to )?.id) === undefined)
-      setConversation({history: [], interlocutor: (to!)});
+      preview.lastMsg?.senderId === (to)?.id ||
+      preview.lastMsg?.receiverId === (to)?.id) === undefined)
+      setConversation({ history: [], interlocutor: (to!) });
   }, [])
 
   const renderContact = (contact: ChatPreview) => {
     const getInterlocutor = (): string => {
       if (!contact.lastMsg)
-        return (to )!.userName!;
+        return (to)!.userName!;
       return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
     }
 
@@ -85,13 +85,13 @@ const Chat: FC = () => {
     return (
       <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
         if (contact.lastMsg) {
-          getConversation(useChat, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
+          getConversation(chatApi, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
         } else {
-          setConversation({history: [], interlocutor: to!})
+          setConversation({ history: [], interlocutor: to! })
         }
-          setInput("");
-          setEdit(None());
-          setFile(None());
+        setInput("");
+        setEdit(None());
+        setFile(None());
       }}>
         {interlocutor}
         {contact.lastMsg &&
@@ -117,9 +117,9 @@ const Chat: FC = () => {
               setEdit(Some(message.id!));
               setInput(message.content!);
             }} />
-            <BsTrash size="100%" onClick={() => removeMessage(useChat, setConversation, message.id!)} />
+            <BsTrash size="100%" onClick={() => removeMessage(chatApi, setConversation, message.id!)} />
           </>
-          )
+        )
         }
         <MessageWrapper self={self}>
           {message.sender!.userName!}
@@ -143,8 +143,8 @@ const Chat: FC = () => {
     <Wrapper>
       <ContactList>
         {(newMessage && contactList.find((preview) =>
-          preview.lastMsg?.senderId === (to )?.id ||
-          preview.lastMsg?.receiverId === (to )?.id) === undefined) &&
+          preview.lastMsg?.senderId === (to)?.id ||
+          preview.lastMsg?.receiverId === (to)?.id) === undefined) &&
           renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
@@ -160,7 +160,7 @@ const Chat: FC = () => {
           )}
           {(conversation.history.length === 0 && newMessage) && (
             <div>
-              Conversation avec {(to )?.userName}
+              Conversation avec {(to)?.userName}
             </div>
           )}
         </ConversationTitle>
@@ -178,7 +178,7 @@ const Chat: FC = () => {
                 <BsXLg onClick={() => {
                   setFile(None())
                   setFileData(None())
-                }}/>
+                }} />
               </FileWrapper>
             )
           )}
@@ -191,21 +191,21 @@ const Chat: FC = () => {
                 onKeyDown={(e) => {
                   if (e.code === "Enter") {
                     if (edit.isSome())
-                      editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input)
+                      editMessage(chatApi, setInput, setEdit, setConversation, conversation, edit, input)
                     else
-                      sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+                      sendMessage(chatApi, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
                   }
-                }}/>
+                }} />
               <label htmlFor="file-upload">
-                <input id="file-upload" type="file" style={{display: "none"}}
-                       onChange={(data) => onChangeFile(reader, setFile, Maybe.fromNull(data.target.files))} multiple={false}/>
-                <ImAttachment size="100%"/>
+                <input id="file-upload" type="file" style={{ display: "none" }}
+                  onChange={(data) => onChangeFile(reader, setFile, Maybe.fromNull(data.target.files))} multiple={false} />
+                <ImAttachment size="100%" />
               </label>
               <FaPaperPlane size="100%" onClick={() =>
                 edit.isSome() ?
-                  editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input) :
-                  sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
-              }/>
+                  editMessage(chatApi, setInput, setEdit, setConversation, conversation, edit, input) :
+                  sendMessage(chatApi, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+              } />
             </ChatInputWrapper>
           }
         </ChatBottomWrapper>
@@ -221,40 +221,36 @@ const timeIndicator = (date: Date): string => {
   if (diff <= 86400000) {
     const indicator = new Date(diff);
     if (indicator.getHours() > 1)
-      return `${indicator.getHours() - 1  } h`;
+      return `${indicator.getHours() - 1} h`;
     if (indicator.getMinutes() !== 0)
-      return `${indicator.getMinutes()  } m`;
-    return `${indicator.getSeconds()  } s`;
+      return `${indicator.getMinutes()} m`;
+    return `${indicator.getSeconds()} s`;
   }
-  return `${Math.floor(diff / 86400000)  } j`;
+  return `${Math.floor(diff / 86400000)} j`;
 }
 
 const getConversation = (chatApi: ChatApi, setConversation: SetState<Conversation>, self: string, accountOne: Account, accountTwo: Account) => {
-  const request: ApiChatHistoryGetRequest = {
-    users: [accountOne.id!, accountTwo.id!]
-  };
 
-
-  chatApi.apiChatHistoryGet(request).then((h: ChatMessage[]) => {
+  chatApi.getConversationHistory({users: [accountOne.id!, accountTwo.id!]}).then((h: ChatMessage[]) => {
     h.sort((first, second) => first.createdAt!.getTime() > second.createdAt!.getTime() ? 1 : -1);
     if (accountOne.id! !== self) {
-      setConversation({history: h, interlocutor: accountOne});
+      setConversation({ history: h, interlocutor: accountOne });
       return;
     }
-    setConversation({history: h, interlocutor: accountTwo})
+    setConversation({ history: h, interlocutor: accountTwo })
   }
-);
+  );
 }
 
 const editMessage = (chatApi: ChatApi, setInput: SetState<string>, setEdit: SetState<Maybe<number>>, setConversation: SetState<Conversation>, conversation: Conversation, messageId: Maybe<number>, message: string) => {
   messageId.cata(
     () => null,
     (id) => {
-      chatApi.apiChatPatch({
+      chatApi.updateChatMessage({
         msgId: id,
         content: message
-      }).then((mess) => {
-        if (mess != null) {
+      }).then((res) => {
+        if (res != null) {
           const toEdit = conversation.history.find((m) => m.id === id);
           if (!toEdit)
             return;
@@ -278,7 +274,7 @@ const editMessage = (chatApi: ChatApi, setInput: SetState<string>, setEdit: SetS
 }
 
 const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, setContactList: SetState<ChatPreview[]>, user: Account, to: Account, message: string, file: Maybe<string>) => {
-  chatApi.apiChatPost({
+  chatApi.createChatMessage({
     createChatMessage: {
       fromUserId: user.id!,
       toUserID: to.id!,
@@ -310,8 +306,8 @@ const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetS
 }
 
 const removeMessage = (chatApi: ChatApi, setConversation: SetState<Conversation>, id: number) => {
-  chatApi.apiChatMsgIdDelete({
-    msgId: id
+  chatApi.deleteChatMessage({
+    messageId: id,
   }).then(() => {
     setConversation((prevState) => ({
       ...prevState,

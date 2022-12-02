@@ -145,6 +145,8 @@ builder.Services.AddSwaggerGen(options =>
         Title = "API Artisashop",
         Version = "v1",
     });
+    var filePath = Path.Combine(AppContext.BaseDirectory, "Artisashop.xml");
+    options.IncludeXmlComments(filePath);
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -253,10 +255,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-// app.MapControllerRoute(
-//     name: "default",
-//     pattern: "api/{controller}/{action=Index}/{id?}");
 
 app.MapControllers();
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("/api/admin/product")]
+[Route("/admin/product")]
 public class AdminProductController : ReactAdminController<Product>
 {
     public AdminProductController(StoreDbContext context) : base(context)

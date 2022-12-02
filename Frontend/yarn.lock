@@ -1459,6 +1459,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.16.7":
+  version: 7.20.6
+  resolution: "@babel/runtime@npm:7.20.6"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 42a8504db21031b1859fbc0f52d698a3d2f5ada9519eb76c6f96a7e657d8d555732a18fe71ef428a67cc9fc81ca0d3562fb7afdc70549c5fec343190cbaa9b03
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.18.10, @babel/template@npm:^7.3.3":
   version: 7.18.10
   resolution: "@babel/template@npm:7.18.10"
@@ -3257,6 +3266,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-router-devtools@npm:beta":
+  version: 0.0.1-beta.19
+  resolution: "@tanstack/react-router-devtools@npm:0.0.1-beta.19"
+  dependencies:
+    "@babel/runtime": ^7.16.7
+    date-fns: ^2.29.1
+  peerDependencies:
+    "@tanstack/react-router": 0.0.1-beta.19
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 5867703530ea618ff181ac7845d1822de4fe3c6919c8dea92098b8a6366e92d22825ce46ce9e1c2ba67f72684539a61f4510851035cf89cf72ba857e39f9db66
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-router@npm:beta":
+  version: 0.0.1-beta.28
+  resolution: "@tanstack/react-router@npm:0.0.1-beta.28"
+  dependencies:
+    "@babel/runtime": ^7.16.7
+    "@tanstack/router-core": 0.0.1-beta.26
+    use-sync-external-store: ^1.2.0
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 8b93e1e8984b068534b4c7654e95ceabb4c70eaa28426d71454604a06374b01cf919c4d61177ed7a1e71af79fa10aa151393866966854962909a82c1f7bf4eaa
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-core@npm:0.0.1-beta.26":
+  version: 0.0.1-beta.26
+  resolution: "@tanstack/router-core@npm:0.0.1-beta.26"
+  dependencies:
+    "@babel/runtime": ^7.16.7
+    history: ^5.2.0
+    tiny-invariant: ^1.3.1
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: cd53f2c01861a004400a3808771196cf3c6f7f9abfc37072bb1382172a94ebb69abbe8d0cd6e242baaf00fedd92af995a435e25921eb759841ba813592605021
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^8.5.0":
   version: 8.19.0
   resolution: "@testing-library/dom@npm:8.19.0"
@@ -4084,6 +4135,8 @@ __metadata:
     "@paypal/react-paypal-js": ^7.8.1
     "@react-spring/types": ^9.5.2
     "@react-spring/web": ^9.5.2
+    "@tanstack/react-router": beta
+    "@tanstack/react-router-devtools": beta
     "@testing-library/react": ^13.3.0
     "@testing-library/user-event": ^14.4.3
     "@types/lodash": ^4.14.165
@@ -6151,7 +6204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.16.1, date-fns@npm:^2.19.0, date-fns@npm:^2.28.0":
+"date-fns@npm:^2.16.1, date-fns@npm:^2.19.0, date-fns@npm:^2.28.0, date-fns@npm:^2.29.1":
   version: 2.29.3
   resolution: "date-fns@npm:2.29.3"
   checksum: e01cf5b62af04e05dfff921bb9c9933310ed0e1ae9a81eb8653452e64dc841acf7f6e01e1a5ae5644d0337e9a7f936175fd2cb6819dc122fdd9c5e86c56be484
@@ -8184,7 +8237,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"history@npm:^5.1.0, history@npm:^5.3.0":
+"history@npm:^5.1.0, history@npm:^5.2.0, history@npm:^5.3.0":
   version: 5.3.0
   resolution: "history@npm:5.3.0"
   dependencies:
@@ -13363,7 +13416,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.10, regenerator-runtime@npm:^0.13.9":
+"regenerator-runtime@npm:^0.13.10, regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.9":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
@@ -14865,6 +14918,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-invariant@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "tiny-invariant@npm:1.3.1"
+  checksum: 872dbd1ff20a21303a2fd20ce3a15602cfa7fcf9b228bd694a52e2938224313b5385a1078cb667ed7375d1612194feaca81c4ecbe93121ca1baebe344de4f84c
+  languageName: node
+  linkType: hard
+
 "tiny-warning@npm:^1.0.2":
   version: 1.0.3
   resolution: "tiny-warning@npm:1.0.3"
@@ -15252,6 +15312,15 @@ __metadata:
     querystringify: ^2.1.1
     requires-port: ^1.0.0
   checksum: fbdba6b1d83336aca2216bbdc38ba658d9cfb8fc7f665eb8b17852de638ff7d1a162c198a8e4ed66001ddbf6c9888d41e4798912c62b4fd777a31657989f7bdf
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "use-sync-external-store@npm:1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 5c639e0f8da3521d605f59ce5be9e094ca772bd44a4ce7322b055a6f58eeed8dda3c94cabd90c7a41fb6fa852210092008afe48f7038792fd47501f33299116a
   languageName: node
   linkType: hard
 

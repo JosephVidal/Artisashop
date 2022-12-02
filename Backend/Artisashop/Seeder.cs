@@ -118,6 +118,7 @@ public static class Seeder
 
         foreach (var account in Admins)
         {
+            account.UserName = account.Email;
             var password = new PasswordHasher<Account>();
             var hashed = password.HashPassword(account, "Artisashop@2022");
             account.PasswordHash = hashed;
@@ -172,14 +173,14 @@ public static class Seeder
         // Create user
         var userFaker = new Faker<Account>()
             .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
-            .RuleFor(o => o.UserName, f => f.Internet.Email())
-            .RuleFor(o => o.Email, (f, o) => o.UserName)
+            .RuleFor(o => o.Email, f => f.Internet.Email())
+            .RuleFor(o => o.UserName, (f, o) => o.Email)
             .RuleFor(o => o.Firstname, f => f.Name.FirstName())
             .RuleFor(o => o.Lastname, f => f.Name.LastName())
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
             .RuleFor(o => o.Biography, f => f.Lorem.Paragraph())
             .RuleFor(o => o.PhoneNumber, f => f.Phone.PhoneNumber())
-            .RuleFor(o => o.Job, f => DemoJob[f.Random.Int(0, DemoJob.Length - 1)])
+            .RuleFor(o => o.Job, f => DemoJobs[f.Random.Int(0, DemoJobs.Length - 1)])
             .RuleFor(o => o.EmailConfirmed, true)
             .RuleFor(o => o.Validation, false)
             .RuleFor(o => o.Suspended, false)
@@ -188,8 +189,8 @@ public static class Seeder
         var users = userFaker.Generate(99);
         var consumerFaker = new Faker<Account>()
             .RuleFor(o => o.Id, f => "2")
-            .RuleFor(o => o.UserName, f => "jane.consumer@artisashop.fr")
-            .RuleFor(o => o.Email, (f, o) => o.UserName)
+            .RuleFor(o => o.Email, f => "jane.consumer@artisashop.fr")
+            .RuleFor(o => o.UserName, (f, o) => o.Email)
             .RuleFor(o => o.Firstname, f => "john")
             .RuleFor(o => o.Lastname, f => "artisan")
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
@@ -203,9 +204,8 @@ public static class Seeder
             .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
         users.Add(consumerFaker.Generate(1).First());
         var sellerFaker = new Faker<Account>()
-            .RuleFor(o => o.Id, f => "1")
-            .RuleFor(o => o.UserName, f => "john.artisan@artisashop.fr")
-            .RuleFor(o => o.Email, (f, o) => o.UserName)
+            .RuleFor(o => o.Email, f => "john.artisan@artisashop.fr")
+            .RuleFor(o => o.UserName, (f, o) => o.Email)
             .RuleFor(o => o.Firstname, f => "john")
             .RuleFor(o => o.Lastname, f => "artisan")
             .RuleFor(o => o.Address, f => f.Address.FullAddress())
@@ -216,7 +216,7 @@ public static class Seeder
             .RuleFor(o => o.Validation, false)
             .RuleFor(o => o.Suspended, false)
             .RuleFor(o => o.PhoneNumberConfirmed, true)
-            .RuleFor(o => o.PasswordHash, f => new PasswordHasher<Account>().HashPassword(null, "Artisashop@2022"));
+            .RuleFor(o => o.PasswordHash, (f, o) => new PasswordHasher<Account>().HashPassword(o, "Artisashop@2022"));
         users.Add(sellerFaker.Generate(1).First());
 
         // Formats the account's data and adds it to the database
@@ -252,8 +252,8 @@ public static class Seeder
         foreach (var account in sellers)
         {
             await AssignRoles(scope.ServiceProvider, account.Id, new[] { Roles.Seller });
-            account.Address = DemoAddress[i].Key;
-            account.AddressGPS = DemoAddress[i].Value;
+            account.Address = DemoAddresses[i].Key;
+            account.AddressGPS = DemoAddresses[i].Value;
             ++i;
             dbContext.Users.Update(account);
         }
@@ -349,7 +349,7 @@ public static class Seeder
         new("Tabouret de piano", "tabouret-de-piano.jpeg"),
     };
 
-    public static readonly KeyValuePair<string, GPSCoord>[] DemoAddress =
+    public static readonly KeyValuePair<string, GPSCoord>[] DemoAddresses =
     {
         new("48 rue de la course, 67000 Strasbourg", new(48.5827813, 7.7338364)),
         new("41B Rue d'Ostheim, 68320 Jebsheim, France", new(48.1289355, 7.4728017)),
@@ -363,7 +363,7 @@ public static class Seeder
         new("4 Rue Vauban, 68320 Muntzenheim, France", new(48.1024371, 7.4695845))
     };
 
-    public static readonly string[] DemoJob =
+    public static readonly string[] DemoJobs =
     {
         new("Ebeniste"),
         new("Sculpteur"),

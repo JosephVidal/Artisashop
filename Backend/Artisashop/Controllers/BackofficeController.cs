@@ -13,7 +13,7 @@ namespace Artisashop.Controllers
     /// </summary>
     [ApiController]
     [Produces("application/json")]
-    [Route("api/backoffice/")]
+    [Route("backoffice/")]
     [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.Unauthorized)]
     public class BackofficeController : ControllerBase
@@ -29,11 +29,12 @@ namespace Artisashop.Controllers
             _userManager = userManager;
         }
 
+
         /// <summary>
         /// This function display the backoffice main page
         /// </summary>
         /// <returns>Index page if user is amdin, Unauthorized if not admin, redirect to AccountController::Login if not logged in or BadRequest</returns>
-        [HttpGet]
+        [HttpGet, Route("[controller]", Name = "BackofficeIndex")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Index()
@@ -53,7 +54,7 @@ namespace Artisashop.Controllers
         /// Displays the validation page
         /// </summary>
         /// <returns>The stat page on success, Unauthorized if not admin, redirect to AccountController::Login or BadRequest</returns>
-        [HttpGet("stats")]
+        [HttpGet, Route("[controller]/stats", Name = "BackofficeStats")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Home), (int)HttpStatusCode.OK)]
@@ -88,7 +89,7 @@ namespace Artisashop.Controllers
         /// <param name="username">The user id of the account to delete as string</param>
         /// <param name="validationStatus">The changed value</param>
         /// <returns>Success JsonResult or error message</returns>
-        [HttpPatch("changeValidationStatus")]
+        [HttpPatch, Route("[controller]/changeValidationStatus", Name = "ChangeValidationStatus")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ChangeCraftsmanValidationStatus([FromBody] Dictionary<string, string> model)
@@ -116,7 +117,7 @@ namespace Artisashop.Controllers
         /// <param name="propertyName">The parameter to change in the account</param>
         /// <param name="value">True or false</param>
         /// <returns></returns>
-        [HttpPatch("setAccountParam")]
+        [HttpPatch, Route("[controller]/setAccountParam", Name = "SetAccountParam")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> SetAccountParam(string userId, string propertyName, bool value)

@@ -13,7 +13,7 @@ namespace Artisashop.Controllers
     [ApiController]
     [AllowAnonymous]
     [Produces("application/json")]
-    [Route("api/contact")]
+    [Route("contact")]
     public class ContactController : ControllerBase
     {
         IMailService _mailService;
@@ -23,31 +23,13 @@ namespace Artisashop.Controllers
             _mailService = mail;
         }
 
-        /// <summary>
-        /// Display contact formular
-        /// </summary>
-        /// <returns>Contact page</returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(Contact), (int)HttpStatusCode.OK)]
-        public IActionResult Index()
-        {
-            try
-            {
-                return Ok(new Contact());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
 
         /// <summary>
         /// Send a message to an Artisashop service by mail
         /// </summary>
         /// <param name="contact">Model with contact information and message</param>
         /// <returns>HomeController::Index on success or BadRequest</returns>
-        [HttpPost]
+        [HttpPost, Route("[controller]", Name = "SendContact")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public IActionResult Send(Contact contact)

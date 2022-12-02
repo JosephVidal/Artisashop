@@ -15,7 +15,7 @@ namespace Artisashop.Controllers
     [ApiController]
     [Authorize]
     [Produces("application/json")]
-    [Route("api/bill/")]
+    [Route("bill/")]
     public class BillController : ControllerBase
     {
         private readonly IMailService _mailService;
@@ -28,11 +28,12 @@ namespace Artisashop.Controllers
             _db = db;
         }
 
+
         /// <summary>
         /// This function handles paypal payment and serializes data
         /// </summary>
         /// <returns>Serialized paypall bill or error 403</returns>
-        [HttpGet]
+        [HttpGet, Route("[controller]", Name = "GetPaypalBill")]
         [ProducesResponseType(typeof(PaypalBill), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> BasketToPaypalBill()
@@ -68,7 +69,7 @@ namespace Artisashop.Controllers
         /// Clean basket after transaction and send a confirmation mail
         /// </summary>
         /// <returns>200 on success, error 403 if not logged in or 500 on fail</returns>
-        [HttpPost]
+        [HttpPost, Route("[controller]", Name = "BasketSold")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Bill>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> BasketSold()
