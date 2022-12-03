@@ -8,7 +8,7 @@ import {
   createRouteConfig,
 } from '@tanstack/react-router';
 
-const Index = lazy(() => import('./pages/index.page'));
+const Index = lazy(() => import('./pages/index'));
 
 const rootRoute = createRouteConfig()
 

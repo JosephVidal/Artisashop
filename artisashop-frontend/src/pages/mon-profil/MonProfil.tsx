@@ -1,4 +1,4 @@
-export default function ProfilePage() {
+export default function MonProfil() {
     return (
         <div>
             <h1 className="text-8xl font-blackfort">

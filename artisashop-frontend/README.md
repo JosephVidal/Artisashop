@@ -37,7 +37,11 @@ yarn build
 ## Architecture
 
 Le projet est basé sur le framework [vite](https://vitejs.dev/).
+
 Il utilise la librairie de routing *type-safe* de [Tanstack Router](https://tanstack.com/router/v1).
+
+La raison de l'utilisation de cette librairie de routage est son typage fort, ce qui permet d'éviter des erreurs basiques,
+et de mieux pouvoir visualiser/connecter les pages entre elles.
 
 ### `public`
 
@@ -58,6 +62,10 @@ Contient les fichiers statiques du projet importés dans le code (ex: les icones
 
 Contient les composants React réutilisables.
 
+### `src/hooks`
+
+Contient les hooks React réutilisables.
+
 ### `src/pages`
 
 Contient les pages du site.
@@ -72,25 +80,23 @@ Dans le cas où une page a besoin d'être chargée dynamiquement, il faut utilis
 ```yaml
 src/pages/mon-profil:
     - index.tsx
-    - MonProfil.tsx
+    - MonProfil.tsx # correspond à `mon-profil`
 ```
 
 ```tsx
 // src/pages/mon-profil/index.tsx
-import { lazy } from "react";
 import { createRouteConfig } from "@tanstack/react-router";
-
-export const MonProfilPage = lazy(() => import("./MonProfil"));
+import { lazy } from "react";
 
 export const monProfilRoute = createRouteConfig().createRoute({
     path: "/mon-profil",
-    component: MonProfilPage,
+    component: lazy(() => import("./MonProfil")),
 });
 ```
 
 ```tsx
 // src/pages/mon-profil/MonProfil.tsx
-export default function ProfilePage() {
+export default function MonProfil() {
     return (
         <div>
             {/* ... */}
