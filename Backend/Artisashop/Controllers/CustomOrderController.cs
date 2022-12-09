@@ -9,6 +9,9 @@ using static Artisashop.Models.Basket;
 
 namespace Artisashop.Controllers
 {
+    /// <summary>
+    /// Handles custom order management
+    /// </summary>
     [ApiController]
     [Produces("application/json")]
     [Route("api/custom-order/")]
