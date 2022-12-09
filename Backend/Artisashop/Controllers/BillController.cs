@@ -12,6 +12,9 @@ using static Artisashop.Models.Basket;
 
 namespace Artisashop.Controllers
 {
+    /// <summary>
+    /// Handles bill management
+    /// </summary>
     [ApiController]
     [Authorize]
     [Produces("application/json")]
