@@ -12,7 +12,7 @@ section {
     }
 }
 
-.search-input {width: 20vw;}
+.search-input {width: 30vw;}
 
 #search-section {
     display: flex;
@@ -203,5 +203,12 @@ section {
     #register-section {
         div {font-size: 1em;}
     }
+
+    #search-block {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .search-input {width: 50vw;}
 }
 `;

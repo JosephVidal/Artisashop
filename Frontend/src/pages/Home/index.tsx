@@ -44,12 +44,14 @@ const HomeView: React.FunctionComponent<Props> = () => {
         >
           {({ values }) => (
             <Form id="search-block">
-              <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
-              <label htmlFor="SearchStr">
-                <button type="submit" id="sendButton" className="search-button">
-                  <i className="fas fa-search" />
-                </button>
-              </label>
+              <div>
+                <Field type="text" className="search-input" name="searchStr" placeholder="Rechercher..." />
+                <label htmlFor="SearchStr">
+                  <button type="submit" id="sendButton" className="search-button">
+                    <i className="fas fa-search" />
+                  </button>
+                </label>
+              </div>
               <div id="searchType">
                 <label className="switch">
                   <Field type="checkbox" name="searchType" />
