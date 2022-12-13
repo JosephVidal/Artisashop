@@ -185,14 +185,16 @@ const Search: React.FunctionComponent<Props> = () => {
               </Form>
             )}
           </Formik>
-          <span className="category">
-            <a href="#search" className="search-header-link">Mobilier 🪑</a>
-            <a href="#search" className="search-header-link">Poterie 🏺</a>
-          </span>
-          <span className="category">
-            <a href="#search" className="search-header-link">Arts de la table 🍴</a>
-            <a href="#search" className="search-header-link">Vêtements 👗</a>
-          </span>
+          <div id="suggest">
+            <span className="category">
+              <a href="#search" className="search-header-link">Mobilier 🪑</a>
+              <a href="#search" className="search-header-link">Poterie 🏺</a>
+            </span>
+            <span className="category">
+              <a href="#search" className="search-header-link">Arts de la table 🍴</a>
+              <a href="#search" className="search-header-link">Vêtements 👗</a>
+            </span>
+          </div>
         </SearchHeader>
 
         <div id="search-body">
