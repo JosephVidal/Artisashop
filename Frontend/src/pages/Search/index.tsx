@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Field, Form, Formik, useFormik } from "formik";
+import React, { useEffect, useMemo } from "react";
+import { Field, Form, Formik } from "formik";
 import _ from "lodash";
 import { atom, PrimitiveAtom, useAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import useAsync from "hooks/useAsync";
-import { Account, Product, ProductApi, ProductStyle, SearchApi } from "../../api";
+import { ProductApi, ProductStyle, SearchApi } from "../../api";
 import { Wrapper, SearchHeader, SearchFilters } from "./styles";
 
 // --- INTERFACE ---
@@ -162,7 +162,7 @@ const Search: React.FunctionComponent<Props> = () => {
                 t: values.isProduct.toString(),
               })
 
-              console.log(values)
+              // console.log(values)
             }}
           >
             {({ values }) => (
@@ -234,7 +234,7 @@ const Search: React.FunctionComponent<Props> = () => {
             {suggestedProductsResults.value?.map(elem =>
               <ProductCard key={elem.id}
                 productStyles={elem.productStyles}
-                img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "table à thé.jpg"}`}
+                img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.svg"}`}
                 serie="Petite série"
                 name={elem.name}
                 price={elem.price}

@@ -10,13 +10,16 @@ import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import _ from "lodash";
 import { Wrapper } from "./styles";
-import { ProductApi } from "../../api";
+import { ProductApi, HomeApi } from "../../api";
 
 interface Props { }
 
 const HomeView: React.FunctionComponent<Props> = () => {
   const productApi = useApi(ProductApi);
+  const homeApi = useApi(HomeApi);
+
   const suggestedProductsResults = useAsync(() => productApi.apiProductGet().then(res => _.take(res, 3)), false);
+  const suggestedCraftsmansResults = useAsync(() => homeApi.apiHomeGet().then(res => _.take(res.craftsmanSample, 2)), false);
 
   const navigate = useNavigate();
 
@@ -29,9 +32,9 @@ const HomeView: React.FunctionComponent<Props> = () => {
 
   useEffect(() => {
     suggestedProductsResults.execute();
+    suggestedCraftsmansResults.execute();
+    fetchData()
   }, []);
-
-  useEffect(() => { fetchData() }, []);
 
   return (
     <Wrapper>
@@ -78,7 +81,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
           {suggestedProductsResults.value?.map(elem =>
             <ProductCard key={elem.id}
               productStyles={elem.productStyles}
-              img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "table à thé.jpg"}`}
+              img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.svg"}`}
               serie="Petite série"
               name={elem.name}
               price={elem.price}
@@ -91,8 +94,15 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="craftsman-section">
         <h2>Artisans de la semaine</h2>
         <div className="section-body">
-          <CraftsmanCard href="/app/craftsman/test" name="Jean du Pont" job="Joalier" img="img/craftsman/Jean.jpeg" description="Joalier à Saint-Sulpice-la-Pointe, je suis spécialisé dans la gravure héraldique." />
-          <CraftsmanCard href="/app/craftsman/test" name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Après des études d'ébénisterie à Revel, je me suis reconverti dans l'informatique en entrant à epitech Toulouse. Aujourd'hui je fabrique des meubles et des objets d'influence Japonaise." />
+          {suggestedCraftsmansResults.value?.map(elem =>
+            <CraftsmanCard key={elem.id}
+              img={`/img/craftsman/${elem.profilePicture ?? "default.svg"}`}
+              name={elem.firstname}
+              job={elem.job ?? ""}
+              description={elem?.biography ?? ""}
+              href={`/app/craftsman/${elem?.id ?? ""}`}
+            />
+          )}
         </div>
       </section>
       <section id="register-section">
