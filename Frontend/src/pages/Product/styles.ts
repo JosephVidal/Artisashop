@@ -3,8 +3,14 @@ import styled from "styled-components";
 export const Tag = styled.span`
     padding: 3px 10px;
     border-radius: var(--elem-radius);
-    background-color: var(--bs-brown);
-    color: var(--bs-light);
+    background-color: var(--artshp-brown);
+    color: var(--artshp-white);
+
+    :not(:first-of-type) {margin-left: 5px;}
+
+    @media (max-width: 620px) {
+        font-size: 0.5em;
+    }
 `;
 
 export const Craftsman = styled.div`
@@ -28,6 +34,10 @@ export const Craftsman = styled.div`
     a {
         text-decoration: none;
         margin: auto 0;
+    }
+
+    @media (max-width: 1250px) {
+        a {font-size: 0.6em}
     }
 `;
 
@@ -68,5 +78,21 @@ export const Wrapper = styled.div`
         height: 600px;
         object-fit: cover;
         border-radius: var(--elem-radius);
+    }
+
+    @media (max-width: 1250px) {
+        #product-info {padding-left: 10px;}
+
+        #price {
+            margin: 0;
+            font-size: 0.1em;
+        }
+
+        .carrousel-img {
+            width: 300px;
+            height: 300px;
+        }
+
+        h1 {font-size: 1.5em !important;}
     }
 `;

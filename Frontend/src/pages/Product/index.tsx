@@ -73,6 +73,10 @@ const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
       quantity,
       currentState: "VALIDATED"
     }
-  })
+  }).then((e) => {
+    alert("Produit ajouté avec succès !");
+  }, (e) => {
+    alert("Oups on dirait qu'il y a un problème, veuillez réessayer plus tard !");
+  });
 
 export default ProductView;
