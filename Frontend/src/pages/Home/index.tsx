@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Home } from "api/models/Home";
 import { BackofficeApi } from "api";
+import useAsync from "hooks/useAsync";
 import useApi from "hooks/useApi";
-import { InputSwitch } from 'primereact/inputswitch';
 import CraftsmanCard from "components/CraftsmanCard";
 import ProductCard from "components/ProductCard";
 import { Link } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
-import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import _ from "lodash";
 import { Wrapper } from "./styles";
+import { ProductApi } from "../../api";
 
 interface Props { }
 
 const HomeView: React.FunctionComponent<Props> = () => {
+  const productApi = useApi(ProductApi);
+  const suggestedProductsResults = useAsync(() => productApi.apiProductGet().then(res => _.take(res, 3)), false);
 
   const navigate = useNavigate();
 
@@ -23,6 +26,10 @@ const HomeView: React.FunctionComponent<Props> = () => {
   const fetchData = async () => {
     setHome(await backOfficeApi.apiBackofficeStatsGet());
   };
+
+  useEffect(() => {
+    suggestedProductsResults.execute();
+  }, []);
 
   useEffect(() => { fetchData() }, []);
 
@@ -68,9 +75,16 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/Applique papier.jpg" name="Applique en papier" price={297.92} href="/app/product/2" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
-          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf d'extérieur" price={473.81} href="/app/product/20" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
-          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/app/product/9" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
+          {suggestedProductsResults.value?.map(elem =>
+            <ProductCard key={elem.id}
+              productStyles={elem.productStyles}
+              img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "table à thé.jpg"}`}
+              serie="Petite série"
+              name={elem.name}
+              price={elem.price}
+              href={`/app/product/${elem.id}`}
+            />
+          )}
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>
