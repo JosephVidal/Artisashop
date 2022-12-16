@@ -4,6 +4,7 @@ import {
   Routes as Wrapper,
   Route, Navigate, useLocation,
 } from "react-router-dom";
+
 import {ToastHandler} from "components/Toaster";
 import {colors} from "globals/styles";
 import HomeView from "pages/Home";
@@ -14,19 +15,19 @@ import ProductView from "pages/Product";
 import CraftsmanView from "pages/Craftsman";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
-import Chat from "pages/Chat";
+import Chat from "pages/chat";
 import Basket from "pages/Basket";
 import ProfilePage from "pages/Profile";
 import ContactView from "pages/Contact";
 import CreateProductView from "pages/CreateProduct";
 import UpdateProductView from "pages/UpdateProduct";
 import ReclamationView from "pages/Reclamation";
-import NewsletterPage from "pages/Newsletter";
+import NewsletterPage from "pages/newsletter";
 import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
 import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
-const AdminDashboard = React.lazy(() => import("pages/Admin"));
+const AdminDashboard = React.lazy(() => import("pages/admin"));
 
 interface Props {
   toastHandler: ToastHandler;

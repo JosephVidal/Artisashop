@@ -3,7 +3,7 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {REACT_APP_CHAT_URL} from "conf";
 import {SetState} from "globals/state";
 import {ChatPreview} from "api";
-import {Conversation} from "pages/Chat/index";
+import {Conversation} from "pages/chat/index";
 
 interface Props {
   setContactList: SetState<ChatPreview[]>,
