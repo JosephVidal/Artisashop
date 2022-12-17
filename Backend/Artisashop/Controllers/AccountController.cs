@@ -282,7 +282,7 @@ public class AccountController : ControllerBase
     [HttpPost("external-login")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public IActionResult ExternalLogin(string provider, string? returnUrl = null)
+    public ActionResult<ChallengeResult> ExternalLogin(string provider, string? returnUrl = null)
     {
         // Request a redirect to the external login provider.
         var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });

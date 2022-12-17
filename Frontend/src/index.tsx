@@ -1,21 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { BrowserRouter, useLocation } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import Routes from "routes";
 import { Provider as JotaiProvider } from "jotai";
 import PrimeReact from "primereact/api";
-import { GlobalStyles } from "globals/styles";
-import Toaster from "components/Toaster";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+
 import "./custom-theme.css";
-import { StoreProvider } from "reducers/utils";
 import "./i18n";
-import Loader from "components/Loader";
+import Loader from "./components/Loader";
+import Toaster from "./components/Toaster";
+import { GlobalStyles } from "./globals/styles";
+import { StoreProvider } from "./reducers/utils";
+import Routes from "./routes";
 
 PrimeReact.ripple = true;
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
+
+const ScrollToTop = () => {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location]);
+
+  return (null)
+}
 
 root.render(
   <React.Suspense fallback={<Loader visible />}>
@@ -23,7 +34,12 @@ root.render(
     <JotaiProvider>
       <StoreProvider>
         <Toaster>
-          {(toastHandler) => <Routes toastHandler={toastHandler} />}
+          {(toastHandler) => (
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes toastHandler={toastHandler} />
+            </BrowserRouter>
+          )}
         </Toaster>
       </StoreProvider>
     </JotaiProvider>

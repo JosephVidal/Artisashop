@@ -23,10 +23,6 @@ T
 $Backend/Artisashop/Artisashop.csproj,c\3\c391c6763bdff8a38e1d85998d8e683813fcab43
 j
 :Backend/Artisashop/Configurations/ConfigurationSections.cs,2\f\2f9fccc2a4dcb600776e9960d6a83bc14ede9a99
-o
-?Backend/Artisashop/Configurations/FranceConnectConfiguration.cs,5\8\589701b072bb7ae6c9c1d868783f2e1ef112027e
-c
-3Backend/Artisashop/Controllers/AccountController.cs,f\7\f71f18842cef51685f1a98adbb5f630777c6b03e
 X
 (Backend/Artisashop/Models/ChatMessage.cs,e\c\ec19c8f21b93b3f6e0da0c384de9e9c8dbbe91f7
 d
@@ -65,8 +61,6 @@ m
 =Backend/Artisashop/Controllers/AdminProductImageController.cs,e\4\e417fe76a8a38a3314e34b4837d031af15ec8bad
 [
 +Backend/Artisashop/Models/StoreDbContext.cs,4\e\4e5b607bc1af91b1899813d48b3f19d43ee54c94
-S
-#Frontend/src/pages/Search/index.tsx,4\7\476b58137f666d333976c3a6dc7350240e0a6aed
 m
 =Backend/Artisashop/Controllers/AdminProductStyleController.cs,b\5\b513a2790b1e5cf6bc79175800ed142c6efd95d4
 e
@@ -75,9 +69,13 @@ i
 9Backend/Artisashop/Controllers/AdminUserRoleController.cs,8\7\8790a0ecdca58d5dfbca521f01898e547ea8cfdb
 L
 Backend/Artisashop/Seeder.cs,5\5\550839df1c0f6a63e531dee47f67aa021b835fdd
-M
-Backend/Artisashop/Program.cs,c\3\c3e1aa6982f69a67c4417998d760a275aab92d71
-b
-2Backend/Artisashop/Controllers/ManageController.cs,9\1\91a488d8e70777ffd0de829845025b91b3b59b54
 b
 2Backend/Artisashop/Controllers/SearchController.cs,b\5\b50af0b395a303d8715671abee041e2eabf5d94a
+`
+0Backend/Artisashop.Tests/Artisashop.Tests.csproj,4\3\432aacfaf81e6ca252ab107f6286fea64e2c9661
+{
+KBackend/Libs/ArtisashopApi/src/ArtisashopApi.Test/ArtisashopApi.Test.csproj,1\c\1c1e8e05185ea8747c201446ff9bfd693dfb8611
+`
+0Backend/Artisashop/Controllers/HomeController.cs,c\4\c4deba6e36c1c6bcfdc300af47138b7f6aefcbb5
+[
++Backend/Artisashop/Models/ViewModel/Home.cs,f\4\f40efc7b9bd7e913ba6bc1f7922203fe6d678be7
