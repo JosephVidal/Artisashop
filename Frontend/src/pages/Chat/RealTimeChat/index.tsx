@@ -1,4 +1,4 @@
-import {useEffect, useState, VFC} from "react";
+import {useEffect, useState, FC} from "react";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {REACT_APP_CHAT_URL} from "conf";
 import {SetState} from "globals/state";
@@ -12,7 +12,7 @@ interface Props {
   conversation: Conversation
 }
 
-const RealTimeChat: VFC<Props> = ({
+const RealTimeChat: FC<Props> = ({
   setContactList,
   setConversation,
   contactList,
@@ -29,6 +29,7 @@ const RealTimeChat: VFC<Props> = ({
   }, [])
 
   useEffect(() => {
+    console.log("connected")
     if (connection) {
       connection.start()
         .then(() => connection.invoke("Connect", "", "test")

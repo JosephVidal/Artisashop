@@ -13,6 +13,7 @@ namespace Artisashop.Hubs
 
         public async Task Connect(string userID, string username)
         {
+            Console.WriteLine("Coucou");
             string id = Context.ConnectionId;
 
             if (!connectedUsers.Any(x => x.ConnectionId == id))

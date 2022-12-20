@@ -71,7 +71,7 @@ builder.Services.AddAuthentication(options =>
         {
             var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
 
-            // FC refuses unknown parameters in the requests, so the two following options are needed 
+            // FC refuses unknown parameters in the requests, so the two following options are needed
             oidc_options.DisableTelemetry =
                 true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
             oidc_options.UsePkce =
@@ -193,7 +193,8 @@ if (app.Environment.IsDevelopment())
             .AllowAnyMethod()
             .AllowAnyHeader()
             .WithExposedHeaders("Content-Range")
-            .SetIsOriginAllowedToAllowWildcardSubdomains();
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowCredentials();
     });
     // Cleans up the database on each run
     using (var scope = app.Services.CreateScope())
