@@ -22,7 +22,7 @@ namespace Artisashop.Hubs
         /// </summary>
         /// <param name="userID">user ID</param>
         /// <returns></returns>
-        Task UserDisconntection(string userID);
+        Task UserDisconnection(string userID);
         /// <summary>
         /// When you receive or send a new message
         /// </summary>
