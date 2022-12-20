@@ -59,7 +59,7 @@ namespace Artisashop.Hubs
                 connectedUsers.Remove(item);
                 if (!connectedUsers.Any(x => x.UserID == item.UserID))
                 {
-                    await Clients.All.UserDisconntection(item.UserID);
+                    await Clients.All.UserDisconnection(item.UserID);
                     //await Clients.All.SendAsync("UserDisconntection", item.UserID);
                 }
             }
