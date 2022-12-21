@@ -13,7 +13,6 @@ namespace Artisashop.Hubs
 
         public async Task Connect(string userID, string username)
         {
-            Console.WriteLine("Coucou");
             string id = Context.ConnectionId;
 
             if (!connectedUsers.Any(x => x.ConnectionId == id))
@@ -24,6 +23,8 @@ namespace Artisashop.Hubs
                 connectedUsers.Add(new ChatUserDetail(id, userID, username));
             }
             await Clients.Caller.OnConnected(userID);
+            Console.WriteLine($"Coucou {userID} !");
+
             //await Clients.Caller.SendAsync("OnConnected", userID, "Connected as " + username + " (" + userID + ")");
         }
 
