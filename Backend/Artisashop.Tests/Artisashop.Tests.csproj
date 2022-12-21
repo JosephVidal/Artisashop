@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Artisashop\Artisashop.csproj" />
+    <ProjectReference Include="..\Libs\ArtisashopApi\src\ArtisashopApi\ArtisashopApi.csproj" />
   </ItemGroup>
 
 </Project>
