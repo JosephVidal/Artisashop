@@ -39,6 +39,7 @@ export const Craftsman = styled.div`
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     color: var(--artshp-dark-blue);
 
     h1 {font-size: 3em;}
@@ -47,6 +48,7 @@ export const Wrapper = styled.div`
         min-height: 100vh;
         width: 50vw;
         padding: 30px;
+        transition: var(--artshp-trans);
     }
 
     #craftsman {margin: 40px 0;}
@@ -56,4 +58,10 @@ export const Wrapper = styled.div`
     #bio, #job {font-size: 1.7em;}
 
     #bio {margin-top: 15vh;}
+
+    @media (max-width: 1440px) {
+        flex-direction: column;
+
+        section {width: 100vw;}
+    }
 `;

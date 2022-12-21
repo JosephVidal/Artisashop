@@ -1,4 +1,12 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const tiltShaking = keyframes`
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(2deg); }
+    50% { transform: rotate(0eg); }
+    75% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+`
 
 export const Tag = styled.span`
     padding: 3px 10px;
@@ -31,6 +39,7 @@ export const Craftsman = styled.div`
         box-shadow: 0px 0px 30px #a0a0a0;
     }
 
+    a:hover {color: var(--artshp-orange);}
     a {
         text-decoration: none;
         margin: auto 0;
@@ -78,6 +87,13 @@ export const Wrapper = styled.div`
         height: 600px;
         object-fit: cover;
         border-radius: var(--elem-radius);
+        transition: var(--artshp-trans);
+    }
+
+    .active {
+        animation : ${tiltShaking} 0.2s linear;
+        transition: var(--artshp-trans);
+        background-color : rgb(2, 162, 23);
     }
 
     @media (max-width: 1250px) {

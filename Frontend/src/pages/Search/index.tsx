@@ -126,6 +126,7 @@ const Search: React.FunctionComponent<Props> = () => {
       : []
     )
   }, [searchProductsAsync.value]);
+
   useEffect(() => {
     setJobFilters(searchCraftsmenAsync.value
       ? _.uniq(searchCraftsmenAsync.value?.map(c => c.job)).map(x => ({ job: x, checked: false }))

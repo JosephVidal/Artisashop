@@ -59,7 +59,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           </Link>
         </div>
         <p>Artisashop 2022</p>
-        <span/>
+        <span id="elem"/>
       </div>
     </footer>
   </FooterWrapper>
