@@ -36,7 +36,7 @@ const Login = () => {
             </Form>
           )}
         </Formik>
-        <p>Pas encore inscrit? <Link to="/app/register">Rejoignez-nous</Link> !</p>
+        <p>Pas encore inscrit? <Link to="/register">Rejoignez-nous</Link> !</p>
       </div>
     </Wrapper>
   );

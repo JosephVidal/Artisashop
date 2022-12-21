@@ -4,6 +4,8 @@ import {REACT_APP_CHAT_URL} from "conf";
 import {SetState} from "globals/state";
 import {ChatPreview} from "api";
 import {Conversation} from "pages/Chat/index";
+import userAtom from "states/atoms/user";
+import { useAtom } from "jotai";
 
 interface Props {
   setContactList: SetState<ChatPreview[]>,
@@ -12,12 +14,13 @@ interface Props {
   conversation: Conversation
 }
 
-const RealTimeChat: FC<Props> = ({
+const useRealTimeChat = ({
   setContactList,
   setConversation,
   contactList,
   conversation
-}) => {
+} : Props) => {
+  const [user] = useAtom(userAtom);
   const [connection, setConnection] = useState<HubConnection>();
 
   useEffect(() => {
@@ -32,23 +35,21 @@ const RealTimeChat: FC<Props> = ({
     console.log("connected")
     if (connection) {
       connection.start()
-        .then(() => connection.invoke("Connect", "", "test")
+        .then(() => connection.invoke("Connect", user?.id, user?.username)
           .then(() => connection.on("OnConnected", (userID: string) => {
             connection.on('PrivateMessage', (isSendByMe: boolean, otherUserID: string, filename: string | null, message: string | null, date: Date, file: string | null, msgId: number) => {
-              console.log(message);
+              console.log("PrivateMessage", isSendByMe, otherUserID, filename, message, date, file, msgId);
             })
             connection.on('DeleteMsg', (msgId: number) => {
-              console.log(msgId);
+              console.log("DeleteMsg", msgId);
             })
             connection.on('UpdateMsg', (msgId: number, content: string) => {
-              console.log(content);
+              console.log("UpdateMsg", msgId, content);
             })
           }))
         )
     }
   }, [connection])
-
-  return null;
 }
 
-export default RealTimeChat;
+export default useRealTimeChat;

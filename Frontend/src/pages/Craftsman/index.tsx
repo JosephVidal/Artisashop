@@ -52,7 +52,7 @@ const CraftsmanView = () => {
               <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
               <button className="chat-button" type="button" onClick={() =>
                 navigate({
-                  pathname: "/app/chat",
+                  pathname: "/chat",
                   search: `?new=true&to=${JSON.stringify(account)}`,
                 })
               }>💬</button>
@@ -70,7 +70,7 @@ const CraftsmanView = () => {
             img={`/img/product/${elem.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série"
             name={elem.name}
             price={elem.price}
-            href={`/app/product/${elem?.id}`}
+            href={`/product/${elem?.id}`}
             productStyles={elem?.productStyles}
           />
         ))}

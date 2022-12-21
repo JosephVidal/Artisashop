@@ -4,8 +4,8 @@ import {
   Routes as Wrapper,
   Route, Navigate, useLocation,
 } from "react-router-dom";
-import {ToastHandler} from "components/Toaster";
-import {colors} from "globals/styles";
+import { ToastHandler } from "components/Toaster";
+import { colors } from "globals/styles";
 import Home from "pages/Home";
 import Register from "pages/Register";
 import Login from "pages/Login";
@@ -25,7 +25,7 @@ import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
 import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
-const AdminDashboard = React.lazy(() => import("pages/Admin"));
+const AdminDashboard = React.lazy(() => import("pages/admin"));
 
 interface Props {
   toastHandler: ToastHandler;
@@ -40,37 +40,34 @@ const ScrollToTop = () => {
   return (null)
 }
 
-const Routes: React.FunctionComponent<Props> = ({toastHandler}) =>
-  (
-    <Router>
-      <ScrollToTop />
-      <Wrapper>
-        <Route path="/app">
-          <Route element={<Template toastHandler={toastHandler} background={colors.darkBlue}/>}/>
-          <Route element={<Template toastHandler={toastHandler} background={colors.beige}/>}>
-            <Route index element={<Home/>}/>
-            <Route path="register" element={<Register/>}/>
-            <Route path="login" element={<Login/>}/>
-            <Route path="search" element={<Search/>}/>
-            <Route path="product/:id" element={<ProductView/>}/>
-            <Route path="mon-panier" element={<Basket />}/>
-            <Route path="craftsman/:id" element={<CraftsmanView/>}/>
-            <Route path="politique-de-confidentialite" element={<PrivacyPolicy/>}/>
-            <Route path="chat" element={<Chat/>}/>
-            <Route path="profile" element={<ProfilePage />}/>
-            <Route path="contact" element={<ContactView />} />
-            <Route path="create-product" element={<CreateProductView />} />
-            <Route path="update-product" element={<UpdateProductView />} />
-            <Route path="reclamation" element={<ReclamationView />} />
-            <Route path="about/craftsmans" element={<CraftsmanPres />} />
-            <Route path="about/products" element={<ProductPres />} />
-            <Route path="dashboard" element={<CraftsmanDashboard />}/>
-          </Route>
-          <Route path="admin/*" element={<AdminDashboard/>}/>
-        </Route>
-        <Route index element={<Navigate to="/app"/>}/>
-      </Wrapper>
-    </Router>
-  );
+const Routes: React.FunctionComponent<Props> = ({ toastHandler }) =>
+(
+  <Router>
+    <ScrollToTop />
+    <Wrapper>
+      <Route element={<Template toastHandler={toastHandler} background={colors.darkBlue} />} />
+      <Route element={<Template toastHandler={toastHandler} background={colors.beige} />}>
+        <Route index element={<Home />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="search" element={<Search />} />
+        <Route path="product/:id" element={<ProductView />} />
+        <Route path="mon-panier" element={<Basket />} />
+        <Route path="craftsman/:id" element={<CraftsmanView />} />
+        <Route path="politique-de-confidentialite" element={<PrivacyPolicy />} />
+        <Route path="chat" element={<Chat />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="contact" element={<ContactView />} />
+        <Route path="create-product" element={<CreateProductView />} />
+        <Route path="update-product" element={<UpdateProductView />} />
+        <Route path="reclamation" element={<ReclamationView />} />
+        <Route path="about/craftsmans" element={<CraftsmanPres />} />
+        <Route path="about/products" element={<ProductPres />} />
+        <Route path="dashboard" element={<CraftsmanDashboard />} />
+      </Route>
+      <Route path="admin/*" element={<AdminDashboard />} />
+    </Wrapper>
+  </Router>
+);
 
 export default Routes;

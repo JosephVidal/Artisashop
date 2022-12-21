@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   useFormattedDocumentTitle("Dashboard Admin");
   
   return (
-    <Admin basename="/app/admin" dataProvider={simpleRestProvider(`${REACT_APP_API_URL}/api/admin`)}>
+    <Admin basename="/admin" dataProvider={simpleRestProvider(`${REACT_APP_API_URL}/api/admin`)}>
       <Resource name="product" list={ProductList} edit={EditGuesser} show={ShowGuesser} />
       <Resource name="complaint" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} />
       <Resource name="user" list={ListGuesser} edit={EditGuesser} show={ShowGuesser} create={UserCreate} />

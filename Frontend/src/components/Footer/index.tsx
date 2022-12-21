@@ -23,7 +23,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           <h3>A propos</h3>
           <Link to="/app">L&apos;équipe</Link>
           <Link to="/app">Nous rejoindre</Link>
-           <Link to="/app/admin">Portail modérateur</Link> 
+           <Link to="/admin">Portail modérateur</Link> 
         </div>
         <div>
           <h3>Boutique</h3>
@@ -34,8 +34,8 @@ const Footer: React.FunctionComponent<Props> = () => (
         <div>
           <h3>Aide</h3>
           <Link to="/app">FAQ</Link>
-          <Link to="/app/contact">Nous contacter</Link>
-          <Link to="/app/politique-de-confidentialite">Politique de confidentialité</Link>
+          <Link to="/contact">Nous contacter</Link>
+          <Link to="/politique-de-confidentialite">Politique de confidentialité</Link>
         </div>
       </div>
       <div id="links">

@@ -217,8 +217,8 @@ const Search: React.FunctionComponent<Props> = () => {
             <div id="result-list">
               {
                 isProduct
-                  ? filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)
-                  : filteredCraftsmen?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.svg"} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)
+                  ? filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/product/${elem?.id}`} />)
+                  : filteredCraftsmen?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.svg"} name={elem.firstname} job={elem.job ?? ""} href={`/craftsman/${elem?.id ?? ""}`} />)
               }
             </div>
           </section>
@@ -236,7 +236,7 @@ const Search: React.FunctionComponent<Props> = () => {
                 serie="Petite série"
                 name={elem.name}
                 price={elem.price}
-                href={`/app/product/${elem.id}`}
+                href={`/product/${elem.id}`}
               />
             )}
           </div>

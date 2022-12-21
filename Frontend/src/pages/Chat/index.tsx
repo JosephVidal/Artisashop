@@ -26,8 +26,8 @@ import {Maybe, None, Some} from "monet";
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import RealTimeChat from "pages/Chat/RealTimeChat";
 import {useSearchParams} from "react-router-dom";
+import useRealTimeChat from "./useRealTimeChat";
 
 export interface Conversation {
   history: ChatMessage[],
@@ -53,6 +53,13 @@ const Chat: FC = () => {
       return JSON.parse(get) as Account
     return null;
   }, [searchParams]);
+
+  useRealTimeChat({
+    setContactList,
+    setConversation,
+    contactList,
+    conversation  
+  });
 
   reader.onloadend = () => {
     setFileData(Some(reader.result as string));
@@ -148,7 +155,6 @@ const Chat: FC = () => {
           renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
-      <RealTimeChat setContactList={setContactList} setConversation={setConversation} contactList={contactList} conversation={conversation} />
       <ConversationWrapper>
         <ConversationTitle>
           {conversation.history.length !== 0 && (
