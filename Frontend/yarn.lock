@@ -4110,6 +4110,7 @@ __metadata:
     "@types/styled-components": ^5.1.4
     "@typescript-eslint/eslint-plugin": ^5.36.1
     "@typescript-eslint/parser": ^5.36.1
+    autoprefixer: ^10.4.13
     axios: ^0.27.2
     babel-plugin-styled-components: ^2.0.7
     classnames: ^2.2.6
@@ -4133,6 +4134,7 @@ __metadata:
     lodash: ^4.17.20
     monet: ^0.9.1
     patch-package: ^6.4.7
+    postcss: ^8.4.20
     prettier: 2.7.1
     primeicons: ^5.0.0
     primereact: ^8.4.0
@@ -4151,6 +4153,7 @@ __metadata:
     rimraf: ^3.0.2
     shortid: ^2.2.16
     styled-components: ^5.3.5
+    tailwindcss: ^3.2.4
     typescript: ^4.8.2
     uuid: ^8.3.1
   languageName: unknown
@@ -12613,6 +12616,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:^8.4.20":
+  version: 8.4.20
+  resolution: "postcss@npm:8.4.20"
+  dependencies:
+    nanoid: ^3.3.4
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 1a5609ea1c1b204f9c2974a0019ae9eef2d99bf645c2c9aac675166c4cb1005be7b5e2ba196160bc771f5d9ac896ed883f236f888c891e835e59d28fff6651aa
+  languageName: node
+  linkType: hard
+
 "preact@npm:^10.0.5":
   version: 10.11.3
   resolution: "preact@npm:10.11.3"
@@ -14713,7 +14727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.0.2":
+"tailwindcss@npm:^3.0.2, tailwindcss@npm:^3.2.4":
   version: 3.2.4
   resolution: "tailwindcss@npm:3.2.4"
   dependencies:

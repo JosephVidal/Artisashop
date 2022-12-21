@@ -1,4 +1,23 @@
 import React, {FC, useEffect, useMemo, useState} from "react";
+import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
+import { FaPaperPlane } from "react-icons/fa";
+import { ImAttachment } from "react-icons/im";
+import { SetState } from "globals/state";
+import { generate } from "shortid";
+import {InputText} from "primereact/inputtext";
+import {Maybe, None, Some} from "monet";
+import {useSearchParams} from "react-router-dom";
+
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { atom, useAtom } from "jotai";
+import { splitAtom } from "jotai/utils";
+
+import { REACT_APP_CHAT_URL } from "conf";
+import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
+import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import userAtom from "states/atoms/user";
+
 import {
   MessageBubble,
   ChatWrapper,
@@ -15,26 +34,164 @@ import {
   MessageDate,
   FileWrapper,
   ChatBottomWrapper
-} from "pages/Chat/styles";
-import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
-import { FaPaperPlane } from "react-icons/fa";
-import { ImAttachment } from "react-icons/im";
-import { SetState } from "globals/state";
-import { generate } from "shortid";
-import {InputText} from "primereact/inputtext";
-import {Maybe, None, Some} from "monet";
-import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
-import useApi from "hooks/useApi";
-import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import {useSearchParams} from "react-router-dom";
-import useRealTimeChat from "./useRealTimeChat";
+} from "./styles";
 
-export interface Conversation {
-  history: ChatMessage[],
-  interlocutor?: Account
+interface ChatContactMenuItem {
+  user?: Account,
+  lastMessage?: ChatMessage,
+  selected?: boolean,
 }
 
-const Chat: FC = () => {
+// --- STATE ---
+
+const chatContactsAtom = atom<ChatContactMenuItem[]>([]);
+const chatContactsAtomAtom = splitAtom(chatContactsAtom);
+
+const interlocutorAtom = atom<Account | null>(null);
+
+const messagesAtom = atom<ChatMessage[]>([]);
+const messagesAtomAtom = splitAtom(messagesAtom);
+
+const useChat = () => {
+  const [user] = useAtom(userAtom);
+  const [contactList, setContactList] = useAtom(chatContactsAtom);
+  const [connection, setConnection] = useState<HubConnection>();
+  const [selectedContact, _setSelectedContact] = useAtom(selectedContactAtom);
+
+  const setSelectedContact = (userId: string) => {
+    if (selectedContact?.user?.id === userId) {
+      console.log("already selected !");
+    }
+    else {
+      _setSelectedContact(contactList.);
+    }
+  }
+
+  useEffect(() => {
+    const newConnection = new HubConnectionBuilder()
+      .withUrl(REACT_APP_CHAT_URL)
+      .withAutomaticReconnect()
+      .build();
+    setConnection(newConnection);
+  }, [])
+
+  useEffect(() => {
+    console.log("connected")
+    if (connection) {
+      connection.start()
+        .then(() => connection.invoke("Connect", user?.id, user?.username)
+          .then(() => connection.on("OnConnected", (userID: string) => {
+            connection.on('PrivateMessage', (isSendByMe: boolean, otherUserID: string, filename: string | null, message: string | null, date: Date, file: string | null, msgId: number) => {
+
+            })
+            connection.on('DeleteMsg', (msgId: number) => {
+              console.log("DeleteMsg", msgId);
+            })
+            connection.on('UpdateMsg', (msgId: number, content: string) => {
+              console.log("UpdateMsg", msgId, content);
+            })
+          }))
+        )
+    }
+  }, [connection])
+
+
+  const chatApi = useApi(ChatApi);
+
+  useEffect(() => { }, [])
+}
+
+interface Props {
+  setContactList: SetState<ChatPreview[]>,
+  setConversation: SetState<Conversation>,
+  contactList: ChatPreview[],
+  conversation: Conversation
+}
+
+const useRealTimeChat = ({
+  setContactList,
+  setConversation,
+  contactList,
+  conversation
+}: Props) => {
+  const [user] = useAtom(userAtom);
+  const [connection, setConnection] = useState<HubConnection>();
+
+  useEffect(() => {
+    const newConnection = new HubConnectionBuilder()
+      .withUrl(REACT_APP_CHAT_URL)
+      .withAutomaticReconnect()
+      .build();
+    setConnection(newConnection);
+  }, [])
+
+  useEffect(() => {
+    console.log("connected")
+    if (connection) {
+      connection.start()
+        .then(() => connection.invoke("Connect", user?.id, user?.username)
+          .then(() => connection.on("OnConnected", (userID: string) => {
+            connection.on('PrivateMessage', (isSendByMe: boolean, otherUserID: string, filename: string | null, message: string | null, date: Date, file: string | null, msgId: number) => {
+              console.log("PrivateMessage", isSendByMe, otherUserID, filename, message, date, file, msgId);
+            })
+            connection.on('DeleteMsg', (msgId: number) => {
+              console.log("DeleteMsg", msgId);
+            })
+            connection.on('UpdateMsg', (msgId: number, content: string) => {
+              console.log("UpdateMsg", msgId, content);
+            })
+          }))
+        )
+    }
+  }, [connection])
+}
+
+// --- COMPONENTS ---
+
+const ChatContact: FC<{ contact: ChatPreview, onClick: () => void }> = ({ contact, onClick }) => (
+)
+
+const ContactListItem : FC<{contact: ChatContactMenuItem, selected: boolean}> = ({ contact, selected}) => {
+  const getInterlocutor = (): string => {
+    if (!contact.lastMsg)
+      return (to )!.userName!;
+    return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
+  }
+
+  const interlocutor: string = getInterlocutor();
+
+  return (
+    <ContactWrapper selected={interlocutor === conversation.interlocutor?.userName} key={generate()} onClick={() => {
+      if (contact.lastMsg) {
+        getConversation(useChat, setConversation, user!.id!, contact.lastMsg.sender!, contact.lastMsg.receiver!);
+      } else {
+        setConversation({history: [], interlocutor: to!})
+      }
+        setInput("");
+        setEdit(None());
+        setFile(None());
+    }}>
+      {interlocutor}
+      {contact.lastMsg &&
+        <ContactPreview>
+          <MessagePreview>
+            {contact.lastMsg?.sender?.userName}: {contact.lastMsg?.content}
+          </MessagePreview>
+          {contact.lastMsg.createdAt ? timeIndicator(contact.lastMsg.createdAt) : null}
+        </ContactPreview>
+      }
+    </ContactWrapper>
+  )
+};
+
+
+const ContactListMenu: FC = () => (
+  <ContactList>
+
+  </ContactList>
+)
+
+const ChatPage: FC = () => {
   const [contactList, setContactList] = useState<ChatPreview[]>([]);
   const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
@@ -83,7 +240,7 @@ const Chat: FC = () => {
   const renderContact = (contact: ChatPreview) => {
     const getInterlocutor = (): string => {
       if (!contact.lastMsg)
-        return (to )!.userName!;
+        return to!.userName!;
       return contact.receive ? contact.lastMsg.sender!.userName! : contact.lastMsg.receiver!.userName!;
     }
 

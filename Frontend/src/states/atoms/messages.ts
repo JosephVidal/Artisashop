@@ -1,6 +1,6 @@
 import { atom } from "jotai";
-import { Conversation } from "pages/Chat";
+import { ChatMessage } from "api/models";
 
-const conversationsAtom = atom<Conversation[]>([]);
+const messages = atom<ChatMessage[]>([]);
 
-export default conversationsAtom;
+export default messages;
