@@ -11,7 +11,7 @@ import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} fr
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import {useSearchParams} from "react-router-dom";
-import RealTimeChat from "pages/chat/RealTimeChat";
+import RealTimeChat from "pages/Chat/RealTimeChat";
 
 import {
   MessageBubble,
