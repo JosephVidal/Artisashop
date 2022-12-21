@@ -57,14 +57,18 @@ builder.Services.AddAuthentication(options =>
         var config = jwtConfig.Get<JwtConfiguration>();
 
         options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
+            ValidateIssuer = true,
             ValidateAudience = false,
             ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+
             ValidIssuer = config.Issuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key)),
         };
-        options.RequireHttpsMetadata = false;
     })
     .AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName,
         oidc_options =>

@@ -374,7 +374,7 @@ public class AccountController : ControllerBase
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.Expiration));
+        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.ExpireDays)).AddHours(2).AddMinutes(30);
 
         var token = new JwtSecurityToken(
             jwtConfiguration.Issuer,
