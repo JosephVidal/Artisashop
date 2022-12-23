@@ -1,33 +1,35 @@
 import React, { FC } from "react";
-import { useAtom } from "jotai";
-import ChatContact from "models/ChatContact";
-import chatContactsAtom from "states/atoms/chatContacts";
+import { PrimitiveAtom, useAtom } from "jotai";
 
-const ContactListItem: FC<ChatContact> = (contact) => (
-  <div className="d-flex flex-row align-items-center p-3">
-    <div className="d-flex flex-column">
-      <div className="font-weight-bold">{contact.interlocutor?.firstname} {contact.interlocutor?.lastname}</div>
+import { ChatPreview } from "api";
+
+import { chatContactsAtomAtom } from "./atoms";
+
+const ContactListItem = ({
+  conversationAtom,
+  // selected,
+} : {
+  conversationAtom: PrimitiveAtom<ChatPreview>,
+  // selected: boolean,
+}) => {
+  const [conversation] = useAtom(conversationAtom);
+
+    return (
       <div>
-        {
-          contact.lastMessage?.id === contact.interlocutor?.id
-            ? <div className="text-black-50">Vous: {contact.lastMessage?.content}</div>
-            : <div className="text-black-50">{contact.lastMessage?.content}</div>
-        }
+        {conversation.lastMsg?.content}
       </div>
-    </div>
-  </div>
-)
+    );
+  }
 
 const ContactList = () => {
-  const [conversations] = useAtom(chatContactsAtom);
+  const [conversations] = useAtom(chatContactsAtomAtom);
 
   return (
     <div className="d-flex flex-column flex-grow-1">
-      {conversations.map((conversation) => (
+      {conversations.map((conversationAtom) => (
         <ContactListItem
-          key={conversation.id}
-          conversation={conversation}
-          selected={selectedConversationId === conversation.id}
+          conversationAtom={conversationAtom}
+          // selected={selectedConversationId === conversation.id}
         />
       ))}
     </div>

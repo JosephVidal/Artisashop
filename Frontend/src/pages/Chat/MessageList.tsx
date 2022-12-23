@@ -8,10 +8,10 @@ const messageListAtomAtom = splitAtom(messageListAtom);
 
 const MessageListItem = ({
   messageAtom,
-  remove,
+  // remove,
 }: {
   messageAtom: PrimitiveAtom<ChatMessage>,
-  remove: () => void,
+  // remove: () => void,
 }) => {
   const [message, setMessage] = useAtom(messageAtom);
 
@@ -31,7 +31,7 @@ const MessageList = () => {
       {messageList.map((messageAtom) => (
         <MessageListItem
           messageAtom={messageAtom}
-          remove={() => dispatch((old) => old.filter((m) => m.id !== messageAtom.id))}
+          // remove={() => dispatch((old) => old.filter((m) => m.id !== messageAtom.id))}
         />
       ))}
     </div>

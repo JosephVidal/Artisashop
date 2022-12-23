@@ -22,7 +22,9 @@ const ContactListItem = ({
 
   return (
     <ContactWrapper selected={chatPreview.selected}>
-      {chatPreview.name}
+      <div>
+        {chatPreview.lastMsg?.content}
+      </div>
     </ContactWrapper>
   );
 }

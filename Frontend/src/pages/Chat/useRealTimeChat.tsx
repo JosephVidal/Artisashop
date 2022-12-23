@@ -3,23 +3,10 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {REACT_APP_CHAT_URL} from "conf";
 import {SetState} from "globals/state";
 import {ChatPreview} from "api";
-import {Conversation} from "pages/Chat/index";
 import userAtom from "states/atoms/user";
 import { useAtom } from "jotai";
 
-interface Props {
-  setContactList: SetState<ChatPreview[]>,
-  setConversation: SetState<Conversation>,
-  contactList: ChatPreview[],
-  conversation: Conversation
-}
-
-const useRealTimeChat = ({
-  setContactList,
-  setConversation,
-  contactList,
-  conversation
-} : Props) => {
+const useRealTimeChat = () => {
   const [user] = useAtom(userAtom);
   const [connection, setConnection] = useState<HubConnection>();
 
