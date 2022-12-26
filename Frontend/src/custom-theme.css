@@ -98,10 +98,14 @@ li {list-style: none;}
 }
 
 .tag {
-   padding: 3px 10px;
-   border-radius: var(--elem-radius);
-   background-color: var(--artshp-brown);
-   color: var(--bs-light);
+  padding: 3px 10px;
+  border-radius: var(--elem-radius);
+  background-color: var(--artshp-brown);
+  color: var(--bs-light);
+ }
+
+ @media (max-width: 930px) {
+  .tag {font-size: 0.1em;}
  }
 
 .p-dropdown-panel {

@@ -45,7 +45,7 @@ const ProductView = () => {
           <h1>{product?.name}</h1>
           <Craftsman>
             <img className="craftsman-img" src={product?.craftsman.profilePicture ?? "/img/craftsman/default.svg"} alt="test" />
-            <a href={craftsmanLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
+            <a href={craftsmanLink}>{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">
             <p id="price">{product?.price.toFixed(2)}€</p>

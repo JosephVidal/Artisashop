@@ -30,7 +30,11 @@ export const MenuItem = styled(Quarter)`
   font-family: "Raleway-Black", sans-serif;
   padding: 0.5rem 1rem;
 
-  a {text-decoration: none;}
+  a {
+    text-decoration: none;
+
+    @media (max-width: 650px) {font-size: 1rem;}
+  }
 
   & text {cursor: pointer;}
 
@@ -48,6 +52,12 @@ export const RightIcons = styled(Quarter)`
     flex: 0.1;
     cursor: pointer;
     margin: 0 5px 0 5px;
+    transition: var(--artshp-trans);
+
+    @media (max-width: 650px) {
+      height: 20px;
+      width: 20px;
+    }
   }
 
   & svg:hover {

@@ -8,18 +8,19 @@ export const ProductCardWrapper = styled.div`
         padding: 20px;
         color: inherit;
         text-decoration: inherit;
-        transition: 0.3s;
 
         img {
             width: 300px;
             height: 300px;
             object-fit: cover;
             border-radius: var(--elem-radius);
+            transition: var(--artshp-trans);
         }
 
         p {
             font-family: Helvetica;
             margin: 5px 0px;
+            transition: var(--artshp-trans);
         }
 
         :hover {color: var(--artshp-orange);}
@@ -42,6 +43,8 @@ export const ProductCardWrapper = styled.div`
                 width: 140px;
                 height: 140px;
             }
+
+            p {font-size: 1em;}
         }
     }
 `;

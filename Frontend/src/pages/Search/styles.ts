@@ -42,6 +42,7 @@ export const SearchHeader = styled.div`
 `;
 
 export const SearchFilters = styled.aside`
+    display: none;
     position: sticky;
     max-height: 20vh;
     bottom: 10vh;
