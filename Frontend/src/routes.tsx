@@ -15,19 +15,19 @@ import ProductView from "pages/Product";
 import CraftsmanView from "pages/Craftsman";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
-import Chat from "pages/chat";
+import Chat from "pages/Chat";
 import Basket from "pages/Basket";
 import ProfilePage from "pages/Profile";
 import ContactView from "pages/Contact";
 import CreateProductView from "pages/CreateProduct";
 import UpdateProductView from "pages/UpdateProduct";
 import ReclamationView from "pages/Reclamation";
-import NewsletterPage from "pages/newsletter";
+import NewsletterPage from "pages/Newsletter";
 import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
 import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
-const AdminDashboard = React.lazy(() => import("pages/admin"));
+const AdminDashboard = React.lazy(() => import("pages/Admin"));
 
 interface Props {
   toastHandler: ToastHandler;
