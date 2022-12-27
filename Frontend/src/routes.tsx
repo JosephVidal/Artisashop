@@ -14,7 +14,7 @@ import ProductView from "pages/Product";
 import CraftsmanView from "pages/Craftsman";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
-// import Chat from "pages/Chat";
+import ChatPage from "pages/Chat";
 import Basket from "pages/Basket";
 import ProfilePage from "pages/Profile";
 import ContactView from "pages/Contact";
@@ -25,7 +25,7 @@ import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
 import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
-const AdminDashboard = React.lazy(() => import("pages/Admin"));
+const AdminDashboard = React.lazy(() => import("pages/admin"));
 
 interface Props {
   toastHandler: ToastHandler;
@@ -55,7 +55,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) =>
         <Route path="mon-panier" element={<Basket />} />
         <Route path="craftsman/:id" element={<CraftsmanView />} />
         <Route path="politique-de-confidentialite" element={<PrivacyPolicy />} />
-        {/* <Route path="chat" element={<Chat />} /> */}
+        <Route path="chat" element={<ChatPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="contact" element={<ContactView />} />
         <Route path="create-product" element={<CreateProductView />} />
