@@ -1,14 +1,51 @@
 import React from 'react';
 
+const Avatar = ({
+  src = 'https://picsum.photos/200',
+}) => (
+  <img src={src} alt="avatar" className="rounded-full w-8 h-8" />
+);
+
+const ContactListItem = ({
+  name = 'Name',
+  lastMessage = 'Last message',
+  avatarSrc = 'https://picsum.photos/200',
+}) => {
+  const [selected, setSelected] = React.useState(false);
+
+  const handleClick = () => {
+    setSelected(!selected);
+  };
+
+    return (
+      <div onClick={handleClick} className="bg-slate-800 rounded-xl p-2 text-white">
+        <div className="flex gap-2 items-center">
+          <Avatar src={avatarSrc} />
+          <div className="flex flex-col">
+            <div className="text-sm">{name}</div>
+            <div className="text-xs">{lastMessage}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 const ContactList = () => (
-  <div>ContactList</div>
+  <div>
+    {/* <div>ContactList</div> */}
+    <div className="flex flex-col gap-1">
+      {Array.from({ length: 10 }).map((_, index) => (
+        <ContactListItem key={index} />
+      ))}
+    </div>
+  </div>
 );
 
 const MessageList = () => (
   <div className="flex flex-col gap-3">
     {Array.from({ length: 25 }).map((_, index) => (
       <div key={index} className="flex gap-5">
-        <img src="https://picsum.photos/200" alt="avatar" className="rounded-full w-7 h-7" />
+        <Avatar />
         <div className="flex flex-col">
           <div className="text-sm">Name</div>
           <div className="text-xs">Last message</div>
