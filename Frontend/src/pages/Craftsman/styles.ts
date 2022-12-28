@@ -16,6 +16,7 @@ export const Craftsman = styled.div`
         object-fit: cover;
         margin: auto 30px auto 0;
         height: 120px;
+        width: 120px;
     }
 
     .chat-button {

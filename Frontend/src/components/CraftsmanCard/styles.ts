@@ -29,6 +29,7 @@ export const CraftsmanCardWrapper = styled.div`
         img {
             height: 90px;
             width: 90px;
+            object-fit: cover;
             border-radius: 100%;
         }
     }

@@ -51,7 +51,10 @@ a:not(.red-button):hover {color: var(--artshp-orange);}
 a {color: var(--artshp-white);}
 
 input::placeholder {color: var(--artshp-dark-blue)}
-input:focus {border: solid 2px var(--artshp-orange)}
+input:focus {
+  outline: none;
+  border: solid 4px var(--artshp-orange)
+}
 input {
   background-color: var(--bs-white);
   border: 0;
@@ -60,6 +63,7 @@ input {
   padding-left: 7px;
   margin-right: 10px;
   font-size: 1.2em;
+  transition: var(--artshp-trans);
 }
 
 li {list-style: none;}

@@ -8,6 +8,14 @@ const tiltShaking = keyframes`
     100% { transform: rotate(0deg); }
 `
 
+const shaking = keyframes`
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(5px); }
+    50% { transform: translateX(0px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0px); }
+`
+
 export const Tag = styled.span`
     padding: 3px 10px;
     border-radius: var(--elem-radius);
@@ -32,9 +40,8 @@ export const Craftsman = styled.div`
     img {
         width: 50px;
         height: 50px;
-        /* object-fit: cover; */
+        object-fit: cover;
         margin-right: 20px;
-        object-fit: fill;
         border-radius: 100%;
         box-shadow: 0px 0px 30px #a0a0a0;
     }
@@ -90,10 +97,11 @@ export const Wrapper = styled.div`
         transition: var(--artshp-trans);
     }
 
+    .error {animation: ${shaking} 0.2s linear;}
     .active {
-        animation : ${tiltShaking} 0.2s linear;
+        animation: ${tiltShaking} 0.2s linear;
         transition: var(--artshp-trans);
-        background-color : rgb(2, 162, 23);
+        background-color: #63af6d;
     }
 
     @media (max-width: 1250px) {

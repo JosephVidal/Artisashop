@@ -178,6 +178,7 @@ export const Wrapper = styled.div`
     #search-result-block {
         padding: 20px;
         border-left: solid 2px var(--bs-dark);
+        margin-left: 30px;
     }
 
     #result-list {
