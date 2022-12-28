@@ -243,17 +243,4 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-.env-artisashop
-.env-artisashop-demo
-.env-artisashop-dev
-deployment_key
-deployment_key.pub
-.env-traefik
-.env-traefik-demo
-Ansible/id_*
-!Ansible/id_*.pub
-
-client_secret*
-Artisashop/app.db
-
 .venv
