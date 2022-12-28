@@ -12,10 +12,10 @@ const CraftsmanPres: React.FunctionComponent<Props> = () =>
       </div>
       <div id="img-part">
         <div id="img-group">
-          <img src="/img/craftsman/Pierre.jpeg" alt="" />
-          <img src="/img/craftsman/Jacques.jpg" alt="" />
+          <img src="/img/craftsman/Joseph.jpg" alt="" />
+          <img src="/img/craftsman/Isabelle.jpg" alt="" />
         </div>
-        <img id="img-solo" src="/img/craftsman/Jean.jpeg" alt="" />
+        <img id="img-solo" src="/img/craftsman/Marie Claire.jpg" alt="" />
       </div>
     </DescSection>
     <WhoSection>
