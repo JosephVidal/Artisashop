@@ -10,11 +10,11 @@ module.exports = {
   rules: {
     '@typescript-eslint/comma-dangle': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/lines-between-class-members': ['error', 'always', {
+    '@typescript-eslint/lines-between-class-members': ['warn', 'always', {
       "exceptAfterSingleLine": true
     }],
     '@typescript-eslint/no-floating-promises': 'off',
-    '@typescript-eslint/no-misused-promises': ['error', {
+    '@typescript-eslint/no-misused-promises': ['warn', {
       'checksVoidReturn': false
     }],
     '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -34,6 +34,7 @@ module.exports = {
       unnamedComponents: "arrow-function"
     }],
     'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     '@typescript-eslint/no-unused-vars': 'warn'
   }
