@@ -31,3 +31,10 @@ export const Wrapper = styled.div`
         }
     }
 `;
+
+export const FlexRow = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
