@@ -26,7 +26,7 @@ import CraftsmanPres from "pages/CraftsmanPres";
 import ProductPres from "pages/ProductPres";
 import CraftsmanDashboard from "pages/CraftsmanDashboard";
 
-const AdminDashboard = React.lazy(() => import("pages/admin"));
+const AdminDashboard = React.lazy(() => import("pages/Admin"));
 
 interface Props {
   toastHandler: ToastHandler;
