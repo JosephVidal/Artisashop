@@ -27,9 +27,9 @@ const Footer: React.FunctionComponent<Props> = () => (
         </div>
         <div>
           <h3>Boutique</h3>
-          <Link to="/app/about/craftsmans">Les créateurs</Link>
-          <Link to="/app/about/products">Leur créations</Link>
-          <Link to="/app/register">S&apos;inscrire</Link>
+          <Link to="/about/craftsmans">Les créateurs</Link>
+          <Link to="/about/products">Leur créations</Link>
+          <Link to="/register">S&apos;inscrire</Link>
         </div>
         <div>
           <h3>Aide</h3>

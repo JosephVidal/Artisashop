@@ -72,7 +72,6 @@ section {
 
     div {
         height: 100%;
-        width: 50vw;
         text-align: center;
         font-size: 2.5em;
         padding: 50px;

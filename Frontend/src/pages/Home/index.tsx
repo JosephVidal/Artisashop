@@ -95,12 +95,12 @@ const HomeView: React.FunctionComponent<Props> = () => {
         <div id="register-dark">
           <h2>Artisan</h2>
           <p>Créez un compte et venez proposer vos produits</p>
-          <Link className="red-button" to="/app/register">Créer un compte</Link>
+          <Link className="red-button" to="/register">Créer un compte</Link>
         </div>
         <div id="register-light">
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
-          <Link className="red-button" to="/app/register">Créer un compte</Link>
+          <Link className="red-button" to="/register">Créer un compte</Link>
         </div>
       </section>
       <section id="craftsman-section">
