@@ -107,7 +107,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
         <h2>Statistiques du site</h2>
         <div className="section-body">
           <div className="surface-ground px-4 py-5 md:px-6 lg:px-8">
-            <div className="grid">
+            <div className="flex flex-col md:flex-row">
               <div className="col-12 md:col-6 lg:col-3">
                 <div className="surface-card shadow-2 p-3 border-round">
                   <div className="flex justify-content-between mb-3">
