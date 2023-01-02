@@ -4,7 +4,6 @@ import {
   Routes as Wrapper,
   Route, Navigate, useLocation,
 } from "react-router-dom";
-
 import { ToastHandler } from "components/Toaster";
 import { colors } from "globals/styles";
 import HomeView from "pages/Home";
@@ -49,7 +48,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) =>
     <Wrapper>
       <Route element={<Template toastHandler={toastHandler} background={colors.darkBlue} />} />
       <Route element={<Template toastHandler={toastHandler} background={colors.beige} />}>
-        <Route index element={<HomeView View/>} />
+        <Route index element={<HomeView />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
         <Route path="search" element={<Search />} />
@@ -63,7 +62,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) =>
         <Route path="create-product" element={<CreateProductView />} />
         <Route path="update-product" element={<UpdateProductView />} />
         <Route path="reclamation" element={<ReclamationView />} />
-            <Route path="newsletter" element={<NewsletterPage />} />
+        <Route path="newsletter" element={<NewsletterPage />} />
         <Route path="about/craftsmans" element={<CraftsmanPres />} />
         <Route path="about/products" element={<ProductPres />} />
         <Route path="dashboard" element={<CraftsmanDashboard />} />
