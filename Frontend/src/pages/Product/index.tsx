@@ -44,8 +44,8 @@ const ProductView = () => {
         <div id="product-info">
           <h1>{product?.name}</h1>
           <Craftsman>
-            <img className="craftsman-img" src={product?.craftsman.profilePicture ?? "/img/craftsman/default.svg"} alt="test" />
-            <a href={craftsmanLink} id="craftsman-name">{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
+            <img className="craftsman-img" src={`/img/craftsman/${product?.craftsman.profilePicture ?? "default.svg"}`} alt="test" />
+            <a href={craftsmanLink}>{product?.craftsman.firstname} {product?.craftsman.lastname}</a>
           </Craftsman>
           <div id="tags">
             <p id="price">{product?.price.toFixed(2)}€</p>
@@ -54,7 +54,7 @@ const ProductView = () => {
           <p id="description">{product?.description}</p>
           <p id="stock">{productStock}</p>
           <QuantityInput quantity={quantity} onChange={changeQuantity(setQuantity, product?.quantity ?? 0)} />
-          <button className={buttonClass} onClick={() => addToBasket(basketApi, product?.id ?? 0, quantity)} type="submit">Ajouter au panier</button>
+          <button id="addToCart" className={buttonClass} onClick={() => addToBasket(basketApi, product?.id ?? 0, quantity)} type="submit">Ajouter au panier</button>
         </div>
       </div>
     </Wrapper>
@@ -73,6 +73,12 @@ const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
       quantity,
       currentState: "VALIDATED"
     }
-  })
+  }).then((e) => {
+    alert("Et hop, c'est dans la boîte !");
+    document.getElementById("addToCart")?.classList.add("active");
+  }, (e) => {
+    alert("Oups on dirait qu'il y a un problème, veuillez réessayer plus tard !");
+    document.getElementById("addToCart")?.classList.add("error");
+  });
 
 export default ProductView;

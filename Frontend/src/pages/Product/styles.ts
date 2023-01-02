@@ -1,10 +1,32 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const tiltShaking = keyframes`
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(2deg); }
+    50% { transform: rotate(0eg); }
+    75% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+`
+
+const shaking = keyframes`
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(5px); }
+    50% { transform: translateX(0px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0px); }
+`
 
 export const Tag = styled.span`
     padding: 3px 10px;
     border-radius: var(--elem-radius);
-    background-color: var(--bs-brown);
-    color: var(--bs-light);
+    background-color: var(--artshp-brown);
+    color: var(--artshp-white);
+
+    :not(:first-of-type) {margin-left: 5px;}
+
+    @media (max-width: 620px) {
+        font-size: 0.5em;
+    }
 `;
 
 export const Craftsman = styled.div`
@@ -18,16 +40,20 @@ export const Craftsman = styled.div`
     img {
         width: 50px;
         height: 50px;
-        /* object-fit: cover; */
+        object-fit: cover;
         margin-right: 20px;
-        object-fit: fill;
         border-radius: 100%;
         box-shadow: 0px 0px 30px #a0a0a0;
     }
 
+    a:hover {color: var(--artshp-orange);}
     a {
         text-decoration: none;
         margin: auto 0;
+    }
+
+    @media (max-width: 1250px) {
+        a {font-size: 0.6em}
     }
 `;
 
@@ -68,5 +94,29 @@ export const Wrapper = styled.div`
         height: 600px;
         object-fit: cover;
         border-radius: var(--elem-radius);
+        transition: var(--artshp-trans);
+    }
+
+    .error {animation: ${shaking} 0.2s linear;}
+    .active {
+        animation: ${tiltShaking} 0.2s linear;
+        transition: var(--artshp-trans);
+        background-color: #63af6d;
+    }
+
+    @media (max-width: 1250px) {
+        #product-info {padding-left: 10px;}
+
+        #price {
+            margin: 0;
+            font-size: 0.1em;
+        }
+
+        .carrousel-img {
+            width: 300px;
+            height: 300px;
+        }
+
+        h1 {font-size: 1.5em !important;}
     }
 `;

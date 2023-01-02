@@ -12,7 +12,7 @@ section {
     }
 }
 
-.search-input {width: 20vw;}
+.search-input {width: 30vw;}
 
 #search-section {
     display: flex;
@@ -84,6 +84,76 @@ section {
     }
 }
 
+.md: px-6 {
+        padding-left: 3rem!important;
+        padding-right: 3rem!important;
+    }
+
+    .py-5 {
+        padding-top: 2rem!important;
+        padding-bottom: 2rem!important;
+    }
+
+    .grid {
+        display: flex;
+        color: white;
+        flex-wrap: wrap;
+        margin-right: -0.5rem;
+        margin-top: -0.5rem;
+    }
+
+    .col-12 {
+        padding: 10px;
+    }
+
+    .surface-card {
+        background-color: var(--artshp-dark-blue);!important;
+    }
+
+    .p-3 {
+        padding: 2rem!important;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem!important;
+    }
+
+    .justify-content-between {
+        justify-content: space-between!important;
+    }
+
+    .flex {
+        display: flex!important;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .font-medium {
+        font-weight: 600!important;
+        font-size: 2.2em;
+        margin-bottom: 1rem!important;
+    }
+
+    .text-green-500 {
+        color: green!important;
+        font-size: 2.2em;
+    }
+
+    .text-500 {
+        color: grey!important;
+        font-size: 2.2em;
+    }
+
+    .shadow-2 {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, .03), 0 0 2px rgba(0, 0, 0, .06), 0 2px 6px rgba(0, 0, 0, .12)!important;
+    }
+
+    div {
+        display: block;
+    }
+
 #register-dark {background-color: var(--artshp-dark-blue);}
 #register-light {
     background-color: var(--artshp-white);
@@ -133,5 +203,12 @@ section {
     #register-section {
         div {font-size: 1em;}
     }
+
+    #search-block {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .search-input {width: 50vw;}
 }
 `;

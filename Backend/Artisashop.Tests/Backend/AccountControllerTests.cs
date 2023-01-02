@@ -1,16 +1,17 @@
+using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-using System.Net;
-using NUnit.Framework;
-using Artisashop.Models;
 using Artisashop.Models.ViewModel;
+using Artisashop.Models;
+using Artisashop.Models.ViewModel.Accounts;
 
 namespace Artisashop.Tests.Backend
 {
@@ -20,7 +21,6 @@ namespace Artisashop.Tests.Backend
         BADREQUEST
     }
 
-    [Order(1)]
     [TestFixture]
     public static class AccountControllerTest
     {
@@ -29,13 +29,13 @@ namespace Artisashop.Tests.Backend
         public static List<string> ids = new List<string>();
 
         [Order(1)]
-        [TestCase("jean.epp@epitech.eu", "Jean", "Epp", "Password_1234", Roles.Admin, null, "", TestName = "Add Jean Epp", Category = "Register Success")]
-        [TestCase("john.artisan@epitech.eu", "John", "Artisan", "Password_1234", Roles.Seller, null, "", TestName = "Add John Artisan", Category = "Register Success")]
-        [TestCase("baby.partner@epitech.eu", "Baby", "Partner", "Password_1234", Roles.Partner, null, "", TestName = "Add Baby Partner", Category = "Register Success")]
-        [TestCase("jane.consumer@epitech.eu", "Jane", "Consumer", "Password_1234", Roles.User, null, "", TestName = "Add Jane Consumer", Category = "Register Success")]
-        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Roles.User, null, "", TestName = "Add Delete User", Category = "Register Success")]
-        [TestCase("delete.user@epitech.eu", "Delete", "User", "Password_1234", Roles.User, null, "Error", TestName = "Account already exist", Category = "Register Fail")]
-        public static async Task Register(string email, string firstname, string lastname, string password, string role, string job, string responseType)
+        [TestCase("jean.epp@epitech.eu", "Jean", "Epp", "Password_1234", Roles.Admin, null, TestName = "Add Jean Epp", Category = "Register Success")]
+        [TestCase("john.artisan@epitech.eu", "John", "Artisan", "Password_1234", Roles.Seller, "Ebeniste", TestName = "Add John Artisan", Category = "Register Success")]
+        [TestCase("baby.partner@epitech.eu", "Baby", "Partner", "Password_1234", Roles.Partner, null, TestName = "Add Baby Partner", Category = "Register Success")]
+        [TestCase("jane.consumer@epitech.eu", "Jane", "Consumer", "Password_1234", Roles.User, null, TestName = "Add Jane Consumer", Category = "Register Success")]
+        [TestCase("delete.user@epitech.eu", "Delete", "Account", "Password_1234", Roles.User, null, TestName = "Add Delete Account", Category = "Register Success")]
+        [TestCase("delete.user@epitech.eu", "Delete", "Account", "Password_1234", Roles.User, null, "Error: DuplicateUserName - Username 'delete.user@epitech.eu' is already taken.", TestName = "Account already exist", Category = "Register Fail")]
+        public static async Task Register(string email, string firstname, string lastname, string password, string role, string job, string expt = null)
         {
             Register model = new()
             {
@@ -67,20 +67,14 @@ namespace Artisashop.Tests.Backend
             }
             catch (Exception)
             {
-                if (responseType == "Error")
-                {
-                    var content = await response.Content.ReadFromJsonAsync<string>();
-                    Assert.NotNull(content);
-                    Console.WriteLine(content);
-                    Assert.True(content!.StartsWith("Failed : DuplicateUserName"));
-                }
+                Common.Control(expt, response!);
             }
         }
 
         [Order(2)]
-        [TestCase("delete.user@epitech.eu", "Password_1234", TestName = "Login Delete User", Category = "Login Success")]
-        [TestCase("delete.user@epitech.eu", "", "Error", TestName = "Login Fail", Category = "Login Fail")]
-        public static async Task Login(string mail, string password, string? responseType = null)
+        [TestCase("delete.user@epitech.eu", "Password_1234", TestName = "Login Delete Account", Category = "Login Success")]
+        [TestCase("delete.user@epitech.eu", "", "Failed", typeof(SignInResult), TestName = "Login Fail", Category = "Login Fail")]
+        public static async Task Login(string mail, string password, string? expt = null, Type? responseType = null)
         {
             Login model = new()
             {
@@ -107,15 +101,12 @@ namespace Artisashop.Tests.Backend
             }
             catch (Exception)
             {
-                if (responseType == "Error")
-                {
-                    Assert.AreEqual("Failed", (await response.Content.ReadFromJsonAsync<SignInResult>())!.ToString());
-                }
+                Common.Control(expt!, response, responseType);
             }
         }
 
         [Order(3)]
-        [TestCase(TestName = "Get Delete User", Category = "GetUser Success")]
+        [TestCase(TestName = "Get Delete Account", Category = "GetUser Success")]
         public static async Task GetUser()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/account");
@@ -131,9 +122,9 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(3)]
-        [TestCase("0", TestName = "Get Delete User by id", Category = "GetAccountId Success")]
-        [TestCase("rugfqoelhfpfdbqoezgf", "NotFound", TestName = "GetAccountId Fail", Category = "GetAccountId Fail")]
-        public static async Task GetAccountId(string id = "", string responseType = "")
+        [TestCase("0", "jean.epp@epitech.eu", TestName = "Get Delete Account by id", Category = "GetAccountId Success")]
+        [TestCase("rugfqoelhfpfdbqoezgf", "Craftsman with id rugfqoelhfpfdbqoezgf not found", TestName = "GetAccountId Fail", Category = "GetAccountId Fail")]
+        public static async Task GetAccountId(string id, string expt)
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/account/" + (int.TryParse(id, out int idt) == true ? ids[idt] : id));
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -144,20 +135,17 @@ namespace Artisashop.Tests.Backend
             {
                 response.EnsureSuccessStatusCode();
 
-                Account? result = await response.Content.ReadFromJsonAsync<Account>();
+                GetAccountResult? result = await response.Content.ReadFromJsonAsync<GetAccountResult>();
                 Assert.NotNull(result);
-                Assert.AreEqual("jean.epp@epitech.eu", result!.Email);
+                Assert.AreEqual(expt, result!.Account.Email);
             } catch (Exception)
             {
-                if (responseType == "NotFound")
-                {
-                    Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
-                }
+                Common.Control(expt, response);
             }
         }
 
         [Order(4)]
-        [TestCase(TestName = "Update Delete User", Category = "UpdateUser Success")]
+        [TestCase(TestName = "Update Delete Account", Category = "UpdateUser Success")]
         public static async Task UpdateUser()
         {
             UpdateAccount model = new()
@@ -184,7 +172,7 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(4)]
-        [TestCase(TestName = "Delete Delete User", Category = "DeleteUser Success")]
+        [TestCase(TestName = "Delete Delete Account", Category = "DeleteUser Success")]
         public static async Task DeleteUser()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/account");

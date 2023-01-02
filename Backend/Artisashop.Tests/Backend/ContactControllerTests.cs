@@ -13,7 +13,7 @@ namespace Artisashop.Tests.Backend
     {
         public static readonly HttpClient _client = new TestingWebAppFactory<Program>().CreateClient();
 
-        [Test]
+        [TestCase(TestName = "Index", Category = "Contact Success")]
         public static async Task Index()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/contact");
@@ -27,7 +27,7 @@ namespace Artisashop.Tests.Backend
             Assert.AreEqual("Sales", result!.ReceiverList[1]);
         }
 
-        [Test]
+        [TestCase(TestName = "Send mail", Category = "Send Success")]
         public static async Task Send()
         {
             Contact? model = new Contact()

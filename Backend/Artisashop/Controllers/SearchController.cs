@@ -26,6 +26,11 @@ namespace Artisashop.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// search for multiple products in the database
+        /// </summary>
+        /// <param name="search">search filter</param>
+        /// <returns>a list of product or a error string</returns>
         [HttpGet("product")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Product>), (int)HttpStatusCode.OK)]
@@ -59,6 +64,11 @@ namespace Artisashop.Controllers
             }
         }
 
+        /// <summary>
+        /// search for multiple craftsmans in the database
+        /// </summary>
+        /// <param name="search">search filter</param>
+        /// <returns>a list of product or a error string</returns>
         [HttpGet("craftsman")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(List<Account>), (int)HttpStatusCode.OK)]
@@ -92,11 +102,24 @@ namespace Artisashop.Controllers
             }
         }
 
+        /// <summary>
+        /// Calculate the distance between two object using Haversine Formula with the earth radius in meter (6 371 000m)
+        /// </summary>
+        /// <param name="a">first object position</param>
+        /// <param name="b">second object position</param>
+        /// <returns>Current distance between the two object</returns>
         private double Haversine(GPSCoord a, GPSCoord b)
         {
             return Haversine(a, b, 6371000); // Call Haversine Formula W/ the earth radius in meter
         }
 
+        /// <summary>
+        /// Calculate the distance between two object using Haversine Formula
+        /// </summary>
+        /// <param name="a">first object position</param>
+        /// <param name="b">second object position</param>
+        /// <param name="radius">radius of your sphere</param>
+        /// <returns>Current distance between the two object</returns>
         private double Haversine(GPSCoord a, GPSCoord b, double radius)
         {
             double radFact = Math.PI / 180;

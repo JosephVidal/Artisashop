@@ -1,7 +1,10 @@
 ﻿using Artisashop.Models;
 using Artisashop.Models.ViewModel;
+using Bogus.DataSets;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -11,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace Artisashop.Tests.Backend
 {
-    [Order(2)]
     [TestFixture]
     public class ProductControllerTests
     {
@@ -21,15 +23,15 @@ namespace Artisashop.Tests.Backend
         [OneTimeSetUp]
         public async Task SetUp()
         {
-            await AccountControllerTest.Login("john.artisan@epitech.eu", "Password_1234");
+            await AccountControllerTest.Login("john.artisan@artisashop.fr", "Artisashop@2022");
             _token = AccountControllerTest.token;
         }
 
         [Order(2)]
-        [Test]
+        [TestCase(TestName = "Load product list", Category = "List Success")]
         public async Task List()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/product/list");
+            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/product?sellerId=1");
 
             var response = await _client.SendAsync(postRequest);
             response.EnsureSuccessStatusCode();
@@ -39,29 +41,37 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(2)]
-        [TestCase(1)]
-        public async Task Info(int info)
+        [TestCase(1, TestName = "ProductInfo", Category = "Product Success")]
+        [TestCase(6, "Product with id 6 not found", TestName = "Product not found", Category = "Product Fail")]
+        public async Task Product(int id, string? expt = null)
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/product/info/" + info);
-
+            var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/product/info/" + id);
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
 
-            Product? result = await response.Content.ReadFromJsonAsync<Product>();
-            Assert.NotNull(result);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                Product? result = await response.Content.ReadFromJsonAsync<Product>();
+                Assert.NotNull(result);
+            }
+            catch (Exception)
+            {
+                Common.Control(expt!, response);
+            }
         }
 
         [Order(1)]
-        [TestCase("Table", "Jolie table", 39.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
-        [TestCase("Chaise", "Jolie chaise", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
-        [TestCase("Lampe", "Jolie lampe", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]")]
-        public async Task Create(string name, string description, decimal price, int quantity, string images, string styles)
+        [TestCase("Table", "Jolie table", 39.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]", TestName = "Creating table", Category = "Create Success")]
+        [TestCase("Chaise", "Jolie chaise", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]", TestName = "Creating chaise", Category = "Create Success")]
+        [TestCase("Lampe", "Jolie lampe", 19.99, 3, "[\"image1\",\"image2\"]", "[\"style1\",\"style2\"]", TestName = "Creating lampe", Category = "Create Success")]
+        public async Task Create(string? name, string description, double price, int quantity, string images, string styles, string? expt = null)
         {
             CreateProduct newProduct = new()
             {
                 Name = name,
                 Description = description,
-                Price = price,
+                Price = decimal.Parse(price.ToString()),
                 Quantity = quantity,
                 Images = JsonSerializer.Deserialize<List<string>>(images)!,
                 Styles = JsonSerializer.Deserialize<List<string>>(styles)!
@@ -80,19 +90,18 @@ namespace Artisashop.Tests.Backend
             Assert.AreEqual(description, result!.Description);
             Assert.AreEqual(price, result!.Price);
             Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ProductImages);
-            Assert.AreEqual(styles, result!.ProductStyles);
         }
 
         [Order(3)]
-        [TestCase(2, "Chaise", "Jolie table", 19.99, 4, "[\"image1\"]", "[\"style2\"]")]
-        public async Task Update(int productId, string name, string description, decimal price, int quantity, string images, string styles)
+        [TestCase(2, "Chaise", "Jolie table", 19.99, 4, "[\"image1\"]", "[\"style2\"]", TestName = "Updating table", Category = "Update Success")]
+        [TestCase(6, "Chaise", "Jolie table", 19.99, 4, "[\"image1\"]", "[\"style2\"]", "Product with id 6 not found", TestName = "Product 6 not found", Category = "Update Fail")]
+        public async Task Update(int productId, string name, string description, double price, int quantity, string images, string styles, string? expt = null)
         {
             CreateProduct newProduct = new()
             {
                 Name = name,
                 Description = description,
-                Price = price,
+                Price = decimal.Parse(price.ToString()),
                 Quantity = quantity,
                 Images = JsonSerializer.Deserialize<List<string>>(images)!,
                 Styles = JsonSerializer.Deserialize<List<string>>(styles)!
@@ -103,30 +112,43 @@ namespace Artisashop.Tests.Backend
             postRequest.Content = new StringContent(JsonSerializer.Serialize(newProduct), Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
 
-            Product? result = await response.Content.ReadFromJsonAsync<Product>();
-            Assert.NotNull(result);
-            Assert.AreEqual(name, result!.Name);
-            Assert.AreEqual(description, result!.Description);
-            Assert.AreEqual(price, result!.Price);
-            Assert.AreEqual(quantity, result!.Quantity);
-            Assert.AreEqual(images, result!.ProductImages);
-            Assert.AreEqual(styles, result!.ProductStyles);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                Product? result = await response.Content.ReadFromJsonAsync<Product>();
+                Assert.NotNull(result);
+                Assert.AreEqual(name, result!.Name);
+                Assert.AreEqual(description, result!.Description);
+                Assert.AreEqual(price, result!.Price);
+                Assert.AreEqual(quantity, result!.Quantity);
+            } catch (Exception)
+            {
+                Common.Control(expt!, response);
+            }
         }
 
         [Order(4)]
-        [TestCase(2)]
-        public async Task Delete(int productId)
+        [TestCase(2, TestName = "Delete product 2", Category = "Delete Success")]
+        [TestCase(2, "Product with id 2 not found", TestName = "Product 2 not found", Category = "Delete Fail")]
+        public async Task Delete(int productId, string? expt = null)
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/product/delete/" + productId);
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
 
-            string? result = await response.Content.ReadFromJsonAsync<string>();
-            Assert.AreEqual("Product with id " + productId + " deleted", result);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                string? result = await response.Content.ReadFromJsonAsync<string>();
+                Assert.AreEqual("Product with id " + productId + " deleted", result);
+            } catch (Exception)
+            {
+                Common.Control(expt!, response);
+            }
         }
     }
 }

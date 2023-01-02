@@ -10,7 +10,7 @@ namespace Artisashop.Tests.Backend
     {
         public static readonly HttpClient _client = new TestingWebAppFactory<Program>().CreateClient();
 
-        [Test]
+        [TestCase(TestName = "Load stats", Category = "Info Success")]
         public async Task Info()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/home");
@@ -20,11 +20,11 @@ namespace Artisashop.Tests.Backend
 
             Home? result = await response.Content.ReadFromJsonAsync<Home>();
             Assert.NotNull(result);
-            Assert.AreEqual(3, result!.ProductSample.Count);
-            Assert.AreEqual(1, result!.CraftsmanSample.Count);
-            Assert.AreEqual(3, result!.ProductNumber);
-            Assert.AreEqual(1, result!.CraftsmanNumber);
-            Assert.AreEqual(2, result!.Inscrit);
+            Assert.AreEqual(5, result!.ProductSample.Count);
+            Assert.AreEqual(5, result!.CraftsmanSample.Count);
+            Assert.AreEqual(27, result!.ProductNumber);
+            Assert.AreEqual(10, result!.CraftsmanNumber);
+            Assert.AreEqual(100, result!.Inscrit);
         }
     }
 }

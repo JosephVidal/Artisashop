@@ -127,8 +127,8 @@ namespace Artisashop.Controllers
                      !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
                     return BadRequest("Invalid joined file");
                 //db:
-                Account sender = await _db.Users!.FirstAsync(user => user.Id == message!.FromUserId);
-                Account receiver = await _db.Users!.FirstAsync(user => user.Id == message!.ToUserID);
+                Account? sender = await _db.Users!.FirstOrDefaultAsync(user => user.Id == message!.FromUserId);
+                Account? receiver = await _db.Users!.FirstOrDefaultAsync(user => user.Id == message!.ToUserID);
                 if (sender == null)
                     return NotFound("Sender with id " + message!.FromUserId + " not found");
                 if (receiver == null)
@@ -138,7 +138,7 @@ namespace Artisashop.Controllers
                     CreatedAt = DateTime.Now,
                     Sender = sender,
                     Receiver = receiver,
-                    Content = message.Content,
+                    Content = message.Content != null ? message.Content : null,
                     Joined = message.Joined,
                     Filename = message.Filename,
                 };
@@ -209,7 +209,11 @@ namespace Artisashop.Controllers
         {
             try
             {
-                return Ok(await _db.ChatMessages!.FirstAsync(message => message.Id == msgId));
+                ChatMessage? msg = await _db.ChatMessages!.FirstOrDefaultAsync(message => message.Id == msgId);
+
+                if (msg == null)
+                    return NotFound("Message with id " + msgId + " not found");
+                return Ok(msg);
             }
             catch (Exception e)
             {
@@ -231,7 +235,10 @@ namespace Artisashop.Controllers
             try
             {
                 //db:
-                var message = await _db.ChatMessages!.FirstAsync(message => message.Id == msgId);
+                var message = await _db.ChatMessages!.FirstOrDefaultAsync(message => message.Id == msgId);
+
+                if (message == null)
+                    return NotFound("Message with id " + msgId + " not found");
                 message.Content = content;
                 _db.ChatMessages!.Update(message);
                 await _db.SaveChangesAsync();
@@ -256,13 +263,18 @@ namespace Artisashop.Controllers
         /// <returns>Dictionnary with success message or error</returns>
         [HttpDelete("{msgId:int}")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteMsg(int msgId)
         {
             try
             {
                 //db:
-                var message = await _db.ChatMessages!.FirstAsync(message => message.Id == msgId);
+                var message = await _db.ChatMessages!.FirstOrDefaultAsync(message => message.Id == msgId);
+
+                if (message == null)
+                    return NotFound("Message with id " + msgId + " not found");
+
                 _db.ChatMessages!.Remove(message);
                 await _db.SaveChangesAsync();
                 //chat hub:

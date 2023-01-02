@@ -9,6 +9,7 @@ using System.Text.Json;
 using Artisashop.Models;
 using static Artisashop.Models.Basket;
 using Artisashop.Models.ViewModel;
+using System;
 
 namespace Artisashop.Tests.Backend
 {
@@ -21,12 +22,12 @@ namespace Artisashop.Tests.Backend
         [OneTimeSetUp]
         public async Task SetUp()
         {
-            await AccountControllerTest.Login("jane.consumer@epitech.eu", "Password_1234");
+            await AccountControllerTest.Login("jane.consumer@artisashop.fr", "Artisashop@2022");
             _token = AccountControllerTest.token;
         }
 
         [Order(2)]
-        [Test]
+        [TestCase(TestName = "Index Success", Category = "Index Success")]
         public async Task Index()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/basket");
@@ -41,23 +42,32 @@ namespace Artisashop.Tests.Backend
         }
 
         [Order(1)]
-        [TestCase(1, 3)]
-        [TestCase(3, 6)]
-        public async Task Add(int productID, int quantityModifier)
+        [TestCase(1, 3, TestName = "Add Product with id 1", Category = "Add Success")]
+        [TestCase(3, 6, TestName = "Add Product with id 3", Category = "Add Success")]
+        [TestCase(7, 8, "Product with id 7 not found", TestName = "Not found", Category = "Add Fail")]
+        public async Task Add(int productID, int quantityModifier, string? expt = "")
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/basket?productID=" + productID + "&quantityModifier=" + quantityModifier);
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
 
-            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
-            Assert.NotNull(result);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+                Assert.NotNull(result);
+            } catch (HttpRequestException)
+            {
+                Common.Control(expt!, response);
+            }
         }
 
         [Order(3)]
-        [TestCase(1, 2, DeliveryOption.DELIVERY, State.ONGOING)]
-        public async Task Update(int id, int quantity, DeliveryOption deliveryOpt, State currentState)
+        [TestCase(1, 2, DeliveryOption.DELIVERY, State.ONGOING, TestName = "Update Product with id 1", Category = "Update Success")]
+        [TestCase(5, 2, DeliveryOption.DELIVERY, State.ONGOING, "Basket with id 5 not found", TestName = "Basket item not found", Category = "Update Fail")]
+        public async Task Update(int id, int quantity, DeliveryOption deliveryOpt, State currentState, string? expt = "")
         {
             UpdateBasket basket = new()
             {
@@ -72,40 +82,61 @@ namespace Artisashop.Tests.Backend
             postRequest.Content = new StringContent(JsonSerializer.Serialize(basket), Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
 
-            Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
-            Assert.NotNull(result);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                Basket? result = await response.Content.ReadFromJsonAsync<Basket>();
+                Assert.NotNull(result);
+            } catch (HttpRequestException)
+            {
+                Common.Control(expt!, response);
+            }
         }
 
         [Order(4)]
-        [TestCase(1)]
-        public async Task Delete(int basketId)
+        [TestCase(1, TestName = "Delete item with id 1", Category = "Delete Success")]
+        [TestCase(6, "Basket item with id 6 not found", TestName = "Basket item 6 not found", Category = "Delete Fail")]
+        public async Task Delete(int basketId, string? expt = "")
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Delete, "api/basket/" + basketId);
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response.EnsureSuccessStatusCode();
 
-            string? result = await response.Content.ReadFromJsonAsync<string>();
-            Assert.NotNull(result);
-            Assert.AreEqual("Basket item with id " + basketId + " not found", result);
+                string? result = await response.Content.ReadFromJsonAsync<string>();
+                Assert.NotNull(result);
+                Assert.AreEqual("Basket item with id " + basketId + " not found", result);
+            } catch (HttpRequestException)
+            {
+                Common.Control(expt!, response);
+            }
         }
 
         [Order(5)]
-        [TestCase("4 rue de l'arc-en-ciel")]
-        public async Task Payement(string address)
+        [TestCase("4 rue de l'arc-en-ciel", TestName = "Payment success", Category = "Payment Success")]
+        [TestCase("", "Adresse Invalide",  TestName = "Wrong address", Category = "Payment Fail")]
+        public async Task Payement(string address, string? expt = "")
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/basket/pay");
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             postRequest.Content = new StringContent(JsonSerializer.Serialize(address), Encoding.UTF8, "application/json");
 
             var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response.EnsureSuccessStatusCode();
 
-            Dictionary<string, object>? result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
-            Assert.NotNull(result);
+                Dictionary<string, object>? result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+                Assert.NotNull(result);
+            } catch (HttpRequestException)
+            {
+                Common.Control(expt!, response);
+            }
         }
     }
 }

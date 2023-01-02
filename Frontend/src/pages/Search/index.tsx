@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Field, Form, Formik, useFormik } from "formik";
+import React, { useEffect, useMemo } from "react";
+import { Field, Form, Formik } from "formik";
 import _ from "lodash";
 import { atom, PrimitiveAtom, useAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import useAsync from "hooks/useAsync";
-import { Account, Product, ProductApi, ProductStyle, SearchApi } from "../../api";
+import { ProductApi, ProductStyle, SearchApi } from "../../api";
 import { Wrapper, SearchHeader, SearchFilters } from "./styles";
 
 // --- INTERFACE ---
@@ -126,6 +126,7 @@ const Search: React.FunctionComponent<Props> = () => {
       : []
     )
   }, [searchProductsAsync.value]);
+
   useEffect(() => {
     setJobFilters(searchCraftsmenAsync.value
       ? _.uniq(searchCraftsmenAsync.value?.map(c => c.job)).map(x => ({ job: x, checked: false }))
@@ -162,7 +163,7 @@ const Search: React.FunctionComponent<Props> = () => {
                 t: values.isProduct.toString(),
               })
 
-              console.log(values)
+              // console.log(values)
             }}
           >
             {({ values }) => (
@@ -185,14 +186,16 @@ const Search: React.FunctionComponent<Props> = () => {
               </Form>
             )}
           </Formik>
-          <span className="category">
-            <a href="#search" className="search-header-link">Mobilier 🪑</a>
-            <a href="#search" className="search-header-link">Poterie 🏺</a>
-          </span>
-          <span className="category">
-            <a href="#search" className="search-header-link">Arts de la table 🍴</a>
-            <a href="#search" className="search-header-link">Vêtements 👗</a>
-          </span>
+          <div id="suggest">
+            <span className="category">
+              <a href="#search" className="search-header-link">Mobilier 🪑</a>
+              <a href="#search" className="search-header-link">Poterie 🏺</a>
+            </span>
+            <span className="category">
+              <a href="#search" className="search-header-link">Arts de la table 🍴</a>
+              <a href="#search" className="search-header-link">Vêtements 👗</a>
+            </span>
+          </div>
         </SearchHeader>
 
         <div id="search-body">
@@ -217,8 +220,8 @@ const Search: React.FunctionComponent<Props> = () => {
             <div id="result-list">
               {
                 isProduct
-                  ? filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/product/${elem?.id}`} />)
-                  : filteredCraftsmen?.map(elem => <CraftsmanresultCard img={elem.profilePicture ?? "/img/craftsman/default.svg"} name={elem.firstname} job={elem.job ?? ""} href={`/craftsman/${elem?.id ?? ""}`} />)
+                  ? filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/app/product/${elem?.id}`} />)
+                  : filteredCraftsmen?.map(elem => <CraftsmanresultCard img={`/img/craftsman/${elem.profilePicture ?? "default.svg"}`} name={elem.firstname} job={elem.job ?? ""} href={`/app/craftsman/${elem?.id ?? ""}`} />)
               }
             </div>
           </section>
@@ -232,7 +235,7 @@ const Search: React.FunctionComponent<Props> = () => {
             {suggestedProductsResults.value?.map(elem =>
               <ProductCard key={elem.id}
                 productStyles={elem.productStyles}
-                img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "table à thé.jpg"}`}
+                img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.svg"}`}
                 serie="Petite série"
                 name={elem.name}
                 price={elem.price}

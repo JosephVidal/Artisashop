@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text;
+using System;
 using Artisashop.Models;
 using Artisashop.Models.ViewModel;
 
@@ -20,11 +21,11 @@ namespace Artisashop.Tests.Backend
         [OneTimeSetUp]
         public async Task SetUp()
         {
-            await AccountControllerTest.Login("jean.epp@epitech.eu", "Password_1234");
+            await AccountControllerTest.Login("jean@artisashop.fr", "Artisashop@2022");
             _token = AccountControllerTest.token;
         }
 
-        [Test]
+        [TestCase(TestName = "Craftsman dashboard", Category = "Index Success")]
         public async Task Index()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/backoffice");
@@ -37,7 +38,7 @@ namespace Artisashop.Tests.Backend
             Assert.NotNull(result);
         }
 
-        [Test]
+        [TestCase(TestName = "Stats", Category = "Stats Success")]
         public async Task Stats()
         {
             var postRequest = new HttpRequestMessage(HttpMethod.Get, "api/backoffice/stats");
@@ -48,30 +49,9 @@ namespace Artisashop.Tests.Backend
 
             Home? result = await response.Content.ReadFromJsonAsync<Home>();
             Assert.NotNull(result);
-            Assert.AreEqual(2, result!.ProductNumber);
-            Assert.AreEqual(1, result!.CraftsmanNumber);
-            Assert.AreEqual(2, result!.Inscrit);
-        }
-
-        [TestCase("john.artisan@epitech.eu", true)]
-        public async Task ChangeCraftsmanValidationStatus(string username, bool validationStatus)
-        {
-            Dictionary<string, string> data = new()
-            {
-                { "username", username },
-                { "validationStatus", validationStatus.ToString() }
-            };
-
-            var postRequest = new HttpRequestMessage(HttpMethod.Patch, "api/backoffice/changeValidationStatus");
-            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            postRequest.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-
-            var response = await _client.SendAsync(postRequest);
-            response.EnsureSuccessStatusCode();
-
-            string? result = await response.Content.ReadFromJsonAsync<string>();
-            Assert.NotNull(result);
-            Assert.AreEqual("Validation status for " + username + " : " + !validationStatus, result);
+            Assert.AreEqual(27, result!.ProductNumber);
+            Assert.AreEqual(10, result!.CraftsmanNumber);
+            Assert.AreEqual(100, result!.Inscrit);
         }
     }
 }

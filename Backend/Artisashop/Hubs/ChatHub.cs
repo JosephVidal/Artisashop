@@ -3,14 +3,26 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Artisashop.Hubs
 {
+    /// <summary>
+    /// Handles the dynamic chat using SignalR
+    /// </summary>
     public class ChatHub : Hub<IChatClient>
     {
+        /// <summary>
+        /// list of connected users to the chat
+        /// </summary>
         public static readonly List<ChatUserDetail> connectedUsers = new();
 
         public ChatHub()
         {
         }
 
+        /// <summary>
+        /// Called when a user connect themself to the chat
+        /// </summary>
+        /// <param name="userID">ID of the user</param>
+        /// <param name="username">username use in the chat by the user</param>
+        /// <returns></returns>
         public async Task Connect(string userID, string username)
         {
             string id = Context.ConnectionId;
@@ -28,11 +40,19 @@ namespace Artisashop.Hubs
             //await Clients.Caller.SendAsync("OnConnected", userID, "Connected as " + username + " (" + userID + ")");
         }
 
+        /// <summary>
+        /// Called by SignalR when a new client connect themself to the hub
+        /// </summary>
+        /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
         }
 
+        /// <summary>
+        /// Called by SignalR when a new client disconnect themself to the hub
+        /// </summary>
+        /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception? e)
         {
             ChatUserDetail? item = connectedUsers.Where(x => x.ConnectionId == Context.ConnectionId).FirstOrDefault();
@@ -41,7 +61,7 @@ namespace Artisashop.Hubs
                 connectedUsers.Remove(item);
                 if (!connectedUsers.Any(x => x.UserID == item.UserID))
                 {
-                    await Clients.All.UserDisconntection(item.UserID);
+                    await Clients.All.UserDisconnection(item.UserID);
                     //await Clients.All.SendAsync("UserDisconntection", item.UserID);
                 }
             }

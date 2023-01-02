@@ -139,7 +139,7 @@ namespace Artisashop.Controllers
         {
             try
             {
-                Basket? basket = await _db.Baskets!.FirstAsync(basket => basket.Id == basketId);
+                Basket? basket = await _db.Baskets!.FirstOrDefaultAsync(basket => basket.Id == basketId);
 
                 if (basket == null)
                     return NotFound("Basket item with id " + basketId + " not found");

@@ -21,15 +21,15 @@ const Footer: React.FunctionComponent<Props> = () => (
       <div id="foot-content">
         <div>
           <h3>A propos</h3>
-          <Link to="/app">L&apos;équipe</Link>
+          <Link to="/app">L&lsquo;équipe</Link>
           <Link to="/app">Nous rejoindre</Link>
            <Link to="/admin">Portail modérateur</Link> 
         </div>
         <div>
           <h3>Boutique</h3>
-          <Link to="/app">Les créateurs</Link>
-          <Link to="/app">Leur créations</Link>
-          <Link to="/app">S&apos;inscrire</Link>
+          <Link to="/app/about/craftsmans">Les créateurs</Link>
+          <Link to="/app/about/products">Leur créations</Link>
+          <Link to="/app/register">S&apos;inscrire</Link>
         </div>
         <div>
           <h3>Aide</h3>
@@ -59,7 +59,7 @@ const Footer: React.FunctionComponent<Props> = () => (
           </Link>
         </div>
         <p>Artisashop 2022</p>
-        <span/>
+        <span id="elem"/>
       </div>
     </footer>
   </FooterWrapper>
