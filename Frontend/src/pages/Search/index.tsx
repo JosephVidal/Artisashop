@@ -229,7 +229,7 @@ const Search: React.FunctionComponent<Props> = () => {
         <div id="suggestions">
           <h2>Pour vous :</h2>
           <div>
-            {suggestedProductsResults.status?.toString()}
+            {/* {suggestedProductsResults.status?.toString()} */}
           </div>
           <div id="suggestions-wrapper">
             {suggestedProductsResults.value?.map(elem =>
