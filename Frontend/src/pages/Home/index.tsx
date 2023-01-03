@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Home } from "api/models/Home";
-import { BackofficeApi } from "api";
 import useAsync from "hooks/useAsync";
 import useApi from "hooks/useApi";
 import CraftsmanCard from "components/CraftsmanCard";
@@ -10,7 +9,7 @@ import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import _ from "lodash";
 import { Wrapper } from "./styles";
-import { ProductApi, HomeApi } from "../../api";
+import { BackofficeApi, ProductApi, HomeApi } from "../../api";
 
 interface Props { }
 
@@ -78,9 +77,9 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/Applique papier.jpg" name="Applique en papier" price={297.92} href="/product/2" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
-          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf d'extérieur" price={473.81} href="/product/20" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
-          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/product/9" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
+          <ProductCard img="img/product/Applique papier.jpg" name="Applique" price={297.92} href="/product/4" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
+          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf de pâques" price={473.81} href="/product/3" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
+          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/product/5" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>
