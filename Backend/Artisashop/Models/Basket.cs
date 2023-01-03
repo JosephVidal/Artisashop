@@ -60,8 +60,8 @@ namespace Artisashop.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum State
         {
-            WAITINGCRAFTSMAN = 0,
-            WAITINGCONSUMER = 1,
+            WAITINGCONSUMER = 0,
+            WAITINGCRAFTSMAN = 1,
             REFUSED = 2,
             VALIDATED = 3,
             ONGOING = 4,

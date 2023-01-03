@@ -71,7 +71,7 @@ const addToBasket = (basketApi: BasketApi, id: number, quantity: number) =>
     createBasket: {
       productId: id,
       quantity,
-      currentState: "VALIDATED"
+      currentState: "WAITINGCONSUMER"
     }
   }).then((e) => {
     alert("Et hop, c'est dans la boîte !");
