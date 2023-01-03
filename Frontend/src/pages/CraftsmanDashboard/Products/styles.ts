@@ -12,6 +12,30 @@ export const Wrapper = styled.div`
   align-content: center;
 `;
 
+export const NewProductButton = styled.div`
+  width: 190px;
+  height: 40px;
+  background: ${colors.darkRed};
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 10px;
+  
+  :hover {
+    background: ${colors.orange};
+  }
+  
+  & svg {
+    margin-right: 10px;
+    color: white;
+  }
+`;
+
 export const ProductWrapper = styled.div`
   display: flex;
   flex-direction: row;

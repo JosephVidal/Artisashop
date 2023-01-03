@@ -4,9 +4,11 @@ import useApi from "hooks/useApi";
 import { priceFormatter } from "components/ProductCard";
 import { useAtom } from "jotai";
 import userAtom from "states/atoms/user";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
+import { AiOutlinePlus } from "react-icons/ai";
 import {
   Wrapper,
+  NewProductButton,
   ProductWrapper,
   ImageWrapper,
   ProductDetails,
@@ -49,6 +51,7 @@ const Products: FC = () => {
 
   return (
     <Wrapper>
+      <NewProductButton onClick={() => navigate("/app/create-product")}><AiOutlinePlus />  Nouveau produit</NewProductButton>
       {productList.map((product) => displayProduct(product))}
     </Wrapper>
   )
