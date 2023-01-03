@@ -4,11 +4,9 @@ import { useAtom } from "jotai";
 import { Image } from "primereact/image";
 import { useTranslation } from "react-i18next";
 import { BsCart, BsChat, BsPerson } from "react-icons/bs";
-
 import Logo from "assets/LogoOvale.png";
 import userAtom from "states/atoms/user";
-import { BaseText } from "globals/styles";
-import { Quarter, TopMenuWrapper, MenuItem, RightIcons } from "./styles";
+import { TopMenuWrapper, MenuItem, RightIcons } from "./styles";
 
 interface Props { }
 
@@ -19,9 +17,12 @@ const TopMenu: React.FunctionComponent<Props> = () => {
   return (
     <TopMenuWrapper>
       <MenuItem>
-        <Link to="/app/dashboard">
-          {t("menu.dashboard")}
-        </Link>
+        {
+          (user && user?.roles?.includes("SELLER")) &&
+          <Link to="/app/dashboard">
+            {t("menu.dashboard")}
+          </Link>
+        }
       </MenuItem>
       <MenuItem>
         <Link to="/app/about/craftsmans">
