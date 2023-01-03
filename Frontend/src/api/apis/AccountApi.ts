@@ -43,6 +43,10 @@ import {
     UpdateAccountToJSON,
 } from '../models';
 
+export interface ApiAccountByEmailEmailGetRequest {
+    email: string;
+}
+
 export interface ApiAccountExternalLoginCallbackGetRequest {
     returnUrl?: string;
 }
@@ -78,6 +82,38 @@ export interface ApiAccountPostRequest {
  * 
  */
 export class AccountApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiAccountByEmailEmailGetRaw(requestParameters: ApiAccountByEmailEmailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
+        if (requestParameters.email === null || requestParameters.email === undefined) {
+            throw new runtime.RequiredError('email','Required parameter requestParameters.email was null or undefined when calling apiAccountByEmailEmailGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/byEmail/{email}`.replace(`{${"email"}}`, encodeURIComponent(String(requestParameters.email))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetAccountResultFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountByEmailEmailGet(requestParameters: ApiAccountByEmailEmailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
+        const response = await this.apiAccountByEmailEmailGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      */
