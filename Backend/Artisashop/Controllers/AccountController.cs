@@ -400,6 +400,44 @@ public class AccountController : ControllerBase
         }
     }*/
 
+    [HttpGet("nbOfResultByAddress")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+    public async Task<int> NbOfResultByAddress(string address)
+    {
+        string GoogleKey = "acdfe36c88484444850da3d8adb97890";
+        int ret = 0;
+        HttpResponseMessage response =
+            await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
+        if (response.IsSuccessStatusCode)
+        {
+            OpencageDataGeocode ODG = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
+            if (ODG.Results != null)
+                ret = ODG.Results.Count();
+        }
+
+        return ret;
+    }
+
+    [HttpGet("opencageDataGeocodeByAddress")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(OpencageDataGeocode), (int)HttpStatusCode.OK)]
+    public async Task<OpencageDataGeocode> OpencageDataGeocodeByAddress(string address)
+    {
+        string GoogleKey = "acdfe36c88484444850da3d8adb97890";
+        OpencageDataGeocode? ret = null;
+        HttpResponseMessage response =
+            await _opencageDataClient.GetAsync("geocode/v1/json?key=" + GoogleKey + "&q=" + address);
+        if (response.IsSuccessStatusCode)
+        {
+            ret = (await response.Content.ReadFromJsonAsync<OpencageDataGeocode>())!;
+        }
+
+        return (ret != null) ? ret : new OpencageDataGeocode();
+    }
+
     private async Task<GPSCoord> AddressToGPSCoord(string address)
     {
         string GoogleKey = "acdfe36c88484444850da3d8adb97890";
