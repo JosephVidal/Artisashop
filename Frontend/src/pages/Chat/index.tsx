@@ -1,53 +1,43 @@
 import { PrimitiveAtom, atom, useAtom } from 'jotai';
 import { splitAtom } from 'jotai/utils';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router';
 
 interface ContactListItemProps {
+  userId: string;
   name: string;
   lastMessage: string;
   avatarSrc?: string;
-  selected: boolean;
 }
 
 const initialContactList: ContactListItemProps[] = Array.from({ length: 10 }).map((_, index) => ({
+  userId: index.toString(),
   name: `Name ${index}`,
   lastMessage: `Last message ${index}`,
   avatarSrc: 'https://picsum.photos/200',
-  selected: false,
 }));
 
 const contactListAtom = atom<ContactListItemProps[]>(initialContactList);
 const contactListAtomAtom = splitAtom(contactListAtom);
-const selectedIndexAtom = atom(0);
-
-const setSelectedIndex = (index: number) => {
-  const [contactList] = useAtom(contactListAtom);
-  const [selectedIndex, iSetSelectedIndex] = useAtom(selectedIndexAtom);
-
-  contactList[selectedIndex].selected = false;
-  iSetSelectedIndex(index);
-};
 
 const ContactListItem = ({
   contactListItemAtom,
+  onClick,
 }: {
   contactListItemAtom: PrimitiveAtom<ContactListItemProps>,
+  onClick?: () => void,
 }) => {
-  const [contactListItem, setContactListItem] = useAtom(contactListItemAtom);
-  const { name, lastMessage, avatarSrc, selected } = contactListItem;
+  const [contactListItem] = useAtom(contactListItemAtom);
+  const { userId, name, lastMessage, avatarSrc } = contactListItem;
+  const { userId: routeUserId } = useParams();
 
-  const handleClick = () => {
-    setContactListItem((prev) => ({
-      ...prev,
-      selected: !prev.selected,
-    }));
-  };
+  const selected = useMemo(() => routeUserId === userId, [routeUserId, userId]);
 
   return (
-    <div onClick={handleClick} className="select-none">
+    <div onClick={onClick} className="select-none">
       <div className={`
-          overflow-hidden relative max-w-sm mx-auto 
-        ${selected ? "bg-[#141C26]" : "bg-[#F9ECE2]"} shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 
+          overflow-hidden relative mx-auto 
+        ${selected ? "bg-[#5a202e]" : "bg-[#141C26]"} shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 
          dark:highlight-white/5`}>
         <img className="absolute -left-6 w-24 h-24 rounded-full shadow-lg" src={avatarSrc} alt={name} />
         <div className="flex flex-col py-5 pl-24">
@@ -61,51 +51,18 @@ const ContactListItem = ({
 
 const ContactList = () => {
   const [contactListAtoms] = useAtom(contactListAtomAtom);
+  const navigate = useNavigate();
 
   return (
     <div>
       <div className="flex flex-col gap-2">
         {contactListAtoms.map((item, index) => (
-          <ContactListItem contactListItemAtom={item} key={index} />
+          <ContactListItem contactListItemAtom={item} key={index} onClick={() => navigate(`/chat/${index}`)} />
         ))}
       </div>
     </div>
   );
 };
-
-const ChatMessageBubble = () => (
-  <div className="flex gap-5">
-    <div className="flex flex-col">
-      <div className="text-xs">Last message</div>
-    </div>
-  </div>
-)
-
-const ChatMessageBubbleGroup = () => (
-  <div className="flex flex-row">
-    <div>
-      <img src="https://picsum.photos/200" alt="avatar" className="rounded-full w-8 h-8" />
-      <div className="text-sm">Name</div>
-    </div>
-    <div className="flex flex-col gap-3">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <ChatMessageBubble key={index} />
-      ))}
-    </div>
-  </div>
-);
-
-const MessageList = () => (
-  <div className="flex flex-col gap-3">
-    {Array.from({ length: 25 }).map((_, index) => (
-      <ChatMessageBubbleGroup key={index} />
-    ))}
-  </div>
-);
-
-const MessageForm = () => (
-  <div>MessageForm</div>
-);
 
 const ChatPage = () => (
   <div className="text-black px-6 pb-5">
@@ -119,12 +76,7 @@ const ChatPage = () => (
         </div>
       </div>
       <div className="md:max-h-96 flex-1 flex flex-col gap-5 p-5 border rounded-3xl border-solid border-black">
-        <div className="overflow-auto overscroll-contain">
-          <MessageList />
-        </div>
-        <div>
-          <MessageForm />
-        </div>
+        <Outlet />
       </div>
     </div>
   </div>
