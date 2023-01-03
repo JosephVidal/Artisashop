@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useAtom } from "jotai";
 import { Field, Form, Formik } from "formik";
 
@@ -21,7 +21,9 @@ const ProfilePage = () => {
   // Executes only if user is defined
   useEffect(() => { if (user?.id) { execute(); } }, [user])
 
-  console.log(profile?.roles);
+  const [seller, setSeller] = useState(profile && profile?.roles?.includes("SELLER"));
+
+  useEffect(() => setSeller(profile && profile?.roles?.includes("SELLER")), [profile])
 
   return (
     <Wrapper>
@@ -79,11 +81,17 @@ const ProfilePage = () => {
 
         <section>
           <FlexRow>
-            {profile && !profile?.roles?.includes("SELLER") &&
-              <button type="button" className="red-button" onClick={() => accounApi.apiAccountIdRoleRolePost({
+            {profile && !seller &&
+              <button type="button" className="red-button" onClick={() => accounApi.apiAccountIdRoleRolePostRaw({
                 id: profile.account!.id!,
                 role: "SELLER",
                 isDeleted: false
+              }).then((result) => {
+                console.log(result)
+                if (result.raw.status === 200) {
+                  console.log(result.raw.status)
+                  setSeller(true);
+                }
               })}>Je suis un artisan</button>
             }
             <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
