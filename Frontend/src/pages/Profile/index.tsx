@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useAtom } from "jotai";
 import { Field, Form, Formik } from "formik";
 
@@ -8,7 +8,7 @@ import useAsync from "hooks/useAsync";
 import userAtom from "states/atoms/user";
 import useAuth from "states/auth";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import { Wrapper } from './styles';
+import {FlexRow, Wrapper } from './styles';
 
 const ProfilePage = () => {
   useFormattedDocumentTitle("Votre Profil");
@@ -20,6 +20,10 @@ const ProfilePage = () => {
   const { value: profile, status, error, execute } = useAsync(() => accounApi.apiAccountIdGet({ id: user?.id ?? '' }), false);
   // Executes only if user is defined
   useEffect(() => { if (user?.id) { execute(); } }, [user])
+
+  const [seller, setSeller] = useState(profile && profile?.roles?.includes("SELLER"));
+
+  useEffect(() => setSeller(profile && profile?.roles?.includes("SELLER")), [profile])
 
   return (
     <Wrapper>
@@ -76,8 +80,22 @@ const ProfilePage = () => {
         </section>
 
         <section>
-          <h3>Se déconnecter</h3>
-          <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
+          <FlexRow>
+            {profile && !seller &&
+              <button type="button" className="red-button" onClick={() => accounApi.apiAccountIdRoleRolePostRaw({
+                id: profile.account!.id!,
+                role: "SELLER",
+                isDeleted: false
+              }).then((result) => {
+                console.log(result)
+                if (result.raw.status === 200) {
+                  console.log(result.raw.status)
+                  setSeller(true);
+                }
+              })}>Je suis un artisan</button>
+            }
+            <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
+          </FlexRow>
         </section>
       </div>
     </Wrapper>
