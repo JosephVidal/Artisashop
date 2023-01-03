@@ -8,7 +8,8 @@ import useAsync from "hooks/useAsync";
 import userAtom from "states/atoms/user";
 import useAuth from "states/auth";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import {FlexRow, Wrapper } from './styles';
+import { useNavigate } from "react-router";
+import { FlexRow, Wrapper } from './styles';
 
 const ProfilePage = () => {
   useFormattedDocumentTitle("Votre Profil");
@@ -16,6 +17,7 @@ const ProfilePage = () => {
   const accounApi = useApi(AccountApi)
   const [user] = useAtom(userAtom)
   const auth = useAuth()
+  const navigate = useNavigate()
 
   const { value: profile, status, error, execute } = useAsync(() => accounApi.apiAccountIdGet({ id: user?.id ?? '' }), false);
   // Executes only if user is defined
@@ -91,7 +93,10 @@ const ProfilePage = () => {
                   setSeller(true);
               })}>Je suis un artisan</button>
             }
-            <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
+            <button type="button" className="red-button" onClick={() => {
+              auth.signout();
+              navigate("/");
+            }}>Se déconnecter</button>
           </FlexRow>
         </section>
       </div>
