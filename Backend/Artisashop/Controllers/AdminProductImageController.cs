@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("/api/admin/productImage")]
+[Authorize(Roles = Roles.Admin)]
 public class AdminProductImageController : ReactAdminController<ProductImage>
 {
     public AdminProductImageController(StoreDbContext context) : base(context)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("/api/admin/complaint")]
+[Authorize(Roles = Roles.Admin)]
 public class AdminComplaintController : ReactAdminController<Complaint>
 {
     public AdminComplaintController(StoreDbContext context) : base(context)
