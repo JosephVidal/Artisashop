@@ -87,11 +87,8 @@ const ProfilePage = () => {
                 role: "SELLER",
                 isDeleted: false
               }).then((result) => {
-                console.log(result)
-                if (result.raw.status === 200) {
-                  console.log(result.raw.status)
+                if (result.raw.status === 200)
                   setSeller(true);
-                }
               })}>Je suis un artisan</button>
             }
             <button type="button" className="red-button" onClick={() => auth.signout()}>Se déconnecter</button>
