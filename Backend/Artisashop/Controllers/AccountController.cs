@@ -164,6 +164,29 @@ public class AccountController : ControllerBase
         }
     }
 
+    [HttpGet("byEmail/{email}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(GetAccountResult), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetAccountFromEmail(string email)
+    {
+        try
+        {
+            Account? account = await _db.Users!.SingleOrDefaultAsync(user => user.Email == email);
+            if (account == null)
+                return NotFound($"User with email {email} not found");
+            IList<string>? roles = await _userManager.GetRolesAsync(account);
+            if (roles == null)
+                return BadRequest($"Impossible to get roles for user {email}");
+            return Ok(new GetAccountResult(account, roles));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
@@ -173,9 +196,9 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account? account = await _db.Users!.SingleOrDefaultAsync(craftsman => craftsman.Id == id);
+            Account? account = await _db.Users!.SingleOrDefaultAsync(user => user.Id == id);
             if (account == null)
-                return NotFound($"Craftsman with id {id} not found");
+                return NotFound($"User with id {id} not found");
             IList<string>? roles = await _userManager.GetRolesAsync(account);
             if (roles == null)
                 return BadRequest($"Impossible to get roles for user {id}");
