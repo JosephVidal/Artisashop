@@ -12,23 +12,7 @@ const CraftsmanDashboard: FC = () => {
 
   return (
     <Wrapper>
-      <TabWrapper>
-        <TabButton
-          selected={selected === "products"}
-          onClick={() => setSelected("products")}>
-          Produits
-        </TabButton>
-        <TabButton
-          selected={selected === "orders"}
-          onClick={() => setSelected("orders")}>
-          Commandes
-        </TabButton>
-      </TabWrapper>
-      {
-        selected === "products" ?
-          <Products /> :
-          <Orders />
-      }
+      <Products />
     </Wrapper>
   )
 };

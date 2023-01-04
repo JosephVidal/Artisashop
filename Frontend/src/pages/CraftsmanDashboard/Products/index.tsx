@@ -33,7 +33,7 @@ const Products: FC = () => {
       search: `?product=${JSON.stringify(product)}`,
     })}>
       <ImageWrapper>
-        {(product.productImages && product.productImages?.length !== 0) && <img src={product.productImages[0].content!} alt=""/>}
+        {(product.productImages && product.productImages?.length !== 0) && <img src={product.productImages[0].content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`} alt="" />}
       </ImageWrapper>
       <ProductDetails>
         <ProductName>
