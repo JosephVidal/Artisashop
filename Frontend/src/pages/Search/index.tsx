@@ -228,9 +228,6 @@ const Search: React.FunctionComponent<Props> = () => {
         </div>
         <div id="suggestions">
           <h2>Pour vous :</h2>
-          <div>
-            {suggestedProductsResults.status?.toString()}
-          </div>
           <div id="suggestions-wrapper">
             {suggestedProductsResults.value?.map(elem =>
               <ProductCard key={elem.id}
