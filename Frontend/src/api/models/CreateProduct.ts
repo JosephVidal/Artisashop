@@ -45,10 +45,10 @@ export interface CreateProduct {
     quantity: number;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<Blob>}
      * @memberof CreateProduct
      */
-    images?: Array<string> | null;
+    images?: Array<Blob> | null;
     /**
      * 
      * @type {Array<string>}

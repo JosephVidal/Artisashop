@@ -220,7 +220,7 @@ const Search: React.FunctionComponent<Props> = () => {
             <div id="result-list">
               {
                 isProduct
-                  ? filteredProducts?.map(elem => <ProductCard productStyles={elem?.productStyles} img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.png"}`} serie="Petite série" name={elem.name} price={elem.price} href={`/product/${elem?.id}`} />)
+                  ? filteredProducts?.map(product => <ProductCard productStyles={product?.productStyles} img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série" name={product.name} price={product.price} href={`/product/${product?.id}`} />)
                   : filteredCraftsmen?.map(elem => <CraftsmanresultCard img={`/img/craftsman/${elem.profilePicture ?? "default.svg"}`} name={elem.firstname} job={elem.job ?? ""} href={`/craftsman/${elem?.id ?? ""}`} />)
               }
             </div>
@@ -228,18 +228,15 @@ const Search: React.FunctionComponent<Props> = () => {
         </div>
         <div id="suggestions">
           <h2>Pour vous :</h2>
-          <div>
-            {/* {suggestedProductsResults.status?.toString()} */}
-          </div>
           <div id="suggestions-wrapper">
-            {suggestedProductsResults.value?.map(elem =>
-              <ProductCard key={elem.id}
-                productStyles={elem.productStyles}
-                img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.svg"}`}
+            {suggestedProductsResults.value?.map(product =>
+              <ProductCard key={product.id}
+                productStyles={product.productStyles}
+                img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`}
                 serie="Petite série"
-                name={elem.name}
-                price={elem.price}
-                href={`/product/${elem.id}`}
+                name={product.name}
+                price={product.price}
+                href={`/product/${product.id}`}
               />
             )}
           </div>

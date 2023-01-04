@@ -77,9 +77,16 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          <ProductCard img="img/product/Applique papier.jpg" name="Applique" price={297.92} href="/product/4" productStyles={[{ displayName: "Papier", normalizedName: "Papier" }]} />
-          <ProductCard img="img/product/Oeuf de paques.jpg" name="Oeuf de pâques" price={473.81} href="/product/3" productStyles={[{ displayName: "Carton", normalizedName: "Carton" }]} />
-          <ProductCard img="img/product/buste-romain.JPG" name="Buste Romain" price={58.90} href="/product/5" productStyles={[{ displayName: "Romain", normalizedName: "Romain" }]} />
+          {suggestedProductsResults.value?.map(product =>
+            <ProductCard key={product.id}
+              productStyles={product.productStyles}
+              img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`}
+              serie="Petite série"
+              name={product.name}
+              price={product.price}
+              href={`/app/product/${product.id}`}
+            />
+          )}
         </div>
         <p id="product-text">Trouvez votre bonheur, vendez vos créations dans un espace unique et dédié à l&apos;art, où excellence rime avec savoir faire et élégance. Nos artisans sont impatients de vous présenter leurs ouvrages réalisés avec passion et expertise.</p>
       </section>
