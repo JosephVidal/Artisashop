@@ -42,7 +42,7 @@ interface ChatMessageBubbleGroupProps {
 }
 
 const ChatMessageBubbleGroup = ({ name, messages, isOwn }: ChatMessageBubbleGroupProps) => (
-  <div className={`flex ${ 'flex-row'} gap-4`}>
+  <div className={`flex ${'flex-row'} gap-4`}>
     <img src="https://picsum.photos/200" alt="avatar" className="rounded-full w-8 h-8" />
     <div className="flex flex-col gap-1">
       <div className="text-sm">{name}</div>
@@ -57,12 +57,12 @@ const ChatMessageBubbleGroup = ({ name, messages, isOwn }: ChatMessageBubbleGrou
 );
 
 const MessageList = () => (
-    <div className="flex flex-col gap-3">
-      {Array.from({ length: 25 }).map((_, index) => (
-        <ChatMessageBubbleGroup name={index % 2 === 0 ? "Brandon" : "Me"} key={index} isOwn={index % 2 === 0} messages={initialMessages} />
-      ))}
-    </div>
-  );
+  <div className="flex flex-col gap-3">
+    {Array.from({ length: 25 }).map((_, index) => (
+      <ChatMessageBubbleGroup name={index % 2 === 0 ? "Brandon" : "Me"} key={index} isOwn={index % 2 === 0} messages={initialMessages} />
+    ))}
+  </div>
+);
 
 const ConversationPage = () => (
   <div className="w-100 md:max-h-[700px] flex-1 flex flex-col gap-5 p-5 border rounded-3xl border-solid border-black">
