@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("/api/admin/productStyle")]
+[Authorize(Roles = Roles.Admin)]
 public class AdminProductStyleController : ReactAdminController<ProductStyle>
 {
     public AdminProductStyleController(StoreDbContext context) : base(context)

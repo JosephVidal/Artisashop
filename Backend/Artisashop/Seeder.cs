@@ -247,7 +247,7 @@ public static class Seeder
         var sellers = new List<Account>() {
             new()
             {
-                Email = "joseph@artisashop.fr",
+                Email = "joseph@gmail.com",
                 Firstname = "Joseph",
                 Lastname = "Vidal",
                 Suspended = false,
@@ -333,7 +333,7 @@ public static class Seeder
                 Name = "Acanthes",
                 Price = 200,
                 Description = "Paire de feuilles d'acanthe en bois avec une patine ancienne.",
-                Quantity = 1,
+                Quantity = 10,
                 Craftsman = sellers[1],
                 CraftsmanId = sellers[1].Id,
                 ProductImages = new List<ProductImage>() {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("/api/admin/role")]
+[Authorize(Roles = Roles.Admin)]
 public class AdminRoleController : ReactAdminController<IdentityRole>
 {
     public AdminRoleController(StoreDbContext context) : base(context)

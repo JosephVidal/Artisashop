@@ -52,7 +52,7 @@ const CraftsmanView = () => {
               <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
               <button className="chat-button" type="button" onClick={() =>
                 navigate({
-                  pathname: "/app/chat",
+                  pathname: "/chat",
                   search: `?new=true&to=${JSON.stringify(account)}`,
                 })
               }>💬</button>
@@ -64,14 +64,14 @@ const CraftsmanView = () => {
         <p id="bio">{craftsmanDescription}</p>
       </section>
       <ProductsList>
-        {craftsmanProducts?.map(elem => (
+        {craftsmanProducts?.map(product => (
           <ProductCard
-            // TODO: Use image.content instead of image.imagePath
-            img={`/img/product/${elem.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série"
-            name={elem.name}
-            price={elem.price}
-            href={`/app/product/${elem?.id}`}
-            productStyles={elem?.productStyles}
+            img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`}
+             serie="Petite série"
+            name={product.name}
+            price={product.price}
+            href={`/product/${product?.id}`}
+            productStyles={product?.productStyles}
           />
         ))}
       </ProductsList>

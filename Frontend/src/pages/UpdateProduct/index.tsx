@@ -9,6 +9,7 @@ import { Wrapper } from "./styles";
 
 const UpdateProductView = () => {
   useFormattedDocumentTitle("Panier");
+<<<<<<< HEAD
   const productApi = useApi(ProductApi);
   const [searchParams] = useSearchParams();
   const product: Product | null = useMemo(() => {
@@ -17,6 +18,20 @@ const UpdateProductView = () => {
       return JSON.parse(param) as Product
     return null;
   }, [searchParams]);
+=======
+  const ProducttApi = useApi(ProductApi)
+
+  const { value : update, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
+    name: '',
+    price: 0,
+    quantity: 0,
+    description: '',
+    images: [],
+    styles: [],
+  }), false);
+
+  useEffect(() => { execute() }, []);
+>>>>>>> origin/dev
 
   return (
     <Wrapper>

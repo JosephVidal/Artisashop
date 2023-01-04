@@ -8,8 +8,23 @@ import { Wrapper } from "./styles";
 
 const CreateProductView = () => {
   useFormattedDocumentTitle("Créer un produit");
+<<<<<<< HEAD
   const navigate = useNavigate()
   const productApi = useApi(ProductApi);
+=======
+  const ProducttApi = useApi(ProductApi)
+
+  const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
+    name: '',
+    price: 0,
+    quantity: 0,
+    description: '',
+    images: [],
+    styles: [],
+  }), false);
+
+  useEffect(() => { if (!null) { execute(); } }, []);
+>>>>>>> origin/dev
 
   return (
     <Wrapper>

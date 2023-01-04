@@ -20,6 +20,7 @@ import type {
   ExternalLoginConfirmationViewModel,
   GetAccountResult,
   Login,
+  OpencageDataGeocode,
   ProblemDetails,
   Register,
   UpdateAccount,
@@ -35,6 +36,8 @@ import {
     GetAccountResultToJSON,
     LoginFromJSON,
     LoginToJSON,
+    OpencageDataGeocodeFromJSON,
+    OpencageDataGeocodeToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
     RegisterFromJSON,
@@ -42,6 +45,10 @@ import {
     UpdateAccountFromJSON,
     UpdateAccountToJSON,
 } from '../models';
+
+export interface ApiAccountByEmailEmailGetRequest {
+    email: string;
+}
 
 export interface ApiAccountExternalLoginCallbackGetRequest {
     returnUrl?: string;
@@ -66,6 +73,14 @@ export interface ApiAccountLoginPostRequest {
     login?: Login;
 }
 
+export interface ApiAccountNbOfResultByAddressGetRequest {
+    address?: string;
+}
+
+export interface ApiAccountOpencageDataGeocodeByAddressGetRequest {
+    address?: string;
+}
+
 export interface ApiAccountPatchRequest {
     updateAccount?: UpdateAccount;
 }
@@ -78,6 +93,38 @@ export interface ApiAccountPostRequest {
  * 
  */
 export class AccountApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiAccountByEmailEmailGetRaw(requestParameters: ApiAccountByEmailEmailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountResult>> {
+        if (requestParameters.email === null || requestParameters.email === undefined) {
+            throw new runtime.RequiredError('email','Required parameter requestParameters.email was null or undefined when calling apiAccountByEmailEmailGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/byEmail/{email}`.replace(`{${"email"}}`, encodeURIComponent(String(requestParameters.email))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetAccountResultFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountByEmailEmailGet(requestParameters: ApiAccountByEmailEmailGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountResult> {
+        const response = await this.apiAccountByEmailEmailGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      */
@@ -302,6 +349,70 @@ export class AccountApi extends runtime.BaseAPI {
      */
     async apiAccountLoginPost(requestParameters: ApiAccountLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AccountToken> {
         const response = await this.apiAccountLoginPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountNbOfResultByAddressGetRaw(requestParameters: ApiAccountNbOfResultByAddressGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<number>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.address !== undefined) {
+            queryParameters['address'] = requestParameters.address;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/nbOfResultByAddress`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.TextApiResponse(response) as any;
+    }
+
+    /**
+     */
+    async apiAccountNbOfResultByAddressGet(requestParameters: ApiAccountNbOfResultByAddressGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number> {
+        const response = await this.apiAccountNbOfResultByAddressGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountOpencageDataGeocodeByAddressGetRaw(requestParameters: ApiAccountOpencageDataGeocodeByAddressGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OpencageDataGeocode>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.address !== undefined) {
+            queryParameters['address'] = requestParameters.address;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/account/opencageDataGeocodeByAddress`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OpencageDataGeocodeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountOpencageDataGeocodeByAddressGet(requestParameters: ApiAccountOpencageDataGeocodeByAddressGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OpencageDataGeocode> {
+        const response = await this.apiAccountOpencageDataGeocodeByAddressGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -57,21 +57,25 @@ builder.Services.AddAuthentication(options =>
         var config = jwtConfig.Get<JwtConfiguration>();
 
         options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
+            ValidateIssuer = true,
             ValidateAudience = false,
             ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+
             ValidIssuer = config.Issuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Key)),
         };
-        options.RequireHttpsMetadata = false;
     })
     .AddOpenIdConnect(FranceConnectConfiguration.ProviderScheme, FranceConnectConfiguration.ProviderDisplayName,
         oidc_options =>
         {
             var fcConfig = franceConnectConfig.Get<FranceConnectConfiguration>();
 
-            // FC refuses unknown parameters in the requests, so the two following options are needed 
+            // FC refuses unknown parameters in the requests, so the two following options are needed
             oidc_options.DisableTelemetry =
                 true; // This is false by default on .NET Core 3.1, and sends additional parameters such as "x-client-ver" in the requests to FC.
             oidc_options.UsePkce =
@@ -188,12 +192,16 @@ if (app.Environment.IsDevelopment())
         policyBuilder
             .WithOrigins("http://localhost:43117",
                     "https://localhost:7095",
+                    "http://localhost:3000",
+                    "http://localhost:5173",
                     "https://localhost:3000",
+                    "https://localhost:5173",
                     "https://localhost:44474")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .WithExposedHeaders("Content-Range")
-            .SetIsOriginAllowedToAllowWildcardSubdomains();
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowCredentials();
     });
     // Cleans up the database on each run
     using (var scope = app.Services.CreateScope())

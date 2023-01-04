@@ -95,7 +95,7 @@ namespace Artisashop.Controllers
         [HttpPost("create")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Create([FromBody] CreateProduct model)
+        public async Task<IActionResult> Create([FromForm] CreateProduct model)
         {
             try
             {
@@ -109,7 +109,14 @@ namespace Artisashop.Controllers
                         Description = model.Description,
                         Price = model.Price,
                         Quantity = model.Quantity,
-                        ProductImages = model.Images.Select(i => new ProductImage { Content = i }).ToList(),
+                        ProductImages = model.Images
+                        .Select(x => {
+                            var s = x.OpenReadStream();
+                            var buf = new byte[s.Length];
+                            s.Read(buf);
+                            s.Close();
+                            return new ProductImage() { Content = buf.ToString() };
+                        }).ToList(),
                         ProductStyles = model.Styles.Select(name => new ProductStyle(name)).ToList(),
                     };
                     // new(model, account);
@@ -135,7 +142,7 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update(int productId, [FromBody] CreateProduct model)
+        public async Task<IActionResult> Update(int productId, [FromForm] CreateProduct model)
         {
             try
             {
@@ -143,7 +150,14 @@ namespace Artisashop.Controllers
                 if (product == null)
                     return NotFound("Product with id " + productId + " not found");
                 _utils.UpdateObject(product, model);
-                product.ProductImages = model.Images.Select(x => new ProductImage() { Content = x }).ToList();
+
+                product.ProductImages = model.Images.Select(x => {
+                    var s = x.OpenReadStream();
+                    var buf = new byte[s.Length];
+                    s.Read(buf);
+                    s.Close();
+                    return new ProductImage() { Content = buf.ToString() };
+                }).ToList();
                 product.ProductStyles = model.Styles.Select(x => new ProductStyle(x)).ToList();
                 var success = _db.Products!.Update(product);
                 if (success == null)

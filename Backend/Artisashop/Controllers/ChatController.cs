@@ -47,24 +47,31 @@ namespace Artisashop.Controllers
                 List<ChatPreview> chatPreview = new();
                 var groupsReceiver = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Sender!.Id == account.Id).AsEnumerable().GroupBy(d => d.Receiver);
                 var groupsSender = _db.ChatMessages!.Include(x => x.Sender).Include(x => x.Receiver).Where(x => x.Receiver!.Id == account.Id).AsEnumerable().GroupBy(d => d.Sender);
-                foreach (var group in groupsReceiver) {
+                foreach (var group in groupsReceiver)
+                {
                     ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
                     chatPreviewReceiver.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
                 }
-                foreach (var group in groupsSender) {
+                foreach (var group in groupsSender)
+                {
                     ChatMessage? mostRecent = group.OrderBy(x => x.CreatedAt).Last();
                     chatPreviewSender.Add(new(mostRecent!, mostRecent!.Sender!.Id == account.Id ? false : true));
                 }
-                foreach (ChatPreview CPR in chatPreviewReceiver) {
+                foreach (ChatPreview CPR in chatPreviewReceiver)
+                {
                     List<ChatPreview> CPS = chatPreviewSender.Where(x => x.LastMsg!.Sender!.Id == CPR.LastMsg!.Receiver!.Id).ToList();
-                    if (CPS.Count() != 0) {
+                    if (CPS.Count() != 0)
+                    {
                         chatPreview.Add((CPR.LastMsg.CreatedAt > CPS[0].LastMsg.CreatedAt) ? CPR : CPS[0]);
                         chatPreviewSender.Remove(CPS[0]);
-                    } else {
+                    }
+                    else
+                    {
                         chatPreview.Add(CPR);
                     }
                 }
-                foreach (ChatPreview CPS in chatPreviewSender) {
+                foreach (ChatPreview CPS in chatPreviewSender)
+                {
                     chatPreview.Add(CPS);
                 }
 
@@ -75,6 +82,28 @@ namespace Artisashop.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        private readonly string[] acceptedExt =
+        {
+            "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm",
+            "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx",
+            "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
+            "odt", "ods", "odp", "odg",
+            "xml", "json", "txt", "csv",
+            "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "ppm", "pgm", "pbm", "pnm", "webp", "heif",
+            "avif", "bpg", "deep", "drw", "ecw", "fits", "flif", "ico", "ilbm", "img", "liff", "nrrd", "pam",
+            "pcx", "pgf", "plbm", "sgi", "sid", "tga", "vicar", "xisf", "afphoto", "cd5", "clip", "cpt", "kra",
+            "mdp", "pdn", "psd", "psp", "sai", "xcf", "cgm", "svg", "afdesign", "ai", "cdr", "gem", "gle",
+            "hpgl", "hvif", "lottie", "mathml", "naplps", "odg", "pgml", "qcc", "regis", "rip", "vml", "xar",
+            "xps", "amf", "blend", "dgn", "dwg", "dxf", "flt", "fvrml", "gltf", "hsf", "iges", "imml", "ipa",
+            "jt", "ma", "mb", "obj", "opengex", "ply", "povray", "prc", "step", "skp", "stl", "u3d", "vrml",
+            "xaml", "xgl", "xvl", "xvrml", "x3d", "3d", "3df", "3dm", "3ds", "3dxml", "x3d", "eps", "ps",
+            "pict", "wmf", "emf", "swf", "xaml", "mpo", "pns", "jps",
+            "webm", "mkv", "flv", "vob", "ogv", "ogg", "drc", "gif", "gifv", "mng", "avi", "mts", "m2ts", "ts",
+            "mov", "qt", "wmv", "yuv", "rm", "rmvb", "viv", "asf", "amv", "mp4", "m4p", "m4v", "mpg", "mp2",
+            "mpeg", "mpe", "mpv", "mpg", "mpeg", "mpe", "mpv", "m2v", "m4v", "svi", "3gp", "3g2", "mxf", "roq",
+            "nsv", "flv", "f4v", "f4p", "f4a", "f4b"
+        };
 
         /// <summary>
         /// This function add a message to chat history database
@@ -98,37 +127,23 @@ namespace Artisashop.Controllers
 
             try
             {
-                string[]? acceptedExt = new[]
+                string? attachment = null;
+                if (message.File != null && message.File.Length < (200L * 1000000L))
                 {
-                    "doc", "dot", "wbk", "docx", "docm", "dotx", "dotm", "docb", "pdf", "wll", "wwl", "xls", "xlsm",
-                    "xltx", "xltm", "xlsb", "xla", "xlam", "xll", "xlw", "ppt", "pot", "pps", "ppa", "ppam", "pptx",
-                    "pptm", "potx", "potm", "ppam", "ppsx", "ppsm", "sldx", "sldm", "pa", "one", "pub", "xps",
-                    "odt", "ods", "odp", "odg",
-                    "xml", "json", "txt", "csv",
-                    "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "ppm", "pgm", "pbm", "pnm", "webp", "heif",
-                    "avif", "bpg", "deep", "drw", "ecw", "fits", "flif", "ico", "ilbm", "img", "liff", "nrrd", "pam",
-                    "pcx", "pgf", "plbm", "sgi", "sid", "tga", "vicar", "xisf", "afphoto", "cd5", "clip", "cpt", "kra",
-                    "mdp", "pdn", "psd", "psp", "sai", "xcf", "cgm", "svg", "afdesign", "ai", "cdr", "gem", "gle",
-                    "hpgl", "hvif", "lottie", "mathml", "naplps", "odg", "pgml", "qcc", "regis", "rip", "vml", "xar",
-                    "xps", "amf", "blend", "dgn", "dwg", "dxf", "flt", "fvrml", "gltf", "hsf", "iges", "imml", "ipa",
-                    "jt", "ma", "mb", "obj", "opengex", "ply", "povray", "prc", "step", "skp", "stl", "u3d", "vrml",
-                    "xaml", "xgl", "xvl", "xvrml", "x3d", "3d", "3df", "3dm", "3ds", "3dxml", "x3d", "eps", "ps",
-                    "pict", "wmf", "emf", "swf", "xaml", "mpo", "pns", "jps",
-                    "webm", "mkv", "flv", "vob", "ogv", "ogg", "drc", "gif", "gifv", "mng", "avi", "mts", "m2ts", "ts",
-                    "mov", "qt", "wmv", "yuv", "rm", "rmvb", "viv", "asf", "amv", "mp4", "m4p", "m4v", "mpg", "mp2",
-                    "mpeg", "mpe", "mpv", "mpg", "mpeg", "mpe", "mpv", "m2v", "m4v", "svi", "3gp", "3g2", "mxf", "roq",
-                    "nsv", "flv", "f4v", "f4p", "f4a", "f4b"
-                };
-                ulong fileSize = (null == message.Joined)
-                    ? 0UL
-                    : Convert.ToUInt64(message.Joined.Length) * Convert.ToUInt64(sizeof(char));
-                if ((null != message.Joined && null == message.Filename) ||
-                    (null != message.Joined && (200UL * 1000000UL) >= fileSize &&
-                     !(acceptedExt.Contains(Path.GetExtension(message?.Filename)?.Substring(1)))))
-                    return BadRequest("Invalid joined file");
-                //db:
+                    var ext = Path.GetExtension(message.File.FileName).Substring(1);
+                    if (!acceptedExt.Contains(ext))
+                        return BadRequest("Invalid file extension");
+
+                    var buf = new byte[message.File.Length];
+                    var s = message.File.OpenReadStream();
+                    await s.ReadAsync(buf, 0, (int)message.File.Length);
+                    s.Close();
+                    attachment = buf.ToString();
+                }
+
                 Account? sender = await _db.Users!.FirstOrDefaultAsync(user => user.Id == message!.FromUserId);
                 Account? receiver = await _db.Users!.FirstOrDefaultAsync(user => user.Id == message!.ToUserID);
+
                 if (sender == null)
                     return NotFound("Sender with id " + message!.FromUserId + " not found");
                 if (receiver == null)
@@ -139,9 +154,10 @@ namespace Artisashop.Controllers
                     Sender = sender,
                     Receiver = receiver,
                     Content = message.Content != null ? message.Content : null,
-                    Joined = message.Joined,
-                    Filename = message.Filename,
+                    Joined = attachment,
+                    Filename = message.File?.FileName,
                 };
+
                 var result = await _db.ChatMessages!.AddAsync(dbMsg);
                 await _db.SaveChangesAsync();
                 //chat hub:
@@ -150,11 +166,11 @@ namespace Artisashop.Controllers
                 List<ChatUserDetail> fromUserList =
                     ChatHub.connectedUsers.Where(x => x.UserID == message.FromUserId).ToList();
                 foreach (ChatUserDetail elem in toUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.FromUserId!, message.Filename,
-                        message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(false, message.FromUserId!, message.File?.FileName,
+                        message.Content, DateTime.Now, attachment, dbMsg.Id);
                 foreach (ChatUserDetail elem in fromUserList)
-                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.ToUserID!, message.Filename,
-                        message.Content, DateTime.Now, message.Joined, dbMsg.Id);
+                    await _chatHub.Clients.Client(elem.ConnectionId).PrivateMessage(true, message.ToUserID!, message.File?.FileName,
+                        message.Content, DateTime.Now, attachment, dbMsg.Id);
 
                 return Ok(result.Entity);
             }
