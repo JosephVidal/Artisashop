@@ -247,7 +247,7 @@ public static class Seeder
         var sellers = new List<Account>() {
             new()
             {
-                Email = "joseph@artisashop.fr",
+                Email = "joseph@gmail.com",
                 Firstname = "Joseph",
                 Lastname = "Vidal",
                 Suspended = false,
