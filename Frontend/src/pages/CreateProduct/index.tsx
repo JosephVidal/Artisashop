@@ -10,7 +10,14 @@ const CreateProductView = () => {
   useFormattedDocumentTitle("Créer un produit");
   const ProducttApi = useApi(ProductApi)
 
-  const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({}), false);
+  const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
+    name: '',
+    price: 0,
+    quantity: 0,
+    description: '',
+    images: [],
+    styles: [],
+  }), false);
 
   useEffect(() => { if (!null) { execute(); } }, []);
 
