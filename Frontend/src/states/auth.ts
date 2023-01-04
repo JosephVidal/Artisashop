@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
-import { AccountApi, AccountToken, AccountViewModel, Configuration, Register } from 'api';
+import { AccountApi, AccountToken, AccountViewModel, Configuration, Register, ApiResponse } from 'api';
 import { REACT_APP_API_URL } from 'conf';
 import useratom from './atoms/user';
 import tokenatom from './atoms/token';
