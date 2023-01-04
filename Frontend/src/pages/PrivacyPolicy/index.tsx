@@ -42,7 +42,7 @@ const PrivacyPolicy = () => {
       <h3 id="source-des-donn-es">Source des données</h3>
       <p>Les données sont issues de l’enregistrement, par la personne souhaitant
         s’inscrire sur le site Artisashop, depuis le champ d’inscription en pied
-        de page du site Artisashop <Link to="/app/register">https://www.artisashop.fr/create-account#pills-client</Link>.</p>
+        de page du site Artisashop <Link to="/register">https://www.artisashop.fr/create-account#pills-client</Link>.</p>
       <h3 id="caract-re-obligatoire-du-recueil-des-donn-es">Caractère obligatoire du recueil des données</h3>
       <p>Le recueil de l’adresse de courrier électronique est obligatoire pour
         l’envoi de la lettre d’information, l&#39;authentification et contacter la
@@ -90,7 +90,7 @@ const PrivacyPolicy = () => {
         traitement.</p>
       <ul>
         <li>Contacter le DPO par voie électronique</li>
-        <li><Link to="/app/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</Link></li>
+        <li><Link to="/contact">Contacter le délégué à la protection des données (DPO) d&#39;Artisashop</Link></li>
         <li>Contacter le DPO par courrier postal</li>
       </ul>
       <p>Le délégué à la protection des données :<br />

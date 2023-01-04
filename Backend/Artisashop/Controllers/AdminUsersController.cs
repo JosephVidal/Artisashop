@@ -2,6 +2,7 @@
 
 using System.Linq.Dynamic.Core;
 using Artisashop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ using Newtonsoft.Json.Linq;
 /// <typeparam name="T">対象となるモデルの型</typeparam>
 [ApiController]
 [Route("api/admin/user")]
+[Authorize(Roles = Roles.Admin)]
 public class AdminUserController : ControllerBase
 {
     protected readonly StoreDbContext _context;

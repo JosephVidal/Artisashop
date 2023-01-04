@@ -36,12 +36,15 @@ public class AccountController : ControllerBase
     private readonly ILogger<AccountController> _logger;
     private readonly HttpClient _opencageDataClient = new HttpClient();
 
+    public IMailService MailService { get; }
+
     public AccountController(
         UserManager<Account> userManager,
         SignInManager<Account> signInManager,
         IConfiguration configuration,
         StoreDbContext db,
         IUtils utils,
+        IMailService mailService,
         IOptions<FranceConnectConfiguration> franceConnectConfiguration,
         ILoggerFactory loggerFactory)
     {
@@ -50,6 +53,7 @@ public class AccountController : ControllerBase
         _configuration = configuration;
         _db = db;
         _utils = utils;
+        MailService = mailService;
         _franceConnectConfiguration = franceConnectConfiguration.Value;
         _logger = loggerFactory.CreateLogger<AccountController>();
 
@@ -81,6 +85,7 @@ public class AccountController : ControllerBase
                     Roles = roles?.ToList() ?? new List<string>(),
                 };
                 var token = new AccountToken(viewModel, await GenerateJwtToken(user));
+                MailService.SendMail(user.Email, "Connexion", $"Vous vous êtes connecté à Artisashop depuis l'adresse IP {this.HttpContext.Connection.RemoteIpAddress}");
                 return Ok(token);
             }
 
@@ -113,6 +118,7 @@ public class AccountController : ControllerBase
                 Roles = roles?.ToList() ?? new List<string>(),
             };
             var token = new AccountToken(viewModel, await GenerateJwtToken(user));
+            MailService.SendMail(user.Email, "Bienvenue chez Artisashop !", $"Bonjour {user.UserName}, nous vous souhaitons la bienvenue sur Artisashop ! Vous pouvez dès à présent explorer notre site et passer vos commandes. N'hésitez pas à nous contacter si vous avez la moindre question. A bientôt ! L'équipe Artisashop");
             return Ok(token);
         }
         catch (Exception ex)
@@ -164,6 +170,29 @@ public class AccountController : ControllerBase
         }
     }
 
+    [HttpGet("byEmail/{email}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(GetAccountResult), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetAccountFromEmail(string email)
+    {
+        try
+        {
+            Account? account = await _db.Users!.SingleOrDefaultAsync(user => user.Email == email);
+            if (account == null)
+                return NotFound($"User with email {email} not found");
+            IList<string>? roles = await _userManager.GetRolesAsync(account);
+            if (roles == null)
+                return BadRequest($"Impossible to get roles for user {email}");
+            return Ok(new GetAccountResult(account, roles));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
@@ -173,9 +202,9 @@ public class AccountController : ControllerBase
     {
         try
         {
-            Account? account = await _db.Users!.SingleOrDefaultAsync(craftsman => craftsman.Id == id);
+            Account? account = await _db.Users!.SingleOrDefaultAsync(user => user.Id == id);
             if (account == null)
-                return NotFound($"Craftsman with id {id} not found");
+                return NotFound($"User with id {id} not found");
             IList<string>? roles = await _userManager.GetRolesAsync(account);
             if (roles == null)
                 return BadRequest($"Impossible to get roles for user {id}");
@@ -269,6 +298,7 @@ public class AccountController : ControllerBase
 
             await _userManager.DeleteAsync(account);
             await _db.SaveChangesAsync();
+            MailService.SendMail(account.Email, "C'est le coeur brisé que nous nous disons au revoir...", "Votre compte a été supprimé. Nous sommes désolés de vous voir partir.");
             return Ok("User with id " + account.UserName + " successfully deleted");
         }
         catch (Exception ex)
@@ -374,7 +404,7 @@ public class AccountController : ControllerBase
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.Expiration));
+        var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtConfiguration.ExpireDays)).AddHours(2).AddMinutes(30);
 
         var token = new JwtSecurityToken(
             jwtConfiguration.Issuer,

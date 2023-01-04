@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System.Net;
+using System.Net.Mail;
 using Artisashop.Interfaces.IService;
 
 namespace Artisashop.Services.MailService
@@ -7,18 +8,20 @@ namespace Artisashop.Services.MailService
     {
         public bool SendMail(string to, string subject, string bodyText)
         {
-            SmtpClient smtpClient = new("smtp-server", 25)
+            SmtpClient smtpClient = new("ex5.mail.ovh.net", 587)
             {
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = false,
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("contact@artisashop.fr", "X9mseogcdn3E^LfCRVXCJ98XBCo4#8kW")
+
                 /*NetworkCredential networkCredential = new("artisashop", "artisashop2021=)");
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Credentials = networkCredential;*/
-                UseDefaultCredentials = true
             };
             MailMessage message = new()
             {
-                From = new MailAddress("artisashop@artisashop.eu"),
+                From = new MailAddress("contact@artisashop.fr"),
                 Subject = subject,
                 Body = bodyText,
                 IsBodyHtml = true

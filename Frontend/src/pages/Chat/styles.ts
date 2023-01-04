@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {colors} from "globals/styles";
+import { colors } from "globals/styles";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -135,7 +135,7 @@ export const ChatInputWrapper = styled.div<ChatInputProps>`
   
   & input {
     border: 1px solid ${colors.darkRed};
-    box-shadow: ${(props) => props.focus ? `0 0 0 1px ${  colors.darkRed}` : "none"};
+    box-shadow: ${(props) => props.focus ? `0 0 0 1px ${colors.darkRed}` : "none"};
     border-radius: 10px;
     width: 100%;
     margin-right: 5px;

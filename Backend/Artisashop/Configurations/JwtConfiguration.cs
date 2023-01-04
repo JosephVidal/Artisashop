@@ -21,5 +21,12 @@ public class JwtConfiguration
 
     [JsonPropertyName("ExpireDays")]
     [Required(ErrorMessage = "Expiration required", AllowEmptyStrings = false)]
-    public int Expiration { get; set; } = 0;
+    public int ExpireDays { get; set; } = 0;
+
+    [JsonPropertyName("TokenValidityInMinutes")]
+    public int TokenValidityInsMinutes { get; set; } = 60;
+
+    [JsonPropertyName("RefreshTokenValidityInDays")]
+    public int RefreshTokenValidityInDays { get; set; } = 30;
+
 }
