@@ -14,11 +14,11 @@ interface FormValues {
 function validate(values: FormValues): FormikErrors<FormValues> {
   const errors = {} as FormValues;
   if (!values.email)
-    errors.email = 'Email is required';
+    errors.email = 'Email requis';
   else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
-    errors.email = 'Invalid email address';
+    errors.email = 'Email invalide';
   if (!values.password)
-    errors.password = 'Password is required';
+    errors.password = 'Mot de passe requis';
   return errors;
 }
 
