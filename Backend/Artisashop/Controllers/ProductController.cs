@@ -95,7 +95,7 @@ namespace Artisashop.Controllers
         [HttpPost("create")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Create([FromBody] CreateProduct model)
+        public async Task<IActionResult> Create([FromForm] CreateProduct model)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Artisashop.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update(int productId, [FromBody] CreateProduct model)
+        public async Task<IActionResult> Update(int productId, [FromForm] CreateProduct model)
         {
             try
             {
