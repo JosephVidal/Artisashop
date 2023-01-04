@@ -23,7 +23,7 @@ const Login = () => {
           }}
           onSubmit={async values => {
             await auth?.signin(values.email, values.password)
-              .then(res => res.user && navigate("/"))
+              .then(res => res.user ? navigate("/") : alert('aaa'))
           }}
         >
           {({ isSubmitting }) => (
