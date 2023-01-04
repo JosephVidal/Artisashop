@@ -25,12 +25,12 @@ function validate(values: FormValues): FormikErrors<FormValues> {
     errors.email = 'Email invalide';
   if (!values.password)
     errors.password = 'Mot de passe requis';
-  // else if (!/[A-Z0-9._%+-]{8,}/i.test(values.password))
-  //   errors.password = 'Le mot de passe doit contenir au moins un chiffre et un caractère spécial';
+  else if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/i.test(values.password))
+    errors.password = 'Le mot de passe doit contenir au moins une majuscule, un chiffre, un caractère spécial, et doit faire 8 caractères minimum';
   if (!values.firstname || !values.lastname)
     errors.firstname = 'Nom et prénom requis';
   if (values.password !== values.passwordConfirm)
-    errors.passwordConfirm = 'Mot de passe et confirmation doivent être identiques';
+    errors.passwordConfirm = 'Le mot de passe et la confirmation doivent être identiques';
   return errors;
 }
 
@@ -56,12 +56,11 @@ const Register = () => {
             role: "USER",
           }}
 
+          validate={validate}
           onSubmit={async values => {
             await auth?.signup(values)
               .then(res => res.user && navigate("/"))
           }}
-
-          validate={validate}
         >
           {({ isSubmitting }) => (
             <Form>
