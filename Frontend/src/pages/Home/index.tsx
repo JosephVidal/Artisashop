@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Home } from "api/models/Home";
-import { BackofficeApi } from "api";
 import useAsync from "hooks/useAsync";
 import useApi from "hooks/useApi";
 import CraftsmanCard from "components/CraftsmanCard";
@@ -10,7 +9,7 @@ import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import _ from "lodash";
 import { Wrapper } from "./styles";
-import { ProductApi, HomeApi } from "../../api";
+import { BackofficeApi, ProductApi, HomeApi } from "../../api";
 
 interface Props { }
 
@@ -47,7 +46,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
           }}
           onSubmit={async values => {
             navigate({
-              pathname: '/app/search',
+              pathname: '/search',
               search: `?q=${values.searchStr}&t=${values.searchType.toString()}`,
             })
           }}
@@ -94,34 +93,27 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="craftsman-section">
         <h2>Artisans de la semaine</h2>
         <div className="section-body">
-          {suggestedCraftsmansResults.value?.map(elem =>
-            <CraftsmanCard key={elem.id}
-              img={`/img/craftsman/${elem.profilePicture ?? "default.svg"}`}
-              name={elem.firstname}
-              job={elem.job ?? ""}
-              description={elem?.biography ?? ""}
-              href={`/app/craftsman/${elem?.id ?? ""}`}
-            />
-          )}
+          <CraftsmanCard href="/craftsman/test" name="Jean du Pont" job="Joalier" img="img/craftsman/Jean.jpeg" description="Joalier à Saint-Sulpice-la-Pointe, je suis spécialisé dans la gravure héraldique." />
+          <CraftsmanCard href="/craftsman/test" name="Joseph Vidal" job="Sculpteur" img="img/craftsman/Joseph.jpg" description="Après des études d'ébénisterie à Revel, je me suis reconverti dans l'informatique en entrant à epitech Toulouse. Aujourd'hui je fabrique des meubles et des objets d'influence Japonaise." />
         </div>
       </section>
       <section id="register-section">
         <div id="register-dark">
           <h2>Artisan</h2>
           <p>Créez un compte et venez proposer vos produits</p>
-          <Link className="red-button" to="/app/register">Créer un compte</Link>
+          <Link className="red-button" to="/register">Créer un compte</Link>
         </div>
         <div id="register-light">
           <h2>Client</h2>
           <p>Inscrivez-vous et découvrez les produits de nos artisans</p>
-          <Link className="red-button" to="/app/register">Créer un compte</Link>
+          <Link className="red-button" to="/register">Créer un compte</Link>
         </div>
       </section>
       <section id="craftsman-section">
         <h2>Statistiques du site</h2>
         <div className="section-body">
           <div className="surface-ground px-4 py-5 md:px-6 lg:px-8">
-            <div className="grid">
+            <div className="flex flex-col md:flex-row">
               <div className="col-12 md:col-6 lg:col-3">
                 <div className="surface-card shadow-2 p-3 border-round">
                   <div className="flex justify-content-between mb-3">

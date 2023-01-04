@@ -35,6 +35,8 @@ namespace Artisashop.Hubs
                 connectedUsers.Add(new ChatUserDetail(id, userID, username));
             }
             await Clients.Caller.OnConnected(userID);
+            Console.WriteLine($"Coucou {userID} !");
+
             //await Clients.Caller.SendAsync("OnConnected", userID, "Connected as " + username + " (" + userID + ")");
         }
 

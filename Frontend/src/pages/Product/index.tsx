@@ -15,7 +15,7 @@ const ProductView = () => {
   const basketApi = useApi(BasketApi);
   const productApi = useApi(ProductApi);
   const [product, setProduct] = useState<Product | null>(null);
-  const craftsmanLink = useMemo(() => product?.craftsmanId ? `/app/craftsman/${product?.craftsmanId}` : "#", [product]);
+  const craftsmanLink = useMemo(() => product?.craftsmanId ? `/craftsman/${product?.craftsmanId}` : "#", [product]);
   const productImg = useMemo(() => product?.productImages?.at(0)?.content ?? `/img/product/${product?.productImages?.at(0)?.imagePath || "default.png"}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
