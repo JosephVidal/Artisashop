@@ -16,8 +16,7 @@ const ProductView = () => {
   const productApi = useApi(ProductApi);
   const [product, setProduct] = useState<Product | null>(null);
   const craftsmanLink = useMemo(() => product?.craftsmanId ? `/app/craftsman/${product?.craftsmanId}` : "#", [product]);
-  // TODO: Use image.content instead of image.imagePath
-  const productImg = useMemo(() => `/img/product/${product?.productImages?.at(0)?.imagePath || 'default.svg'}`, [product]);
+  const productImg = useMemo(() => product?.productImages?.at(0)?.content ?? `/img/product/${product?.productImages?.at(0)?.imagePath || "default.png"}`, [product]);
   const productStock = useMemo(() => product?.quantity === 0 ? "Épuisé" : "En stock", [product]);
   const buttonClass = useMemo(() => product?.quantity === 0 ? "red-button disabled" : "red-button", [product]);
 
@@ -26,7 +25,7 @@ const ProductView = () => {
   useEffect(() => {
     const getProduct = async () => {
       if (id) {
-        const result = await productApi.apiProductInfoProductIdGet({productId: +id});
+        const result = await productApi.apiProductInfoProductIdGet({ productId: +id });
         setProduct(result ?? null);
       }
     }

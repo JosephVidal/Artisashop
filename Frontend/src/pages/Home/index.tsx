@@ -78,14 +78,14 @@ const HomeView: React.FunctionComponent<Props> = () => {
       <section id="product-section">
         <h2>Produits de la semaine</h2>
         <div className="section-body">
-          {suggestedProductsResults.value?.map(elem =>
-            <ProductCard key={elem.id}
-              productStyles={elem.productStyles}
-              img={`/img/product/${elem.productImages?.at(0)?.imagePath ?? "default.svg"}`}
+          {suggestedProductsResults.value?.map(product =>
+            <ProductCard key={product.id}
+              productStyles={product.productStyles}
+              img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`}
               serie="Petite série"
-              name={elem.name}
-              price={elem.price}
-              href={`/app/product/${elem.id}`}
+              name={product.name}
+              price={product.price}
+              href={`/app/product/${product.id}`}
             />
           )}
         </div>
