@@ -82,6 +82,7 @@ public class AccountController : ControllerBase
                     Email = user.Email,
                     EmailConfirmed = user.EmailConfirmed,
                     TwoFactorEnabled = user.TwoFactorEnabled,
+                    ProfilePicture = user.ProfilePicture,
                     Roles = roles?.ToList() ?? new List<string>(),
                 };
                 var token = new AccountToken(viewModel, await GenerateJwtToken(user));
@@ -115,6 +116,7 @@ public class AccountController : ControllerBase
                 Email = user.Email,
                 EmailConfirmed = user.EmailConfirmed,
                 TwoFactorEnabled = user.TwoFactorEnabled,
+                ProfilePicture = user.ProfilePicture,
                 Roles = roles?.ToList() ?? new List<string>(),
             };
             var token = new AccountToken(viewModel, await GenerateJwtToken(user));
