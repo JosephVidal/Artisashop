@@ -16,48 +16,48 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UnitAmount
+ * @interface LicenseInfo
  */
-export interface UnitAmount {
+export interface LicenseInfo {
     /**
      * 
      * @type {string}
-     * @memberof UnitAmount
+     * @memberof LicenseInfo
      */
-    currencyCode?: string | null;
+    name?: string | null;
     /**
      * 
-     * @type {number}
-     * @memberof UnitAmount
+     * @type {string}
+     * @memberof LicenseInfo
      */
-    value?: number;
+    url?: string | null;
 }
 
 /**
- * Check if a given object implements the UnitAmount interface.
+ * Check if a given object implements the LicenseInfo interface.
  */
-export function instanceOfUnitAmount(value: object): boolean {
+export function instanceOfLicenseInfo(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function UnitAmountFromJSON(json: any): UnitAmount {
-    return UnitAmountFromJSONTyped(json, false);
+export function LicenseInfoFromJSON(json: any): LicenseInfo {
+    return LicenseInfoFromJSONTyped(json, false);
 }
 
-export function UnitAmountFromJSONTyped(json: any, ignoreDiscriminator: boolean): UnitAmount {
+export function LicenseInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): LicenseInfo {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'currencyCode': !exists(json, 'currency_code') ? undefined : json['currency_code'],
-        'value': !exists(json, 'value') ? undefined : json['value'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'url': !exists(json, 'url') ? undefined : json['url'],
     };
 }
 
-export function UnitAmountToJSON(value?: UnitAmount | null): any {
+export function LicenseInfoToJSON(value?: LicenseInfo | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -66,8 +66,8 @@ export function UnitAmountToJSON(value?: UnitAmount | null): any {
     }
     return {
         
-        'currency_code': value.currencyCode,
-        'value': value.value,
+        'name': value.name,
+        'url': value.url,
     };
 }
 

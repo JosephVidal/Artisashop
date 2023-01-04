@@ -18,8 +18,8 @@
  * @export
  */
 export const State = {
-    Waitingcraftsman: 'WAITINGCRAFTSMAN',
     Waitingconsumer: 'WAITINGCONSUMER',
+    Waitingcraftsman: 'WAITINGCRAFTSMAN',
     Refused: 'REFUSED',
     Validated: 'VALIDATED',
     Ongoing: 'ONGOING',

@@ -42,7 +42,7 @@ const Chat: FC = () => {
   const [hover, setHover] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [file, setFile] = useState<Maybe<File>>(None());
-  const [fileData, setFileData] = useState<Maybe<string>>(None());
+
   const reader = new FileReader();
   const [edit, setEdit] = useState<Maybe<number>>(None());
   const useChat = useApi(ChatApi);
@@ -56,9 +56,9 @@ const Chat: FC = () => {
     return null;
   }, [searchParams]);
 
-  reader.onloadend = () => {
-    setFileData(Some(reader.result as string));
-  }
+  // reader.onloadend = () => {
+  //   setFileData(Some(reader.result as string));
+  // }
 
   useFormattedDocumentTitle("Chat");
 
@@ -179,7 +179,7 @@ const Chat: FC = () => {
                 {f.type === "application/pdf" && <BsFileEarmarkPdf size={90} />}
                 <BsXLg onClick={() => {
                   setFile(None())
-                  setFileData(None())
+                  // setFileData(None())
                 }}/>
               </FileWrapper>
             )
@@ -192,10 +192,10 @@ const Chat: FC = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.code === "Enter") {
-                    if (edit.isSome())
-                      editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input)
-                    else
-                      sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+                    // if (edit.isSome())
+                    //   editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input)
+                    // else
+                    //   sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
                   }
                 }}/>
               <label htmlFor="file-upload">
@@ -204,9 +204,10 @@ const Chat: FC = () => {
                 <ImAttachment size="100%"/>
               </label>
               <FaPaperPlane size="100%" onClick={() =>
-                edit.isSome() ?
-                  editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input) :
-                  sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
+                console.log("send")
+                // edit.isSome() ?
+                //   editMessage(useChat, setInput, setEdit, setConversation, conversation, edit, input) :
+                //   sendMessage(useChat, setInput, setFile, setFileData, setConversation, setContactList, user!, conversation.interlocutor!, input, fileData)
               }/>
             </ChatInputWrapper>
           }
@@ -279,13 +280,13 @@ const editMessage = (chatApi: ChatApi, setInput: SetState<string>, setEdit: SetS
   )
 }
 
-const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, setContactList: SetState<ChatPreview[]>, user: Account, to: Account, message: string, file: Maybe<string>) => {
+const sendMessage = (chatApi: ChatApi, setInput: SetState<string>, setFile: SetState<Maybe<File>>, setFileData: SetState<Maybe<string>>, setConversation: SetState<Conversation>, setContactList: SetState<ChatPreview[]>, user: Account, to: Account, message: string, file: Blob | null) => {
   chatApi.apiChatPost({
     createChatMessage: {
       fromUserId: user.id!,
       toUserID: to.id!,
       content: message,
-      filename: file.orSome("")
+      file,
     }
   }).then((m) => {
     if (m !== null) {

@@ -16,48 +16,48 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UnitAmount
+ * @interface SocialInfo
  */
-export interface UnitAmount {
+export interface SocialInfo {
     /**
      * 
      * @type {string}
-     * @memberof UnitAmount
+     * @memberof SocialInfo
      */
-    currencyCode?: string | null;
+    blog?: string | null;
     /**
      * 
-     * @type {number}
-     * @memberof UnitAmount
+     * @type {string}
+     * @memberof SocialInfo
      */
-    value?: number;
+    twitter?: string | null;
 }
 
 /**
- * Check if a given object implements the UnitAmount interface.
+ * Check if a given object implements the SocialInfo interface.
  */
-export function instanceOfUnitAmount(value: object): boolean {
+export function instanceOfSocialInfo(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function UnitAmountFromJSON(json: any): UnitAmount {
-    return UnitAmountFromJSONTyped(json, false);
+export function SocialInfoFromJSON(json: any): SocialInfo {
+    return SocialInfoFromJSONTyped(json, false);
 }
 
-export function UnitAmountFromJSONTyped(json: any, ignoreDiscriminator: boolean): UnitAmount {
+export function SocialInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): SocialInfo {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'currencyCode': !exists(json, 'currency_code') ? undefined : json['currency_code'],
-        'value': !exists(json, 'value') ? undefined : json['value'],
+        'blog': !exists(json, 'blog') ? undefined : json['blog'],
+        'twitter': !exists(json, 'twitter') ? undefined : json['twitter'],
     };
 }
 
-export function UnitAmountToJSON(value?: UnitAmount | null): any {
+export function SocialInfoToJSON(value?: SocialInfo | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -66,8 +66,8 @@ export function UnitAmountToJSON(value?: UnitAmount | null): any {
     }
     return {
         
-        'currency_code': value.currencyCode,
-        'value': value.value,
+        'blog': value.blog,
+        'twitter': value.twitter,
     };
 }
 
