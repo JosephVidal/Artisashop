@@ -16,6 +16,8 @@ import {
   FileWrapper,
   ChatBottomWrapper
 } from "pages/Chat/styles";
+import { atom, useAtom } from "jotai";
+import { splitAtom } from "jotai/utils";
 import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
@@ -34,7 +36,19 @@ export interface Conversation {
   interlocutor?: Account
 }
 
+const contactsAtom = atom<ChatPreview[]>([]);
+const contactsAtomsAtom = splitAtom(contactsAtom);
+const historyAtom = atom<ChatMessage[]>([]);
+const historyAtomsAtom = splitAtom(historyAtom);
+const interlocutorAtom = atom<Account | null>(null);
+
 const Chat: FC = () => {
+  const [myContacts, mySetContacts] = useAtom(contactsAtom);
+  const [myContactsAtoms, myDispatchContactsAtoms] = useAtom(contactsAtomsAtom);
+  const [myHistory, mySetHistory] = useAtom(historyAtom);
+  const [myHistoryAtoms, myDispatchHistoryAtoms] = useAtom(historyAtomsAtom);
+  const [myInterlocutor, mySetInterlocutor] = useAtom(interlocutorAtom);
+  
   const [contactList, setContactList] = useState<ChatPreview[]>([]);
   const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
