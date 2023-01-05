@@ -15,20 +15,18 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateProduct,
   Product,
 } from '../models';
 import {
+    CreateProductFromJSON,
+    CreateProductToJSON,
     ProductFromJSON,
     ProductToJSON,
 } from '../models';
 
 export interface ApiProductCreatePostRequest {
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    images?: Array<Blob>;
-    styles?: Array<string>;
+    createProduct?: CreateProduct;
 }
 
 export interface ApiProductDeleteProductIdDeleteRequest {
@@ -45,12 +43,7 @@ export interface ApiProductInfoProductIdGetRequest {
 
 export interface ApiProductUpdateProductIdPatchRequest {
     productId: number;
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    images?: Array<Blob>;
-    styles?: Array<string>;
+    createProduct?: CreateProduct;
 }
 
 /**
@@ -61,72 +54,14 @@ export class ProductApi extends runtime.BaseAPI {
     /**
      */
     async apiProductCreatePostRaw(requestParameters: ApiProductCreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
-        if (requestParameters.name === null || requestParameters.name === undefined) {
-            throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling apiProductCreatePost.');
-        }
-
-        if (requestParameters.description === null || requestParameters.description === undefined) {
-            throw new runtime.RequiredError('description','Required parameter requestParameters.description was null or undefined when calling apiProductCreatePost.');
-        }
-
-        if (requestParameters.price === null || requestParameters.price === undefined) {
-            throw new runtime.RequiredError('price','Required parameter requestParameters.price was null or undefined when calling apiProductCreatePost.');
-        }
-
-        if (requestParameters.quantity === null || requestParameters.quantity === undefined) {
-            throw new runtime.RequiredError('quantity','Required parameter requestParameters.quantity was null or undefined when calling apiProductCreatePost.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        headerParameters['Content-Type'] = 'application/json';
+
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const consumes: runtime.Consume[] = [
-            { contentType: 'multipart/form-data' },
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        if (requestParameters.name !== undefined) {
-            formParams.append('Name', requestParameters.name as any);
-        }
-
-        if (requestParameters.description !== undefined) {
-            formParams.append('Description', requestParameters.description as any);
-        }
-
-        if (requestParameters.price !== undefined) {
-            formParams.append('Price', requestParameters.price as any);
-        }
-
-        if (requestParameters.quantity !== undefined) {
-            formParams.append('Quantity', requestParameters.quantity as any);
-        }
-
-        if (requestParameters.images) {
-            requestParameters.images.forEach((element) => {
-                formParams.append('Images', element as any);
-            })
-        }
-
-        if (requestParameters.styles) {
-            requestParameters.styles.forEach((element) => {
-                formParams.append('Styles', element as any);
-            })
         }
 
         const response = await this.request({
@@ -134,7 +69,7 @@ export class ProductApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: formParams,
+            body: CreateProductToJSON(requestParameters.createProduct),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
@@ -142,7 +77,7 @@ export class ProductApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProductCreatePost(requestParameters: ApiProductCreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
+    async apiProductCreatePost(requestParameters: ApiProductCreatePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
         const response = await this.apiProductCreatePostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -250,72 +185,14 @@ export class ProductApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('productId','Required parameter requestParameters.productId was null or undefined when calling apiProductUpdateProductIdPatch.');
         }
 
-        if (requestParameters.name === null || requestParameters.name === undefined) {
-            throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling apiProductUpdateProductIdPatch.');
-        }
-
-        if (requestParameters.description === null || requestParameters.description === undefined) {
-            throw new runtime.RequiredError('description','Required parameter requestParameters.description was null or undefined when calling apiProductUpdateProductIdPatch.');
-        }
-
-        if (requestParameters.price === null || requestParameters.price === undefined) {
-            throw new runtime.RequiredError('price','Required parameter requestParameters.price was null or undefined when calling apiProductUpdateProductIdPatch.');
-        }
-
-        if (requestParameters.quantity === null || requestParameters.quantity === undefined) {
-            throw new runtime.RequiredError('quantity','Required parameter requestParameters.quantity was null or undefined when calling apiProductUpdateProductIdPatch.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        headerParameters['Content-Type'] = 'application/json';
+
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const consumes: runtime.Consume[] = [
-            { contentType: 'multipart/form-data' },
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        if (requestParameters.name !== undefined) {
-            formParams.append('Name', requestParameters.name as any);
-        }
-
-        if (requestParameters.description !== undefined) {
-            formParams.append('Description', requestParameters.description as any);
-        }
-
-        if (requestParameters.price !== undefined) {
-            formParams.append('Price', requestParameters.price as any);
-        }
-
-        if (requestParameters.quantity !== undefined) {
-            formParams.append('Quantity', requestParameters.quantity as any);
-        }
-
-        if (requestParameters.images) {
-            requestParameters.images.forEach((element) => {
-                formParams.append('Images', element as any);
-            })
-        }
-
-        if (requestParameters.styles) {
-            requestParameters.styles.forEach((element) => {
-                formParams.append('Styles', element as any);
-            })
         }
 
         const response = await this.request({
@@ -323,7 +200,7 @@ export class ProductApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: formParams,
+            body: CreateProductToJSON(requestParameters.createProduct),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));

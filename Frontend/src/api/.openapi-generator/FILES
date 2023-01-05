@@ -37,6 +37,7 @@ models/Contact.ts
 models/CreateBasket.ts
 models/CreateChatMessage.ts
 models/CreateCustomOrder.ts
+models/CreateProduct.ts
 models/CreatedTimestampInfo.ts
 models/DeliveryOption.ts
 models/ExternalLoginConfirmationViewModel.ts

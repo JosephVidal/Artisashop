@@ -17,6 +17,7 @@ export * from './Contact';
 export * from './CreateBasket';
 export * from './CreateChatMessage';
 export * from './CreateCustomOrder';
+export * from './CreateProduct';
 export * from './CreatedTimestampInfo';
 export * from './DeliveryOption';
 export * from './ExternalLoginConfirmationViewModel';

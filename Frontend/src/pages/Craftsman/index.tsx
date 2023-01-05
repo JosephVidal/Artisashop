@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams, useNavigate, Link} from "react-router-dom";
 import {Account} from "api/models/Account";
 import {Product} from "api/models/Product";
 import ProductCard from "components/ProductCard";
@@ -50,12 +50,7 @@ const CraftsmanView = () => {
           <div id="craftsman">
             <div id="craftsman-name-section">
               <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
-              <button className="chat-button" type="button" onClick={() =>
-                navigate({
-                  pathname: "/chat",
-                  search: `?new=true&to=${JSON.stringify(account)}`,
-                })
-              }>💬</button>
+              <Link to={`/chat/${account?.id ?? ''}`} className="chat-button">💬</Link>
             </div>
             <p id="job">{craftsmanJob}</p>
             <p>{craftsmanAddress}</p>

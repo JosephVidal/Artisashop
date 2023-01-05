@@ -254,8 +254,8 @@ using (var scope = app.Services.CreateScope())
     // Keep this in here
     // if (app.Environment.IsDevelopment())
     // {
-        await Seeder.SeedDemoDataAsync(scope.ServiceProvider);
-        await Seeder.SeedDemoAdminUsersAsync(scope.ServiceProvider);
+    await Seeder.SeedDemoDataAsync(scope.ServiceProvider);
+    await Seeder.SeedDemoAdminUsersAsync(scope.ServiceProvider);
     // }
 }
 

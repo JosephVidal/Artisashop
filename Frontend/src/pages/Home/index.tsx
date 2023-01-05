@@ -84,7 +84,7 @@ const HomeView: React.FunctionComponent<Props> = () => {
               serie="Petite série"
               name={product.name}
               price={product.price}
-              href={`/app/product/${product.id}`}
+              href={`/product/${product.id}`}
             />
           )}
         </div>
