@@ -1,18 +1,4 @@
 import React, {FC, useEffect, useMemo, useState} from "react";
-
-import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
-import { FaPaperPlane } from "react-icons/fa";
-import { ImAttachment } from "react-icons/im";
-import { SetState } from "globals/state";
-import { generate } from "shortid";
-import {InputText} from "primereact/inputtext";
-import {Maybe, None, Some} from "monet";
-import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
-import useApi from "hooks/useApi";
-import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import {useSearchParams} from "react-router-dom";
-import RealTimeChat from "pages/Chat/RealTimeChat";
-
 import {
   MessageBubble,
   ChatWrapper,
@@ -29,7 +15,19 @@ import {
   MessageDate,
   FileWrapper,
   ChatBottomWrapper
-} from "./styles";
+} from "pages/Chat/styles";
+import { BsTrash, BsPencil, BsXLg, BsFileEarmarkWord, BsFileEarmarkPdf } from "react-icons/bs";
+import { FaPaperPlane } from "react-icons/fa";
+import { ImAttachment } from "react-icons/im";
+import { SetState } from "globals/state";
+import { generate } from "shortid";
+import {InputText} from "primereact/inputtext";
+import {Maybe, None, Some} from "monet";
+import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
+import useApi from "hooks/useApi";
+import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
+import RealTimeChat from "pages/Chat/RealTimeChat";
+import {useSearchParams} from "react-router-dom";
 
 export interface Conversation {
   history: ChatMessage[],

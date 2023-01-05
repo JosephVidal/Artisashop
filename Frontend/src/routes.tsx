@@ -14,9 +14,7 @@ import ProductView from "pages/Product";
 import CraftsmanView from "pages/Craftsman";
 import PrivacyPolicy from "pages/PrivacyPolicy";
 import Template from "components/Template";
-import ChatLayout from "pages/Chat/+layout";
-import ChatEmptyPage from "pages/Chat/+page";
-import ChatConversationPage from "pages/Chat/[id]/+page";
+import ChatPage from "pages/Chat";
 import Basket from "pages/Basket";
 import ProfilePage from "pages/Profile";
 import ContactView from "pages/Contact";
@@ -60,10 +58,7 @@ const Routes: React.FunctionComponent<Props> = ({ toastHandler }) => {
             ? */}
             <>
               <Route path="mon-panier" element={<Basket />} />
-              <Route path="chat" element={<ChatLayout />}>
-                <Route index element={<ChatEmptyPage />} />
-                <Route path=":id" element={<ChatConversationPage />} />
-              </Route>
+              <Route path="chat" element={<ChatPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="create-product" element={<CreateProductView />} />
               <Route path="update-product" element={<UpdateProductView />} />

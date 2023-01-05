@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {useParams, useNavigate, Link} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {Account} from "api/models/Account";
 import {Product} from "api/models/Product";
 import ProductCard from "components/ProductCard";
@@ -50,7 +50,12 @@ const CraftsmanView = () => {
           <div id="craftsman">
             <div id="craftsman-name-section">
               <h1>{craftsmanFirstname} {craftsmanLastname}</h1>
-              <Link to={`/chat/${account?.id ?? ''}`} className="chat-button">💬</Link>
+              <button className="chat-button" type="button" onClick={() =>
+                navigate({
+                  pathname: "/chat",
+                  search: `?new=true&to=${JSON.stringify(account)}`,
+                })
+              }>💬</button>
             </div>
             <p id="job">{craftsmanJob}</p>
             <p>{craftsmanAddress}</p>
@@ -59,14 +64,14 @@ const CraftsmanView = () => {
         <p id="bio">{craftsmanDescription}</p>
       </section>
       <ProductsList>
-        {craftsmanProducts?.map(product => (
+        {craftsmanProducts?.map(elem => (
           <ProductCard
-            img={product.productImages?.at(0)?.content ?? `/img/product/${product.productImages?.at(0)?.imagePath || "default.png"}`}
-             serie="Petite série"
-            name={product.name}
-            price={product.price}
-            href={`/product/${product?.id}`}
-            productStyles={product?.productStyles}
+            // TODO: Use image.content instead of image.imagePath
+            img={`/img/product/${elem.productImages?.at(0)?.imagePath || "default.png"}`} serie="Petite série"
+            name={elem.name}
+            price={elem.price}
+            href={`/product/${elem?.id}`}
+            productStyles={elem?.productStyles}
           />
         ))}
       </ProductsList>

@@ -27,8 +27,6 @@ o
 ?Backend/Artisashop/Configurations/FranceConnectConfiguration.cs,5\8\589701b072bb7ae6c9c1d868783f2e1ef112027e
 c
 3Backend/Artisashop/Controllers/AccountController.cs,f\7\f71f18842cef51685f1a98adbb5f630777c6b03e
-X
-(Backend/Artisashop/Models/ChatMessage.cs,e\c\ec19c8f21b93b3f6e0da0c384de9e9c8dbbe91f7
 d
 4Backend/Artisashop/Models/ViewModel/CreateProduct.cs,2\f\2f738e476c172626c0368a3f8421e5ed5b46354f
 g
