@@ -11,12 +11,14 @@ const CreateProductView = () => {
   const ProducttApi = useApi(ProductApi)
 
   const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
-    name: '',
-    price: 0,
-    quantity: 0,
-    description: '',
-    images: [],
-    styles: [],
+    createProduct: {
+      name: '',
+      price: 0,
+      quantity: 0,
+      description: '',
+      images: [],
+      styles: [],
+    }
   }), false);
 
   useEffect(() => { if (!null) { execute(); } }, []);

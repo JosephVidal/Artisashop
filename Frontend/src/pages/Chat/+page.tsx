@@ -15,12 +15,14 @@ const EmptyChatPage = () => {
 
   const handleFire = async () => {
     const response = await productApi.apiProductCreatePost({
-      description: "test",
-      name: "test",
-      price: 1,
-      quantity: 1,
-      images: [],
-      styles: ["Scandinave"],
+      createProduct: {
+        description: "test",
+        name: "test",
+        price: 1,
+        quantity: 1,
+        images: [],
+        styles: ["Scandinave"],
+      },
     });
     console.log(response);
   }

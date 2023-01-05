@@ -10,13 +10,15 @@ const UpdateProductView = () => {
   useFormattedDocumentTitle("Panier");
   const ProducttApi = useApi(ProductApi)
 
-  const { value : update, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
-    name: '',
-    price: 0,
-    quantity: 0,
-    description: '',
-    images: [],
-    styles: [],
+  const { value: update, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
+    createProduct: {
+      name: '',
+      price: 0,
+      quantity: 0,
+      description: '',
+      images: [],
+      styles: [],
+    }
   }), false);
 
   useEffect(() => { execute() }, []);
