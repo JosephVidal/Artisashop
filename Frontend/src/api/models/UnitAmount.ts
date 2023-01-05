@@ -52,7 +52,7 @@ export function UnitAmountFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'currencyCode': !exists(json, 'currency_code') ? undefined : json['currency_code'],
+        'currencyCode': !exists(json, 'currencyCode') ? undefined : json['currencyCode'],
         'value': !exists(json, 'value') ? undefined : json['value'],
     };
 }
@@ -66,7 +66,7 @@ export function UnitAmountToJSON(value?: UnitAmount | null): any {
     }
     return {
         
-        'currency_code': value.currencyCode,
+        'currencyCode': value.currencyCode,
         'value': value.value,
     };
 }

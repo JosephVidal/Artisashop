@@ -20,7 +20,6 @@ import type {
   ExternalLoginConfirmationViewModel,
   GetAccountResult,
   Login,
-  OpencageDataGeocode,
   ProblemDetails,
   Register,
   UpdateAccount,
@@ -36,8 +35,6 @@ import {
     GetAccountResultToJSON,
     LoginFromJSON,
     LoginToJSON,
-    OpencageDataGeocodeFromJSON,
-    OpencageDataGeocodeToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
     RegisterFromJSON,
@@ -71,14 +68,6 @@ export interface ApiAccountIdRoleRolePostRequest {
 
 export interface ApiAccountLoginPostRequest {
     login?: Login;
-}
-
-export interface ApiAccountNbOfResultByAddressGetRequest {
-    address?: string;
-}
-
-export interface ApiAccountOpencageDataGeocodeByAddressGetRequest {
-    address?: string;
 }
 
 export interface ApiAccountPatchRequest {
@@ -349,70 +338,6 @@ export class AccountApi extends runtime.BaseAPI {
      */
     async apiAccountLoginPost(requestParameters: ApiAccountLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AccountToken> {
         const response = await this.apiAccountLoginPostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiAccountNbOfResultByAddressGetRaw(requestParameters: ApiAccountNbOfResultByAddressGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<number>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.address !== undefined) {
-            queryParameters['address'] = requestParameters.address;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/account/nbOfResultByAddress`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.TextApiResponse(response) as any;
-    }
-
-    /**
-     */
-    async apiAccountNbOfResultByAddressGet(requestParameters: ApiAccountNbOfResultByAddressGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number> {
-        const response = await this.apiAccountNbOfResultByAddressGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiAccountOpencageDataGeocodeByAddressGetRaw(requestParameters: ApiAccountOpencageDataGeocodeByAddressGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OpencageDataGeocode>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.address !== undefined) {
-            queryParameters['address'] = requestParameters.address;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/account/opencageDataGeocodeByAddress`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OpencageDataGeocodeFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiAccountOpencageDataGeocodeByAddressGet(requestParameters: ApiAccountOpencageDataGeocodeByAddressGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OpencageDataGeocode> {
-        const response = await this.apiAccountOpencageDataGeocodeByAddressGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

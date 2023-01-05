@@ -54,7 +54,7 @@ export function BreakdownFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'itemTotal': UnitAmountFromJSON(json['item_total']),
+        'itemTotal': UnitAmountFromJSON(json['itemTotal']),
     };
 }
 
@@ -67,7 +67,7 @@ export function BreakdownToJSON(value?: Breakdown | null): any {
     }
     return {
         
-        'item_total': UnitAmountToJSON(value.itemTotal),
+        'itemTotal': UnitAmountToJSON(value.itemTotal),
     };
 }
 

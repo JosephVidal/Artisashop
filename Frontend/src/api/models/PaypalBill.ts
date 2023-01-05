@@ -53,7 +53,7 @@ export function PaypalBillFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'purchaseUnits': !exists(json, 'purchase_units') ? undefined : (json['purchase_units'] === null ? null : (json['purchase_units'] as Array<any>).map(PurchaseUnitElemFromJSON)),
+        'purchaseUnits': !exists(json, 'purchaseUnits') ? undefined : (json['purchaseUnits'] === null ? null : (json['purchaseUnits'] as Array<any>).map(PurchaseUnitElemFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function PaypalBillToJSON(value?: PaypalBill | null): any {
     }
     return {
         
-        'purchase_units': value.purchaseUnits === undefined ? undefined : (value.purchaseUnits === null ? null : (value.purchaseUnits as Array<any>).map(PurchaseUnitElemToJSON)),
+        'purchaseUnits': value.purchaseUnits === undefined ? undefined : (value.purchaseUnits === null ? null : (value.purchaseUnits as Array<any>).map(PurchaseUnitElemToJSON)),
     };
 }
 

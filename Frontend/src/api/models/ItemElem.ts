@@ -77,7 +77,7 @@ export function ItemElemFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'name': json['name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'quantity': json['quantity'],
-        'unitAmount': UnitAmountFromJSON(json['unit_amount']),
+        'unitAmount': UnitAmountFromJSON(json['unitAmount']),
     };
 }
 
@@ -93,7 +93,7 @@ export function ItemElemToJSON(value?: ItemElem | null): any {
         'name': value.name,
         'description': value.description,
         'quantity': value.quantity,
-        'unit_amount': UnitAmountToJSON(value.unitAmount),
+        'unitAmount': UnitAmountToJSON(value.unitAmount),
     };
 }
 

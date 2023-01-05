@@ -6,7 +6,7 @@ namespace Artisashop.Models.ViewModel
     {
         public CreateProduct()
         {
-            Images = new List<IFormFile>();
+            Images = new List<string>();
             Styles = new List<string>();
         }
 
@@ -18,7 +18,7 @@ namespace Artisashop.Models.ViewModel
         public decimal Price { get; set; }
         [Required]
         public int Quantity { get; set; }
-        public List<IFormFile> Images { get; set; }
+        public List<string> Images { get; set; }
         public List<string> Styles { get; set; }
     }
 }

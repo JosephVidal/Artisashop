@@ -36,13 +36,19 @@ export interface CreateChatMessage {
      * @type {string}
      * @memberof CreateChatMessage
      */
+    filename?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateChatMessage
+     */
     content: string;
     /**
      * 
-     * @type {Blob}
+     * @type {string}
      * @memberof CreateChatMessage
      */
-    file?: Blob | null;
+    joined?: string | null;
 }
 
 /**
@@ -69,8 +75,9 @@ export function CreateChatMessageFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'fromUserId': json['fromUserId'],
         'toUserID': json['toUserID'],
+        'filename': !exists(json, 'filename') ? undefined : json['filename'],
         'content': json['content'],
-        'file': !exists(json, 'file') ? undefined : json['file'],
+        'joined': !exists(json, 'joined') ? undefined : json['joined'],
     };
 }
 
@@ -85,8 +92,9 @@ export function CreateChatMessageToJSON(value?: CreateChatMessage | null): any {
         
         'fromUserId': value.fromUserId,
         'toUserID': value.toUserID,
+        'filename': value.filename,
         'content': value.content,
-        'file': value.file,
+        'joined': value.joined,
     };
 }
 

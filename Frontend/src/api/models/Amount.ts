@@ -68,7 +68,7 @@ export function AmountFromJSONTyped(json: any, ignoreDiscriminator: boolean): Am
     }
     return {
         
-        'currencyCode': json['currency_code'],
+        'currencyCode': json['currencyCode'],
         'value': json['value'],
         'breakdown': BreakdownFromJSON(json['breakdown']),
     };
@@ -83,7 +83,7 @@ export function AmountToJSON(value?: Amount | null): any {
     }
     return {
         
-        'currency_code': value.currencyCode,
+        'currencyCode': value.currencyCode,
         'value': value.value,
         'breakdown': BreakdownToJSON(value.breakdown),
     };

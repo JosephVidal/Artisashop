@@ -429,83 +429,6 @@
         }
       }
     },
-    "/api/account/nbOfResultByAddress": {
-      "get": {
-        "tags": [
-          "Account"
-        ],
-        "parameters": [
-          {
-            "name": "address",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/account/opencageDataGeocodeByAddress": {
-      "get": {
-        "tags": [
-          "Account"
-        ],
-        "parameters": [
-          {
-            "name": "address",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OpencageDataGeocode"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/admin/complaint/{id}": {
       "delete": {
         "tags": [
@@ -2975,16 +2898,6 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
           "200": {
             "description": "Success",
             "content": {
@@ -4181,12 +4094,12 @@
       "Amount": {
         "required": [
           "breakdown",
-          "currency_code",
+          "currencyCode",
           "value"
         ],
         "type": "object",
         "properties": {
-          "currency_code": {
+          "currencyCode": {
             "minLength": 1,
             "type": "string"
           },
@@ -4289,25 +4202,13 @@
         },
         "additionalProperties": false
       },
-      "BoundInfo": {
-        "type": "object",
-        "properties": {
-          "northeast": {
-            "$ref": "#/components/schemas/GPSCoord"
-          },
-          "southwest": {
-            "$ref": "#/components/schemas/GPSCoord"
-          }
-        },
-        "additionalProperties": false
-      },
       "Breakdown": {
         "required": [
-          "item_total"
+          "itemTotal"
         ],
         "type": "object",
         "properties": {
-          "item_total": {
+          "itemTotal": {
             "$ref": "#/components/schemas/UnitAmount"
           }
         },
@@ -4432,71 +4333,6 @@
         ],
         "type": "string"
       },
-      "ComponentsInfo": {
-        "type": "object",
-        "properties": {
-          "ISO_3166-1_alpha-2": {
-            "type": "string",
-            "nullable": true
-          },
-          "ISO_3166-1_alpha-3": {
-            "type": "string",
-            "nullable": true
-          },
-          "ISO_3166-2": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "_category": {
-            "type": "string",
-            "nullable": true
-          },
-          "_type": {
-            "type": "string",
-            "nullable": true
-          },
-          "city": {
-            "type": "string",
-            "nullable": true
-          },
-          "continent": {
-            "type": "string",
-            "nullable": true
-          },
-          "country": {
-            "type": "string",
-            "nullable": true
-          },
-          "country_code": {
-            "type": "string",
-            "nullable": true
-          },
-          "postcode": {
-            "type": "string",
-            "nullable": true
-          },
-          "restaurant": {
-            "type": "string",
-            "nullable": true
-          },
-          "road": {
-            "type": "string",
-            "nullable": true
-          },
-          "state": {
-            "type": "string",
-            "nullable": true
-          },
-          "suburb": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Contact": {
         "required": [
           "content",
@@ -4566,13 +4402,16 @@
             "minLength": 1,
             "type": "string"
           },
+          "filename": {
+            "type": "string",
+            "nullable": true
+          },
           "content": {
             "minLength": 1,
             "type": "string"
           },
-          "file": {
+          "joined": {
             "type": "string",
-            "format": "binary",
             "nullable": true
           }
         },
@@ -4634,8 +4473,7 @@
           "images": {
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "binary"
+              "type": "string"
             },
             "nullable": true
           },
@@ -4645,20 +4483,6 @@
               "type": "string"
             },
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreatedTimestampInfo": {
-        "type": "object",
-        "properties": {
-          "created_http": {
-            "type": "string",
-            "nullable": true
-          },
-          "created_unix": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -4800,7 +4624,7 @@
         "required": [
           "name",
           "quantity",
-          "unit_amount"
+          "unitAmount"
         ],
         "type": "object",
         "properties": {
@@ -4816,22 +4640,8 @@
             "type": "integer",
             "format": "int32"
           },
-          "unit_amount": {
+          "unitAmount": {
             "$ref": "#/components/schemas/UnitAmount"
-          }
-        },
-        "additionalProperties": false
-      },
-      "LicenseInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4850,47 +4660,6 @@
           "password": {
             "minLength": 1,
             "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OpencageDataGeocode": {
-        "type": "object",
-        "properties": {
-          "documentation": {
-            "type": "string",
-            "nullable": true
-          },
-          "licenses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LicenseInfo"
-            },
-            "nullable": true
-          },
-          "rate": {
-            "$ref": "#/components/schemas/RateInfo"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResultData"
-            },
-            "nullable": true
-          },
-          "total_results": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "stay_informed": {
-            "$ref": "#/components/schemas/SocialInfo"
-          },
-          "thanks": {
-            "type": "string",
-            "nullable": true
-          },
-          "timestamp": {
-            "$ref": "#/components/schemas/CreatedTimestampInfo"
           }
         },
         "additionalProperties": false
@@ -4914,7 +4683,7 @@
       "PaypalBill": {
         "type": "object",
         "properties": {
-          "purchase_units": {
+          "purchaseUnits": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PurchaseUnitElem"
@@ -5079,24 +4848,6 @@
         },
         "additionalProperties": false
       },
-      "RateInfo": {
-        "type": "object",
-        "properties": {
-          "limit": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "remaining": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "reset": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "Register": {
         "required": [
           "email",
@@ -5139,47 +4890,10 @@
         },
         "additionalProperties": false
       },
-      "ResultData": {
-        "type": "object",
-        "properties": {
-          "components": {
-            "$ref": "#/components/schemas/ComponentsInfo"
-          },
-          "bounds": {
-            "$ref": "#/components/schemas/BoundInfo"
-          },
-          "geometry": {
-            "$ref": "#/components/schemas/GPSCoord"
-          },
-          "formatted": {
-            "type": "string",
-            "nullable": true
-          },
-          "confidence": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SocialInfo": {
-        "type": "object",
-        "properties": {
-          "blog": {
-            "type": "string",
-            "nullable": true
-          },
-          "twitter": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "State": {
         "enum": [
-          "WAITINGCONSUMER",
           "WAITINGCRAFTSMAN",
+          "WAITINGCONSUMER",
           "REFUSED",
           "VALIDATED",
           "ONGOING",
@@ -5205,7 +4919,7 @@
       "UnitAmount": {
         "type": "object",
         "properties": {
-          "currency_code": {
+          "currencyCode": {
             "type": "string",
             "nullable": true
           },

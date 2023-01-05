@@ -8,8 +8,9 @@ namespace Artisashop.Models.ViewModel
         public string? FromUserId { get; set; }
         [Required]
         public string? ToUserID { get; set; }
+        public string? Filename { get; set; }
         [Required]
         public string? Content { get; set; }
-        public IFormFile? File { get; set; }
+        public string? Joined { get; set; }
     }
 }
