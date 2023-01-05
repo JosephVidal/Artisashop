@@ -15,6 +15,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { Link } from "react-router-dom";
 
 const meAtom = atom<Account | null>(null);
 const interlocutorAtom = atom<Account | null>(null);
@@ -144,7 +145,9 @@ const ConversationPage = () => {
     <div className="w-100 md:max-h-[700px]">
       <div className="flex gap-5 items-center">
         <img src={`/img/craftsman/${interlocutor?.profilePicture ?? "default.svg"}`} alt="avatar" className="rounded-full w-12 h-12" />
-        <div className="text-lg">{interlocutor?.firstname} {interlocutor?.lastname}</div>
+        <div className="text-lg">
+          <Link className="text-black" to={`/craftsman/${interlocutor?.id ?? ''}`}>{interlocutor?.firstname} {interlocutor?.lastname}</Link>
+        </div>
 
       </div>
       <div className="w-100 md:max-h-[700px] flex-1 flex flex-col gap-5 p-5 border rounded-3xl border-solid border-black">
