@@ -29,6 +29,10 @@ export const Wrapper = styled.div`
 
         input {margin: 10px 0}
 
+        #fileinput {
+            background-color: #141C26;
+        }
+
         #contact-button {
             margin-top: 40px;
             font-size: 1.3em;
@@ -38,7 +42,7 @@ export const Wrapper = styled.div`
             display: flex;
             justify-content: space-between;
         }
-
+        
         #image-file {
             background-color: transparent;
             margin-left: -5px;

@@ -1,27 +1,22 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useMemo} from "react";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
 import { Field, Form, Formik } from "formik";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
-import { ProductApi } from "api";
+import {Account, Product, ProductApi} from "api";
+import {useSearchParams} from "react-router-dom";
 import { Wrapper } from "./styles";
 
 const UpdateProductView = () => {
   useFormattedDocumentTitle("Panier");
-  const ProducttApi = useApi(ProductApi)
-
-  const { value: update, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
-    createProduct: {
-      name: '',
-      price: 0,
-      quantity: 0,
-      description: '',
-      images: [],
-      styles: [],
-    }
-  }), false);
-
-  useEffect(() => { execute() }, []);
+  const productApi = useApi(ProductApi);
+  const [searchParams] = useSearchParams();
+  const product: Product | null = useMemo(() => {
+    const param = searchParams.get("product");
+    if (param !== null)
+      return JSON.parse(param) as Product
+    return null;
+  }, [searchParams]);
 
   return (
     <Wrapper>
@@ -31,12 +26,12 @@ const UpdateProductView = () => {
         <Formik
           enableReinitialize
           initialValues={{
-            name: update?.name ?? '',
-            price: update?.price ?? '',
-            quantity: update?.quantity ?? '',
-            description: update?.description ?? '',
-            images: update?.productImages ?? '',
-            styles: update?.productImages ?? '',
+            name: product?.name ?? '',
+            price: product?.price ?? '',
+            quantity: product?.quantity ?? '',
+            description: product?.description ?? '',
+            images: product?.productImages ?? '',
+            styles: product?.productImages ?? '',
           }}
 
           onSubmit={async values => { }}
