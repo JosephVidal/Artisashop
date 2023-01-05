@@ -48,7 +48,7 @@ const Chat: FC = () => {
   const [myHistory, mySetHistory] = useAtom(historyAtom);
   const [myHistoryAtoms, myDispatchHistoryAtoms] = useAtom(historyAtomsAtom);
   const [myInterlocutor, mySetInterlocutor] = useAtom(interlocutorAtom);
-  
+
   const [contactList, setContactList] = useState<ChatPreview[]>([]);
   const [conversation, setConversation] = useState<Conversation>({ history: [] });
   const [hover, setHover] = useState<number>(0);
@@ -79,13 +79,22 @@ const Chat: FC = () => {
     if (storedUser)
       setUser(JSON.parse(storedUser) as Account);
     useChat.apiChatListGet().then((r) => {
-      setContactList(r);
+      setContactList(r.sort(sortByDate));
     });
-    if (newMessage && contactList.find((preview) =>
-      preview.lastMsg?.senderId === (to )?.id ||
-      preview.lastMsg?.receiverId === (to )?.id) === undefined)
-      setConversation({history: [], interlocutor: (to!)});
   }, [])
+
+  useEffect(() => {
+    if (newMessage) {
+      const newConv = contactList.find((preview) =>
+        preview.lastMsg?.senderId === (to)?.id ||
+        preview.lastMsg?.receiverId === (to)?.id);
+      if (newConv !== undefined) {
+        getConversation(useChat, setConversation, user!.id!, newConv.lastMsg?.sender!, newConv.lastMsg?.receiver!);
+      } else {
+        setConversation({history: [], interlocutor: (to!)});
+      }
+    }
+  }, [contactList])
 
   const renderContact = (contact: ChatPreview) => {
     const getInterlocutor = (): string => {
@@ -344,6 +353,14 @@ const onChangeFile = (reader: FileReader, setFile: SetState<Maybe<File>>, fileLi
         reader.readAsDataURL(files[0]);
       }
     })
+}
+
+const sortByDate = (contact1: ChatPreview, contact2: ChatPreview) => {
+  if (!contact1.lastMsg || !contact2.lastMsg)
+    return -1;
+  if (contact1.lastMsg && contact2.lastMsg && contact1.lastMsg.createdAt! > contact2.lastMsg.createdAt!)
+    return -1;
+  return 1;
 }
 
 export default Chat;
