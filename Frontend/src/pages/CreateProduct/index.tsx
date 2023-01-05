@@ -8,23 +8,8 @@ import { Wrapper } from "./styles";
 
 const CreateProductView = () => {
   useFormattedDocumentTitle("Créer un produit");
-<<<<<<< HEAD
   const navigate = useNavigate()
   const productApi = useApi(ProductApi);
-=======
-  const ProducttApi = useApi(ProductApi)
-
-  const { value, status, error, execute } = useAsync(() => ProducttApi.apiProductCreatePost({
-    name: '',
-    price: 0,
-    quantity: 0,
-    description: '',
-    images: [],
-    styles: [],
-  }), false);
-
-  useEffect(() => { if (!null) { execute(); } }, []);
->>>>>>> origin/dev
 
   return (
     <Wrapper>
@@ -42,21 +27,23 @@ const CreateProductView = () => {
           }}
 
           onSubmit={async values => {
+            console.log(values.name)
+            console.log(values.price)
+            console.log(values.quantity)
+            console.log(values.description)
             console.log(values.images)
             console.log(values.styles)
             await productApi.apiProductCreatePost({
-              createProduct: {
-                name: values.name,
-                price: values.price,
-                quantity: values.quantity,
-                description: values.description,
-                images: values.images,
-                styles: values.styles.split(',').map(s => s.trim()),
-              }
+              name: values.name,
+              price: values.price,
+              quantity: values.quantity,
+              description: values.description,
+              images: values.images,
+              styles: values.styles.split(',').map(s => s.trim()),
             })
               .then(res => {
                 console.log(res);
-                navigate("/app/dashboard");
+                navigate("/dashboard");
               })
           }}
         >

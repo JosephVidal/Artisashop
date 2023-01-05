@@ -29,7 +29,7 @@ const Products: FC = () => {
 
   const displayProduct = (product: Product) => (
     <ProductWrapper key={product.id} onClick={() => navigate({
-      pathname: "/app/update-product",
+      pathname: "/update-product",
       search: `?product=${JSON.stringify(product)}`,
     })}>
       <ImageWrapper>
@@ -51,7 +51,7 @@ const Products: FC = () => {
 
   return (
     <Wrapper>
-      <NewProductButton onClick={() => navigate("/app/create-product")}><AiOutlinePlus />  Nouveau produit</NewProductButton>
+      <NewProductButton onClick={() => navigate("/create-product")}><AiOutlinePlus />  Nouveau produit</NewProductButton>
       {productList.map((product) => displayProduct(product))}
     </Wrapper>
   )

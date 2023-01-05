@@ -17,18 +17,12 @@ const TopMenu: React.FunctionComponent<Props> = () => {
   return (
     <TopMenuWrapper>
       <MenuItem>
-<<<<<<< HEAD
         {
           (user && user?.roles?.includes("SELLER")) &&
-          <Link to="/app/dashboard">
+          <Link to="/dashboard">
             {t("menu.dashboard")}
           </Link>
         }
-=======
-        <Link to="/dashboard">
-          {t("menu.dashboard")}
-        </Link>
->>>>>>> origin/dev
       </MenuItem>
       <MenuItem>
         <Link to="/about/craftsmans">
