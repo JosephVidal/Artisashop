@@ -26,7 +26,7 @@ import {Maybe, None, Some} from "monet";
 import {Account, ApiChatHistoryGetRequest, ChatApi, ChatMessage, ChatPreview} from "api";
 import useApi from "hooks/useApi";
 import useFormattedDocumentTitle from "hooks/useFormattedDocumentTitle";
-import RealTimeChat from "pages/Chat/RealTimeChat";
+import useRealTimeChat from "pages/Chat/RealTimeChat";
 import {useSearchParams} from "react-router-dom";
 
 export interface Conversation {
@@ -107,7 +107,7 @@ const Chat: FC = () => {
   };
 
   const renderMessage = (message: ChatMessage) => {
-    const self = message.sender!.id! === user?.id;
+    const self = message.senderId === user?.id;
 
     return (
       <MessageTooltipWrapper key={message.id} self={self} onMouseOver={() => setHover(message.id!)} onMouseOut={() => setHover(0)}>
@@ -122,7 +122,7 @@ const Chat: FC = () => {
           )
         }
         <MessageWrapper self={self}>
-          {message.sender!.userName!}
+          {message.sender?.userName}
           <MessageBubble self={self}>
             {message.content!}
             {message.filename !== undefined && message.filename !== null && message.filename !== "" && (
@@ -139,6 +139,8 @@ const Chat: FC = () => {
     )
   };
 
+  useRealTimeChat({contactList, setContactList, setConversation, conversation});
+
   return (
     <Wrapper>
       <ContactList>
@@ -148,7 +150,6 @@ const Chat: FC = () => {
           renderContact({})}
         {contactList.map(renderContact)}
       </ContactList>
-      <RealTimeChat setContactList={setContactList} setConversation={setConversation} contactList={contactList} conversation={conversation} />
       <ConversationWrapper>
         <ConversationTitle>
           {conversation.history.length !== 0 && (
