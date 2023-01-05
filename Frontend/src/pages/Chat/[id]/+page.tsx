@@ -1,49 +1,26 @@
 import { Account, AccountApi, ChatApi, ChatMessage, CreateChatMessage, ProductApi } from "api";
 import useApi from "hooks/useApi";
 import useAsync from "hooks/useAsync";
-import { atom, useAtom, PrimitiveAtom } from "jotai";
-import { splitAtom } from "jotai/utils";
 import React, { useEffect } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { useParams } from "react-router";
 import userAtom from "states/atoms/user";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
 import { Link } from "react-router-dom";
-
-const meAtom = atom<Account | null>(null);
-const interlocutorAtom = atom<Account | null>(null);
-
-
-interface ChatMessageGroup {
-  user: Account;
-  messages: ChatMessage[];
-}
-
-const messagesAtom = atom<ChatMessage[]>([]);
-const messagesAtomAtom = splitAtom(messagesAtom);
+import { useAtom } from "jotai";
 
 const ChatBubble = ({
-  messageAtom,
+  isOwn,
+  message,
   showHead,
 }: {
-  messageAtom: PrimitiveAtom<ChatMessage>;
+  isOwn: boolean;
+  message: ChatMessage;
   showHead: boolean;
+
 }) => {
-  const [me] = useAtom(meAtom);
-  const [interlocutor] = useAtom(interlocutorAtom);
-  const [message] = useAtom(messageAtom);
-
-  const isOwn = me?.id === message.senderId;
-  const user = isOwn ? me : interlocutor;
-
-  let profilePicture = user?.profilePicture ?? "https://picsum.photos/200";
+  const user = message.sender!;
+  let profilePicture = user.profilePicture ?? "https://picsum.photos/200";
 
   if (profilePicture.endsWith(".jpg") || profilePicture.endsWith(".png") || profilePicture.endsWith(".jpeg") || profilePicture.endsWith(".svg")) {
     profilePicture = `/img/craftsman/${profilePicture}`;
@@ -73,80 +50,42 @@ const ChatBubble = ({
   );
 };
 
-const MessageList = () => {
-  const [messages, setMessages] = useAtom(messagesAtom);
-  const [messageAtoms] = useAtom(messagesAtomAtom);
-
-  setMessages(
-    [
-      {
-        id: 1,
-        senderId: "1",
-        content: "Hello",
-        createdAt: new Date(),
-      },
-      {
-        id: 2,
-        senderId: "2",
-        content: "Hello",
-        createdAt: new Date(),
-      },
-    ],
-  )
-
-  return (
+const MessageList = ({
+  messages,
+}: {
+  messages: ChatMessage[];
+}) => (
     <div className="flex flex-col gap-3">
-      {messageAtoms.map((messageAtom, index) => (
+      {messages?.map((message, index) => (
         <ChatBubble
-          messageAtom={messageAtom}
+          message={message}
           showHead={index === 0}
-          key={messageAtom.read(x => x).id} />
+          key={message.id} isOwn={false} />
       ))}
     </div>
   );
-};
 
 const ConversationPage = () => {
   const accountApi = useApi(AccountApi);
   const chatApi = useApi(ChatApi);
-  const queryClient = useQueryClient();
 
-  const { id } = useParams();
+  const [me] = useAtom(userAtom);
+  const { id: interlocutorId } = useParams<{ id: string }>();
 
-  const [user] = useAtom(userAtom);
-  const [interlocutor, setInterlocutor] = useAtom(interlocutorAtom);
-  const [me, setMe] = useAtom(userAtom);
-
-  const messagesQuery = useQuery({
-    queryKey: ['messages'],
-    queryFn: () => { },
-  });
-  const postMessagesMutation = useMutation({
-    mutationFn: (createChatMessage: CreateChatMessage) => chatApi.apiChatPost({ createChatMessage }),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['messages'] }) },
-  });
-
-  useAsync(async () => {
-    if (id) {
-      const res = await accountApi.apiAccountIdGet({ id })
-      if (res.account) {
-        setInterlocutor(res.account);
-      }
-    }
-    if (user?.id) {
-      const res = await accountApi.apiAccountIdGet({ id: user.id ?? "" });
-      if (res.account) {
-        setMe(res.account);
-      }
-    }
-  }, true);
+  const fetchInterlocutor = useAsync(async () => interlocutorId ? accountApi.apiAccountIdGet({ id: interlocutorId }).then(res => res.account) : null, false);
+  const fetchMessages = useAsync(async () => interlocutorId ? chatApi.apiChatHistoryGet({ users: [me!.id!, interlocutorId] }) : null, false);
+  
+  useEffect(() => {
+    fetchInterlocutor.execute();
+    fetchMessages.execute();
+  }, []);
 
   return (
     <div className="w-100 md:max-h-[700px]">
       <div className="flex gap-5 items-center">
-        <img src={`/img/craftsman/${interlocutor?.profilePicture ?? "default.svg"}`} alt="avatar" className="rounded-full w-12 h-12" />
+        <img src={`/img/craftsman/${fetchInterlocutor.value?.profilePicture ?? "default.svg"}`} alt="avatar" className="rounded-full w-12 h-12" />
         <div className="text-lg">
-          <Link className="text-black" to={`/craftsman/${interlocutor?.id ?? ''}`}>{interlocutor?.firstname} {interlocutor?.lastname}</Link>
+          <Link className="text-black" to={`/craftsman/${fetchInterlocutor.value?.id ?? ''}`}>{fetchInterlocutor.value?.firstname} {fetchInterlocutor.value?.lastname}</Link>
         </div>
 
       </div>

@@ -69,7 +69,7 @@ const ContactList = () => {
     <div>
       <div className="flex flex-col gap-2">
         {contactListAtoms.map((item, index) => (
-          <Link to={`/chat/${index}`} className="decoration-transparent">
+          <Link to={`/chat/${index}`} className="decoration-transparent" key={index}>
             <ContactListItem
               contactListItemAtom={item}
               key={index}

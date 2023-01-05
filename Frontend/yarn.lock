@@ -6632,6 +6632,7 @@ __metadata:
     i18next-http-backend: ^1.4.1
     jest: ^29.0.1
     jotai: ^1.10.0
+    jotai-tanstack-query: ^0.4.0
     lint-staged: ^13.0.3
     lodash: ^4.17.20
     monet: ^0.9.1
@@ -14946,6 +14947,16 @@ __metadata:
   bin:
     jest: bin/jest.js
   checksum: 613f4ec657b14dd84c0056b2fef1468502927fd551bef0b19d4a91576a609678fb316c6a5b5fc6120dd30dd4ff4569070ffef3cb507db9bb0260b28ddaa18d7a
+  languageName: node
+  linkType: hard
+
+"jotai-tanstack-query@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "jotai-tanstack-query@npm:0.4.0"
+  peerDependencies:
+    "@tanstack/query-core": "*"
+    jotai: "*"
+  checksum: aed859e6fe02815460117fdc9e3d7e82f1d3d508ebd37c5424cfe07798e74868bce16381542f2b589b881579e1f44c39265b445ee3c4ce33d59b136c0fd047ab
   languageName: node
   linkType: hard
 
