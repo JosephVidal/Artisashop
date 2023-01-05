@@ -8,6 +8,7 @@ import { useParams } from "react-router";
 import userAtom from "states/atoms/user";
 import { Link } from "react-router-dom";
 import { useAtom } from "jotai";
+import { Field, Form, Formik, FormikHelpers, FormikValues } from "formik";
 
 const ChatBubble = ({
   isOwn,
@@ -55,15 +56,15 @@ const MessageList = ({
 }: {
   messages: ChatMessage[];
 }) => (
-    <div className="flex flex-col gap-3">
-      {messages?.map((message, index) => (
-        <ChatBubble
-          message={message}
-          showHead={index === 0}
-          key={message.id} isOwn={false} />
-      ))}
-    </div>
-  );
+  <div className="flex flex-col gap-3">
+    {messages?.map((message, index) => (
+      <ChatBubble
+        message={message}
+        showHead={index === 0}
+        key={message.id} isOwn={false} />
+    ))}
+  </div>
+);
 
 const ConversationPage = () => {
   const accountApi = useApi(AccountApi);
@@ -72,9 +73,18 @@ const ConversationPage = () => {
   const [me] = useAtom(userAtom);
   const { id: interlocutorId } = useParams<{ id: string }>();
 
+  const [file, setFile] = React.useState<File | null>(null);
+
   const fetchInterlocutor = useAsync(async () => interlocutorId ? accountApi.apiAccountIdGet({ id: interlocutorId }).then(res => res.account) : null, false);
   const fetchMessages = useAsync(async () => interlocutorId ? chatApi.apiChatHistoryGet({ users: [me!.id!, interlocutorId] }) : null, false);
   
+  const fileToDataUri = (f : File) => new Promise<Blob>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      resolve(new Blob([event.target!.result as BlobPart], {type: f.type}))
+    };
+    reader.readAsDataURL(f);
+    })
   useEffect(() => {
     fetchInterlocutor.execute();
     fetchMessages.execute();
@@ -82,9 +92,9 @@ const ConversationPage = () => {
 
   return (
     <div className="w-100 md:max-h-[700px]">
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-3 items-center mb-1">
         <img src={`/img/craftsman/${fetchInterlocutor.value?.profilePicture ?? "default.svg"}`} alt="avatar" className="rounded-full w-12 h-12" />
-        <div className="text-lg">
+        <div className="text-lg mt-2">
           <Link className="text-black" to={`/craftsman/${fetchInterlocutor.value?.id ?? ''}`}>{fetchInterlocutor.value?.firstname} {fetchInterlocutor.value?.lastname}</Link>
         </div>
 
@@ -93,27 +103,50 @@ const ConversationPage = () => {
 
         <div>
           <div className="overflow-auto overscroll-contain">
-            {/* <MessageList /> */}
+            <MessageList messages={fetchMessages.value ?? []} />
           </div>
 
         </div>
-        <div className="w-100 h-10 max-h-10 flex justify-between">
-          <input
-            type="text"
-            className="m-0 p-3 border-black bg-white w-100 grow"
-            placeholder="Ecrivez un message..." />
-          <label htmlFor="file-upload" className="shrink w-10 p-2">
-            <input
-              id="file-upload"
-              type="file"
-              style={{ display: "none" }}
-              multiple={false} />
-            <ImAttachment size="100%" />
-          </label>
-          <div className="shrink w-10 p-2">
-            <FaPaperPlane size="100%" />
-          </div>
-        </div>
+        <Formik
+          initialValues={{
+            message: "",
+          }}
+          onSubmit={async (values, { setSubmitting }) => {
+            chatApi.apiChatPost({
+              createChatMessage: {
+                content: values.message,
+                fromUserId: me!.id!,
+                toUserID: interlocutorId!,
+                file: file ? await fileToDataUri(file) ?? null : null,
+              }
+            })
+            console.log(values, file);
+          }}
+        >
+          {({ setFieldValue, handleSubmit }) => (
+            <Form>
+              <div className="w-100 h-10 max-h-10 flex justify-between">
+                <Field name="message"
+                  type="text"
+                  className="m-0 p-3 border-black bg-white w-100 grow"
+                  placeholder="Ecrivez un message..." />
+                <label htmlFor="file-upload" className="shrink w-10 p-2">
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    multiple={false}
+                    onChange={(event) => { setFile(event.target.files![0]); setFieldValue("file", event.target.files![0]); }}
+                  />
+                  <ImAttachment size="100%" />
+                </label>
+                <div onClick={() => handleSubmit()} className="shrink w-10 p-2">
+                  <FaPaperPlane size="100%" />
+                </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

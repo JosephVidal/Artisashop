@@ -1,31 +1,13 @@
 import { atom, useAtom } from "jotai";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ProductApi } from "api";
-import useApi from "hooks/useApi";
 
 import { contactListAtom } from "./+layout";
 
 export const lastConversationAtom = atom<number | null>(null);
 
-const EmptyChatPage = () => {
+const DefaultChatPage = () => {
   const [contactList] = useAtom(contactListAtom);
-
-  const productApi = useApi(ProductApi);
-
-  const handleFire = async () => {
-    const response = await productApi.apiProductCreatePost({
-      createProduct: {
-        description: "test",
-        name: "test",
-        price: 1,
-        quantity: 1,
-        images: [],
-        styles: ["Scandinave"],
-      },
-    });
-    console.log(response);
-  }
 
   return (
     <div className="align-middle text-center my-auto py-12 text-xl">
@@ -42,10 +24,8 @@ const EmptyChatPage = () => {
       <Link to="/search" className="text-black">
         Explorez les artisans
       </Link>
-
-      <button type="button" onClick={handleFire}>Fire</button>
     </div>
   );
 };
 
-export default EmptyChatPage;
+export default DefaultChatPage;

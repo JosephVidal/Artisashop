@@ -1,6 +1,6 @@
 import { PrimitiveAtom, atom, useAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Outlet, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -82,22 +82,26 @@ const ContactList = () => {
   );
 };
 
-const ChatPage = () => (
-  <div className="text-black px-6 pb-5">
-    <h1>Messagerie</h1>
-    <div className="flex flex-col md:flex-row justify-between gap-5">
-      <div className="md:w-1/3 md:max-h-[700px] flex flex-col gap-5 p-3 border rounded-3xl border-solid border-black text-white">
-        {/* <div className="md:w-1/4 p-3 border rounded-3xl border-solid border-black"> */}
-        {/* <div className="text-xl font-bold">Contacts</div> */}
-        <div className="overflow-auto overscroll-contain px-1">
-          <ContactList />
+const ChatLayout = () => {
+  useEffect(() => {})
+  
+  return (
+    <div className="text-black px-6 pb-5">
+      <h1>Messagerie</h1>
+      <div className="flex flex-col md:flex-row justify-between gap-5">
+        <div className="md:w-1/3 md:max-h-[700px] flex flex-col gap-5 p-3 border rounded-3xl border-solid border-black text-white">
+          {/* <div className="md:w-1/4 p-3 border rounded-3xl border-solid border-black"> */}
+          {/* <div className="text-xl font-bold">Contacts</div> */}
+          <div className="overflow-auto overscroll-contain px-1">
+            <ContactList />
+          </div>
+        </div>
+        <div className="md:w-2/3">
+          <Outlet />
         </div>
       </div>
-      <div className="md:w-2/3">
-        <Outlet />
-      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export default ChatPage;
+export default ChatLayout;
